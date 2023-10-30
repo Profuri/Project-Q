@@ -15,9 +15,9 @@ public class PlayerRotationModule : BaseModule<PlayerController>
 
     private void Rotate()
     {
-        Vector3 rotateDir;
-        
-        rotateDir = Controller.GetModule<PlayerMovementModule>().InputDir;
+        Vector3 rotateDir = Controller.GetModule<PlayerMovementModule>().MoveVelocity;
+        rotateDir.y = 0;
+        rotateDir.Normalize();
 
         if (rotateDir != Vector3.zero)
         {
