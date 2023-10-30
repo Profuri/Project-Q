@@ -1,6 +1,7 @@
 using InputControl;
 using ModuleSystem;
 using UnityEngine;
+using static Core.Define;
 
 public class PlayerMovementModule : BaseModule<PlayerController>
 {
@@ -9,11 +10,11 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     private CharacterController _characterController;
 
     private Vector3 _inputDir;
-    public Vector3 InputDir => _inputDir;
     
     private Vector3 _moveVelocity;
     private Vector3 _verticalVelocity;
 
+    public Vector3 MoveVelocity => _moveVelocity;
     public bool IsGround => _characterController.isGrounded;
 
     public override void Init(Transform root)
@@ -46,7 +47,10 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     private void CalcMovement()
     {
-        _moveVelocity = _inputDir * Controller.DataSO.walkSpeed;
+        var forward = new Vector3(MainCam.transform.forward.x, 0, MainCam.transform.forward.z).normalized;
+        var right = new Vector3(MainCam.transform.right.x, 0, MainCam.transform.right.z).normalized;
+        
+        _moveVelocity = (_inputDir.x * right + _inputDir.z * forward) * Controller.DataSO.walkSpeed;
         _moveVelocity += _verticalVelocity;
 
         if (!IsGround)
