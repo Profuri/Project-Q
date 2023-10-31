@@ -33,8 +33,6 @@ public class CameraManager : BaseManager<CameraManager>
 
     private void ChangeCamera(EAxisType type)
     {
-        MainCam.orthographic = type != EAxisType.NONE;
-        
         if (_currentVCam != null)
         {
             _currentVCam.m_Priority = 0;
