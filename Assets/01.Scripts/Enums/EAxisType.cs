@@ -1,7 +1,7 @@
 public enum EAxisType
 {
-    NONE,
-    EXPRESSION_Y,
-    EXPRESSION_X,
-    EXPRESSION_Z    
+    NONE = 0,
+    EXPRESSION_X = 1,
+    EXPRESSION_Y = 2,
+    EXPRESSION_Z = 3 
 }

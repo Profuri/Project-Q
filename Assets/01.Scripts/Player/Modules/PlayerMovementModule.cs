@@ -1,3 +1,4 @@
+using System;
 using InputControl;
 using ModuleSystem;
 using UnityEngine;
@@ -47,10 +48,22 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     private void CalcMovement()
     {
-        var forward = new Vector3(MainCam.transform.forward.x, 0, MainCam.transform.forward.z).normalized;
-        var right = new Vector3(MainCam.transform.right.x, 0, MainCam.transform.right.z).normalized;
+        switch (StageAxisManager.Instance.AxisType)
+        {
+            case EAxisType.NONE:
+                _moveVelocity = (_inputDir.x * MainCam.RightView() + _inputDir.z * MainCam.ForwardView()) * Controller.DataSO.walkSpeed;
+                break;
+            case EAxisType.EXPRESSION_Y:
+                _moveVelocity = (_inputDir.x * MainCam.RightView() + _inputDir.z * MainCam.UpView()) * Controller.DataSO.walkSpeed;
+                break;
+            case EAxisType.EXPRESSION_X:
+                _moveVelocity = new Vector3(0, 0, _inputDir.x) * Controller.DataSO.walkSpeed;
+                break;
+            case EAxisType.EXPRESSION_Z:
+                _moveVelocity = new Vector3(_inputDir.x, 0, 0) * Controller.DataSO.walkSpeed;
+                break;
+        }
         
-        _moveVelocity = (_inputDir.x * right + _inputDir.z * forward) * Controller.DataSO.walkSpeed;
         _moveVelocity += _verticalVelocity;
 
         if (!IsGround)

@@ -6,7 +6,7 @@ namespace ManagingSystem
 {
     public abstract class BaseManager<T> : MonoSingleton<T>, IManager where T : MonoBehaviour
     {
-        public void Awake()
+        public virtual void Awake()
         {
             GameManager.Instance.OnStartEvent += StartManager;
             GameManager.Instance.OnUpdateEvent += UpdateManager;
