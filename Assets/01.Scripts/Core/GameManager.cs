@@ -27,17 +27,17 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (Keyboard.current.bKey.wasPressedThisFrame)
         {
-            ChangeAxis(EAxisType.EXPRESSION_X);
+            ChangeAxis(EAxisType.X);
         }
 
         if (Keyboard.current.nKey.wasPressedThisFrame)
         {
-            ChangeAxis(EAxisType.EXPRESSION_Y);
+            ChangeAxis(EAxisType.Y);
         }
 
         if (Keyboard.current.mKey.wasPressedThisFrame)
         {
-            ChangeAxis(EAxisType.EXPRESSION_Z);
+            ChangeAxis(EAxisType.Z);
         }
     }
 
