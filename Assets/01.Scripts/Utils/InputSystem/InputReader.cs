@@ -7,8 +7,12 @@ namespace InputControl
     [CreateAssetMenu(menuName = "SO/New Input System/InputReader")]
     public class InputReader : ScriptableObject, InputControls.IPlayerActions
     {
-        public event Action<Vector2> OnMovementEvent = null;
-        public event Action OnJumpEvent = null;
+        public delegate void InputEventListener();
+        public delegate void InputEventListener<in T>(T value);
+        
+        public event InputEventListener<Vector2> OnMovementEvent = null;
+        public event InputEventListener OnJumpEvent = null;
+        public event InputEventListener OnAxisControlEvent = null;
 
         private InputControls _inputControls;
 
@@ -31,7 +35,18 @@ namespace InputControl
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            OnJumpEvent?.Invoke();
+            if (context.performed)
+            {
+                OnJumpEvent?.Invoke();
+            }
+        }
+
+        public void OnAxisControl(InputAction.CallbackContext context)
+        {
+            if (context.performed || context.canceled)
+            {
+                OnAxisControlEvent?.Invoke();
+            }
         }
     }
 }

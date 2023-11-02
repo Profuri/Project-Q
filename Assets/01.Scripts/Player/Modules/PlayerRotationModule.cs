@@ -17,6 +17,12 @@ public class PlayerRotationModule : BaseModule<PlayerController>
     {
         Vector3 rotateDir = Controller.GetModule<PlayerMovementModule>().MoveVelocity;
         rotateDir.y = 0;
+
+        if (Controller.Converter.AxisType == EAxisType.X)
+            rotateDir.x = 0;
+        if (Controller.Converter.AxisType == EAxisType.Z)
+            rotateDir.z = 0;
+        
         rotateDir.Normalize();
 
         if (rotateDir != Vector3.zero)
