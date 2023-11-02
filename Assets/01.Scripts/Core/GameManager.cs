@@ -9,7 +9,6 @@ public class GameManager : MonoSingleton<GameManager>
     
     public event UnityEventListener OnStartEvent = null;
     public event UnityEventListener OnUpdateEvent = null;
-    public event ObserverListener<EAxisType> OnAxisTypeChangeEvent = null;
 
     private void Start()
     {
@@ -19,30 +18,5 @@ public class GameManager : MonoSingleton<GameManager>
     private void Update()
     {
         OnUpdateEvent?.Invoke();
-
-        if (Keyboard.current.vKey.wasPressedThisFrame)
-        {
-            ChangeAxis(EAxisType.NONE);
-        }
-
-        if (Keyboard.current.bKey.wasPressedThisFrame)
-        {
-            ChangeAxis(EAxisType.X);
-        }
-
-        if (Keyboard.current.nKey.wasPressedThisFrame)
-        {
-            ChangeAxis(EAxisType.Y);
-        }
-
-        if (Keyboard.current.mKey.wasPressedThisFrame)
-        {
-            ChangeAxis(EAxisType.Z);
-        }
-    }
-
-    public void ChangeAxis(EAxisType nextType)
-    {
-        OnAxisTypeChangeEvent?.Invoke(nextType);
     }
 }

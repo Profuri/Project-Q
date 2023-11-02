@@ -20,14 +20,34 @@ namespace StageStructureConvertSystem
             _meshFilter = GetComponent<MeshFilter>();
             _meshRenderer = GetComponent<MeshRenderer>();
 
-            _objectInfo.mesh = _meshFilter.mesh;
-            _objectInfo.material = _meshRenderer.material;
+            if (_meshFilter)
+            {
+                _objectInfo.mesh = _meshFilter.mesh;
+            }
+
+            if (_meshRenderer)
+            {
+                _objectInfo.material = _meshRenderer.material;
+            }
+            
             _objectInfo.position = transform.localPosition;
             _objectInfo.scale = transform.localScale;
+            _objectInfo.axis = EAxisType.NONE;
         }
 
         public void ConvertDimension(EAxisType axisType)
-        {   
+        {
+            _objectInfo.position = transform.localPosition;
+            _objectInfo.scale = transform.localScale;
+
+            ConvertMesh(axisType);
+            TransformSynchronization(axisType);
+            ApplyCollider(axisType);
+            ObjectSetting(_objectInfo);
+        }
+
+        public void ConvertMesh(EAxisType axisType)
+        {
             // convert to 3D
             if (axisType == EAxisType.NONE)
             {
@@ -37,65 +57,87 @@ namespace StageStructureConvertSystem
             else
             {
                 _prevObjectInfo = _objectInfo;
-                _objectInfo.mesh = new Mesh
-                {
-                    vertices = _prevObjectInfo.mesh.vertices,
-                    triangles = _prevObjectInfo.mesh.triangles,
-                    normals = _prevObjectInfo.mesh.normals,
-                    tangents = _prevObjectInfo.mesh.tangents,
-                    bounds = _prevObjectInfo.mesh.bounds,
-                    uv = _prevObjectInfo.mesh.uv
-                };
-                
-                var vertices = _prevObjectInfo.mesh.vertices;
+                _objectInfo.axis = axisType;
 
-                for (var i = 0; i < vertices.Length; i++)
+                if (_objectType == EStructureObjectType.PLATFORM)
                 {
-                    switch (axisType)
+                    _objectInfo.mesh = new Mesh
                     {
-                        case EAxisType.X:
-                            vertices[i].x = 0.5f;
-                            break;
-                        case EAxisType.Y:
-                            vertices[i].y = -0.5f;
-                            break;
-                        case EAxisType.Z:
-                            vertices[i].z = -0.5f;
-                            break;
-                    }
-                }
-                
-                // switch (axisType)
-                // {
-                //     case EAxisType.X:
-                //         Array.Sort(vertices, (v1, v2) => v1.x.CompareTo(v2.x) * -1);
-                //         break;
-                //     case EAxisType.Y:
-                //         Array.Sort(vertices, (v1, v2) => v1.y.CompareTo(v2.x));
-                //         break;
-                //     case EAxisType.Z:
-                //         Array.Sort(vertices, (v1, v2) => v1.z.CompareTo(v2.z));
-                //         break;
-                // }
+                        vertices = _prevObjectInfo.mesh.vertices,
+                        triangles = _prevObjectInfo.mesh.triangles,
+                        normals = _prevObjectInfo.mesh.normals,
+                        tangents = _prevObjectInfo.mesh.tangents,
+                        bounds = _prevObjectInfo.mesh.bounds,
+                        uv = _prevObjectInfo.mesh.uv
+                    };
+                    
+                    var vertices = _prevObjectInfo.mesh.vertices;
 
-                _objectInfo.mesh.vertices = vertices;
+                    for (var i = 0; i < vertices.Length; i++)
+                    {
+                        switch (axisType)
+                        {
+                            case EAxisType.X:
+                                vertices[i].x = 0.5f;
+                                break;
+                            case EAxisType.Y:
+                                vertices[i].y = 0.5f;
+                                break;
+                            case EAxisType.Z:
+                                vertices[i].z = -0.5f;
+                                break;
+                        }
+                    }
+                    
+                    _objectInfo.mesh.vertices = vertices;
+                }
             }
-            
-            TransformSynchronization();
-            ApplyCollider(axisType);
-            ObjectSetting(_objectInfo);
         }
 
-        public void TransformSynchronization()
+        public void TransformSynchronization(EAxisType axisType)
         {
-            
+            switch (axisType)
+            {
+                case EAxisType.NONE:
+                    switch (_prevObjectInfo.axis)
+                    {
+                        // x compress
+                        case EAxisType.X:
+                            _objectInfo.position.y = _prevObjectInfo.position.y;
+                            _objectInfo.position.z = _prevObjectInfo.position.z;
+                            break;
+                        // y compress
+                        case EAxisType.Y:
+                            _objectInfo.position.x = _prevObjectInfo.position.x;
+                            _objectInfo.position.z = _prevObjectInfo.position.z;
+                            break;
+                        // z compress
+                        case EAxisType.Z:
+                            _objectInfo.position.x = _prevObjectInfo.position.x;
+                            _objectInfo.position.y = _prevObjectInfo.position.y;
+                            break;
+                    }
+                    break;
+                case EAxisType.X:
+                    _objectInfo.position.x = 0;
+                    _objectInfo.scale.x = 1;
+                    break;
+                case EAxisType.Y:
+                    _objectInfo.position.y = 0;
+                    _objectInfo.scale.y = 1;
+                    break;
+                case EAxisType.Z:
+                    _objectInfo.position.z = 0;
+                    _objectInfo.scale.z = 1;
+                    break;
+            }
         }
 
         public void ApplyCollider(EAxisType axisType)
         {
             if (axisType == EAxisType.NONE)
             {
-                _objectInfo.collider = new BoxCollider();
+                // _objectInfo.collider = new BoxCollider();
             }
             else
             {
@@ -108,13 +150,20 @@ namespace StageStructureConvertSystem
             transform.localPosition = info.position;
             transform.localScale = info.scale;
 
-            _meshFilter.mesh = info.mesh;
-            _meshRenderer.material = info.material;
-
-            if (transform.TryGetComponent<Collider>(out var collider))
+            if (_meshFilter)
             {
-                Destroy(collider);
+                _meshFilter.mesh = info.mesh;
             }
+
+            if (_meshRenderer)
+            {
+                _meshRenderer.material = info.material;
+            }
+
+            // if (transform.TryGetComponent<Collider>(out var collider))
+            // {
+            //     Destroy(collider);
+            // }
             
             // var originalType = info.collider.GetType();
             // var compo = transform.AddComponent<Collider>();

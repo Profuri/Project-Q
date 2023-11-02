@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace StageStructureConvertSystem
 {
@@ -19,26 +20,6 @@ namespace StageStructureConvertSystem
             _convertableUnits.ForEach(unit => unit.Init());
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.V))
-            {
-                ConvertDimension(EAxisType.NONE);
-            }
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                ConvertDimension(EAxisType.X);
-            }
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                ConvertDimension(EAxisType.Y);
-            }
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                ConvertDimension(EAxisType.Z);
-            }
-        }
-
         public void ConvertDimension(EAxisType axisType)
         {
             if (_axisType == axisType)
@@ -47,11 +28,18 @@ namespace StageStructureConvertSystem
             if (_axisType != EAxisType.NONE && axisType != EAxisType.NONE)
                 return;
             
-            _axisType = axisType;
-            _convertableUnits.ForEach(unit =>
+            CameraManager.Instance.ChangeCamera(axisType, () =>
             {
-                unit.ConvertDimension(axisType);
+                CameraManager.Instance.ShakeCam();
+                VolumeManager.Instance.Highlight(0.2f);
+                CameraManager.Instance.SetOrthographic(axisType != EAxisType.NONE);
+                _axisType = axisType;
+                _convertableUnits.ForEach(unit =>
+                {
+                    unit.ConvertDimension(axisType);
+                });
             });
+
         }
     }
 }
