@@ -29,23 +29,39 @@ public class CameraManager : BaseManager<CameraManager>
 
     public void ChangeCamera(EAxisType type, Action CallBack = null)
     {
-        StartCoroutine(ChangeCamRoutine(type, 0.5f, CallBack));
+        StartCoroutine(ChangeCamRoutine(type, 1f, CallBack));
     }
 
     private IEnumerator ChangeCamRoutine(EAxisType type, float time, Action CallBack)
     {
-        if (_currentVCam != null)
+        if (type == EAxisType.NONE)
         {
-            _currentVCam.m_Priority = 0;
-            _currentVCam = null;
+            CallBack?.Invoke();
+
+            if (_currentVCam != null)
+            {
+                _currentVCam.m_Priority = 0;
+                _currentVCam = null;
+            }
+            
+            _currentVCam = _virtualCams[(int)type];
+            _currentVCam.m_Priority = 10;
         }
+        else
+        {
+            if (_currentVCam != null)
+            {
+                _currentVCam.m_Priority = 0;
+                _currentVCam = null;
+            }
+            
+            _currentVCam = _virtualCams[(int)type];
+            _currentVCam.m_Priority = 10;
 
-        _currentVCam = _virtualCams[(int)type];
-        _currentVCam.m_Priority = 10;
-
-        yield return new WaitForSeconds(time);
-        
-        CallBack?.Invoke();
+            yield return new WaitForSeconds(time);
+            
+            CallBack?.Invoke();
+        }
     }
 
     public void SetOrthographic(bool value)
