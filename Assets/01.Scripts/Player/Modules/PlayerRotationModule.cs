@@ -17,19 +17,18 @@ public class PlayerRotationModule : BaseModule<PlayerController>
     {
         Vector3 rotateDir = Controller.GetModule<PlayerMovementModule>().MoveVelocity;
         rotateDir.y = 0;
-
-        if (Controller.Converter.AxisType == EAxisType.X)
-            rotateDir.x = 0;
-        if (Controller.Converter.AxisType == EAxisType.Z)
-            rotateDir.z = 0;
-        
         rotateDir.Normalize();
 
-        if (rotateDir != Vector3.zero)
+        if (rotateDir == Vector3.zero)
+            return;
+
+        var rotateQuaternion = Quaternion.LookRotation(rotateDir);
+        
+        if (Controller.Converter.AxisType == EAxisType.NONE)
         {
-            var rotateQuaternion = Quaternion.LookRotation(rotateDir);
-            var lerpQuaternion = Quaternion.Slerp(Controller.ModelTrm.rotation, rotateQuaternion, Controller.DataSO.rotationSpeed * Time.deltaTime);
-            Controller.ModelTrm.rotation = lerpQuaternion;
+            rotateQuaternion = Quaternion.Slerp(Controller.ModelTrm.rotation, rotateQuaternion, Controller.DataSO.rotationSpeed * Time.deltaTime);
         }
+        
+        Controller.ModelTrm.rotation = rotateQuaternion;
     }
 }
