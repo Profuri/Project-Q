@@ -119,15 +119,18 @@ namespace StageStructureConvertSystem
                     }
                     break;
                 case EAxisType.X:
-                    _objectInfo.position.x = _prevObjectInfo.scale.x / 2;
+                    // _objectInfo.position.x = _prevObjectInfo.scale.x / 2;
+                    _objectInfo.position.x = 0;
                     _objectInfo.scale.x = 1;
                     break;
                 case EAxisType.Y:
-                    _objectInfo.position.y = -_prevObjectInfo.scale.y / 2;
+                    // _objectInfo.position.y = -_prevObjectInfo.scale.y / 2;
+                    _objectInfo.position.y = 0;
                     _objectInfo.scale.y = 1;
                     break;
                 case EAxisType.Z:
-                    _objectInfo.position.z = -_prevObjectInfo.scale.z / 2;
+                    // _objectInfo.position.z = -_prevObjectInfo.scale.z / 2;
+                    _objectInfo.position.z = 0;
                     _objectInfo.scale.z = 1;
                     break;
             }
