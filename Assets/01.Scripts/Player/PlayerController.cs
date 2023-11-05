@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class PlayerController : BaseModuleController
 {
-    [SerializeField]
-    private PlayerDataSO _dataSO;
+    [SerializeField] private PlayerDataSO _dataSO;
     public PlayerDataSO DataSO => _dataSO;
 
     private Transform _modelTrm;
@@ -13,7 +12,7 @@ public class PlayerController : BaseModuleController
 
     private StructureConverter _converter;
     public StructureConverter Converter => _converter;
-    
+
     public override void Start()
     {
         _modelTrm = transform.Find("Model");

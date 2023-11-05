@@ -1,13 +1,11 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace StageStructureConvertSystem
 {
     public class StructureConverter : MonoBehaviour
     {
-        private List<StructureObjectUnit> _convertableUnits;
+        private List<StructureObjectUnitBase> _convertableUnits;
 
         private EAxisType _axisType;
         public EAxisType AxisType => _axisType;
@@ -15,7 +13,7 @@ namespace StageStructureConvertSystem
         private void Awake()
         {
             _axisType = EAxisType.NONE;
-            _convertableUnits = new List<StructureObjectUnit>();
+            _convertableUnits = new List<StructureObjectUnitBase>();
             GetComponentsInChildren(_convertableUnits);
             _convertableUnits.ForEach(unit => unit.Init());
         }
@@ -40,6 +38,16 @@ namespace StageStructureConvertSystem
                 _convertableUnits.ForEach(unit =>
                 {
                     unit.ConvertDimension(axisType);
+                });
+                
+                _convertableUnits.ForEach(unit =>
+                {
+                    unit.TransformSynchronization(axisType);
+                });
+                
+                _convertableUnits.ForEach(unit =>
+                {
+                    unit.ObjectSetting();
                 });
             });
 
