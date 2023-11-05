@@ -33,7 +33,10 @@ namespace StageStructureConvertSystem
                 CameraManager.Instance.ShakeCam();
                 VolumeManager.Instance.Highlight(0.2f);
                 CameraManager.Instance.SetOrthographic(axisType != EAxisType.NONE);
+                LightManager.Instance.SetShadow(axisType == EAxisType.NONE ? LightShadows.Soft : LightShadows.None);
+                
                 _axisType = axisType;
+
                 _convertableUnits.ForEach(unit =>
                 {
                     unit.ConvertDimension(axisType);
