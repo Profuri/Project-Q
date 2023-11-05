@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace StageStructureConvertSystem
 {
@@ -14,6 +15,8 @@ namespace StageStructureConvertSystem
 
         private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
+
+        public UnityEvent<EAxisType> OnChangeAxis = null;
 
         public void Init()
         {
@@ -44,6 +47,8 @@ namespace StageStructureConvertSystem
             TransformSynchronization(axisType);
             ApplyCollider(axisType);
             ObjectSetting(_objectInfo);
+            
+            OnChangeAxis?.Invoke(axisType);
         }
 
         public void ConvertMesh(EAxisType axisType)
@@ -90,6 +95,19 @@ namespace StageStructureConvertSystem
                     }
                     
                     _objectInfo.mesh.vertices = vertices;
+                    
+                    switch (axisType)
+                    {
+                        case EAxisType.X:
+                            _objectInfo.material.renderQueue = Mathf.CeilToInt(_prevObjectInfo.position.x + 5f);
+                            break;
+                        case EAxisType.Y:
+                            _objectInfo.material.renderQueue = Mathf.CeilToInt(_prevObjectInfo.position.y);
+                            break;
+                        case EAxisType.Z:
+                            _objectInfo.material.renderQueue = Mathf.CeilToInt(Mathf.Abs(_prevObjectInfo.position.z - 5f));
+                            break;
+                    }
                 }
             }
         }
