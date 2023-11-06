@@ -4,22 +4,26 @@ using System.Collections.Generic;
 using Cinemachine;
 using ManagingSystem;
 using UnityEngine;
+using VirtualCam;
 using static Core.Define;
 
 public class CameraManager : BaseManager<CameraManager>
 {
-    [SerializeField] private List<CinemachineVirtualCameraBase> _virtualCams = new List<CinemachineVirtualCameraBase>();
-
-    private CinemachineVirtualCameraBase _currentVCam;
+    [SerializeField] private List<VirtualCamComponent> _virtualCams = new();
+    private Dictionary<EAxisType, VirtualCamComponent> _virtualCamDiction = new();
+    
+    private VirtualCamComponent _currentVCam;
 
     public override void StartManager()
     {
         _currentVCam = null;
         foreach (var vCam in _virtualCams)
         {
-            vCam.m_Priority = 0;
+            vCam.ExitCam();
+            _virtualCamDiction.Add(vCam.Type, vCam);
         }
-        ChangeCamera(EAxisType.NONE, null);
+
+        ChangeCamera(EAxisType.NONE);
     }
 
     public override void UpdateManager()
@@ -40,23 +44,23 @@ public class CameraManager : BaseManager<CameraManager>
 
             if (_currentVCam != null)
             {
-                _currentVCam.m_Priority = 0;
+                _currentVCam.ExitCam();
                 _currentVCam = null;
             }
             
-            _currentVCam = _virtualCams[(int)type];
-            _currentVCam.m_Priority = 10;
+            _currentVCam = _virtualCamDiction[type];
+            _currentVCam.EnterCam();
         }
         else
         {
             if (_currentVCam != null)
             {
-                _currentVCam.m_Priority = 0;
+                _currentVCam.ExitCam();
                 _currentVCam = null;
             }
             
-            _currentVCam = _virtualCams[(int)type];
-            _currentVCam.m_Priority = 10;
+            _currentVCam = _virtualCamDiction[type];
+            _currentVCam.EnterCam();
 
             yield return new WaitForSeconds(time);
             
@@ -64,16 +68,8 @@ public class CameraManager : BaseManager<CameraManager>
         }
     }
 
-    public void SetOrthographic(bool value)
+    public void ShakeCam(float intensity, float time)
     {
-        MainCam.orthographic = value;
-    }
-
-    public void ShakeCam()
-    {
-        if (_currentVCam.TryGetComponent<CinemachineImpulseSource>(out var source))
-        {
-            source.GenerateImpulse();
-        }
+        _currentVCam.ShakeCam(intensity, time);
     }
 }
