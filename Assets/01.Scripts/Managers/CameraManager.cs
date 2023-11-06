@@ -68,16 +68,8 @@ public class CameraManager : BaseManager<CameraManager>
         }
     }
 
-    public void SetOrthographic(bool value)
+    public void ShakeCam(float intensity, float time)
     {
-        MainCam.orthographic = value;
-    }
-
-    public void ShakeCam()
-    {
-        if (_currentVCam.TryGetComponent<CinemachineImpulseSource>(out var source))
-        {
-            source.GenerateImpulse();
-        }
+        _currentVCam.ShakeCam(intensity, time);
     }
 }
