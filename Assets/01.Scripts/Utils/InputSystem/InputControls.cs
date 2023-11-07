@@ -55,6 +55,15 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""043858ae-c34a-4cf1-a083-a73b2ccd9f34"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -134,6 +143,17 @@ namespace InputControl
                     ""action"": ""AxisControl"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3697c80f-d747-4b78-8fd3-45d1ddd08ce1"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -162,6 +182,7 @@ namespace InputControl
             m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_AxisControl = m_Player.FindAction("AxisControl", throwIfNotFound: true);
+            m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -226,6 +247,7 @@ namespace InputControl
         private readonly InputAction m_Player_Movement;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_AxisControl;
+        private readonly InputAction m_Player_Interaction;
         public struct PlayerActions
         {
             private @InputControls m_Wrapper;
@@ -233,6 +255,7 @@ namespace InputControl
             public InputAction @Movement => m_Wrapper.m_Player_Movement;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @AxisControl => m_Wrapper.m_Player_AxisControl;
+            public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -251,6 +274,9 @@ namespace InputControl
                 @AxisControl.started += instance.OnAxisControl;
                 @AxisControl.performed += instance.OnAxisControl;
                 @AxisControl.canceled += instance.OnAxisControl;
+                @Interaction.started += instance.OnInteraction;
+                @Interaction.performed += instance.OnInteraction;
+                @Interaction.canceled += instance.OnInteraction;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -264,6 +290,9 @@ namespace InputControl
                 @AxisControl.started -= instance.OnAxisControl;
                 @AxisControl.performed -= instance.OnAxisControl;
                 @AxisControl.canceled -= instance.OnAxisControl;
+                @Interaction.started -= instance.OnInteraction;
+                @Interaction.performed -= instance.OnInteraction;
+                @Interaction.canceled -= instance.OnInteraction;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -295,6 +324,7 @@ namespace InputControl
             void OnMovement(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnAxisControl(InputAction.CallbackContext context);
+            void OnInteraction(InputAction.CallbackContext context);
         }
     }
 }

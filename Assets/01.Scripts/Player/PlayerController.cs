@@ -10,6 +10,9 @@ public class PlayerController : BaseModuleController
     private Transform _modelTrm;
     public Transform ModelTrm => _modelTrm;
 
+    private PlayerUIController _playerUIController;
+    public PlayerUIController PlayerUIController => _playerUIController;
+
     private StructureConverter _converter;
     public StructureConverter Converter => _converter;
 
@@ -17,6 +20,7 @@ public class PlayerController : BaseModuleController
     {
         _modelTrm = transform.Find("Model");
         _converter = transform.parent.GetComponent<StructureConverter>();
+        _playerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         base.Start();
     }
 
