@@ -9,16 +9,13 @@ public class PressurePlate : InteractableObject
     [SerializeField] private float _maxHeight;
     [SerializeField] private float _minHeight;
 
-    [SerializeField] private float _minPressableWeight;
-
-    [SerializeField] private PressureAffectedObject _affectedObject;
+    [SerializeField] private InteractableObject _affectedObject;
     
     private Transform _pressureMainTrm;
     private Transform _pressureObjTrm;
 
     private void Awake()
     {
-        _affectedObject = null;
         _pressureMainTrm = transform.Find("PressureMain");
         _pressureObjTrm = _pressureMainTrm.Find("PressureObject");
     }
@@ -30,18 +27,18 @@ public class PressurePlate : InteractableObject
 
     public override void OnInteraction(PlayerController player, bool interactValue)
     {
+        _affectedObject?.OnInteraction(null, interactValue);
+        
         var current = _pressureMainTrm.localScale.y;
         var dest = interactValue ? _minHeight : _maxHeight;
 
-        if (dest.ToString() != current.ToString() && Mathf.Abs(dest - current) <= 0.01f)
+        if (Mathf.Abs(dest - current) <= 0.01f)
         {
             current = dest;
-            _affectedObject?.OnInteraction(null, interactValue);
         }
         
         var scale = _pressureMainTrm.localScale;
         scale.y = Mathf.Lerp(current, dest, Time.deltaTime * _pressSpeed);
-
         _pressureMainTrm.localScale = scale;
 
     }
