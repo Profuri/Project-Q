@@ -24,7 +24,7 @@ public class VolumeManager : BaseManager<VolumeManager>
         StartCoroutine(HighlightRoutine(time));
     }
 
-    private IEnumerator HighlightRoutine(float time)
+    private IEnumerator HighlightRoutine(float time, float changePercent = 0.5f)
     {
         var curTime = 0f;
         var percent = 0f;
@@ -34,15 +34,15 @@ public class VolumeManager : BaseManager<VolumeManager>
             curTime += Time.deltaTime;
             percent = curTime / time;
 
-            if (percent < 0.5)
+            if (percent < changePercent)
             {
                 _mainVolume.weight = 1f - percent * 2f;
                 _highlightVolume.weight = percent * 2f;
             }
             else
             {
-                _mainVolume.weight = (percent - 0.5f) * 2f;
-                _highlightVolume.weight = 1 - (percent - 0.5f) * 2f;
+                _mainVolume.weight = (percent - changePercent) * 2f;
+                _highlightVolume.weight = 1 - (percent - changePercent) * 2f;
             }
             yield return null;
         }
