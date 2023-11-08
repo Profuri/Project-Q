@@ -53,9 +53,11 @@ public class PressurePlate : MonoBehaviour, IInteractable
             + Vector3.up 
             * (_pressureObjTrm.localScale.y * _pressureMainTrm.localScale.y / 2 + _pressureObjTrm.localScale.y / 2);
         var checkSize = _pressureObjTrm.localScale;
-        var cols = Physics.OverlapBox(checkPos, checkSize / 2, Quaternion.identity, _pressionorMask);
 
-        return cols.Length > 0;
+        var cols = new Collider[1];
+        var size = Physics.OverlapBoxNonAlloc(checkPos, checkSize / 2, cols, Quaternion.identity, _pressionorMask);
+
+        return size > 0;
     }
     
 #if UNITY_EDITOR

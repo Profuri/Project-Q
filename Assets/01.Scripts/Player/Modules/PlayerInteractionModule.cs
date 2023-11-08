@@ -14,6 +14,8 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
     [SerializeField] private LayerMask _interactableMask;
     [SerializeField] private float _interactableRadius;
 
+    [SerializeField] private int _InteractableCheckLimit;
+
     private IInteractable _selectedInteractable = null;
 
     public override void Init(Transform root)
@@ -36,21 +38,17 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
 
     private void OnInteraction()
     {
-        if (_selectedInteractable == null)
-        {
-            return;
-        }
-        
-        _selectedInteractable.OnInteraction(Controller, true);
+        _selectedInteractable?.OnInteraction(Controller, true);
     }
 
     private IInteractable FindInteractable()
     {
-        var cols = Physics.OverlapSphere(Controller.transform.position, _interactableRadius, _interactableMask);
+        var cols = new Collider[_InteractableCheckLimit];
+        var size = Physics.OverlapSphereNonAlloc(Controller.transform.position, _interactableRadius, cols, _interactableMask);
 
-        foreach (var col in cols)
+        for(var i = 0; i < size; ++i)
         {
-            if (col.TryGetComponent<IInteractable>(out var interactable))
+            if (cols[i].TryGetComponent<IInteractable>(out var interactable))
             {
                 if (interactable.InteractType == EInteractType.INPUT_RECEIVE)
                 {
