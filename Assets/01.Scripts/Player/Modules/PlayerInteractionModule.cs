@@ -41,21 +41,28 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
             return;
         }
         
-        _selectedInteractable.OnInteraction(Controller);
+        _selectedInteractable.OnInteraction(Controller, true);
     }
 
     private IInteractable FindInteractable()
     {
         var cols = Physics.OverlapSphere(Controller.transform.position, _interactableRadius, _interactableMask);
 
-        if (cols.Length <= 0)
+        foreach (var col in cols)
         {
-            return null;
+            if (col.TryGetComponent<IInteractable>(out var interactable))
+            {
+                if (interactable.InteractType == EInteractType.INPUT_RECEIVE)
+                {
+                    return interactable;
+                }
+            }
         }
 
-        return cols[0].TryGetComponent<IInteractable>(out var interactable) ? interactable : null;
+        return null;
     }
-
+    
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;
@@ -71,4 +78,5 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
             Gizmos.DrawLine(Controller.transform.position, _selectedInteractable.GetTransform.position);
         }
     }
+#endif
 }

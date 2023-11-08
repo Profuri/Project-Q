@@ -4,8 +4,9 @@ using UnityEngine;
 public class GoalObject : MonoBehaviour, IInteractable
 {
     public Transform GetTransform => transform;
-    
-    public void OnInteraction(PlayerController player)
+    public EInteractType InteractType => EInteractType.INPUT_RECEIVE;
+
+    public void OnInteraction(PlayerController player, bool interactValue)
     {
         Debug.Log("Goal!!");    
     }

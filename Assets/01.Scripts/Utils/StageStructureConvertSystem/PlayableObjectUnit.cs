@@ -6,7 +6,7 @@ namespace StageStructureConvertSystem
     [RequireComponent(typeof(CharacterController))]
     public class PlayableObjectUnit : StructureObjectUnitBase
     {
-        [SerializeField] private LayerMask _whatIsObjectUnit;
+        [SerializeField] private LayerMask _objectUnitMask;
         [SerializeField] private float _rayDistance;
         
         private CharacterController _characterController;
@@ -54,7 +54,7 @@ namespace StageStructureConvertSystem
             var dir = Vector3.down;
 
             RaycastHit hit;
-            var isHit = Physics.Raycast(origin, dir, out hit, _rayDistance, _whatIsObjectUnit);
+            var isHit = Physics.Raycast(origin, dir, out hit, _rayDistance, _objectUnitMask);
 
             if (isHit)
             {
