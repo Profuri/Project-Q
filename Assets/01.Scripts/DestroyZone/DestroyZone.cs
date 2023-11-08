@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using StageStructureConvertSystem;
 using UnityEngine;
 
@@ -11,7 +8,7 @@ public class DestroyZone : MonoBehaviour
         if (other.TryGetComponent<StructureObjectUnitBase>(out var unit))
         {
             var rigid = other.GetComponent<Rigidbody>();
-            if (rigid is not null)
+            if (rigid != null)
             {
                 rigid.velocity = Vector3.zero;
             }
