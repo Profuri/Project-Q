@@ -16,6 +16,8 @@ public class PlayerObjectHoldingModule : BaseModule<PlayerController>
 
     public override void UpdateModule()
     {
+        HoldingPointMovement();
+        
         if (_heldObject is null)
         {
             return;
@@ -28,7 +30,7 @@ public class PlayerObjectHoldingModule : BaseModule<PlayerController>
     {
         // Do Nothing
     }
-    
+
     public void AttachObject(HoldableObject obj)
     {
         if (_heldObject is not null)
@@ -42,5 +44,22 @@ public class PlayerObjectHoldingModule : BaseModule<PlayerController>
     public void DetachObject()
     {
         _heldObject = null;
+    }
+
+    private void HoldingPointMovement()
+    {
+        var holdPoint = _holdPoint.position;
+        var height = _holdPoint.localPosition.y;
+        var origin = Controller.transform.position + Vector3.up * height;
+        var radius = Mathf.Round(Vector3.Distance(origin, holdPoint));
+
+        var originDir = (holdPoint - origin).normalized;  
+        var destDir = Controller.ModelTrm.forward;
+
+        var lerpDir = Vector3.Lerp(originDir, destDir, Controller.DataSO.rotationSpeed * Time.deltaTime);
+
+        var destPos = origin + lerpDir * radius;
+
+        _holdPoint.position = destPos;
     }
 }
