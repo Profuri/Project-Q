@@ -16,7 +16,7 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
 
     [SerializeField] private int _InteractableCheckLimit;
 
-    private IInteractable _selectedInteractable = null;
+    private InteractableObject _selectedInteractable = null;
 
     public override void Init(Transform root)
     {
@@ -41,14 +41,14 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
         _selectedInteractable?.OnInteraction(Controller, true);
     }
 
-    private IInteractable FindInteractable()
+    private InteractableObject FindInteractable()
     {
         var cols = new Collider[_InteractableCheckLimit];
         var size = Physics.OverlapSphereNonAlloc(Controller.transform.position, _interactableRadius, cols, _interactableMask);
 
         for(var i = 0; i < size; ++i)
         {
-            if (cols[i].TryGetComponent<IInteractable>(out var interactable))
+            if (cols[i].TryGetComponent<InteractableObject>(out var interactable))
             {
                 if (interactable.InteractType == EInteractType.INPUT_RECEIVE)
                 {
@@ -73,7 +73,7 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
         if (_selectedInteractable != null)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(Controller.transform.position, _selectedInteractable.GetTransform.position);
+            Gizmos.DrawLine(Controller.transform.position, _selectedInteractable.transform.position);
         }
     }
 #endif

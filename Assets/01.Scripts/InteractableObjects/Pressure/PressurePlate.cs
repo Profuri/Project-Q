@@ -1,16 +1,15 @@
 using InteractableSystem;
 using UnityEngine;
 
-public class PressurePlate : MonoBehaviour, IInteractable
+public class PressurePlate : InteractableObject
 {
-    public Transform GetTransform => transform;
-    public EInteractType InteractType => EInteractType.INTERACT_SELF;
-
     [SerializeField] private LayerMask _pressionorMask;
 
     [SerializeField] private float _pressSpeed;
     [SerializeField] private float _maxHeight;
     [SerializeField] private float _minHeight;
+
+    [SerializeField] private float _minPressableWeight;
 
     [SerializeField] private PressureAffectedObject _affectedObject;
     
@@ -29,7 +28,7 @@ public class PressurePlate : MonoBehaviour, IInteractable
         OnInteraction(null, CheckPressed());
     }
 
-    public void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(PlayerController player, bool interactValue)
     {
         var current = _pressureMainTrm.localScale.y;
         var dest = interactValue ? _minHeight : _maxHeight;
@@ -57,7 +56,17 @@ public class PressurePlate : MonoBehaviour, IInteractable
         var cols = new Collider[1];
         var size = Physics.OverlapBoxNonAlloc(checkPos, checkSize / 2, cols, Quaternion.identity, _pressionorMask);
 
-        return size > 0;
+        if (size <= 0)
+        {
+            return false;
+        }
+        
+        if (cols[0].TryGetComponent<InteractableObject>(out var interactable))
+        {
+            return interactable.Attribute.HasFlag(EInteractableAttribute.CAN_PRESS_THE_PRESSURE_PLATE);
+        }
+
+        return true;
     }
     
 #if UNITY_EDITOR
