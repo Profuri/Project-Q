@@ -66,7 +66,11 @@ public class PlayerMovementModule : BaseModule<PlayerController>
         
         _moveVelocity += _verticalVelocity;
 
-        if (!IsGround)
+        if (IsGround && _verticalVelocity.y < 0f)
+        {
+            _verticalVelocity.y = -1f;
+        }
+        else
         {
             _verticalVelocity.y += Controller.DataSO.gravity * Time.deltaTime;
         }
@@ -79,7 +83,9 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     
     private void OnJump()
     {
-        if(IsGround)
+        if (IsGround)
+        {
             _verticalVelocity.y = Controller.DataSO.jumpPower;
+        }
     }
 }

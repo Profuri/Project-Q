@@ -18,7 +18,7 @@ namespace StageStructureConvertSystem
             _isConvertable = true;
             _convertableUnits = new List<StructureObjectUnitBase>();
             GetComponentsInChildren(_convertableUnits);
-            _convertableUnits.ForEach(unit => unit.Init());
+            _convertableUnits.ForEach(unit => unit.Init(this));
         }
 
         public void ConvertDimension(EAxisType axisType)

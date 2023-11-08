@@ -11,9 +11,9 @@ namespace StageStructureConvertSystem
         
         private CharacterController _characterController;
 
-        public override void Init()
+        public override void Init(StructureConverter converter)
         {
-            base.Init();
+            base.Init(converter);
             _characterController = GetComponent<CharacterController>();
         }
 
