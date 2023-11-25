@@ -10,9 +10,10 @@ namespace StageStructureConvertSystem
         protected ObjectInfo _prevObjectInfo;
         protected ObjectInfo _objectInfo;
 
+        protected Collider _collider;
         private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
-
+        
         public ObjectInfo PrevObjectInfo => _prevObjectInfo;
         public ObjectInfo ObjectInfo => _objectInfo;
 
@@ -20,7 +21,8 @@ namespace StageStructureConvertSystem
         {
             _originPos = transform.position;
             _converter = converter;
-            
+
+            _collider = GetComponent<Collider>();
             _meshFilter = GetComponent<MeshFilter>();
             _meshRenderer = GetComponent<MeshRenderer>();
 
@@ -33,7 +35,7 @@ namespace StageStructureConvertSystem
             {
                 _objectInfo.material = _meshRenderer.material;
             }
-            
+
             _objectInfo.position = transform.localPosition;
             _objectInfo.scale = transform.localScale;
             _objectInfo.axis = EAxisType.NONE;
