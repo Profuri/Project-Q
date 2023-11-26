@@ -16,12 +16,35 @@ public class PlayerController : BaseModuleController
     private StructureConverter _converter;
     public StructureConverter Converter => _converter;
 
+    private ushort _enableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
+
     public override void Start()
     {
         _modelTrm = transform.Find("Model");
         _converter = transform.parent.GetComponent<StructureConverter>();
         _playerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         base.Start();
+    }
+
+    public bool GetAxisEnabled(EAxisType axis)
+    {
+        return !((_enableAxis & (ushort)axis) == 0);
+    }
+
+    public void SetEnableAxis(EAxisType axis, bool enabled)
+    {
+        if(enabled)
+        {
+            _enableAxis |= (ushort)axis;
+        }
+        else
+        {
+            _enableAxis ^= (ushort)axis;
+            if(axis == _converter.AxisType)
+            {
+                _converter.ConvertDimension(EAxisType.NONE);
+            }
+        }
     }
 
     public override void Update()
@@ -31,15 +54,15 @@ public class PlayerController : BaseModuleController
         {
             _converter.ConvertDimension(EAxisType.NONE);
         }
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B) && GetAxisEnabled(EAxisType.X)) 
         {
             _converter.ConvertDimension(EAxisType.X);
         }
-        if (Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKeyDown(KeyCode.N) && GetAxisEnabled(EAxisType.Y))
         {
             _converter.ConvertDimension(EAxisType.Y);
         }
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M) && GetAxisEnabled(EAxisType.Z))
         {
             _converter.ConvertDimension(EAxisType.Z);
         }
