@@ -15,6 +15,8 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     private Vector3 _moveVelocity;
     private Vector3 _verticalVelocity;
 
+    private bool _canMove = true;
+
     public Vector3 MoveVelocity => _moveVelocity;
     public bool IsGround => _characterController.isGrounded;
 
@@ -30,7 +32,10 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public override void UpdateModule()
     {
-        CalcMovement();
+        if(_canMove)
+        {
+            CalcMovement();
+        }
     }
 
     public override void FixedUpdateModule()
@@ -44,6 +49,17 @@ public class PlayerMovementModule : BaseModule<PlayerController>
         
         _inputReader.OnMovementEvent -= SetInputDir;
         _inputReader.OnJumpEvent -= OnJump;
+    }
+
+    public void SetEnableMove(bool value)
+    {
+        _canMove = value;
+    }
+
+    public void StopImmediately()
+    {
+        _moveVelocity = Vector3.zero;
+        _verticalVelocity = Vector3.zero;
     }
 
     private void CalcMovement()
