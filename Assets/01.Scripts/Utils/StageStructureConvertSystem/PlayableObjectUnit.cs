@@ -21,6 +21,7 @@ namespace StageStructureConvertSystem
         public override void TransformSynchronization(EAxisType axisType)
         {
             base.TransformSynchronization(axisType);
+            _playerController.GetModule<PlayerMovementModule>().CanJump = axisType != EAxisType.Y;
 
             switch (axisType)
             {

@@ -20,6 +20,8 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     private Vector3 _verticalVelocity;
 
     public Vector3 MoveVelocity => _moveVelocity;
+
+    public bool CanJump { get; set; }
     public bool IsGround => CheckGround();
 
     public override void Init(Transform root)
@@ -109,7 +111,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     
     private void OnJump()
     {
-        if (IsGround)
+        if (IsGround && CanJump)
         {
             _verticalVelocity.y = Controller.DataSO.jumpPower;
         }
