@@ -5,22 +5,28 @@ namespace StageStructureConvertSystem
     public class StructureObjectUnitBase : MonoBehaviour, IStructureObject
     {
         private Vector3 _originPos;
+        private Vector3 _originScale;
+        
         private StructureConverter _converter;
         
         protected ObjectInfo _prevObjectInfo;
         protected ObjectInfo _objectInfo;
 
+        protected Collider _collider;
         private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
-
+        
         public ObjectInfo PrevObjectInfo => _prevObjectInfo;
         public ObjectInfo ObjectInfo => _objectInfo;
 
         public virtual void Init(StructureConverter converter)
         {
-            _originPos = transform.position;
-            _converter = converter;
+            _originPos = transform.localPosition;
+            _originScale = transform.localScale;
             
+            _converter = converter;
+
+            _collider = GetComponent<Collider>();
             _meshFilter = GetComponent<MeshFilter>();
             _meshRenderer = GetComponent<MeshRenderer>();
 
@@ -33,9 +39,9 @@ namespace StageStructureConvertSystem
             {
                 _objectInfo.material = _meshRenderer.material;
             }
-            
-            _objectInfo.position = transform.localPosition;
-            _objectInfo.scale = transform.localScale;
+
+            _objectInfo.position = _originPos;
+            _objectInfo.scale = _originScale;
             _objectInfo.axis = EAxisType.NONE;
         }
 
@@ -115,6 +121,7 @@ namespace StageStructureConvertSystem
         public virtual void ReloadObject()
         {
             _objectInfo.position = _originPos;
+            _objectInfo.scale = _originScale;
             TransformSynchronization(_converter.AxisType);
             ObjectSetting();
         }
