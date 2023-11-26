@@ -1,21 +1,21 @@
-using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace StageStructureConvertSystem
 {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(PlayerController))]
     public class PlayableObjectUnit : StructureObjectUnitBase
     {
         [SerializeField] private LayerMask _standableObjectMask;
         [SerializeField] private float _rayDistance;
-        
-        private CharacterController _characterController;
+
+        private PlayerController _playerController;
+        private BoxCollider _playerCollider;
 
         public override void Init(StructureConverter converter)
         {
             base.Init(converter);
-            _characterController = GetComponent<CharacterController>();
+            _playerController = GetComponent<PlayerController>();
+            _playerCollider = GetComponent<BoxCollider>();
         }
 
         public override void TransformSynchronization(EAxisType axisType)
@@ -26,32 +26,32 @@ namespace StageStructureConvertSystem
             {
                 case EAxisType.NONE:
                     CheckObject(_prevObjectInfo.axis);
-                    _characterController.center = Vector3.zero;
+                    _playerCollider.center = Vector3.zero;
                     break;
                 case EAxisType.X:
                     _objectInfo.position.x = 1;
-                    _characterController.center = new Vector3(-1, 0, 0);
+                    _playerCollider.center = new Vector3(-1, 0, 0);
                     break;
                 case EAxisType.Y:
                     _objectInfo.position.y = 1;
                     break;
                 case EAxisType.Z:
                     _objectInfo.position.z = -1;
-                    _characterController.center = new Vector3(0, 0, 1);
+                    _playerCollider.center = new Vector3(0, 0, 1);
                     break;
             }
         }
 
         public override void ObjectSetting()
         {
-            _characterController.enabled = false;
+            _playerCollider.enabled = false;
             base.ObjectSetting();
-            _characterController.enabled = true;
+            _playerCollider.enabled = true;
         }
 
         private void CheckObject(EAxisType axisType)
         {
-            var origin = _prevObjectInfo.position + _characterController.center;
+            var origin = _prevObjectInfo.position + _playerCollider.bounds.center;
             var dir = Vector3.down;
 
             RaycastHit hit;
@@ -93,6 +93,12 @@ namespace StageStructureConvertSystem
                     _objectInfo.position.z = unit.ObjectInfo.position.z;
                     break;
             }
+        }
+
+        public override void ReloadObject()
+        {
+            _playerController.GetModule<PlayerMovementModule>().StopImmediately();
+            base.ReloadObject();
         }
     }
 }
