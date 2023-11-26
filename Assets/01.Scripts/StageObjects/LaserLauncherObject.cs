@@ -23,6 +23,8 @@ public class LaserLauncherObject : PlatformObjectUnit
     public override void Init(StructureConverter converter)
     {
         _laserRenderer = GetComponent<LineRenderer>();
+        var position = _shotPointTrm.position;
+        _laserRenderer.SetPositions(new[] { position, position } );
         _laserRenderer.enabled = false;
         _isActiveLaser = false;
         base.Init(converter);
