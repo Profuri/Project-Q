@@ -5,7 +5,6 @@ namespace StageStructureConvertSystem
     public class PlatformObjectUnit : StructureObjectUnitBase
     {
         [SerializeField] private bool _isPlane = false;
-
         public override void ObjectSetting()
         {
             switch (_objectInfo.axis)
