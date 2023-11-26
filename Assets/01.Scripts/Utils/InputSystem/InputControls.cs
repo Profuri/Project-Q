@@ -156,6 +156,94 @@ namespace InputControl
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Editor"",
+            ""id"": ""7b46995b-e0a1-4ec3-bebc-975bd55a947e"",
+            ""actions"": [
+                {
+                    ""name"": ""X-CameraSwitcher"",
+                    ""type"": ""Button"",
+                    ""id"": ""6957f8aa-6d32-4a0b-a5e5-a680c3c3a24e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Y-CameraSwitcher"",
+                    ""type"": ""Button"",
+                    ""id"": ""cf2594af-30de-41a3-9855-5d3454d6831c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Z-CameraSwitcher"",
+                    ""type"": ""Button"",
+                    ""id"": ""6f354320-3be8-4f69-a5ba-ac357d02bf8f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reset"",
+                    ""type"": ""Button"",
+                    ""id"": ""ff3a679a-1385-4731-a944-a2fbbd4afb78"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e0a84256-0f2b-45a8-a6d3-fc5a8879dfd6"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Z-CameraSwitcher"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""953e3991-cc4e-434f-8b00-2e931c7c2da1"",
+                    ""path"": ""<Keyboard>/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Y-CameraSwitcher"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36ec9dff-c5de-44e6-90fb-b94a3a47d6db"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""X-CameraSwitcher"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""876079f7-015a-423a-918d-76606a6733c3"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Reset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -183,6 +271,12 @@ namespace InputControl
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_AxisControl = m_Player.FindAction("AxisControl", throwIfNotFound: true);
             m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
+            // Editor
+            m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
+            m_Editor_XCameraSwitcher = m_Editor.FindAction("X-CameraSwitcher", throwIfNotFound: true);
+            m_Editor_YCameraSwitcher = m_Editor.FindAction("Y-CameraSwitcher", throwIfNotFound: true);
+            m_Editor_ZCameraSwitcher = m_Editor.FindAction("Z-CameraSwitcher", throwIfNotFound: true);
+            m_Editor_Reset = m_Editor.FindAction("Reset", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -310,6 +404,76 @@ namespace InputControl
             }
         }
         public PlayerActions @Player => new PlayerActions(this);
+
+        // Editor
+        private readonly InputActionMap m_Editor;
+        private List<IEditorActions> m_EditorActionsCallbackInterfaces = new List<IEditorActions>();
+        private readonly InputAction m_Editor_XCameraSwitcher;
+        private readonly InputAction m_Editor_YCameraSwitcher;
+        private readonly InputAction m_Editor_ZCameraSwitcher;
+        private readonly InputAction m_Editor_Reset;
+        public struct EditorActions
+        {
+            private @InputControls m_Wrapper;
+            public EditorActions(@InputControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @XCameraSwitcher => m_Wrapper.m_Editor_XCameraSwitcher;
+            public InputAction @YCameraSwitcher => m_Wrapper.m_Editor_YCameraSwitcher;
+            public InputAction @ZCameraSwitcher => m_Wrapper.m_Editor_ZCameraSwitcher;
+            public InputAction @Reset => m_Wrapper.m_Editor_Reset;
+            public InputActionMap Get() { return m_Wrapper.m_Editor; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(EditorActions set) { return set.Get(); }
+            public void AddCallbacks(IEditorActions instance)
+            {
+                if (instance == null || m_Wrapper.m_EditorActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_EditorActionsCallbackInterfaces.Add(instance);
+                @XCameraSwitcher.started += instance.OnXCameraSwitcher;
+                @XCameraSwitcher.performed += instance.OnXCameraSwitcher;
+                @XCameraSwitcher.canceled += instance.OnXCameraSwitcher;
+                @YCameraSwitcher.started += instance.OnYCameraSwitcher;
+                @YCameraSwitcher.performed += instance.OnYCameraSwitcher;
+                @YCameraSwitcher.canceled += instance.OnYCameraSwitcher;
+                @ZCameraSwitcher.started += instance.OnZCameraSwitcher;
+                @ZCameraSwitcher.performed += instance.OnZCameraSwitcher;
+                @ZCameraSwitcher.canceled += instance.OnZCameraSwitcher;
+                @Reset.started += instance.OnReset;
+                @Reset.performed += instance.OnReset;
+                @Reset.canceled += instance.OnReset;
+            }
+
+            private void UnregisterCallbacks(IEditorActions instance)
+            {
+                @XCameraSwitcher.started -= instance.OnXCameraSwitcher;
+                @XCameraSwitcher.performed -= instance.OnXCameraSwitcher;
+                @XCameraSwitcher.canceled -= instance.OnXCameraSwitcher;
+                @YCameraSwitcher.started -= instance.OnYCameraSwitcher;
+                @YCameraSwitcher.performed -= instance.OnYCameraSwitcher;
+                @YCameraSwitcher.canceled -= instance.OnYCameraSwitcher;
+                @ZCameraSwitcher.started -= instance.OnZCameraSwitcher;
+                @ZCameraSwitcher.performed -= instance.OnZCameraSwitcher;
+                @ZCameraSwitcher.canceled -= instance.OnZCameraSwitcher;
+                @Reset.started -= instance.OnReset;
+                @Reset.performed -= instance.OnReset;
+                @Reset.canceled -= instance.OnReset;
+            }
+
+            public void RemoveCallbacks(IEditorActions instance)
+            {
+                if (m_Wrapper.m_EditorActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IEditorActions instance)
+            {
+                foreach (var item in m_Wrapper.m_EditorActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_EditorActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public EditorActions @Editor => new EditorActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -325,6 +489,13 @@ namespace InputControl
             void OnJump(InputAction.CallbackContext context);
             void OnAxisControl(InputAction.CallbackContext context);
             void OnInteraction(InputAction.CallbackContext context);
+        }
+        public interface IEditorActions
+        {
+            void OnXCameraSwitcher(InputAction.CallbackContext context);
+            void OnYCameraSwitcher(InputAction.CallbackContext context);
+            void OnZCameraSwitcher(InputAction.CallbackContext context);
+            void OnReset(InputAction.CallbackContext context);
         }
     }
 }
