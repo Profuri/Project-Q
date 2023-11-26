@@ -57,38 +57,41 @@ namespace StageStructureConvertSystem
             RaycastHit hit;
             var isHit = Physics.Raycast(origin, dir, out hit, _rayDistance, _standableObjectMask);
 
-            if (isHit)
+            if (!isHit)
             {
-                if (hit.collider.TryGetComponent<PlatformObjectUnit>(out var unit))
-                {
-                    switch (axisType)
+                return;
+            }
+
+            if (!hit.collider.TryGetComponent<PlatformObjectUnit>(out var unit))
+            {
+                return;
+            }
+            
+            switch (axisType)
+            {
+                case EAxisType.X:
+                    if (_objectInfo.position.x >= unit.ObjectInfo.position.x - unit.ObjectInfo.scale.x / 2f  &&
+                        _objectInfo.position.x <= unit.ObjectInfo.position.x + unit.ObjectInfo.scale.x / 2f)
                     {
-                        case EAxisType.X:
-                            if (_objectInfo.position.x >= unit.ObjectInfo.position.x - unit.ObjectInfo.scale.x / 2f  &&
-                                _objectInfo.position.x <= unit.ObjectInfo.position.x + unit.ObjectInfo.scale.x / 2f)
-                            {
-                                return;
-                            }
-                            _objectInfo.position.x = unit.ObjectInfo.position.x;
-                            break;
-                        case EAxisType.Y:
-                            if (_objectInfo.position.y >= unit.ObjectInfo.position.y + unit.ObjectInfo.scale.y / 2f + _objectInfo.scale.y / 2f)
-                            {
-                                return;
-                            }
-                            _objectInfo.position.y = unit.ObjectInfo.position.y + unit.ObjectInfo.scale.y / 2f + _objectInfo.scale.y / 2f;
-                            break;
-                        case EAxisType.Z:
-                            if (_objectInfo.position.z >= unit.ObjectInfo.position.z - unit.ObjectInfo.scale.z / 2f  &&
-                                _objectInfo.position.z <= unit.ObjectInfo.position.z + unit.ObjectInfo.scale.z / 2f)
-                            {
-                                return;
-                            }
-                            _objectInfo.position.z = unit.ObjectInfo.position.z;
-                            break;
+                        return;
                     }
-                    
-                }
+                    _objectInfo.position.x = unit.ObjectInfo.position.x;
+                    break;
+                case EAxisType.Y:
+                    if (_objectInfo.position.y >= unit.ObjectInfo.position.y + unit.ObjectInfo.scale.y / 2f + _objectInfo.scale.y / 2f)
+                    {
+                        return;
+                    }
+                    _objectInfo.position.y = unit.ObjectInfo.position.y + unit.ObjectInfo.scale.y / 2f + _objectInfo.scale.y / 2f;
+                    break;
+                case EAxisType.Z:
+                    if (_objectInfo.position.z >= unit.ObjectInfo.position.z - unit.ObjectInfo.scale.z / 2f  &&
+                        _objectInfo.position.z <= unit.ObjectInfo.position.z + unit.ObjectInfo.scale.z / 2f)
+                    {
+                        return;
+                    }
+                    _objectInfo.position.z = unit.ObjectInfo.position.z;
+                    break;
             }
         }
     }

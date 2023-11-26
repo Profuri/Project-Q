@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
+using InteractableSystem;
 using UnityEngine;
 using StageStructureConvertSystem;
-using Unity.VisualScripting;
 
 public class LaserLauncherObject : PlatformObjectUnit
 {
@@ -53,6 +52,11 @@ public class LaserLauncherObject : PlatformObjectUnit
             
             yield return waitForLaunch;
             yield return StartCoroutine(LaserActiveRoutine(false));
+
+            if (ObstacleCheck(out var hit))
+            {
+                InteractOther(hit.collider, false);
+            }
             _laserRenderer.enabled = false;
             _isActiveLaser = false;
             var position = _shotPointTrm.position;
@@ -84,10 +88,27 @@ public class LaserLauncherObject : PlatformObjectUnit
         if (ObstacleCheck(out var hit))
         {
             _laserRenderer.SetPosition(1, hit.point);
+            InteractOther(hit.collider, true);
         }
         else
         {
             _laserRenderer.SetPosition(1, _shotPointTrm.position + transform.forward * _laserDistance);
+        }
+    }
+
+    private void InteractOther(Collider col, bool interactValue)
+    {
+        if (col.TryGetComponent<PlayableObjectUnit>(out var playerUnit))
+        {
+            playerUnit.ReloadObject();
+        }
+
+        if (col.TryGetComponent<InteractableObject>(out var interactable))
+        {
+            if (interactable.Attribute.HasFlag(EInteractableAttribute.AFFECTED_FROM_LASER))
+            {
+                interactable.OnInteraction(null, interactValue);
+            }
         }
     }
 
