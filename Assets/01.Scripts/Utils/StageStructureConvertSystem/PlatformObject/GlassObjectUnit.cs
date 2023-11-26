@@ -8,7 +8,7 @@ namespace StageStructureConvertSystem
 
         public override void ObjectSetting()
         {
-            _collider.enabled = _objectInfo.axis == _activeAxisType | _objectInfo.axis == EAxisType.NONE;
+            gameObject.SetActive(_objectInfo.axis == _activeAxisType | _objectInfo.axis == EAxisType.NONE);
             base.ObjectSetting();
         }
     }
