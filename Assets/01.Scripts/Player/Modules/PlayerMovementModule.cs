@@ -63,12 +63,6 @@ public class PlayerMovementModule : BaseModule<PlayerController>
         _canMove = value;
     }
 
-    public void StopImmediately()
-    {
-        _moveVelocity = Vector3.zero;
-        _verticalVelocity = Vector3.zero;
-    }
-
     private void CalcMovement()
     {
         switch (Controller.Converter.AxisType)
