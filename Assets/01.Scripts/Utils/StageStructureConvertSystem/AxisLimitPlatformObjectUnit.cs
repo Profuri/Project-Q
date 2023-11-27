@@ -24,6 +24,7 @@ public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
 
         _collider = GetComponent<Collider>();
         _priorityCollider = _priorityObject.GetComponent<Collider>();
+
         if (_coroutine != null)
         {
             StopCoroutine(_coroutine);
@@ -37,7 +38,7 @@ public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
         {
             Collider[] cols = Physics.OverlapSphere(transform.position, _colCheckDistance, _targetLayer);
             //if Player is checked
-            if(cols.Length > 0 )
+            if(cols.Length > 0)
             {
                 _priorityCollider.isTrigger = true;
             }
@@ -58,18 +59,27 @@ public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
         if (axisType == EAxisType.NONE)
         {
             (_prevObjectInfo, _objectInfo) = (_objectInfo, _prevObjectInfo);
+            this.gameObject.SetActive(true);
         }
         // convert to 2D
         else
         {
             _prevObjectInfo = _objectInfo;
             _objectInfo.axis = axisType;
+
+            if (axisType == _targetAxisType)
+            {
+                this.gameObject.SetActive(true);
+            }
+            else
+            {
+                this.gameObject.SetActive(false);
+            }
         }
     }
 
     public override void TransformSynchronization(EAxisType axisType)
     {
-        this.gameObject.SetActive(true);
         if (_targetAxisType == axisType)
         {
             Vector3 priorityPos = _priorityObject.transform.position;
@@ -106,26 +116,19 @@ public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
                 case EAxisType.X:
                     float priorityXPos = (priorityPos.x + priObjColBoundsDivTwo.x) * xDir;
                     _objectInfo.position.x = priorityXPos;
-                    //_objectInfo.position.x = 0;
                     _objectInfo.scale.x = Mathf.Min(_objectInfo.scale.x, 1);
                     break;
                 case EAxisType.Y:
                     float priorityYPos = (priorityPos.y + priObjColBoundsDivTwo.y) * yDir;
                     _objectInfo.position.y = priorityYPos;
-                    //_objectInfo.position.y = 0;
                     _objectInfo.scale.y = Mathf.Min(_objectInfo.scale.y, 1);
                     break;
                 case EAxisType.Z:
                     float priorityZPos = (priorityPos.z + priObjColBoundsDivTwo.z) * zDir;
                     _objectInfo.position.z = priorityZPos;
-                    //_objectInfo.position.z = 0;
                     _objectInfo.scale.z = Mathf.Min(_objectInfo.scale.z, 1);
                     break;
             }
-        }
-        else
-        {
-            this.gameObject.SetActive(false);
         }
     }
 
