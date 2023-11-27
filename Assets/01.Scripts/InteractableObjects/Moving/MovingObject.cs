@@ -1,5 +1,6 @@
 using System;
 using InteractableSystem;
+using StageStructureConvertSystem;
 using UnityEngine;
 
 public class MovingObject : InteractableObject
@@ -11,11 +12,15 @@ public class MovingObject : InteractableObject
 
     [SerializeField] [Range(0.5f, 1f)] private float _checkDistance;
 
+    private PlatformObjectUnit _objectUnit;
+
     private float _minLimitPos;
     private float _maxLimitPos;
     
     private void Awake()
     {
+        _objectUnit = GetComponent<PlatformObjectUnit>();
+        
         var scale = _movingAxis == EMovingAxis.X ? transform.localScale.x : transform.localScale.z;
         var trackScale = _movingAxis == EMovingAxis.X ? _movingTrackTrm.localScale.x : _movingTrackTrm.localScale.z;
         _minLimitPos = -trackScale / 2f + scale / 2f;
@@ -24,6 +29,11 @@ public class MovingObject : InteractableObject
 
     private void Update()
     {
+        if (_objectUnit.ObjectInfo.axis != EAxisType.NONE)
+        {
+            return;
+        }
+        
         if (!CheckPlayer(out var cols))
         {
             return;
