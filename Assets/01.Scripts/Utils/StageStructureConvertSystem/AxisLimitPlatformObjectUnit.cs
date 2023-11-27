@@ -2,6 +2,7 @@ using StageStructureConvertSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
 {
@@ -12,8 +13,11 @@ public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
     [SerializeField] private float _colCheckDistance;
     [SerializeField] private LayerMask _targetLayer;
 
+    public bool IsCorrectAxis { get; private set; } = false;
+
     private Collider _collider;
     private Coroutine _coroutine;
+
 
     private Collider _priorityCollider;
 
@@ -36,15 +40,21 @@ public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
     {
         while (true)
         {
-            Collider[] cols = Physics.OverlapSphere(transform.position, _colCheckDistance, _targetLayer);
-            //if Player is checked
-            if(cols.Length > 0)
+            if (IsCorrectAxis)
             {
-                _priorityCollider.isTrigger = true;
-            }
-            else
-            {
-                _priorityCollider.isTrigger = false;
+                Collider[] cols = Physics.OverlapSphere(transform.position, _colCheckDistance, _targetLayer);
+                //if Player is checked
+                if (cols.Length > 0)
+                {
+                    _priorityCollider.isTrigger = true;
+                    _collider.isTrigger = false;
+                }
+                else
+                {
+
+                    _priorityCollider.isTrigger = false;
+                    _collider.isTrigger = true;
+                }
             }
             yield return null;
         }
@@ -54,6 +64,8 @@ public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
     {
         _objectInfo.position = transform.localPosition;
         _objectInfo.scale = transform.localScale;
+
+        IsCorrectAxis = false;
 
         // convert to 3D
         if (axisType == EAxisType.NONE)
@@ -69,6 +81,7 @@ public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
 
             if (axisType == _targetAxisType)
             {
+                IsCorrectAxis = true;
                 this.gameObject.SetActive(true);
             }
             else
