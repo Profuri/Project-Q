@@ -24,6 +24,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     public Vector3 MoveVelocity => _moveVelocity;
 
     public bool CanJump { get; set; }
+    public bool IsMovement => _inputDir.sqrMagnitude > 0f;
     public bool IsGround => CheckGround();
 
     public override void Init(Transform root)
@@ -32,6 +33,8 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
         _collider = root.GetComponent<BoxCollider>();
         _rigidbody = root.GetComponent<Rigidbody>();
+
+        CanJump = true;
 
         _inputReader.OnMovementEvent += SetInputDir;
         _inputReader.OnJumpEvent += OnJump;
