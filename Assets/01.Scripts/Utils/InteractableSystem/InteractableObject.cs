@@ -10,9 +10,6 @@ namespace InteractableSystem
         [SerializeField] private EInteractableAttribute _attribute;
         public EInteractableAttribute Attribute => _attribute;
 
-        public virtual void OnInteraction(PlayerController player, bool interactValue)
-        {
-            
-        }
+        public abstract void OnInteraction(PlayerController player, bool interactValue);
     }
 }
