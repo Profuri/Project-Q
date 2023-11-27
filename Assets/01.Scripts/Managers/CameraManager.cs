@@ -38,34 +38,18 @@ public class CameraManager : BaseManager<CameraManager>
 
     private IEnumerator ChangeCamRoutine(EAxisType type, float time, Action CallBack)
     {
-        if (type == EAxisType.NONE)
+        if (_currentVCam != null)
         {
-            CallBack?.Invoke();
-
-            if (_currentVCam != null)
-            {
-                _currentVCam.ExitCam();
-                _currentVCam = null;
-            }
-            
-            _currentVCam = _virtualCamDiction[type];
-            _currentVCam.EnterCam();
+            _currentVCam.ExitCam();
+            _currentVCam = null;
         }
-        else
-        {
-            if (_currentVCam != null)
-            {
-                _currentVCam.ExitCam();
-                _currentVCam = null;
-            }
             
-            _currentVCam = _virtualCamDiction[type];
-            _currentVCam.EnterCam();
+        _currentVCam = _virtualCamDiction[type];
+        _currentVCam.EnterCam();
 
-            yield return new WaitForSeconds(time);
+        yield return new WaitForSeconds(time);
             
-            CallBack?.Invoke();
-        }
+        CallBack?.Invoke();
     }
 
     public void ShakeCam(float intensity, float time)

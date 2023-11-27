@@ -1,5 +1,6 @@
 using InteractableSystem;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PressurePlate : InteractableObject
 {

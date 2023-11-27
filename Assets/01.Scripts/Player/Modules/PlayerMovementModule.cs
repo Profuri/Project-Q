@@ -19,6 +19,8 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     private Vector3 _moveVelocity;
     private Vector3 _verticalVelocity;
 
+    private bool _canMove = true;
+
     public Vector3 MoveVelocity => _moveVelocity;
 
     public bool CanJump { get; set; }
@@ -40,7 +42,10 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public override void UpdateModule()
     {
-        CalcMovement();
+        if(_canMove)
+        {
+            CalcMovement();
+        }
     }
 
     public override void FixedUpdateModule()
@@ -54,6 +59,11 @@ public class PlayerMovementModule : BaseModule<PlayerController>
         
         _inputReader.OnMovementEvent -= SetInputDir;
         _inputReader.OnJumpEvent -= OnJump;
+    }
+
+    public void SetEnableMove(bool value)
+    {
+        _canMove = value;
     }
 
     private void CalcMovement()
