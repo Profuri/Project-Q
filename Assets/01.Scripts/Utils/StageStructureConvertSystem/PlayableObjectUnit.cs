@@ -52,7 +52,8 @@ namespace StageStructureConvertSystem
 
         private void CheckObject(EAxisType axisType)
         {
-            var origin = _prevObjectInfo.position + _playerCollider.bounds.center;
+            // var origin = _prevObjectInfo.position + _playerCollider.bounds.center;
+            var origin = _playerCollider.bounds.center;
             var dir = Vector3.down;
 
             RaycastHit hit;
@@ -67,7 +68,7 @@ namespace StageStructureConvertSystem
             {
                 return;
             }
-            
+
             switch (axisType)
             {
                 case EAxisType.X:

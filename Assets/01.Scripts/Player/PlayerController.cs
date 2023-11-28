@@ -28,7 +28,7 @@ public class PlayerController : BaseModuleController
 
     public bool GetAxisEnabled(EAxisType axis)
     {
-        return !((_enableAxis & (ushort)axis) == 0);
+        return (_enableAxis & (ushort)axis) != 0;
     }
 
     public void SetEnableAxis(EAxisType axis, bool enabled)
