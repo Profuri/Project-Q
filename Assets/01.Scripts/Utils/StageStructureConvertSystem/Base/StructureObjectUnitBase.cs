@@ -12,8 +12,6 @@ namespace StageStructureConvertSystem
         protected ObjectInfo _prevObjectInfo;
         protected ObjectInfo _objectInfo;
 
-        protected Collider _collider;
-        private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
         
         public ObjectInfo PrevObjectInfo => _prevObjectInfo;
@@ -26,14 +24,7 @@ namespace StageStructureConvertSystem
             
             _converter = converter;
 
-            _collider = GetComponent<Collider>();
-            _meshFilter = GetComponent<MeshFilter>();
             _meshRenderer = GetComponent<MeshRenderer>();
-
-            if (_meshFilter)
-            {
-                _objectInfo.mesh = _meshFilter.mesh;
-            }
 
             if (_meshRenderer)
             {
@@ -106,11 +97,6 @@ namespace StageStructureConvertSystem
         {
             transform.localPosition = _objectInfo.position;
             transform.localScale = _objectInfo.scale;
-
-            if (_meshFilter)
-            {
-                _meshFilter.mesh = _objectInfo.mesh;
-            }
 
             if (_meshRenderer)
             {
