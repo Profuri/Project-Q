@@ -23,12 +23,13 @@ public class ReciprocationObject : InteractableObject
 
     public override void OnInteraction(PlayerController player, bool interactValue)
     {
-        var curPos = transform.position;
+        var curPos = transform.position;  
         var destPos = interactValue ? _destPos : _originPos;
 
         if (Vector3.Distance(curPos, destPos) <= 0.01f)
         {
             transform.position = destPos;
+            InterEnd = true;
             return;
         }
         
