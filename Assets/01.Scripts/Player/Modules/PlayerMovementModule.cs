@@ -11,8 +11,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     [SerializeField] private LayerMask _groundMask;
     [SerializeField] private float _maxGroundCheckDistance;
 
-    private BoxCollider _collider;
-    private Rigidbody _rigidbody;
+    private CharacterController _characterController;
 
     private Vector3 _inputDir;
     
@@ -31,8 +30,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     {
         base.Init(root);
 
-        _collider = root.GetComponent<BoxCollider>();
-        _rigidbody = root.GetComponent<Rigidbody>();
+        _characterController = root.GetComponent<CharacterController>();
 
         CanJump = true;
 
@@ -50,7 +48,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public override void FixedUpdateModule()
     {
-        _rigidbody.velocity = _moveVelocity;
+        _characterController.Move(_moveVelocity * Time.deltaTime);
     }
 
     public override void DisableModule()
@@ -98,7 +96,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     private bool CheckGround()
     {
-        var size = _collider.size;
+        var size = _characterController.bounds.size;
         size.y = 0.1f;
         var trm = transform;
         return Physics.BoxCast(
@@ -135,12 +133,12 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     {
         Gizmos.color = Color.cyan;
 
-        if (_collider == null)
+        if (_characterController == null)
         {
             return;
         }
 
-        var size = _collider.size;
+        var size = _characterController.bounds.size;
         size.y = 0.1f;
         var trm = transform;
         Gizmos.DrawCube(trm.position - trm.up * _maxGroundCheckDistance, size);
