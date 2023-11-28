@@ -2,14 +2,15 @@ using System;
 using System.Numerics;
 using InteractableSystem;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Vector3 = UnityEngine.Vector3;
 
 public class ReciprocationObject : InteractableObject
 {
-    [SerializeField] private Vector3 _reciprocateDir;
+    [SerializeField] private Vector3 _reciprocationDir;
 
-    [SerializeField] private float _reciprocateDistance;
-    [SerializeField] private float _reciprocateSpeed;
+    [SerializeField] private float _reciprocationDistance;
+    [SerializeField] private float _reciprocationSpeed;
 
     private Vector3 _originPos;
     private Vector3 _destPos;
@@ -17,7 +18,7 @@ public class ReciprocationObject : InteractableObject
     private void Awake()
     {
         _originPos = transform.position;
-        _destPos = _originPos + _reciprocateDir * _reciprocateDistance;
+        _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
     }
 
     public override void OnInteraction(PlayerController player, bool interactValue)
@@ -32,7 +33,7 @@ public class ReciprocationObject : InteractableObject
             return;
         }
         
-        var lerpPos = Vector3.Lerp(curPos, destPos, _reciprocateSpeed * Time.deltaTime);
+        var lerpPos = Vector3.Lerp(curPos, destPos, _reciprocationSpeed * Time.deltaTime);
         
         transform.position = lerpPos;
     }
@@ -43,7 +44,7 @@ public class ReciprocationObject : InteractableObject
         Gizmos.color = Color.white;
 
         var origin = transform.position;
-        var dest = origin + _reciprocateDir * _reciprocateDistance;
+        var dest = origin + _reciprocationDir * _reciprocationDistance;
 
         if (Application.isPlaying)
         {
