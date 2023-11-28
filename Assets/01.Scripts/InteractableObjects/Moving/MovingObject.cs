@@ -112,14 +112,14 @@ public class MovingObject : InteractableObject
         if (_movingAxis == EMovingAxis.X)
         {
             size.x *= _checkDistance;
-            size.z /= 2f;
+            size.z /= 2.25f;
         }
         else
         {
             size.z *= _checkDistance;
-            size.x /= 2f;
+            size.x /= 2.25f;
         }
-        size.y /= 2f;
+        size.y /= 2.25f;
 
         cols = new Collider[1];
         var colSize = Physics.OverlapBoxNonAlloc(transform.position, size, cols, transform.rotation, _playerMask);
@@ -134,14 +134,14 @@ public class MovingObject : InteractableObject
         if (_movingAxis == EMovingAxis.X)
         {
             size.x *= _checkDistance;
-            size.z /= 2f;
+            size.z /= 2.25f;
         }
         else
         {
             size.z *= _checkDistance;
-            size.x /= 2f;
+            size.x /= 2.25f;
         }
-        size.y /= 2f;
+        size.y /= 2.25f;
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireCube(transform.position, size * 2f);
     }
