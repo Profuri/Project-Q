@@ -9,13 +9,13 @@ namespace StageStructureConvertSystem
         [SerializeField] private float _rayDistance;
 
         private PlayerController _playerController;
-        private BoxCollider _playerCollider;
+        private CharacterController _characterController;
 
         public override void Init(StructureConverter converter)
         {
             base.Init(converter);
             _playerController = GetComponent<PlayerController>();
-            _playerCollider = GetComponent<BoxCollider>();
+            _characterController = GetComponent<CharacterController>();
         }
 
         public override void TransformSynchronization(EAxisType axisType)
@@ -27,33 +27,32 @@ namespace StageStructureConvertSystem
             {
                 case EAxisType.NONE:
                     CheckObject(_prevObjectInfo.axis);
-                    _playerCollider.center = Vector3.zero;
+                    _characterController.center = Vector3.zero;
                     break;
                 case EAxisType.X:
                     _objectInfo.position.x = 1;
-                    _playerCollider.center = new Vector3(-1, 0, 0);
+                    _characterController.center = new Vector3(-1, 0, 0);
                     break;
                 case EAxisType.Y:
                     _objectInfo.position.y = 1;
                     break;
                 case EAxisType.Z:
                     _objectInfo.position.z = -1;
-                    _playerCollider.center = new Vector3(0, 0, 1);
+                    _characterController.center = new Vector3(0, 0, 1);
                     break;
             }
         }
 
         public override void ObjectSetting()
         {
-            _playerCollider.enabled = false;
+            _characterController.enabled = false;
             base.ObjectSetting();
-            _playerCollider.enabled = true;
+            _characterController.enabled = true;
         }
 
         private void CheckObject(EAxisType axisType)
         {
-            // var origin = _prevObjectInfo.position + _playerCollider.bounds.center;
-            var origin = _playerCollider.bounds.center;
+            var origin = _prevObjectInfo.position + _characterController.center;
             var dir = Vector3.down;
 
             RaycastHit hit;
@@ -61,13 +60,17 @@ namespace StageStructureConvertSystem
 
             if (!isHit)
             {
+                Debug.Log(1);
                 return;
             }
 
             if (!hit.collider.TryGetComponent<PlatformObjectUnit>(out var unit))
             {
+                Debug.Log(2);
                 return;
             }
+
+            Debug.Log(hit.collider.name);
 
             switch (axisType)
             {
