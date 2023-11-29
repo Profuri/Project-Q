@@ -13,9 +13,12 @@ public class CameraManager : BaseManager<CameraManager>
     private Dictionary<EAxisType, VirtualCamComponent> _virtualCamDiction = new();
     
     private VirtualCamComponent _currentVCam;
+    private Camera _mainCam;
+    public Camera MainCam => _mainCam;
 
     public override void StartManager()
     {
+        _mainCam = Camera.main;
         _currentVCam = null;
         foreach (var vCam in _virtualCams)
         {
