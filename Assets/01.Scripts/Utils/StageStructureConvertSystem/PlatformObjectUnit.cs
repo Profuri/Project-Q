@@ -22,14 +22,5 @@ namespace StageStructureConvertSystem
             }
             base.ObjectSetting();
         }
-
-        public override void TransformSynchronization(EAxisType axisType)
-        {
-            base.TransformSynchronization(axisType);
-            if (_isPlane)
-            {
-                _objectInfo.scale = new Vector3(10, 1, 10);
-            }
-        }
     }
 }
