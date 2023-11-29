@@ -104,7 +104,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
             size,
             -trm.up,
             out var hit,
-            trm.rotation,
+            Controller.ModelTrm.rotation,
             _maxGroundCheckDistance,
             _groundMask
         );
