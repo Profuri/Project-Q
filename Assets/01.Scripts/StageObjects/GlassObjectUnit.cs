@@ -1,7 +1,7 @@
 using UnityEngine;
 using StageStructureConvertSystem;
 
-public class GlassObjectUnit : PlatformObjectUnit
+public class GlassObjectUnit : StructureObjectUnitBase
 {
     [SerializeField] private EAxisType _activeAxisType;
 

@@ -99,14 +99,17 @@ public class PlayerMovementModule : BaseModule<PlayerController>
         var size = _characterController.bounds.size;
         size.y = 0.1f;
         var trm = transform;
-        return Physics.BoxCast(
+        var isHit = Physics.BoxCast(
             trm.position,
             size,
             -trm.up,
+            out var hit,
             trm.rotation,
             _maxGroundCheckDistance,
             _groundMask
         );
+
+        return isHit && !hit.collider.isTrigger;
     }
 
     public void StopImmediately()
