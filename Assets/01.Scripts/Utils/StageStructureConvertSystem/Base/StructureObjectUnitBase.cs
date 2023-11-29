@@ -12,10 +12,15 @@ namespace StageStructureConvertSystem
         protected ObjectInfo _prevObjectInfo;
         protected ObjectInfo _objectInfo;
 
-        private MeshRenderer _meshRenderer;
+        protected MeshRenderer _meshRenderer;
+        protected Material _material;
+        protected Collider _collider;
         
         public ObjectInfo PrevObjectInfo => _prevObjectInfo;
         public ObjectInfo ObjectInfo => _objectInfo;
+
+        [SerializeField] private bool _materialRenderSetting = true;
+        [SerializeField] private bool _colliderSetting = true;
 
         public virtual void Init(StructureConverter converter)
         {
@@ -25,10 +30,11 @@ namespace StageStructureConvertSystem
             _converter = converter;
 
             _meshRenderer = GetComponent<MeshRenderer>();
+            _collider = GetComponent<Collider>();
 
             if (_meshRenderer)
             {
-                _objectInfo.material = _meshRenderer.material;
+                _material = _meshRenderer.material;
             }
 
             _objectInfo.position = _originPos;
@@ -83,7 +89,7 @@ namespace StageStructureConvertSystem
                     _objectInfo.scale.x = Mathf.Min(_objectInfo.scale.x, 1);
                     break;
                 case EAxisType.Y:
-                    _objectInfo.position.y = 0;
+                    _objectInfo.position.y = 1;
                     _objectInfo.scale.y = Mathf.Min(_objectInfo.scale.y, 1);
                     break;
                 case EAxisType.Z:
@@ -95,12 +101,15 @@ namespace StageStructureConvertSystem
 
         public virtual void ObjectSetting()
         {
+            MaterialRenderSetting();
+            ColliderSetting();
+            
             transform.localPosition = _objectInfo.position;
             transform.localScale = _objectInfo.scale;
 
             if (_meshRenderer)
             {
-                _meshRenderer.material = _objectInfo.material;
+                _meshRenderer.material = _material;
             }
         }
 
@@ -110,6 +119,37 @@ namespace StageStructureConvertSystem
             _objectInfo.scale = _originScale;
             TransformSynchronization(_converter.AxisType);
             ObjectSetting();
+        }
+
+        public virtual void MaterialRenderSetting()
+        {
+            if (!_material || !_materialRenderSetting)
+            {
+                return;
+            }
+            
+            switch (_objectInfo.axis)
+            {
+                case EAxisType.X:
+                    _material.renderQueue = Mathf.CeilToInt(_prevObjectInfo.position.x + 5f);
+                    break;
+                case EAxisType.Y:
+                    _material.renderQueue = Mathf.CeilToInt(_prevObjectInfo.position.y);
+                    break;
+                case EAxisType.Z:
+                    _material.renderQueue = Mathf.CeilToInt(Mathf.Abs(_prevObjectInfo.position.z - 5f));
+                    break;
+            }
+        }
+
+        public virtual void ColliderSetting()
+        {
+            if (!_collider || !_colliderSetting)
+            {
+                return;
+            }
+
+            _collider.isTrigger = _objectInfo.axis == EAxisType.Y;
         }
     }
 }
