@@ -52,20 +52,24 @@ namespace StageStructureConvertSystem
 
         private void CheckObject(EAxisType axisType)
         {
-            var origin = _prevObjectInfo.position + _characterController.center;
+            var origin = _prevObjectInfo.position + _characterController.center + Vector3.up * (_prevObjectInfo.scale.y / 2f);
             var dir = Vector3.down;
 
             var isHit = Physics.Raycast(origin, dir, out var hit, _rayDistance, _standableObjectMask);
 
             if (!isHit)
             {
+                Debug.Log(1);
                 return;
             }
 
             if (!hit.collider.TryGetComponent<StructureObjectUnitBase>(out var unit))
             {
+                Debug.Log(2);
                 return;
             }
+
+            Debug.Log(hit.collider.name);
 
             switch (axisType)
             {
