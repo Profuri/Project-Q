@@ -155,7 +155,7 @@ GameObject:
   - component: {fileID: 1854247662565198065}
   - component: {fileID: 2894957178739470968}
   - component: {fileID: 262930886990304570}
-  - component: {fileID: 7515312267290249139}
+  - component: {fileID: 3762729807181999764}
   m_Layer: 7
   m_Name: wall
   m_TagString: Untagged
@@ -249,7 +249,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7515312267290249139
+--- !u!114 &3762729807181999764
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -258,10 +258,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2910960123851740423}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d808a457854ec49a16c1fa12d0b952, type: 3}
+  m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPlane: 0
+  _materialRenderSetting: 1
+  _colliderSetting: 1
 --- !u!1 &4655657780581225977
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,6 +345,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _materialRenderSetting: 1
+  _colliderSetting: 0
 --- !u!114 &4790876277578452091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,7 +394,6 @@ GameObject:
   - component: {fileID: 7524741878112117448}
   - component: {fileID: 5258939399098673093}
   - component: {fileID: 4106434011151345804}
-  - component: {fileID: 7251191947813572854}
   m_Layer: 6
   m_Name: Plane
   m_TagString: Untagged
@@ -485,19 +487,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7251191947813572854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7739969114059502878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d808a457854ec49a16c1fa12d0b952, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isPlane: 1
 --- !u!1 &8866300722033292457
 GameObject:
   m_ObjectHideFlags: 0
