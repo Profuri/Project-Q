@@ -56,11 +56,11 @@ public class Outline : MonoBehaviour {
   [SerializeField]
   private Mode outlineMode;
 
-  [SerializeField]
+  [SerializeField, ColorUsage(true, true)]
   private Color outlineColor = Color.white;
 
   [SerializeField, Range(0f, 20f)]
-  private float outlineWidth = 2f;
+  private float outlineWidth = 5f;
 
   [Header("Optional")]
 
@@ -75,9 +75,7 @@ public class Outline : MonoBehaviour {
   private List<ListVector3> bakeValues = new List<ListVector3>();
 
   private Renderer[] renderers;
-[SerializeField]
   private Material outlineMaskMaterial;
-[SerializeField]
   private Material outlineFillMaterial;
 
   private bool needsUpdate;
@@ -88,8 +86,8 @@ public class Outline : MonoBehaviour {
     renderers = GetComponentsInChildren<Renderer>();
 
         // Instantiate outline materials
-        outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
-        outlineFillMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineFill"));
+        outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"OutLineMat/OutlineMask"));
+        outlineFillMaterial = Instantiate(Resources.Load<Material>(@"OutLineMat/OutlineFill"));
 
         outlineMaskMaterial.name = "OutlineMask (Instance)";
         outlineFillMaterial.name = "OutlineFill (Instance)";
