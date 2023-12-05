@@ -12,14 +12,14 @@ public class MovingObject : InteractableObject
 
     [SerializeField] [Range(0.5f, 1f)] private float _checkDistance;
 
-    private PlatformObjectUnit _objectUnit;
+    private StructureObjectUnitBase _objectUnit;
 
     private float _minLimitPos;
     private float _maxLimitPos;
     
     private void Awake()
     {
-        _objectUnit = GetComponent<PlatformObjectUnit>();
+        _objectUnit = GetComponent<StructureObjectUnitBase>();
         
         var scale = _movingAxis == EMovingAxis.X ? transform.localScale.x : transform.localScale.z;
         var trackScale = _movingAxis == EMovingAxis.X ? _movingTrackTrm.localScale.x : _movingTrackTrm.localScale.z;

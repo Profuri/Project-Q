@@ -3,7 +3,7 @@ using InteractableSystem;
 using UnityEngine;
 using StageStructureConvertSystem;
 
-public class LaserLauncherObject : PlatformObjectUnit
+public class LaserLauncherObject : StructureObjectUnitBase
 {
     [SerializeField] private Transform _shotPointTrm;
     
@@ -57,6 +57,7 @@ public class LaserLauncherObject : PlatformObjectUnit
             {
                 InteractOther(hit.collider, false);
             }
+            
             _laserRenderer.enabled = false;
             _isActiveLaser = false;
             var position = _shotPointTrm.position;

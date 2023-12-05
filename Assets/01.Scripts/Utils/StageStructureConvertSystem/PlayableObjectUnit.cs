@@ -30,14 +30,14 @@ namespace StageStructureConvertSystem
                     _characterController.center = Vector3.zero;
                     break;
                 case EAxisType.X:
-                    _objectInfo.position.x = 1;
+                    _objectInfo.position.x = 1f;
                     _characterController.center = new Vector3(-1, 0, 0);
                     break;
                 case EAxisType.Y:
-                    _objectInfo.position.y = 1;
+                    _objectInfo.position.y = 1f;
                     break;
                 case EAxisType.Z:
-                    _objectInfo.position.z = -1;
+                    _objectInfo.position.z = -1f;
                     _characterController.center = new Vector3(0, 0, 1);
                     break;
             }
@@ -52,11 +52,10 @@ namespace StageStructureConvertSystem
 
         private void CheckObject(EAxisType axisType)
         {
-            var origin = _prevObjectInfo.position + _characterController.center;
+            var origin = _prevObjectInfo.position + _characterController.center + Vector3.up * (_prevObjectInfo.scale.y / 2f);
             var dir = Vector3.down;
 
-            RaycastHit hit;
-            var isHit = Physics.Raycast(origin, dir, out hit, _rayDistance, _standableObjectMask);
+            var isHit = Physics.Raycast(origin, dir, out var hit, _rayDistance, _standableObjectMask);
 
             if (!isHit)
             {
@@ -64,7 +63,7 @@ namespace StageStructureConvertSystem
                 return;
             }
 
-            if (!hit.collider.TryGetComponent<PlatformObjectUnit>(out var unit))
+            if (!hit.collider.TryGetComponent<StructureObjectUnitBase>(out var unit))
             {
                 Debug.Log(2);
                 return;

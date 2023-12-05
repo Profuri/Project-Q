@@ -96,17 +96,20 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     private bool CheckGround()
     {
-        var size = _characterController.bounds.size;
+        var size = _characterController.bounds.size * 0.8f;
         size.y = 0.1f;
         var trm = transform;
-        return Physics.BoxCast(
+        var isHit = Physics.BoxCast(
             trm.position,
             size,
             -trm.up,
-            trm.rotation,
+            out var hit,
+            Controller.ModelTrm.rotation,
             _maxGroundCheckDistance,
             _groundMask
         );
+
+        return isHit && !hit.collider.isTrigger;
     }
 
     public void StopImmediately()
@@ -138,7 +141,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
             return;
         }
 
-        var size = _characterController.bounds.size;
+        var size = _characterController.bounds.size * 0.8f;
         size.y = 0.1f;
         var trm = transform;
         Gizmos.DrawCube(trm.position - trm.up * _maxGroundCheckDistance, size);
