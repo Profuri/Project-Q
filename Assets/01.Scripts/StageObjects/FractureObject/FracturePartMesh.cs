@@ -12,7 +12,7 @@ public class FracturePartMesh : PoolableMono
     public Vector3[] Normal;
     public int[][] Triangle;
     public Vector2[] UV;
-    public Bounds Bounds = new Bounds();
+    public Bounds Bounds;
 
     private MeshRenderer _meshRenderer;
     private MeshFilter _meshFilter;

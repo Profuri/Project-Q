@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
+using InteractableSystem;
 using StageStructureConvertSystem;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class FractureObject : StructureObjectUnitBase
+public class FractureObject : InteractableObject
 {
     private bool _edgeSet = false;
     private Vector3 _edgeVertex = Vector3.zero;
@@ -15,23 +18,16 @@ public class FractureObject : StructureObjectUnitBase
     private MeshFilter _meshFilter;
     public MeshFilter MeshFilter => _meshFilter;
 
+    private MeshRenderer _meshRenderer;
     public MeshRenderer MeshRenderer => _meshRenderer;
 
-    public override void Init(StructureConverter converter)
+    private void Awake()
     {
-        base.Init(converter);
+        _meshRenderer = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
     }
 
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Fracture();
-        }
-    }
-
-    public void Fracture()
+    public override void OnInteraction(PlayerController player, bool interactValue)
     {
         var originalMesh = _meshFilter.mesh;
         originalMesh.RecalculateBounds();
@@ -62,8 +58,8 @@ public class FractureObject : StructureObjectUnitBase
                 var plane = new Plane(
                     Random.onUnitSphere,
                     new Vector3(Random.Range(bounds.min.x, bounds.max.x),
-                    Random.Range(bounds.min.y, bounds.max.y),
-                    Random.Range(bounds.min.z, bounds.max.z))
+                        Random.Range(bounds.min.y, bounds.max.y),
+                        Random.Range(bounds.min.z, bounds.max.z))
                 );
 
                 subParts.Add(GenerateMesh(part, plane, true));
@@ -82,7 +78,7 @@ public class FractureObject : StructureObjectUnitBase
             part.AddForce(part.Bounds.center * _explodeForce, transform.position);
         }
 
-        Destroy(gameObject);
+        Destroy(gameObject);   
     }
 
     private FracturePartMesh GenerateMesh(FracturePartMesh original, Plane plane, bool left)
