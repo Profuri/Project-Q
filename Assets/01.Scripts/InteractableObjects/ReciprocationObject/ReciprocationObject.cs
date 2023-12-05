@@ -22,6 +22,14 @@ public class ReciprocationObject : InteractableObject
     {
         _originPos = transform.position;
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
+        if(_converter == null)
+        {
+            _converter = transform.parent.parent.GetComponent<StructureConverter>();
+            if(_converter == null)
+            {
+                Debug.LogError("Set Converter to this Reciprocation Object");
+            }
+        }
     }
 
     public override void OnInteraction(PlayerController player, bool interactValue)
