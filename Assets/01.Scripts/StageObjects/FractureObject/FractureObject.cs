@@ -13,6 +13,9 @@ public class FractureObject : StructureObjectUnitBase
     [SerializeField] private float _explodeForce = 0;
 
     private MeshFilter _meshFilter;
+    public MeshFilter MeshFilter => _meshFilter;
+
+    public MeshRenderer MeshRenderer => _meshRenderer;
 
     public override void Init(StructureConverter converter)
     {
@@ -24,29 +27,27 @@ public class FractureObject : StructureObjectUnitBase
     {
         if (Input.GetMouseButtonDown(0))
         {
-            DestroyMesh();
+            Fracture();
         }
     }
 
-    public void DestroyMesh()
+    public void Fracture()
     {
         var originalMesh = _meshFilter.mesh;
         originalMesh.RecalculateBounds();
-        var parts = new List<PartMesh>();
-        var subParts = new List<PartMesh>();
+        var parts = new List<FracturePartMesh>();
+        var subParts = new List<FracturePartMesh>();
 
-        var mainPart = new PartMesh()
-        {
-            UV = originalMesh.uv,
-            Vertices = originalMesh.vertices,
-            Normals = originalMesh.normals,
-            Triangles = new int[originalMesh.subMeshCount][],
-            Bounds = originalMesh.bounds
-        };
+        var mainPart = PoolManager.Instance.Pop("FracturePart") as FracturePartMesh;
+        mainPart.UV = originalMesh.uv;
+        mainPart.Vertices = originalMesh.vertices;
+        mainPart.Normal = originalMesh.normals;
+        mainPart.Triangle = new int[originalMesh.subMeshCount][];
+        mainPart.Bounds = originalMesh.bounds;
 
         for (var i = 0; i < originalMesh.subMeshCount; i++)
         {
-            mainPart.Triangles[i] = originalMesh.GetTriangles(i);
+            mainPart.Triangle[i] = originalMesh.GetTriangles(i);
         }
 
         parts.Add(mainPart);
@@ -58,57 +59,64 @@ public class FractureObject : StructureObjectUnitBase
                 var bounds = part.Bounds;
                 bounds.Expand(0.5f);
 
-                var plane = new Plane(Random.onUnitSphere, new Vector3(Random.Range(bounds.min.x, bounds.max.x),
+                var plane = new Plane(
+                    Random.onUnitSphere,
+                    new Vector3(Random.Range(bounds.min.x, bounds.max.x),
                     Random.Range(bounds.min.y, bounds.max.y),
-                    Random.Range(bounds.min.z, bounds.max.z)));
-
+                    Random.Range(bounds.min.z, bounds.max.z))
+                );
 
                 subParts.Add(GenerateMesh(part, plane, true));
                 subParts.Add(GenerateMesh(part, plane, false));
+                
+                PoolManager.Instance.Push(part);
             }
-            parts = new List<PartMesh>(subParts);
+            
+            parts = new List<FracturePartMesh>(subParts);
             subParts.Clear();
         }
 
         foreach (var part in parts)
         {
-            part.MakeGameobject(this);
-            part.GameObject.GetComponent<Rigidbody>().AddForceAtPosition(part.Bounds.center * _explodeForce, transform.position);
+            part.Setting(this);
+            part.AddForce(part.Bounds.center * _explodeForce, transform.position);
         }
 
         Destroy(gameObject);
     }
 
-    private PartMesh GenerateMesh(PartMesh original, Plane plane, bool left)
+    private FracturePartMesh GenerateMesh(FracturePartMesh original, Plane plane, bool left)
     {
-        var partMesh = new PartMesh() { };
+        var partMesh = PoolManager.Instance.Pop("FracturePart") as FracturePartMesh;
         var ray1 = new Ray();
         var ray2 = new Ray();
         
-        for (var i = 0; i < original.Triangles.Length; i++)
+        for (var i = 0; i < original.Triangle.Length; i++)
         {
-            var triangles = original.Triangles[i];
+            var triangles = original.Triangle[i];
             _edgeSet = false;
 
-            for (var j = 0; j < triangles.Length; j = j + 3)
+            for (var j = 0; j < triangles.Length; j += 3)
             {
                 var sideA = plane.GetSide(original.Vertices[triangles[j]]) == left;
                 var sideB = plane.GetSide(original.Vertices[triangles[j + 1]]) == left;
                 var sideC = plane.GetSide(original.Vertices[triangles[j + 2]]) == left;
 
-                var sideCount = (sideA ? 1 : 0) +
-                                (sideB ? 1 : 0) +
-                                (sideC ? 1 : 0);
+                var sideCount = (sideA ? 1 : 0) + (sideB ? 1 : 0) + (sideC ? 1 : 0);
+
                 if (sideCount == 0)
                 {
                     continue;
                 }
+                
                 if (sideCount == 3)
                 {
-                    partMesh.AddTriangle(i,
-                                         original.Vertices[triangles[j]], original.Vertices[triangles[j + 1]], original.Vertices[triangles[j + 2]],
-                                         original.Normals[triangles[j]], original.Normals[triangles[j + 1]], original.Normals[triangles[j + 2]],
-                                         original.UV[triangles[j]], original.UV[triangles[j + 1]], original.UV[triangles[j + 2]]);
+                    partMesh.AddTriangle(
+                        i,
+                        original.Vertices[triangles[j]], original.Vertices[triangles[j + 1]], original.Vertices[triangles[j + 2]],
+                        original.Normal[triangles[j]], original.Normal[triangles[j + 1]], original.Normal[triangles[j + 2]],
+                        original.UV[triangles[j]], original.UV[triangles[j + 1]], original.UV[triangles[j + 2]]
+                    );
                     continue;
                 }
 
@@ -127,59 +135,64 @@ public class FractureObject : StructureObjectUnitBase
                 plane.Raycast(ray2, out var enter2);
                 var lerp2 = enter2 / dir2.magnitude;
 
-                //first vertex = ancor
-                AddEdge(i,
-                        partMesh,
-                        left ? plane.normal * -1f : plane.normal,
-                        ray1.origin + ray1.direction.normalized * enter1,
-                        ray2.origin + ray2.direction.normalized * enter2,
-                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
+                //first vertex = Anchor
+                AddEdge
+                (
+                    i,
+                    partMesh,
+                    left ? plane.normal * -1f : plane.normal,
+                    ray1.origin + ray1.direction.normalized * enter1,
+                    ray2.origin + ray2.direction.normalized * enter2,
+                    Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                    Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2)
+                );
 
-                if (sideCount == 1)
+                switch (sideCount)
                 {
-                    partMesh.AddTriangle(i,
-                                        original.Vertices[triangles[j + singleIndex]],
-                                        //Vector3.Lerp(originalMesh.vertices[triangles[j + singleIndex]], originalMesh.vertices[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        //Vector3.Lerp(originalMesh.vertices[triangles[j + singleIndex]], originalMesh.vertices[triangles[j + ((singleIndex + 2) % 3)]], lerp2),
-                                        ray1.origin + ray1.direction.normalized * enter1,
-                                        ray2.origin + ray2.direction.normalized * enter2,
-                                        original.Normals[triangles[j + singleIndex]],
-                                        Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 2) % 3)]], lerp2),
-                                        original.UV[triangles[j + singleIndex]],
-                                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
-                    
-                    continue;
+                    case 1:
+                        partMesh.AddTriangle
+                        (
+                            i,
+                            original.Vertices[triangles[j + singleIndex]],
+                            ray1.origin + ray1.direction.normalized * enter1,
+                            ray2.origin + ray2.direction.normalized * enter2,
+                            original.Normal[triangles[j + singleIndex]],
+                            Vector3.Lerp(original.Normal[triangles[j + singleIndex]], original.Normal[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                            Vector3.Lerp(original.Normal[triangles[j + singleIndex]], original.Normal[triangles[j + ((singleIndex + 2) % 3)]], lerp2),
+                            original.UV[triangles[j + singleIndex]],
+                            Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                            Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2)
+                        );
+                        continue;
+                    case 2:
+                        partMesh.AddTriangle
+                        (
+                            i,
+                            ray1.origin + ray1.direction.normalized * enter1,
+                            original.Vertices[triangles[j + ((singleIndex + 1) % 3)]],
+                            original.Vertices[triangles[j + ((singleIndex + 2) % 3)]],
+                            Vector3.Lerp(original.Normal[triangles[j + singleIndex]], original.Normal[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                            original.Normal[triangles[j + ((singleIndex + 1) % 3)]],
+                            original.Normal[triangles[j + ((singleIndex + 2) % 3)]],
+                            Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                            original.UV[triangles[j + ((singleIndex + 1) % 3)]],
+                            original.UV[triangles[j + ((singleIndex + 2) % 3)]]
+                        );
+                        partMesh.AddTriangle
+                        (
+                            i,
+                            ray1.origin + ray1.direction.normalized * enter1,
+                            original.Vertices[triangles[j + ((singleIndex + 2) % 3)]],
+                            ray2.origin + ray2.direction.normalized * enter2,
+                            Vector3.Lerp(original.Normal[triangles[j + singleIndex]], original.Normal[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                            original.Normal[triangles[j + ((singleIndex + 2) % 3)]],
+                            Vector3.Lerp(original.Normal[triangles[j + singleIndex]], original.Normal[triangles[j + ((singleIndex + 2) % 3)]], lerp2),
+                            Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
+                            original.UV[triangles[j + ((singleIndex + 2) % 3)]],
+                            Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2)
+                        );
+                        continue;
                 }
-
-                if (sideCount == 2)
-                {
-                    partMesh.AddTriangle(i,
-                                        ray1.origin + ray1.direction.normalized * enter1,
-                                        original.Vertices[triangles[j + ((singleIndex + 1) % 3)]],
-                                        original.Vertices[triangles[j + ((singleIndex + 2) % 3)]],
-                                        Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        original.Normals[triangles[j + ((singleIndex + 1) % 3)]],
-                                        original.Normals[triangles[j + ((singleIndex + 2) % 3)]],
-                                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        original.UV[triangles[j + ((singleIndex + 1) % 3)]],
-                                        original.UV[triangles[j + ((singleIndex + 2) % 3)]]);
-                    partMesh.AddTriangle(i,
-                                        ray1.origin + ray1.direction.normalized * enter1,
-                                        original.Vertices[triangles[j + ((singleIndex + 2) % 3)]],
-                                        ray2.origin + ray2.direction.normalized * enter2,
-                                        Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        original.Normals[triangles[j + ((singleIndex + 2) % 3)]],
-                                        Vector3.Lerp(original.Normals[triangles[j + singleIndex]], original.Normals[triangles[j + ((singleIndex + 2) % 3)]], lerp2),
-                                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
-                                        original.UV[triangles[j + ((singleIndex + 2) % 3)]],
-                                        Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 2) % 3)]], lerp2));
-                    continue;
-                }
-
-
             }
         }
 
@@ -188,7 +201,7 @@ public class FractureObject : StructureObjectUnitBase
         return partMesh;
     }
 
-    private void AddEdge(int subMesh, PartMesh partMesh, Vector3 normal, Vector3 vertex1, Vector3 vertex2, Vector2 uv1, Vector2 uv2)
+    private void AddEdge(int subMesh, FracturePartMesh fracturePartMesh, Vector3 normal, Vector3 vertex1, Vector3 vertex2, Vector2 uv1, Vector2 uv2)
     {
         if (!_edgeSet)
         {
@@ -200,16 +213,18 @@ public class FractureObject : StructureObjectUnitBase
         {
             _edgePlane.Set3Points(_edgeVertex, vertex1, vertex2);
 
-            partMesh.AddTriangle(subMesh,
-                                _edgeVertex,
-                                _edgePlane.GetSide(_edgeVertex + normal) ? vertex1 : vertex2,
-                                _edgePlane.GetSide(_edgeVertex + normal) ? vertex2 : vertex1,
-                                normal,
-                                normal,
-                                normal,
-                                _edgeUV,
-                                uv1,
-                                uv2);
+            fracturePartMesh.AddTriangle(
+                subMesh,
+                _edgeVertex,
+                _edgePlane.GetSide(_edgeVertex + normal) ? vertex1 : vertex2,
+                _edgePlane.GetSide(_edgeVertex + normal) ? vertex2 : vertex1,
+                normal,
+                normal,
+                normal,
+                _edgeUV,
+                uv1,
+                uv2
+            );
         }
     }
 }
