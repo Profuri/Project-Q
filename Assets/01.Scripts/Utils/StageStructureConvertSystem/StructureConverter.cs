@@ -72,5 +72,11 @@ namespace StageStructureConvertSystem
                 unit.ObjectSetting();
             });
         }
+
+        public void RemoveObject(StructureObjectUnitBase unit)
+        {
+            Destroy(unit.gameObject);
+            _convertableUnits.Remove(unit);
+        }
     }
 }
