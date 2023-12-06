@@ -381,6 +381,7 @@ GameObject:
   - component: {fileID: 6755510101772228636}
   - component: {fileID: 7041642057818713983}
   - component: {fileID: 7856407372285298661}
+  - component: {fileID: 406441414484410968}
   m_Layer: 0
   m_Name: LaserLauncherObject
   m_TagString: Untagged
@@ -592,7 +593,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6efb4616c71440c981781b093c0b1e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPlane: 0
+  _materialRenderSetting: 1
+  _colliderSetting: 1
+  _yAxisInteraction: 1
   _shotPointTrm: {fileID: 9147449382558402738}
   _obstacleMask:
     serializedVersion: 2
@@ -601,6 +604,24 @@ MonoBehaviour:
   _launchTime: 3
   _activeDelay: 0.1
   _laserDistance: 5
+--- !u!114 &406441414484410968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8722439006986682453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &9092391544806981275
 GameObject:
   m_ObjectHideFlags: 0

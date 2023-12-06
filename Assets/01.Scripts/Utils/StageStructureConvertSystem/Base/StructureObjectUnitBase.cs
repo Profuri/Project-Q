@@ -6,27 +6,29 @@ namespace StageStructureConvertSystem
     {
         private Vector3 _originPos;
         private Vector3 _originScale;
-        
+
         private StructureConverter _converter;
-        
+
         protected ObjectInfo _prevObjectInfo;
         protected ObjectInfo _objectInfo;
 
         protected MeshRenderer _meshRenderer;
         protected Material _material;
         protected Collider _collider;
-        
+
         public ObjectInfo PrevObjectInfo => _prevObjectInfo;
         public ObjectInfo ObjectInfo => _objectInfo;
 
         [SerializeField] private bool _materialRenderSetting = true;
         [SerializeField] private bool _colliderSetting = true;
+        [SerializeField, Tooltip("y축 압축상태에 플레이어를 막으려면 false,")] private bool _yAxisInteraction = false;
+
 
         public virtual void Init(StructureConverter converter)
         {
             _originPos = transform.localPosition;
             _originScale = transform.localScale;
-            
+
             _converter = converter;
 
             _meshRenderer = GetComponent<MeshRenderer>();
@@ -40,7 +42,30 @@ namespace StageStructureConvertSystem
             _objectInfo.position = _originPos;
             _objectInfo.scale = _originScale;
             _objectInfo.axis = EAxisType.NONE;
+
+            if (_yAxisInteraction && GetComponent<Outline>() == null)
+                Debug.LogError("이 옵션을 사용하시려면 OutLineComponent를 추가하세요");
         }
+
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            Outline outline = GetComponent<Outline>();
+            if(outline != null)
+            {
+                if (_yAxisInteraction)
+                {
+                    outline.enabled = true;
+                }
+                else
+                {
+                    outline.enabled = false;
+                }
+            }
+        }
+#endif
+
 
         public virtual void ConvertDimension(EAxisType axisType)
         {
@@ -149,7 +174,7 @@ namespace StageStructureConvertSystem
                 return;
             }
 
-            _collider.isTrigger = _objectInfo.axis == EAxisType.Y;
+            _collider.isTrigger = _objectInfo.axis == EAxisType.Y && _yAxisInteraction;
         }
     }
 }

@@ -115,13 +115,29 @@ public class LaserLauncherObject : StructureObjectUnitBase
 
     private bool ObstacleCheck(out RaycastHit hit)
     {
-        return Physics.Raycast(
-            _shotPointTrm.position,
-            transform.forward,
-            out hit,
-            _laserDistance,
-            _obstacleMask
-        );
+        if (GameManager.Instance.CurAxisType == EAxisType.Y) //Y축 압축상태일때만 따로 충돌 계산
+        {
+            Vector3 startPos = _shotPointTrm.position;
+            startPos.y = GameManager.Instance.Player.transform.position.y;
+            //Vector3 forward = new Vector3(transform.forward.x, 0, transform.forward.z);
+            return Physics.Raycast(
+                startPos,
+                transform.forward,
+                out hit,
+                _laserDistance,
+                _obstacleMask
+            );
+        }
+        else
+        {
+            return Physics.Raycast(
+                _shotPointTrm.position,
+                transform.forward,
+                out hit,
+                _laserDistance,
+                _obstacleMask
+            );
+        }
     }
     
 #if UNITY_EDITOR
