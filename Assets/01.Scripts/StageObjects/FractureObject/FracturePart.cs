@@ -1,7 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FracturePartMesh : PoolableMono
+public class FracturePart : PoolableMono
 {
     private readonly List<Vector3> _verticies = new List<Vector3>();
     private readonly List<Vector3> _normals = new List<Vector3>();
@@ -97,7 +98,29 @@ public class FracturePartMesh : PoolableMono
             Triangle[i] = _triangles[i].ToArray();
     }
 
+    private IEnumerator LifeRoutine()
+    {
+        var duration = 1f;
+        var currentTime = 0f;
+        var percent = 0f;
+
+        while (percent <= 1f)
+        {
+            currentTime += Time.deltaTime;
+            percent = currentTime / duration;
+
+            var color = _meshRenderer.material.color;
+            color.a = 1f - percent;
+            _meshRenderer.material.color = color;
+
+            yield return null;
+        }
+        
+        PoolManager.Instance.Push(this);
+    }
+
     public override void Init()
     {
+        StartCoroutine(LifeRoutine());
     }
 }

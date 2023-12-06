@@ -151,5 +151,10 @@ namespace StageStructureConvertSystem
 
             _collider.isTrigger = _objectInfo.axis == EAxisType.Y;
         }
+
+        public void RemoveUnit()
+        {
+            _converter.RemoveObject(this);
+        }
     }
 }

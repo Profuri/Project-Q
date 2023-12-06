@@ -32,6 +32,7 @@ public class Pool
     {
         var obj = _pool.Count <= 0 ? CreateNewPrefab() : _pool.Pop();
         obj.gameObject.SetActive(true);
+        obj.Init();
         return obj;
     }
 

@@ -59,17 +59,13 @@ namespace StageStructureConvertSystem
 
             if (!isHit)
             {
-                Debug.Log(1);
                 return;
             }
 
             if (!hit.collider.TryGetComponent<StructureObjectUnitBase>(out var unit))
             {
-                Debug.Log(2);
                 return;
             }
-
-            Debug.Log(hit.collider.name);
 
             switch (axisType)
             {

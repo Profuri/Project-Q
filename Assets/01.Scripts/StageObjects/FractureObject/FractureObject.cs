@@ -21,20 +21,23 @@ public class FractureObject : InteractableObject
     private MeshRenderer _meshRenderer;
     public MeshRenderer MeshRenderer => _meshRenderer;
 
+    private StructureObjectUnitBase _objectUnit;
+
     private void Awake()
     {
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
+        _objectUnit = GetComponent<StructureObjectUnitBase>();
     }
 
     public override void OnInteraction(PlayerController player, bool interactValue)
     {
         var originalMesh = _meshFilter.mesh;
         originalMesh.RecalculateBounds();
-        var parts = new List<FracturePartMesh>();
-        var subParts = new List<FracturePartMesh>();
+        var parts = new List<FracturePart>();
+        var subParts = new List<FracturePart>();
 
-        var mainPart = PoolManager.Instance.Pop("FracturePart") as FracturePartMesh;
+        var mainPart = PoolManager.Instance.Pop("FracturePart") as FracturePart;
         mainPart.UV = originalMesh.uv;
         mainPart.Vertices = originalMesh.vertices;
         mainPart.Normal = originalMesh.normals;
@@ -68,7 +71,7 @@ public class FractureObject : InteractableObject
                 PoolManager.Instance.Push(part);
             }
             
-            parts = new List<FracturePartMesh>(subParts);
+            parts = new List<FracturePart>(subParts);
             subParts.Clear();
         }
 
@@ -78,12 +81,12 @@ public class FractureObject : InteractableObject
             part.AddForce(part.Bounds.center * _explodeForce, transform.position);
         }
 
-        Destroy(gameObject);   
+        _objectUnit.RemoveUnit();
     }
 
-    private FracturePartMesh GenerateMesh(FracturePartMesh original, Plane plane, bool left)
+    private FracturePart GenerateMesh(FracturePart original, Plane plane, bool left)
     {
-        var partMesh = PoolManager.Instance.Pop("FracturePart") as FracturePartMesh;
+        var partMesh = PoolManager.Instance.Pop("FracturePart") as FracturePart;
         var ray1 = new Ray();
         var ray2 = new Ray();
         
@@ -197,7 +200,7 @@ public class FractureObject : InteractableObject
         return partMesh;
     }
 
-    private void AddEdge(int subMesh, FracturePartMesh fracturePartMesh, Vector3 normal, Vector3 vertex1, Vector3 vertex2, Vector2 uv1, Vector2 uv2)
+    private void AddEdge(int subMesh, FracturePart fracturePart, Vector3 normal, Vector3 vertex1, Vector3 vertex2, Vector2 uv1, Vector2 uv2)
     {
         if (!_edgeSet)
         {
@@ -209,7 +212,7 @@ public class FractureObject : InteractableObject
         {
             _edgePlane.Set3Points(_edgeVertex, vertex1, vertex2);
 
-            fracturePartMesh.AddTriangle(
+            fracturePart.AddTriangle(
                 subMesh,
                 _edgeVertex,
                 _edgePlane.GetSide(_edgeVertex + normal) ? vertex1 : vertex2,
