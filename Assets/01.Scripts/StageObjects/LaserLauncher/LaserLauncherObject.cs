@@ -3,18 +3,21 @@ using InteractableSystem;
 using UnityEngine;
 using StageStructureConvertSystem;
 
+[RequireComponent(typeof(LineRenderer))]
 public class LaserLauncherObject : StructureObjectUnitBase
 {
     [SerializeField] private Transform _shotPointTrm;
-    
     [SerializeField] private LayerMask _obstacleMask;
 
+    [SerializeField] private float _laserDistance;
+    
+    [Header("Breath Setting")] 
+    [SerializeField] private bool _isBreath;
+    
     [SerializeField] private float _refreshDelay;
     [SerializeField] private float _launchTime;
     [SerializeField] private float _activeDelay;
 
-    [SerializeField] private float _laserDistance;
-    
     private LineRenderer _laserRenderer;
 
     private bool _isActiveLaser;
@@ -27,7 +30,8 @@ public class LaserLauncherObject : StructureObjectUnitBase
         _laserRenderer.enabled = false;
         _isActiveLaser = false;
         base.Init(converter);
-        StartCoroutine(LaunchRoutine());
+        
+        StartCoroutine(_isBreath ? LaunchRoutine() : LaserActiveRoutine(true));
     }
 
     public void Update()
@@ -46,10 +50,7 @@ public class LaserLauncherObject : StructureObjectUnitBase
         while (true)
         {
             yield return waitForRefresh;
-            _laserRenderer.enabled = true;
             yield return StartCoroutine(LaserActiveRoutine(true));
-            _isActiveLaser = true;
-            
             yield return waitForLaunch;
             yield return StartCoroutine(LaserActiveRoutine(false));
 
@@ -58,8 +59,6 @@ public class LaserLauncherObject : StructureObjectUnitBase
                 InteractOther(hit.collider, false);
             }
             
-            _laserRenderer.enabled = false;
-            _isActiveLaser = false;
             var position = _shotPointTrm.position;
             _laserRenderer.SetPositions(new[] { position, position } );
         }
@@ -68,6 +67,11 @@ public class LaserLauncherObject : StructureObjectUnitBase
     private IEnumerator LaserActiveRoutine(bool active)
     {
         _isActiveLaser = false;
+        
+        if (active)
+        {
+            _laserRenderer.enabled = true;
+        }
 
         var percent = 0f;
         var currentTime = 0f;
@@ -81,6 +85,15 @@ public class LaserLauncherObject : StructureObjectUnitBase
             var lerpPos = Vector3.Lerp(_laserRenderer.GetPosition(index), dest, percent);
             _laserRenderer.SetPosition(index, lerpPos);
             yield return null;
+        }
+
+        if (active)
+        {
+            _isActiveLaser = true;
+        }
+        else
+        {
+            _laserRenderer.enabled = false;
         }
     }
 

@@ -27,7 +27,7 @@ public class PressurePlate : InteractableObject
         OnInteraction(null, CheckPressed());
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         _affectedObject?.OnInteraction(null, interactValue);
         

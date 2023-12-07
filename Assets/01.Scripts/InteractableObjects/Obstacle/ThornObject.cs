@@ -19,7 +19,7 @@ public class ThornObject : InteractableObject
         OnInteraction(null, false);
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         var pos = transform.position + _boxCollider.center;
         var checkSize = _boxCollider.size;

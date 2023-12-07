@@ -46,7 +46,7 @@ public class TogglePlateMany : InteractableObject
             _activeObjects = new();
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         if(_isPlaying == true)
         {

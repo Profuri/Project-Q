@@ -13,6 +13,6 @@ namespace InteractableSystem
         [SerializeField] private EInteractableAttribute _attribute;
         public EInteractableAttribute Attribute => _attribute;
 
-        public abstract void OnInteraction(StructureObjectUnitBase communicator, bool interactValue);
+        public abstract void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param);
     }
 }

@@ -22,7 +22,7 @@ public class ReciprocationObject : InteractableObject
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         var curPos = transform.position;  
         var destPos = interactValue ? _destPos : _originPos;

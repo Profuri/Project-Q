@@ -11,7 +11,7 @@ public class ToggleObject : InteractableObject
     private bool _isToggle = false;
     private event Action _ToggleEvent;
     
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         _isToggle = interactValue;
         gameObject.SetActive(_isToggle);

@@ -28,7 +28,7 @@ public class PressurePlateMany : InteractableObject
         OnInteraction(null, CheckPressed());
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         for( int i = 0; i < _affectedObjects.Count; i++)
         {

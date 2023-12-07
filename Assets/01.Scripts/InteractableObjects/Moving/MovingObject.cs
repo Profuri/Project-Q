@@ -47,7 +47,7 @@ public class MovingObject : InteractableObject
         OnInteraction(playerUnit, true);
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         var player = ((PlayableObjectUnit)communicator).PlayerController;
         var playerMovementModule = player.GetModule<PlayerMovementModule>();

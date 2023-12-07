@@ -30,7 +30,7 @@ public class FractureObject : InteractableObject
         _objectUnit = GetComponent<StructureObjectUnitBase>();
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         var originalMesh = _meshFilter.mesh;
         originalMesh.RecalculateBounds();
