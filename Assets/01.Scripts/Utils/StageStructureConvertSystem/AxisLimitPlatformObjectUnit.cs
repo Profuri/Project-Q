@@ -7,12 +7,11 @@ public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
 {
     [SerializeField] private EAxisType _targetAxisType;
     [SerializeField] private GameObject _priorityObject;
+    [SerializeField, Tooltip("압축시 뒤에 오브젝트 배경 처리 여부")] private bool _isBackground = false;
     [SerializeField] private float _colCheckDistance;
     [SerializeField] private LayerMask _targetLayer;
 
     private Collider _collider;
-    private Coroutine _coroutine;
-
     private Collider _priorityCollider;
 
 
@@ -22,28 +21,19 @@ public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
 
         _collider = GetComponent<Collider>();
         _priorityCollider = _priorityObject.GetComponent<Collider>();
-        if (_coroutine != null)
-        {
-            StopCoroutine(_coroutine);
-        }
-        _coroutine = StartCoroutine(CheckColCor());
     }
 
-    private IEnumerator CheckColCor()
+    private void Update()
     {
-        while (true)
+        Collider[] cols = Physics.OverlapSphere(transform.position, _colCheckDistance, _targetLayer);
+        //if Player is checked
+        if (cols.Length > 0)
         {
-            Collider[] cols = Physics.OverlapSphere(transform.position, _colCheckDistance, _targetLayer);
-            //if Player is checked
-            if(cols.Length > 0 )
-            {
-                _priorityCollider.isTrigger = true;
-            }
-            else
-            {
-                _priorityCollider.isTrigger = false;
-            }
-            yield return null;
+            _priorityCollider.isTrigger = true;
+        }
+        else
+        {
+            _priorityCollider.isTrigger = false;
         }
     }
 
@@ -67,9 +57,15 @@ public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
 
     public override void TransformSynchronization(EAxisType axisType)
     {
+        Debug.Log($"CurrentAxisTYpe { axisType }");
         this.gameObject.SetActive(true);
-        if (_targetAxisType == axisType)
+        if (_targetAxisType.HasFlag(axisType))
         {
+            //if (axisType != EAxisType.NONE)
+            //    _priorityCollider.isTrigger = true;
+            //else
+            //    _priorityCollider.isTrigger = false;
+
             Vector3 priorityPos = _priorityObject.transform.position;
             //Vector3 priObjColBoundsDivTwo = _priorityObject.transform.GetComponent<Collider>().bounds.size;
             Vector3 priObjColBoundsDivTwo = Vector3.zero;
@@ -123,6 +119,7 @@ public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
         }
         else
         {
+            _priorityCollider.isTrigger = false;
             this.gameObject.SetActive(false);
         }
     }
