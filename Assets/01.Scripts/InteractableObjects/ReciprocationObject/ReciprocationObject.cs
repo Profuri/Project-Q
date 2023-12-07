@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using InteractableSystem;
+using StageStructureConvertSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Vector3 = UnityEngine.Vector3;
@@ -21,7 +22,7 @@ public class ReciprocationObject : InteractableObject
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
     }
 
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue)
     {
         var curPos = transform.position;  
         var destPos = interactValue ? _destPos : _originPos;

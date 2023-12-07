@@ -11,6 +11,8 @@ namespace StageStructureConvertSystem
         private PlayerController _playerController;
         private CharacterController _characterController;
 
+        public PlayerController PlayerController => _playerController;
+
         public override void Init(StructureConverter converter)
         {
             base.Init(converter);

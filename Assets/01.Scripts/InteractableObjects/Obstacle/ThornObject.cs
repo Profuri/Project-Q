@@ -19,7 +19,7 @@ public class ThornObject : InteractableObject
         OnInteraction(null, false);
     }
 
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue)
     {
         var pos = transform.position + _boxCollider.center;
         var checkSize = _boxCollider.size;
@@ -39,7 +39,7 @@ public class ThornObject : InteractableObject
                 if (interactable.InteractType == EInteractType.AFFECTED_OTHER &&
                     interactable.Attribute.HasFlag(EInteractableAttribute.DAMAGED_BY_THORN))
                 {
-                    interactable.OnInteraction(player, interactValue);
+                    interactable.OnInteraction(communicator, interactValue);
                 }
             }
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using InteractableSystem;
 using System;
+using StageStructureConvertSystem;
 
 public class ToggleObject : InteractableObject
 {
@@ -10,7 +11,7 @@ public class ToggleObject : InteractableObject
     private bool _isToggle = false;
     private event Action _ToggleEvent;
     
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue)
     {
         _isToggle = interactValue;
         gameObject.SetActive(_isToggle);

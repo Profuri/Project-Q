@@ -1,11 +1,10 @@
 using InteractableSystem;
 using StageStructureConvertSystem;
-using UnityEngine;
 
-public class GoalObject : InteractableObject
+public class LeserReflectObject : InteractableObject
 {
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue)
     {
-        Debug.Log("Goal!!");    
+        
     }
 }
