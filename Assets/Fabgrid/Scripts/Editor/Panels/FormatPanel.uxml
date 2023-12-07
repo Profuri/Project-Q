@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="format-panel" class="panel">
+        <ui:VisualElement name="VisualElement" class="sub-panel rounded-panel">
+            <uie:FloatField name="floor-spacing-field" label="Floor Spacing" binding-path="floorSpacing" class="field" />
+            <uie:EnumField name="snap-option-field" label="Snap Option" binding-path="snapOption" type="Fabgrid.SnapOption, Fabgrid" class="field" />
+            <ui:Toggle name="replace-existing-tile-toggle" label="Replace Existing Tile" binding-path="replaceExistingTile" class="field" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

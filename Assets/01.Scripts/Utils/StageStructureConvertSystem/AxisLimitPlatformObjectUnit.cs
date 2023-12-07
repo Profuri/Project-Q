@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class AxisLimitPlatformObjectUnit : StructureObjectUnitBase
 {
-    //dddddddddddd
-
     [SerializeField] private EAxisType _targetAxisType;
     [SerializeField] private GameObject _priorityObject;
     [SerializeField] private float _colCheckDistance;
