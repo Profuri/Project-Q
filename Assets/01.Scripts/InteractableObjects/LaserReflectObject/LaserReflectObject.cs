@@ -12,8 +12,8 @@ public class LaserReflectObject : InteractableObject
         var normal = (Vector3)param[1];
         var lastDir = (Vector3)param[2];
 
-        var dir = Vector3.Reflect(lastDir, normal);
+        var dir = Vector3.Reflect(lastDir, normal).normalized;
         
-        // laserObject.AddLaser({  });
+        laserObject.AddLaser(new LaserInfo { origin = point, dir = dir });
     }
 }
