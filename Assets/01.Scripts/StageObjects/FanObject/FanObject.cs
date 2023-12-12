@@ -13,6 +13,7 @@ public class FanObject : InteractableObject
     [Header("Air Settings")]
     [SerializeField] private float _airMaxHeight;
     [SerializeField] private float _airPower;
+    [SerializeField] private LayerMask _effectedMask;
     
     [Header("Fan Settings")]
     [SerializeField] private float _fanMaxSpeed;
@@ -27,6 +28,7 @@ public class FanObject : InteractableObject
     private void Update()
     {
         RotateFan();
+        FloatingOther();
         
         if (Keyboard.current.oKey.wasPressedThisFrame)
         {
@@ -53,8 +55,7 @@ public class FanObject : InteractableObject
     
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
-        _enabled = interactValue;
-        if (_enabled)
+        if (interactValue)
         {
             EnableFan();
         }
@@ -62,6 +63,44 @@ public class FanObject : InteractableObject
         {
             ReleaseFan();
         }
+    }
+
+    private void FloatingOther()
+    {
+        if (!_enabled)
+        {
+            return;
+        }
+
+        if (!CheckCollision(out var hits, out var size))
+        {
+            return;
+        }
+        
+        for (var i = 0; i < size; i++)
+        {
+            var hit = hits[i];
+
+            if (hit.collider.TryGetComponent(out CharacterController characterController))
+            {
+                characterController.Move(new Vector3(0, _airPower, 0) * Time.deltaTime);
+            }
+        }
+    }
+
+    private bool CheckCollision(out RaycastHit[] hits, out int size)
+    {
+        hits = new RaycastHit[10];
+        size = Physics.BoxCastNonAlloc(
+            transform.position,
+            _maxHeightController.GetColSize() / 2f,
+            transform.up,
+            hits, 
+            Quaternion.identity,
+            _airMaxHeight / 2f,
+            _effectedMask
+        );
+        return size > 0;
     }
 
     private void RotateFan()
