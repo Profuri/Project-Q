@@ -18,7 +18,7 @@ public class LaserLauncherObject : StructureObjectUnitBase
     
     [SerializeField] private float _refreshDelay;
     [SerializeField] private float _launchTime;
-    [SerializeField] private float _activeDelay;
+    // [SerializeField] private float _activeDelay;
 
     private LineRenderer _laserRenderer;
     private Queue<LaserInfo> _laserInfos;
