@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace StageStructureConvertSystem
 {
+    [RequireComponent(typeof(Stage))]
     public class StructureConverter : MonoBehaviour
     {
         private List<StructureObjectUnitBase> _convertableUnits;
