@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _materialRenderSetting: 1
+  _colliderSetting: 0
 --- !u!114 &6513694820203422493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,7 +96,7 @@ GameObject:
   - component: {fileID: 4654746079513195106}
   - component: {fileID: 5378396285156040603}
   - component: {fileID: 7046196545126147477}
-  - component: {fileID: 4329413643826530203}
+  - component: {fileID: 8743743773618457661}
   m_Layer: 7
   m_Name: Wall (3)
   m_TagString: Untagged
@@ -188,7 +190,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4329413643826530203
+--- !u!114 &8743743773618457661
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -197,10 +199,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1433123135346875319}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d808a457854ec49a16c1fa12d0b952, type: 3}
+  m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPlane: 0
+  _materialRenderSetting: 1
+  _colliderSetting: 1
 --- !u!1 &2024107046462208241
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,8 +384,7 @@ GameObject:
   - component: {fileID: 5428689313735616778}
   - component: {fileID: 1253151976025498059}
   - component: {fileID: 5988696505723096878}
-  - component: {fileID: 2473301804897868059}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -475,19 +477,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2473301804897868059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4672316901296549828}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d808a457854ec49a16c1fa12d0b952, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isPlane: 1
 --- !u!1 &4719996615824002944
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,7 +489,7 @@ GameObject:
   - component: {fileID: 3218554901417394427}
   - component: {fileID: 716922202919880970}
   - component: {fileID: 875592433083873162}
-  - component: {fileID: 6070490868314889692}
+  - component: {fileID: 4767820789737894989}
   m_Layer: 7
   m_Name: Wall (2)
   m_TagString: Untagged
@@ -594,7 +583,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6070490868314889692
+--- !u!114 &4767820789737894989
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -603,10 +592,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4719996615824002944}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d808a457854ec49a16c1fa12d0b952, type: 3}
+  m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPlane: 0
+  _materialRenderSetting: 1
+  _colliderSetting: 1
 --- !u!1 &7726627576999368153
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,7 +658,7 @@ GameObject:
   - component: {fileID: 6465070899870384720}
   - component: {fileID: 3164606507008981756}
   - component: {fileID: 7912923608269711920}
-  - component: {fileID: 1848624736111645877}
+  - component: {fileID: 6299517283210315804}
   m_Layer: 7
   m_Name: Wall (4)
   m_TagString: Untagged
@@ -762,7 +752,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1848624736111645877
+--- !u!114 &6299517283210315804
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -771,10 +761,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8787657324033058033}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d808a457854ec49a16c1fa12d0b952, type: 3}
+  m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPlane: 0
+  _materialRenderSetting: 1
+  _colliderSetting: 1
 --- !u!1 &9156320833724068787
 GameObject:
   m_ObjectHideFlags: 0
@@ -787,8 +778,7 @@ GameObject:
   - component: {fileID: 1234346678591898239}
   - component: {fileID: 3956958107335570665}
   - component: {fileID: 1248329628963531200}
-  - component: {fileID: 8783298253533350160}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -881,19 +871,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8783298253533350160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9156320833724068787}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d808a457854ec49a16c1fa12d0b952, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isPlane: 0
 --- !u!1001 &1874147585291750773
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1450,6 +1427,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3750513011890819203}
     m_Modifications:
+    - target: {fileID: 2165570085718572125, guid: 06d202e9f43744e8fb8e27dedbdff6c3,
+        type: 3}
+      propertyPath: _groundMask.m_Bits
+      value: 960
+      objectReference: {fileID: 0}
     - target: {fileID: 3521114569831783098, guid: 06d202e9f43744e8fb8e27dedbdff6c3,
         type: 3}
       propertyPath: m_Name

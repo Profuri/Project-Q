@@ -1,5 +1,6 @@
 using System;
 using InteractableSystem;
+using StageStructureConvertSystem;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -14,11 +15,12 @@ public class HoldableObject : InteractableObject
         _isHeld = false;
     }
 
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         _isHeld = !_isHeld;
         _rigid.useGravity = !_isHeld;
-        
+
+        var player = ((PlayableObjectUnit)communicator).PlayerController;
         var holdingModule = player.GetModule<PlayerObjectHoldingModule>();
 
         if (_isHeld)

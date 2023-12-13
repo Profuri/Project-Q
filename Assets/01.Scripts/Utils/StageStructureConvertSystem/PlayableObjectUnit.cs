@@ -11,6 +11,8 @@ namespace StageStructureConvertSystem
         private PlayerController _playerController;
         private CharacterController _characterController;
 
+        public PlayerController PlayerController => _playerController;
+
         public override void Init(StructureConverter converter)
         {
             base.Init(converter);
@@ -59,17 +61,13 @@ namespace StageStructureConvertSystem
 
             if (!isHit)
             {
-                Debug.Log(1);
                 return;
             }
 
             if (!hit.collider.TryGetComponent<StructureObjectUnitBase>(out var unit))
             {
-                Debug.Log(2);
                 return;
             }
-
-            Debug.Log(hit.collider.name);
 
             switch (axisType)
             {
