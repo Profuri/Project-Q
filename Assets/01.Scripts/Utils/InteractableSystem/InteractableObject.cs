@@ -6,6 +6,7 @@ namespace InteractableSystem
     public abstract class InteractableObject : MonoBehaviour, IInteractable
     {
         public bool InterEnd { get; set; }
+        public bool IsInteract { get; set; }
 
         [SerializeField] private EInteractType _interactType;
         public EInteractType InteractType => _interactType;

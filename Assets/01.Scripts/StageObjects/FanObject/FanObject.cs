@@ -86,6 +86,28 @@ public class FanObject : InteractableObject
                 var movementModule = playerController.GetModule<PlayerMovementModule>();
                 movementModule.SetVerticalVelocity(_airPower);
             }
+
+            if (hit.collider.TryGetComponent(out InteractableObject interactableObject))
+            {
+                if (interactableObject.IsInteract)
+                {
+                    continue;
+                }
+                
+                if (!interactableObject.Attribute.HasFlag(EInteractableAttribute.AFFECTED_FROM_AIR))
+                {
+                    continue;
+                }
+
+                if (!interactableObject.TryGetComponent<Rigidbody>(out var rigid))
+                {
+                    continue;
+                }
+                
+                var velocity = rigid.velocity;
+                velocity.y = _airPower;
+                rigid.velocity = velocity;
+            }
         }
     }
 
