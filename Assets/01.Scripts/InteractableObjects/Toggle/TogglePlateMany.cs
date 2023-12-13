@@ -1,0 +1,119 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using InteractableSystem;
+using System;
+using StageStructureConvertSystem;
+
+public class TogglePlateMany : InteractableObject
+{
+    [SerializeField] private LayerMask _pressionorMask;
+
+    [SerializeField] private float _pressSpeed;
+    [SerializeField] private float _maxHeight;
+    [SerializeField] private float _minHeight;
+    [SerializeField] private List<InteractableObject> _affectedObjects;
+
+    [Header("Delay")]
+    [SerializeField] private bool _useDelay = false;
+    [SerializeField] private bool _rollbackReverse = false;
+    [SerializeField] private float _delayTime = 0.5f;
+
+
+    private List<InteractableObject> _activeObjects;
+    private Transform _pressureMainTrm;
+    private Transform _pressureObjTrm;
+
+    private bool _isToggle = false;
+    private bool _isPlaying = false;
+
+    private Coroutine _coroutine;
+
+    private void Awake()
+    {
+        _pressureMainTrm = transform.Find("PressureMain");
+        _pressureObjTrm = _pressureMainTrm.Find("PressureObject");
+        _coroutine = null;
+    }
+
+    private void Start()
+    {
+        _isToggle = false;
+        _isPlaying = false;
+        if (!_useDelay)
+            _activeObjects = _affectedObjects;
+        else
+            _activeObjects = new();
+    }
+
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    {
+        if(_isPlaying == true)
+        {
+            Debug.Log("Toggle�� �� �����ϴ�.");
+        }
+        else
+        {
+            _isToggle = !_isToggle;
+            if(_useDelay)
+                StartCoroutine(ToggleObjects(_isToggle));
+        }
+    }
+
+    private void Update()
+    {
+        ToggleUpdate();
+    }
+
+    private void ToggleUpdate()
+    {
+        if (_activeObjects == null) return;
+
+        for (int i = 0; i < _activeObjects.Count; i++)
+        {
+            _activeObjects[i]?.OnInteraction(null, _isToggle);
+        }
+        var scale = _pressureMainTrm.localScale;
+        scale.y = _isToggle ? _minHeight : _maxHeight;
+        _pressureMainTrm.localScale = scale;
+    }
+
+
+    private IEnumerator ToggleObjects(bool _isToggle)
+    {
+        _isPlaying = true;
+        for (int i = 0; i < _affectedObjects.Count; i++)
+        {
+            _activeObjects.Add(_affectedObjects[i]);
+            _activeObjects[i]?.OnInteraction(null, _isToggle);
+            yield return new WaitForSeconds(_delayTime);
+        }
+            
+        for(int i = 0; i < _activeObjects.Count; i++)
+            yield return new WaitUntil(() => _activeObjects[i].InterEnd);
+        
+
+        if(_rollbackReverse) _affectedObjects.Reverse();
+        _activeObjects.ForEach((obj) => obj.InterEnd = false);
+        _activeObjects.Clear();
+        _isPlaying = false;
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (!_pressureObjTrm)
+        {
+            return;
+        }
+
+        Gizmos.color = Color.yellow;
+        var checkPos = _pressureObjTrm.position
+            + Vector3.up
+            * (_pressureObjTrm.localScale.y * _pressureMainTrm.localScale.y / 2 + _pressureObjTrm.localScale.y / 2);
+        var checkSize = _pressureObjTrm.localScale;
+        Gizmos.DrawWireCube(checkPos, checkSize);
+    }
+#endif
+}
+

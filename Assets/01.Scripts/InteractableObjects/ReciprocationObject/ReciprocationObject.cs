@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using InteractableSystem;
+using StageStructureConvertSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Vector3 = UnityEngine.Vector3;
@@ -15,20 +16,44 @@ public class ReciprocationObject : InteractableObject
     private Vector3 _originPos;
     private Vector3 _destPos;
 
+    [SerializeField] private StructureConverter _converter;
+
     private void Awake()
     {
         _originPos = transform.position;
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
+        if(_converter == null)
+        {
+            _converter = transform.parent.parent.GetComponent<StructureConverter>();
+            if(_converter == null)
+            {
+                Debug.LogError("Set Converter to this Reciprocation Object");
+            }
+        }
     }
 
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
-        var curPos = transform.position;
+        var curPos = transform.position;  
         var destPos = interactValue ? _destPos : _originPos;
+
+        switch (_converter.AxisType)
+        {
+            case EAxisType.X:
+                destPos.x = 0f;
+                break;
+            case EAxisType.Y:
+                destPos.y = 0f;
+                break;
+            case EAxisType.Z:
+                destPos.z = 0f;
+                break;
+        }
 
         if (Vector3.Distance(curPos, destPos) <= 0.01f)
         {
             transform.position = destPos;
+            InterEnd = true;
             return;
         }
         

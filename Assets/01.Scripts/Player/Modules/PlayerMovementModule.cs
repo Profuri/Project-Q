@@ -11,8 +11,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     [SerializeField] private LayerMask _groundMask;
     [SerializeField] private float _maxGroundCheckDistance;
 
-    private BoxCollider _collider;
-    private Rigidbody _rigidbody;
+    private CharacterController _characterController;
 
     private Vector3 _inputDir;
     
@@ -24,14 +23,16 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     public Vector3 MoveVelocity => _moveVelocity;
 
     public bool CanJump { get; set; }
+    public bool IsMovement => _inputDir.sqrMagnitude > 0f;
     public bool IsGround => CheckGround();
 
     public override void Init(Transform root)
     {
         base.Init(root);
 
-        _collider = root.GetComponent<BoxCollider>();
-        _rigidbody = root.GetComponent<Rigidbody>();
+        _characterController = root.GetComponent<CharacterController>();
+
+        CanJump = true;
 
         _inputReader.OnMovementEvent += SetInputDir;
         _inputReader.OnJumpEvent += OnJump;
@@ -47,7 +48,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public override void FixedUpdateModule()
     {
-        _rigidbody.velocity = _moveVelocity;
+        _characterController.Move(_moveVelocity * Time.deltaTime);
     }
 
     public override void DisableModule()
@@ -85,27 +86,40 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
         if (IsGround && _verticalVelocity.y < 0f)
         {
-            _verticalVelocity.y = -1f;
+            SetVerticalVelocity(-1f);
         }
         else
         {
-            _verticalVelocity.y += Controller.DataSO.gravity * Time.deltaTime;
+            AddVerticalVelocity(Controller.DataSO.gravity * Time.deltaTime);
         }
+    }
+
+    public void SetVerticalVelocity(float value)
+    {
+        _verticalVelocity.y = value;
+    }
+
+    public void AddVerticalVelocity(float value)
+    {
+        _verticalVelocity.y += value;
     }
 
     private bool CheckGround()
     {
-        var size = _collider.size;
+        var size = _characterController.bounds.size * 0.8f;
         size.y = 0.1f;
         var trm = transform;
-        return Physics.BoxCast(
+        var isHit = Physics.BoxCast(
             trm.position,
             size,
             -trm.up,
-            trm.rotation,
+            out var hit,
+            Controller.ModelTrm.rotation,
             _maxGroundCheckDistance,
             _groundMask
         );
+
+        return isHit && !hit.collider.isTrigger;
     }
 
     public void StopImmediately()
@@ -132,12 +146,12 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     {
         Gizmos.color = Color.cyan;
 
-        if (_collider == null)
+        if (_characterController == null)
         {
             return;
         }
 
-        var size = _collider.size;
+        var size = _characterController.bounds.size * 0.8f;
         size.y = 0.1f;
         var trm = transform;
         Gizmos.DrawCube(trm.position - trm.up * _maxGroundCheckDistance, size);

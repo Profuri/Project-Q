@@ -1,10 +1,22 @@
 using InteractableSystem;
+using StageStructureConvertSystem;
 using UnityEngine;
 
 public class GoalObject : InteractableObject
 {
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    private bool _isToggle;
+
+    private void OnEnable()
     {
-        Debug.Log("Goal!!");    
+        _isToggle = false;
+    }
+
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    {
+        if(!_isToggle)
+        {
+            StageManager.Instance.StageClear();  
+            _isToggle = true;
+        }
     }
 }

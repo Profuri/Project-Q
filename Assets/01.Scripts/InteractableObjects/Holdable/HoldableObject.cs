@@ -1,27 +1,28 @@
 using System;
 using InteractableSystem;
+using StageStructureConvertSystem;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class HoldableObject : InteractableObject
 {
     private Rigidbody _rigid;
-    private bool _isHeld;
 
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody>();
-        _isHeld = false;
+        IsInteract = false;
     }
 
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
-        _isHeld = !_isHeld;
-        _rigid.useGravity = !_isHeld;
-        
+        IsInteract = !IsInteract;
+        _rigid.useGravity = !IsInteract;
+
+        var player = ((PlayableObjectUnit)communicator).PlayerController;
         var holdingModule = player.GetModule<PlayerObjectHoldingModule>();
 
-        if (_isHeld)
+        if (IsInteract)
         {
             holdingModule.AttachObject(this);
         }

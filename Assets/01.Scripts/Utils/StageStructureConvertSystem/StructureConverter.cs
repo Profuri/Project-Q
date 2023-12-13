@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace StageStructureConvertSystem
 {
+    [RequireComponent(typeof(Stage))]
     public class StructureConverter : MonoBehaviour
     {
         private List<StructureObjectUnitBase> _convertableUnits;
@@ -70,6 +71,12 @@ namespace StageStructureConvertSystem
             {
                 unit.ObjectSetting();
             });
+        }
+
+        public void RemoveObject(StructureObjectUnitBase unit)
+        {
+            Destroy(unit.gameObject);
+            _convertableUnits.Remove(unit);
         }
     }
 }
