@@ -4,7 +4,7 @@ using UnityEngine;
 using Fabgrid;
 using System;
 using System.Reflection;
-//using StageStructureConvertSystem;
+using StageStructureConvertSystem;
 
 namespace Fabgrid
 {
@@ -31,16 +31,22 @@ namespace Fabgrid
         }
 
         public List<FieldInfo> _fieldInfoList;
-
+        
+        [ContextMenu("LoadFieldInfo")]
         private void LoadFieldInfo()
         {
             _fieldInfoList.Clear();
 
-            //Type type = typeof(StructureObjectUnitBase);
-            //foreach (FieldInfo fieldInfo in type.GetFields())
-            //{
-            //    Debug.Log(fieldInfo);
-            //}
+            Type type = typeof(StructureObjectUnitBase);
+            foreach (FieldInfo fieldInfo in type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+            {
+
+                //Get Private && SerializeField Info
+                if (Attribute.IsDefined(fieldInfo, typeof(SerializeField)))
+                {
+                    Debug.Log(fieldInfo);
+                }
+            }
         }
     }
 }
