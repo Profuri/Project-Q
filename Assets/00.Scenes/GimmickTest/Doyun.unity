@@ -965,7 +965,7 @@ GameObject:
   - component: {fileID: 898269055}
   - component: {fileID: 898269054}
   - component: {fileID: 898269058}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PictureObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1003,7 +1003,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 1
-  _yAxisInteraction: 0
+  _outlineSetting: 1
+  _interatableYAxis: 0
 --- !u!65 &898269055
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1082,14 +1083,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 898269052}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   outlineMode: 0
-  outlineColor: {r: 0.6509434, g: 0.7396122, b: 2, a: 1}
-  outlineWidth: 5
+  outlineColor: {r: 1.7824343, g: 0.018208921, b: 0, a: 1}
+  outlineWidth: 7
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -2595,7 +2596,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 1
-  _yAxisInteraction: 0
+  _outlineSetting: 1
+  _interatableYAxis: 0
 --- !u!1 &1009514036653725741
 GameObject:
   m_ObjectHideFlags: 0
@@ -2608,6 +2610,7 @@ GameObject:
   - component: {fileID: 466700045487413452}
   - component: {fileID: 1247055326862987588}
   - component: {fileID: 4923201342624944222}
+  - component: {fileID: 4923201342624944223}
   m_Layer: 8
   m_Name: Goal
   m_TagString: Untagged
@@ -2837,6 +2840,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4923201342624944223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009514036653725741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &5611142750732782317
 GameObject:
   m_ObjectHideFlags: 0

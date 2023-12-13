@@ -650,6 +650,7 @@ GameObject:
   - component: {fileID: 5413009278714807062}
   - component: {fileID: 7023724106154867271}
   - component: {fileID: 8456581276595569573}
+  - component: {fileID: 2917235811965471049}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -729,10 +730,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 0
+  _outlineSetting: 0
+  _interatableYAxis: 0
   _standableObjectMask:
     serializedVersion: 2
     m_Bits: 448
   _rayDistance: 5
+--- !u!114 &2917235811965471049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3521114569831783098}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &5199850681926758381
 GameObject:
   m_ObjectHideFlags: 0

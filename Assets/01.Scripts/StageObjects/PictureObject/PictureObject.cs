@@ -30,7 +30,7 @@ public class PictureObject : StructureObjectUnitBase
         }
     }
 
-    public override void ColliderSetting()
+    protected override void ColliderSetting()
     {
         base.ColliderSetting();
 
