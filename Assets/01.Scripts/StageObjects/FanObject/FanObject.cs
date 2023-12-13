@@ -29,15 +29,6 @@ public class FanObject : InteractableObject
     {
         RotateFan();
         FloatingOther();
-        
-        if (Keyboard.current.oKey.wasPressedThisFrame)
-        {
-            EnableFan();
-        }
-        else if (Keyboard.current.pKey.wasPressedThisFrame)
-        {
-            ReleaseFan();
-        }
     }
 
     private void EnableFan()
