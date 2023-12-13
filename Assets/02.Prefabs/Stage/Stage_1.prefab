@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7251271249432079639}
   - component: {fileID: 8606647248281597747}
+  - component: {fileID: 5937647196674516872}
+  - component: {fileID: 2910719805825807890}
   m_Layer: 0
   m_Name: Stage_1
   m_TagString: Untagged
@@ -49,6 +51,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f975e98f4bcf47c38f04f8533d511d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5937647196674516872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28423110865202235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a20ae8a59cd4e1b4eaebd92ae706779d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NextStage: {fileID: 6312967263935480828, guid: 0ebcd4616fa03415b81fbdc18c51e778,
+    type: 3}
+  IsEndStage: 0
+  CurStageNum: 0
+--- !u!65 &2910719805825807890
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28423110865202235}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 12, y: 5, z: 12}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &1358743725588849896
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,6 +208,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 1
+  _yAxisInteraction: 0
 --- !u!1 &1987475728613033036
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,6 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 0
+  _yAxisInteraction: 0
 --- !u!114 &349032517184621861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -373,6 +414,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 1
+  _yAxisInteraction: 0
 --- !u!1 &4855762227704904790
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,6 +800,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 1
+  _yAxisInteraction: 0
 --- !u!1001 &262287441694308736
 PrefabInstance:
   m_ObjectHideFlags: 0

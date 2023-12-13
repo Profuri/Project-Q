@@ -15,11 +15,15 @@ public class CameraManager : BaseManager<CameraManager>
     private VirtualCamComponent _currentVCam;
     private Camera _mainCam;
     public Camera MainCam => _mainCam;
-
+    public Transform CameraContainerTrm => _mainCam.transform.parent;
+    public Vector3 CameraDiff => _cameraDiff;
+    private Vector3 _cameraDiff;
     public override void StartManager()
     {
         _mainCam = Camera.main;
         _currentVCam = null;
+        _cameraDiff = _mainCam.transform.parent.transform.position;
+
         foreach (var vCam in _virtualCams)
         {
             vCam.ExitCam();

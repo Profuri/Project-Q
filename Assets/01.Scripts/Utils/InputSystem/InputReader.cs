@@ -28,6 +28,14 @@ namespace InputControl
             _inputControls.Player.Enable();
         }
 
+        public void SetEnableInput(bool enabled)
+        {
+            if (enabled)
+                _inputControls.Player.Enable();
+            else
+                _inputControls.Player.Disable();
+        }
+
         public void OnMovement(InputAction.CallbackContext context)
         {
             Vector2 value = context.ReadValue<Vector2>();

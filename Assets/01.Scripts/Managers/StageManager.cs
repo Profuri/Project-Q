@@ -36,15 +36,22 @@ public class StageManager : BaseManager<StageManager>
                 
     }
 
+
     public void StageClear()
     {
-        if(_curStage.IsEndStage)
+
+        //CameraManager.Instance.ChangeCamera(EAxisType.NONE);
+        GameManager.Instance.Player.SetEnableInput(false);
+        GameManager.Instance.Player.ConvertDimension(EAxisType.NONE);
+
+        
+        if (_curStage.IsEndStage)
         {
             EndChapter();
             return;
         }
         _curStage?.GoNext();
-        _curStage = _curStage.NextStage;    
+        _curStage = _curStage.NextStage;
     }
 
     private void EndChapter()
@@ -62,16 +69,22 @@ public class StageManager : BaseManager<StageManager>
         {
             Stage newStage = Instantiate(stage);
             newStage.gameObject.SetActive(false);
-            
             stages.Add(newStage);
         }); 
        
 
         for (int i = 0; i < stages.Count; i++)
         {
+            //일단은 stage에 있는 player코드로 지워줌 나중엔 프리팹 내에서 없애야 함
+            if(i != 0)
+                Destroy(stages[i].transform.Find("Player").gameObject);
+            
+            stages[i].IsPlayerEnter = false;
             stages[i].CurStageNum = i;
+
             stages[i].transform.SetParent(stageTrmMain.GetChild(i));
             stages[i].transform.localPosition = Vector3.zero;
+            stages[i].transform.localRotation = Quaternion.identity;
 
             //챕터별 마지막 스테이지
             if (i == stages.Count - 1)
@@ -86,6 +99,7 @@ public class StageManager : BaseManager<StageManager>
         }
 
         _curStage = stages[0];
+        _curStage.IsPlayerEnter = true;
         _curStage.gameObject.SetActive(true);
     }
 

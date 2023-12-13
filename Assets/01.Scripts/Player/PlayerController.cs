@@ -1,9 +1,11 @@
+using InputControl;
 using ModuleSystem;
 using StageStructureConvertSystem;
 using UnityEngine;
 
 public class PlayerController : BaseModuleController
 {
+    [SerializeField] private InputReader _inputReader;
     [SerializeField] private PlayerDataSO _dataSO;
     public PlayerDataSO DataSO => _dataSO;
 
@@ -51,6 +53,11 @@ public class PlayerController : BaseModuleController
         }
     }
 
+    public void SetEnableInput(bool enabled)
+    {
+        _inputReader.SetEnableInput(enabled);
+    }
+
     public override void Update()
     {
         base.Update();
@@ -74,7 +81,7 @@ public class PlayerController : BaseModuleController
         }
     }
 
-    private void ConvertDimension(EAxisType axis)
+    public void ConvertDimension(EAxisType axis)
     {
         PlayerMovementModule movement = GetModule<PlayerMovementModule>();
         movement.SetEnableMove(false);
