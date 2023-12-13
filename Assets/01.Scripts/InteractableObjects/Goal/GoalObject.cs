@@ -1,4 +1,5 @@
 using InteractableSystem;
+using StageStructureConvertSystem;
 using UnityEngine;
 
 public class GoalObject : InteractableObject
@@ -10,7 +11,7 @@ public class GoalObject : InteractableObject
         _isToggle = false;
     }
 
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         if(!_isToggle)
         {

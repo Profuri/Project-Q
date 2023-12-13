@@ -86,12 +86,22 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
         if (IsGround && _verticalVelocity.y < 0f)
         {
-            _verticalVelocity.y = -1f;
+            SetVerticalVelocity(-1f);
         }
         else
         {
-            _verticalVelocity.y += Controller.DataSO.gravity * Time.deltaTime;
+            AddVerticalVelocity(Controller.DataSO.gravity * Time.deltaTime);
         }
+    }
+
+    public void SetVerticalVelocity(float value)
+    {
+        _verticalVelocity.y = value;
+    }
+
+    public void AddVerticalVelocity(float value)
+    {
+        _verticalVelocity.y += value;
     }
 
     private bool CheckGround()

@@ -186,6 +186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _materialRenderSetting: 1
+  _colliderSetting: 0
 --- !u!114 &8986315580739756761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,8 +318,7 @@ GameObject:
   - component: {fileID: 3604340046561156170}
   - component: {fileID: 640946120948717247}
   - component: {fileID: 8705421426269589942}
-  - component: {fileID: 6112075074755650094}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -410,19 +411,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6112075074755650094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1117976639902111545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d808a457854ec49a16c1fa12d0b952, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isPlane: 0
 --- !u!1 &2617671666200177998
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,8 +788,7 @@ GameObject:
   - component: {fileID: 2139709639917647958}
   - component: {fileID: 729588376001165761}
   - component: {fileID: 4385203983971829647}
-  - component: {fileID: 3335155047616573025}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -894,19 +881,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3335155047616573025
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3596362875971743057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d808a457854ec49a16c1fa12d0b952, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isPlane: 1
 --- !u!1 &4910476278290862725
 GameObject:
   m_ObjectHideFlags: 0
@@ -1847,6 +1821,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4558856841983780389}
     m_Modifications:
+    - target: {fileID: 2165570085718572125, guid: 06d202e9f43744e8fb8e27dedbdff6c3,
+        type: 3}
+      propertyPath: _groundMask.m_Bits
+      value: 960
+      objectReference: {fileID: 0}
     - target: {fileID: 3521114569831783098, guid: 06d202e9f43744e8fb8e27dedbdff6c3,
         type: 3}
       propertyPath: m_Name
@@ -2098,6 +2077,11 @@ PrefabInstance:
     - target: {fileID: 3773513666925007558, guid: d60bc2a6774977c46a1250ab8fbfd488,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4306919365112982369, guid: d60bc2a6774977c46a1250ab8fbfd488,
+        type: 3}
+      propertyPath: _colliderSetting
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
