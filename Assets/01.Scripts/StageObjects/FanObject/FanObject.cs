@@ -48,6 +48,11 @@ public class FanObject : InteractableObject
     {
         if (interactValue)
         {
+            if (_enabled)
+            {
+                return;
+            }
+            
             EnableFan();
         }
         else
