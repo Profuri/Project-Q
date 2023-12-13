@@ -81,9 +81,10 @@ public class FanObject : InteractableObject
         {
             var hit = hits[i];
 
-            if (hit.collider.TryGetComponent(out CharacterController characterController))
+            if (hit.collider.TryGetComponent(out PlayerController playerController))
             {
-                characterController.Move(new Vector3(0, _airPower, 0) * Time.deltaTime);
+                var movementModule = playerController.GetModule<PlayerMovementModule>();
+                movementModule.SetVerticalVelocity(_airPower);
             }
         }
     }
