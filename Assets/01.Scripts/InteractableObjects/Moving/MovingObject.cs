@@ -39,16 +39,17 @@ public class MovingObject : InteractableObject
             return;
         }
         
-        if (!cols[0].TryGetComponent<PlayerController>(out var playerController))
+        if (!cols[0].TryGetComponent<PlayableObjectUnit>(out var playerUnit))
         {
             return;
         }   
             
-        OnInteraction(playerController, true);
+        OnInteraction(playerUnit, true);
     }
 
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
+        var player = ((PlayableObjectUnit)communicator).PlayerController;
         var playerMovementModule = player.GetModule<PlayerMovementModule>();
 
         if (!playerMovementModule.IsMovement)
@@ -56,7 +57,7 @@ public class MovingObject : InteractableObject
             return;
         }
 
-        if (IsPulling(player.transform.position, playerMovementModule.MoveVelocity, out var dir))
+        if (IsPulling(communicator.transform.position, playerMovementModule.MoveVelocity, out var dir))
         {
             var speed = player.DataSO.walkSpeed / 2f;
             transform.position += dir * (speed * Time.deltaTime);

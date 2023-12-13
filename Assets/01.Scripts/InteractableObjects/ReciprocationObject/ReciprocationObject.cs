@@ -32,7 +32,7 @@ public class ReciprocationObject : InteractableObject
         }
     }
 
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         var curPos = transform.position;  
         var destPos = interactValue ? _destPos : _originPos;

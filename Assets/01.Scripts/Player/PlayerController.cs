@@ -16,6 +16,9 @@ public class PlayerController : BaseModuleController
     private StructureConverter _converter;
     public StructureConverter Converter => _converter;
 
+    private PlayableObjectUnit _playerUnit;
+    public PlayableObjectUnit PlayerUnit => _playerUnit;
+
     private ushort _enableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
 
     public override void Start()
@@ -23,6 +26,7 @@ public class PlayerController : BaseModuleController
         _modelTrm = transform.Find("Model");
         _converter = transform.parent.GetComponent<StructureConverter>();
         _playerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
+        _playerUnit = GetComponent<PlayableObjectUnit>();
         base.Start();
     }
 
@@ -50,6 +54,8 @@ public class PlayerController : BaseModuleController
     public override void Update()
     {
         base.Update();
+        
+        // test key
         if (Input.GetKeyDown(KeyCode.V))
         {
             ConvertDimension(EAxisType.NONE);

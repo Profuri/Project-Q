@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using InteractableSystem;
 using System;
+using StageStructureConvertSystem;
 
 public class TogglePlateMany : InteractableObject
 {
@@ -45,11 +46,11 @@ public class TogglePlateMany : InteractableObject
             _activeObjects = new();
     }
 
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         if(_isPlaying == true)
         {
-            Debug.Log("ToggleÇÒ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.Log("Toggleï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
         }
         else
         {

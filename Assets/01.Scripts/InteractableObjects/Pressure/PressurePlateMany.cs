@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using InteractableSystem;
+using StageStructureConvertSystem;
 
 public class PressurePlateMany : InteractableObject
 {
@@ -27,7 +28,7 @@ public class PressurePlateMany : InteractableObject
         OnInteraction(null, CheckPressed());
     }
 
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         for( int i = 0; i < _affectedObjects.Count; i++)
         {
