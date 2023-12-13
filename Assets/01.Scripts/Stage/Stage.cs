@@ -25,5 +25,6 @@ public class Stage : MonoBehaviour
     public void GoNext()
     {
         NextStage.ActiveStage();
+
     }
 }
