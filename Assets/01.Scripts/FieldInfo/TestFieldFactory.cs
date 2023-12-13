@@ -13,8 +13,6 @@ public class TestFieldFactory : MonoBehaviour
     
     public TestField CreateUI(FieldInfo fieldInfo)
     {
-        //TestField inputField = Instantiate(_testField, Vector3.zero, Quaternion.identity, _canvas).GetComponent<TestField>();
-        //inputField.Init(fieldInfo.FieldType);
         Type type = fieldInfo.FieldType;
         TestField field = null;
         if (type.IsEnum)

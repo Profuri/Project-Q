@@ -10,6 +10,6 @@ using UnityEngine.UI;
 
 public abstract class TestField : MonoBehaviour
 {
-    //public 
+    public abstract object GetValue(); 
     public abstract void Init(Type type);
 }

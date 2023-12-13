@@ -11,40 +11,48 @@ using UnityEngine.InputSystem;
 
 public class TestFieldInfoSet : MonoBehaviour
 {
-    public List<FieldInfo> FieldInfoList = new List<FieldInfo>();
     [SerializeField] private TestFieldFactory _factory;
     
     private Type _type;
-    private TestField _testField;
+    private Dictionary<FieldInfo,TestField> _fieldDictionary = new Dictionary<FieldInfo,TestField>();
 
     private void Awake()
     {
-        _type = typeof(AxisLimitPlatformObjectUnit);
+        _type = typeof(PictureUnit);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.U))
         {
-            FieldInfoList = _type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance).ToList();
+            var fieldInfoList = _type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance).ToList();
 
-            foreach (var fieldInfo in FieldInfoList)
+            foreach (var fieldInfo in fieldInfoList)
             {
                 if (Attribute.IsDefined(fieldInfo, typeof(SerializeField)))
                 {
-                    _testField = _factory.CreateUI(fieldInfo);
+                    var field = _factory.CreateUI(fieldInfo);
+                    _fieldDictionary.Add(fieldInfo,field);
                 }
             }
         }
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            PlatformObjectUnit unitBase = new PlatformObjectUnit();
+            PictureUnit unitBase = new PictureUnit();
 
-            foreach (FieldInfo info in FieldInfoList)
+            foreach (var kvp in _fieldDictionary)
             {
                 //unitBase의 info값을 바꾼다.
-                info.SetValue(unitBase,1f);
+                if (kvp.Value != null)
+                {
+                    kvp.Key.SetValue(unitBase,kvp.Value.GetValue());
+                }
+            }
+
+            foreach (var fieldinfo in _fieldDictionary.Keys)
+            {
+                Debug.Log($"value: {fieldinfo.GetValue(unitBase)}");
             }
         }
     }
