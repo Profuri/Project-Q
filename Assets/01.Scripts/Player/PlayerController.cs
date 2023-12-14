@@ -25,11 +25,23 @@ public class PlayerController : BaseModuleController
 
     public override void Start()
     {
+        Init();  
+        base.Start();
+    }
+
+    public void Init()
+    {
         _modelTrm = transform.Find("Model");
         _converter = transform.parent.GetComponent<StructureConverter>();
         _playerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         _playerUnit = GetComponent<PlayableObjectUnit>();
-        base.Start();
+    }
+
+    public void SetParent(Transform stage)
+    {
+        transform.SetParent(stage);
+        Init();
+        Converter.Init();
     }
 
     public bool GetAxisEnabled(EAxisType axis)
@@ -83,6 +95,7 @@ public class PlayerController : BaseModuleController
 
     public void ConvertDimension(EAxisType axis)
     {
+        Debug.Log(1);
         PlayerMovementModule movement = GetModule<PlayerMovementModule>();
         movement.SetEnableMove(false);
         movement.StopImmediately();

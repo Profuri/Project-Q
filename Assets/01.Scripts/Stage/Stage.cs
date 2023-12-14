@@ -12,6 +12,8 @@ public class Stage : MonoBehaviour
     [HideInInspector] public int    CurStageNum = 0;
     public event Action OnStageChange;
     public bool IsPlayerEnter;
+
+
     private List<BridgeObject> _bridgeList;
     public List<BridgeObject> BridgeList => _bridgeList;
 
@@ -30,11 +32,6 @@ public class Stage : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void LateUpdate()
-    {
-
-    }
-
     public void GoNext()
     {
         NextStage.ActiveStage();
@@ -51,14 +48,17 @@ public class Stage : MonoBehaviour
         seq.AppendInterval(3.5f);
         seq.Append(camerTrm.DOMove(nextPos, 1f)).SetEase(Ease.OutCirc);
         seq.AppendInterval(0.3f);
-        seq.Append(camerTrm.DOMove(GameManager.Instance.Player.transform.position + cameraDiff, 0.5f));
+        seq.Append(camerTrm.DOMove(transform.position + cameraDiff, 0.3f).SetEase(Ease.Unset));
+        //seq.Append(camerTrm.DOMove(GameManager.Instance.Player.transform.position + cameraDiff, 0.5f));
         seq.OnComplete(() =>
         {
             //플레이어 다시 움직이게
             MakeBridge();
+            GameManager.Instance.Player.SetParent(NextStage.transform);
             GameManager.Instance.Player.SetEnableInput(true); 
         });
     }
+
 
     private void MakeBridge()
     {
@@ -95,6 +95,26 @@ public class Stage : MonoBehaviour
         }
     }
 
+    public void EnterStage()
+    {
+        if(PrevStage.BridgeList.Count > 0)
+        {
+            StartCoroutine(RemoveBridge(0.3f));
+        }
+    }
+
+    private IEnumerator RemoveBridge(float delay)
+    {
+        for(int i = PrevStage.BridgeList.Count-1; i >= 0; i--)
+        {
+            BridgeObject bridge = PrevStage.BridgeList[i];
+            bridge.Move(bridge.transform.position + Vector3.down * 10, 0.45f);
+            yield return new WaitForSeconds(delay);
+        }    
+        //Destroy(bridge);
+        PrevStage.gameObject.SetActive(false);
+    }
+
     private void OnTriggerEnter(Collider collider)
     {
         PlayerController player;
@@ -106,9 +126,7 @@ public class Stage : MonoBehaviour
             //얘는 Next넘어 왔을 때 쓰임 고로 현재 포지션으로 설정해줘야 함
             Vector3 nextPos = transform.position + camerDiff;
 
-            camerTrm.DOMove(nextPos, 0.5f).SetEase(Ease.InOutBounce);
-
-
+            camerTrm.DOMove(nextPos, 0.5f).SetEase(Ease.OutQuad);
             //GetComponent<Collider>().enabled = false;
         }
     }
