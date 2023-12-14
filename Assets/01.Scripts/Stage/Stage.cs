@@ -6,16 +6,20 @@ using DG.Tweening;
 
 public class Stage : MonoBehaviour
 {
-    //[HideInInspector] public Stage prevStage = null;
+    [HideInInspector] public Stage  PrevStage = null;
     [HideInInspector] public Stage  NextStage = null;
     [HideInInspector] public bool   IsEndStage = false;
     [HideInInspector] public int    CurStageNum = 0;
     public event Action OnStageChange;
     public bool IsPlayerEnter;
+    private List<BridgeObject> _bridgeList;
+    public List<BridgeObject> BridgeList => _bridgeList;
 
     public void Awake()
     {
+        _bridgeList = new ();
         //할당은 모두 StageManager에서 해줄꺼야
+        // stage event추가
         //OnStageChange += () => gameObject.SetActive(true);
     }
 
@@ -24,6 +28,11 @@ public class Stage : MonoBehaviour
         Debug.Log($"Active : {this.gameObject.name}");
         OnStageChange?.Invoke();
         gameObject.SetActive(true);
+    }
+
+    public void LateUpdate()
+    {
+
     }
 
     public void GoNext()
@@ -39,25 +48,52 @@ public class Stage : MonoBehaviour
         Vector3 nextPos = NextStage.transform.position + cameraDiff;
 
         Sequence seq = DOTween.Sequence();
-        seq.AppendInterval(4f);
+        seq.AppendInterval(3.5f);
         seq.Append(camerTrm.DOMove(nextPos, 1f)).SetEase(Ease.OutCirc);
         seq.AppendInterval(0.3f);
-        seq.Append(camerTrm.DOMove(transform.position + cameraDiff, 0.5f));
+        seq.Append(camerTrm.DOMove(GameManager.Instance.Player.transform.position + cameraDiff, 0.5f));
         seq.OnComplete(() =>
         {
             //플레이어 다시 움직이게
             MakeBridge();
-            GameManager.Instance.Player.SetEnableInput(true);    
+            GameManager.Instance.Player.SetEnableInput(true); 
         });
     }
 
     private void MakeBridge()
     {
-        Vector3 startPos;
+        Transform bridgeStart = transform.Find("BridgeStartPos");
+        Vector3 startPos = bridgeStart == null 
+            ? GameManager.Instance.Player.transform.position
+            : bridgeStart.position;
 
-        Vector3 endPos; 
+
+        Transform bridgeEnd = NextStage.transform.Find("BridgeEndPos");
+        Vector3 endPos = bridgeEnd == null
+            ? (NextStage.transform.position - bridgeStart.position).normalized * 10f
+            : bridgeEnd.position;
+
+        float interval = 0.2f;
+        StartCoroutine(MakeBridgeCor(startPos, endPos, interval));
     }
 
+    private IEnumerator MakeBridgeCor(Vector3 startPos, Vector3 endPos, float interval = 0.05f)
+    {
+        float t = interval / 2;
+        while(t < 1)
+        {
+            Vector3 pos = Vector3.Lerp(startPos, endPos, t);
+            BridgeObject bridgeObj = Instantiate(
+                    StageManager.Instance.BridgePrefab
+                    , pos + Vector3.down * 10f
+                    , Quaternion.identity).GetComponent<BridgeObject>();
+            bridgeObj.Move(pos, 0.45f);
+            BridgeList.Add(bridgeObj);
+
+            t += interval;
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
 
     private void OnTriggerEnter(Collider collider)
     {
@@ -70,12 +106,19 @@ public class Stage : MonoBehaviour
             //얘는 Next넘어 왔을 때 쓰임 고로 현재 포지션으로 설정해줘야 함
             Vector3 nextPos = transform.position + camerDiff;
 
-            camerTrm.DOMove(nextPos, 0.5f);
+            camerTrm.DOMove(nextPos, 0.5f).SetEase(Ease.InOutBounce);
 
 
-            GetComponent<Collider>().enabled = false;
+            //GetComponent<Collider>().enabled = false;
         }
     }
 
-
+    private void OnTriggerExit(Collider other)
+    {
+        PlayerController player;
+        if (other.TryGetComponent<PlayerController>(out player))
+        {
+            IsPlayerEnter = false;
+        }
+    }
 }

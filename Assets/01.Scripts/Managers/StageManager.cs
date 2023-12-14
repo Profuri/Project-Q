@@ -18,14 +18,12 @@ public class StageManager : BaseManager<StageManager>
 
     private List<Stage> stages;
 
+    public GameObject BridgePrefab;
+
     public override void StartManager()
     {
         _curStage = null;
         stages = new();
-        //for (int i = 0; i < _chapterDataSO.Chapters.Count; i++)
-        //{
-
-        //}
 
         //Debuging
         StartStage(0);
@@ -39,11 +37,9 @@ public class StageManager : BaseManager<StageManager>
 
     public void StageClear()
     {
-
         //CameraManager.Instance.ChangeCamera(EAxisType.NONE);
         GameManager.Instance.Player.SetEnableInput(false);
         GameManager.Instance.Player.ConvertDimension(EAxisType.NONE);
-
         
         if (_curStage.IsEndStage)
         {
@@ -77,7 +73,10 @@ public class StageManager : BaseManager<StageManager>
         {
             //일단은 stage에 있는 player코드로 지워줌 나중엔 프리팹 내에서 없애야 함
             if(i != 0)
+            {
                 Destroy(stages[i].transform.Find("Player").gameObject);
+                stages[i].PrevStage = stages[i - 1];
+            }
             
             stages[i].IsPlayerEnter = false;
             stages[i].CurStageNum = i;
