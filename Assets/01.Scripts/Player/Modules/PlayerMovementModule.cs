@@ -15,9 +15,8 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     private Vector3 _inputDir;
 
-    [SerializeField] private Vector3 _force;
-    [SerializeField] private Vector3 _moveVelocity;
-    [SerializeField] private Vector3 _verticalVelocity;
+    private Vector3 _force;
+    private Vector3 _moveVelocity;
 
     private bool _canMove = true;
 
@@ -87,9 +86,8 @@ public class PlayerMovementModule : BaseModule<PlayerController>
         }
 
         _moveVelocity += _force;
-        _moveVelocity += _verticalVelocity;
-
-        if ((IsGround) && _verticalVelocity.y < 0f)
+        
+        if(IsGround && _force.y < 0f)
         {
             SetVerticalVelocity(-1f);
         }
@@ -97,18 +95,18 @@ public class PlayerMovementModule : BaseModule<PlayerController>
         {
             AddVerticalVelocity(Controller.DataSO.gravity * Time.deltaTime);
         }
-        
-        _force = Vector3.zero;
+
+        _force = new Vector3(0, _force.y, 0);
     }
 
-    public void SetVerticalVelocity(float value)
+    private void SetVerticalVelocity(float value)
     {
-        _verticalVelocity.y = value;
+        _force.y = value;
     }
 
-    public void AddVerticalVelocity(float value)
+    private void AddVerticalVelocity(float value)
     {
-        _verticalVelocity.y += value;
+        _force.y += value;
     }
 
     public void SetForce(Vector3 force)
@@ -141,9 +139,8 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public void StopImmediately()
     {
-        _verticalVelocity.y = -1f;
+        _force = new Vector3(0, -1f, 0);
         _moveVelocity = Vector3.zero;
-        _force = Vector3.zero;
     }
 
     private void SetInputDir(Vector2 input)
@@ -155,7 +152,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     {
         if (IsGround && CanJump)
         {
-            _verticalVelocity.y = Controller.DataSO.jumpPower;
+            SetVerticalVelocity(Controller.DataSO.jumpPower);
         }
     }
     
