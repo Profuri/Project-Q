@@ -14,9 +14,10 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     private CharacterController _characterController;
 
     private Vector3 _inputDir;
-    
-    private Vector3 _moveVelocity;
-    private Vector3 _verticalVelocity;
+
+    [SerializeField] private Vector3 _force;
+    [SerializeField] private Vector3 _moveVelocity;
+    [SerializeField] private Vector3 _verticalVelocity;
 
     private bool _canMove = true;
 
@@ -48,7 +49,10 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public override void FixedUpdateModule()
     {
-        _characterController.Move(_moveVelocity * Time.deltaTime);
+        if (_moveVelocity != Vector3.zero)
+        {
+            _characterController.Move(_moveVelocity * Time.deltaTime);
+        }
     }
 
     public override void DisableModule()
@@ -81,10 +85,11 @@ public class PlayerMovementModule : BaseModule<PlayerController>
                 _moveVelocity = new Vector3(_inputDir.x, 0, 0) * Controller.DataSO.walkSpeed;
                 break;
         }
-        
+
+        _moveVelocity += _force;
         _moveVelocity += _verticalVelocity;
 
-        if (IsGround && _verticalVelocity.y < 0f)
+        if ((IsGround) && _verticalVelocity.y < 0f)
         {
             SetVerticalVelocity(-1f);
         }
@@ -92,6 +97,8 @@ public class PlayerMovementModule : BaseModule<PlayerController>
         {
             AddVerticalVelocity(Controller.DataSO.gravity * Time.deltaTime);
         }
+        
+        _force = Vector3.zero;
     }
 
     public void SetVerticalVelocity(float value)
@@ -102,6 +109,16 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     public void AddVerticalVelocity(float value)
     {
         _verticalVelocity.y += value;
+    }
+
+    public void SetForce(Vector3 force)
+    {
+        _force = force;
+    }
+
+    public void AddForce(Vector3 force)
+    {
+        _force += force;
     }
 
     private bool CheckGround()
@@ -126,6 +143,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     {
         _verticalVelocity.y = -1f;
         _moveVelocity = Vector3.zero;
+        _force = Vector3.zero;
     }
 
     private void SetInputDir(Vector2 input)
