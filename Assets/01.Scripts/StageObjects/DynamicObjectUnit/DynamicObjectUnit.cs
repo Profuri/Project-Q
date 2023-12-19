@@ -1,10 +1,19 @@
 using StageStructureConvertSystem;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class DynamicObjectUnit : StructureObjectUnitBase
 {
     [SerializeField] private LayerMask _standableObjectMask;
     [SerializeField] private float _rayDistance;
+
+    private Rigidbody _rigidbody;
+
+    public override void Init(StructureConverter converter)
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+        base.Init(converter);
+    }
 
     public override void TransformSynchronization(EAxisType axisType)
     {
@@ -70,5 +79,11 @@ public class DynamicObjectUnit : StructureObjectUnitBase
                 _objectInfo.position.z = unit.ObjectInfo.position.z;
                 break;
         }
+    }
+
+    public override void ReloadObject()
+    {
+        base.ReloadObject();
+        _rigidbody.velocity = Vector3.zero;
     }
 }
