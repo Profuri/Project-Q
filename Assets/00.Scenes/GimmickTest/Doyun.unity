@@ -2054,7 +2054,7 @@ GameObject:
   - component: {fileID: 1664878865}
   - component: {fileID: 1664878864}
   - component: {fileID: 1664878870}
-  - component: {fileID: 1664878869}
+  - component: {fileID: 1664878871}
   m_Layer: 8
   m_Name: HoldObject
   m_TagString: Untagged
@@ -2189,23 +2189,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664878862}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1664878869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1664878862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _materialRenderSetting: 1
-  _colliderSetting: 1
-  _outlineSetting: 1
-  _interatableYAxis: 1
-  _rigidobySetting: 1
 --- !u!114 &1664878870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2224,6 +2207,27 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &1664878871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664878862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac9b0106d3034bdeac8b202a75e00d84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _materialRenderSetting: 1
+  _colliderSetting: 1
+  _outlineSetting: 1
+  _interatableYAxis: 1
+  _rigidobySetting: 1
+  _standableObjectMask:
+    serializedVersion: 2
+    m_Bits: 192
+  _rayDistance: 5
 --- !u!1 &1680558623
 GameObject:
   m_ObjectHideFlags: 0
