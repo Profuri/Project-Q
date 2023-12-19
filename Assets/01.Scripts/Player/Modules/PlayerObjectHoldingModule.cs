@@ -50,9 +50,9 @@ public class PlayerObjectHoldingModule : BaseModule<PlayerController>
     {
         var holdPoint = _holdPoint.position;
         var height = _holdPoint.localPosition.y;
-        var origin = Controller.transform.position + Vector3.up * height;
+        var origin = Controller.transform.position + Controller.CharController.center + Vector3.up * height;
         var radius = Mathf.Round(Vector3.Distance(origin, holdPoint));
-
+        
         var originDir = (holdPoint - origin).normalized;  
         var destDir = Controller.ModelTrm.forward;
 
