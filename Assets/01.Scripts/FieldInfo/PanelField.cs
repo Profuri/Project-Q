@@ -21,7 +21,6 @@ public abstract class PanelField
         _nameLabel = _root.Q<Label>("Label");
 
         _nameLabel.text = field.name;
-        Init(info);
     }
     
     public abstract void Init(FieldInfo info);

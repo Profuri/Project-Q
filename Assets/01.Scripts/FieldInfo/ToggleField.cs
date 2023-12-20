@@ -12,6 +12,7 @@ public class ToggleField : PanelField
     {
         //base(field, info);        
         //만약 안된다면 부무 생성자가 실행이 안 되는지 확인.
+        Init(info);
     }
 
     public override void Init(FieldInfo info)

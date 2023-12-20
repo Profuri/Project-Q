@@ -1,30 +1,33 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
-public class DropdownField : TestField
+public class DropdownField : PanelField
 {
-    private TMP_Dropdown _dropdown;
-    private Type _type;
+    private VisualElement _registerParentElem;
 
-    public override object GetValue()
+    private VisualElement _textElement;    
+    public DropdownField(VisualTreeAsset field, FieldInfo info) : base(field, info)
     {
-        EAxisType value = (EAxisType)Enum.Parse(typeof(EAxisType), _dropdown.options[_dropdown.value].text);
-        return value;
+        //두 번째에 있는 Element를 찾아옴.
+        _registerParentElem = _root.Q<VisualElement>("VisualElement");
+        _textElement = _registerParentElem.Q<VisualElement>("TextElement");
     }
-
-    public override void Init(Type type)
+    
+    public override void Init(FieldInfo info)
     {
-        _type = type;
-        _dropdown = GetComponent<TMP_Dropdown>();
-         foreach (Enum value in Enum.GetValues(type))
-         {
-             TMP_Dropdown.OptionData optionData = new TMP_Dropdown.OptionData();
-             optionData.text = $"{value.ToString()}";
-             _dropdown.options.Add(optionData);
-         }
+        Type type = info.GetType();
+        foreach (Enum value in Enum.GetValues(type))
+        {
+            UnityEngine.UIElements.TextElement textElement = new TextElement();
+            textElement.text = value.ToString();
+            //textElement.
+            _registerParentElem.Add(textElement);            
+        }
     }
 }

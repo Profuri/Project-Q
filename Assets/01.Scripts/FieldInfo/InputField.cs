@@ -11,13 +11,12 @@ namespace PanelEditor
     {
         //이거 뭐 가져와야 되는지도 고민해봐야 될듯.
         private UnityEngine.UIElements.TextInputBaseField<T> _inputField;
-
-        
+                
         public override void Init(FieldInfo info)
         {
             //이거 t 말고 string으로 가져와야 될 것 같기도함.
             _inputField = _root.Q<TextInputBaseField<T>>("unity-text-input");
-            
+            Init(info);
         }
         
         public InputField(VisualTreeAsset field, FieldInfo info) : base(field, info)

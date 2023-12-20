@@ -17,18 +17,18 @@ public class TestFieldFactory : MonoBehaviour
         TestField field = null;
         if (type.IsEnum)
         {
-            field = Instantiate(GetCorrectField<DropdownField>(),Vector3.zero,Quaternion.identity,_canvas);
+            //field = Instantiate(GetCorrectField<DropdownField>(),Vector3.zero,Quaternion.identity,_canvas);
         }
         else if (type.IsValueType)
         {
             if (type == typeof(float))
             {
-                field = Instantiate(GetCorrectField<TestInputField>(), Vector3.zero, Quaternion.identity, _canvas);
+                //field = Instantiate(GetCorrectField<TestInputField>(), Vector3.zero, Quaternion.identity, _canvas);
             }
             else if (type == typeof(bool))
             {
                 Debug.Log("IsBoolean");
-                field = Instantiate(GetCorrectField<TestToggle>(),Vector3.zero,Quaternion.identity,_canvas);
+                //field = Instantiate(GetCorrectField<TestToggle>(),Vector3.zero,Quaternion.identity,_canvas);
             }
         }
         field?.Init(type);
