@@ -1,22 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class TestInputField : TestField
+public class TestToggle : TestField
 {
-    private TMP_InputField _inputField;
-
-
+    private Toggle _toggle;
     public override object GetValue()
     {
-        return null;
+        return _toggle.isOn;
     }
 
     public override void Init(Type type)
     {
-        _inputField = GetComponent<TMP_InputField>();
+        _toggle = GetComponent<Toggle>();
     }
 }
-

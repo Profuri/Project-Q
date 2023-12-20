@@ -25,6 +25,11 @@ public class TestFieldFactory : MonoBehaviour
             {
                 field = Instantiate(GetCorrectField<TestInputField>(), Vector3.zero, Quaternion.identity, _canvas);
             }
+            else if (type == typeof(bool))
+            {
+                Debug.Log("IsBoolean");
+                field = Instantiate(GetCorrectField<TestToggle>(),Vector3.zero,Quaternion.identity,_canvas);
+            }
         }
         field?.Init(type);
         return field;

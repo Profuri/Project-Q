@@ -15,10 +15,10 @@ public class TestFieldInfoSet : MonoBehaviour
     
     private Type _type;
     private Dictionary<FieldInfo,TestField> _fieldDictionary = new Dictionary<FieldInfo,TestField>();
-
+    
     private void Awake()
     {
-        _type = typeof(PictureUnit);
+        _type = typeof(StructureObjectUnitBase);
     }
 
     private void Update()
@@ -31,15 +31,18 @@ public class TestFieldInfoSet : MonoBehaviour
             {
                 if (Attribute.IsDefined(fieldInfo, typeof(SerializeField)))
                 {
-                    var field = _factory.CreateUI(fieldInfo);
-                    _fieldDictionary.Add(fieldInfo,field);
+                    if (_fieldDictionary.ContainsKey(fieldInfo) == false)
+                    {
+                        var field = _factory.CreateUI(fieldInfo);
+                        _fieldDictionary.TryAdd(fieldInfo, field);
+                    }
                 }
             }
         }
-
+                
         if (Input.GetKeyDown(KeyCode.I))
         {
-            PictureUnit unitBase = new PictureUnit();
+            StructureObjectUnitBase unitBase = new StructureObjectUnitBase();
 
             foreach (var kvp in _fieldDictionary)
             {
@@ -49,7 +52,7 @@ public class TestFieldInfoSet : MonoBehaviour
                     kvp.Key.SetValue(unitBase,kvp.Value.GetValue());
                 }
             }
-
+            
             foreach (var fieldinfo in _fieldDictionary.Keys)
             {
                 Debug.Log($"value: {fieldinfo.GetValue(unitBase)}");
