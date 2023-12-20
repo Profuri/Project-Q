@@ -95,9 +95,10 @@ public class Stage : MonoBehaviour
         }
     }
 
-    public void EnterStage()
+    public void EnterStage(Vector3 stageStartPos)
     {
-        if(PrevStage.BridgeList.Count > 0)
+        GameManager.Instance.Player.PlayerUnit.ReSetOriginPos(stageStartPos);
+        if (PrevStage.BridgeList.Count > 0)
         {
             StartCoroutine(RemoveBridge(0.3f));
         }

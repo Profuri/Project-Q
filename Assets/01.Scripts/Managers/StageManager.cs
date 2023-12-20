@@ -40,7 +40,7 @@ public class StageManager : BaseManager<StageManager>
         //CameraManager.Instance.ChangeCamera(EAxisType.NONE);
         GameManager.Instance.Player.SetEnableInput(false);
         GameManager.Instance.Player.ConvertDimension(EAxisType.NONE);
-        
+
         if (_curStage.IsEndStage)
         {
             EndChapter();

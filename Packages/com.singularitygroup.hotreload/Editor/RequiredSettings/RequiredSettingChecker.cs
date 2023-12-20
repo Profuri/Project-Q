@@ -1,8 +1,14 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using SingularityGroup.HotReload.HarmonyLib;
 using UnityEditor;
-using System;
+using UnityEditor.Compilation;
+using UnityEngine;
 
 namespace SingularityGroup.HotReload.Editor {
+    using IndicationStatus = EditorIndicationState.IndicationStatus;
+    
     // Before Unity 2021.3, value is 0 or 1. Only value of 1 is a problem.
     // From Unity 2021.3 onwards, the key is "kAutoRefreshMode".
     // kAutoRefreshMode options are:
@@ -128,5 +134,137 @@ namespace SingularityGroup.HotReload.Editor {
             // The exact issue users are experiencing is that domain reload happens shortly after entering play mode causing nullrefs
             return recompileAfterFinishedPlaying ?? recompileAndContinuePlaying;
         }
+    }
+    
+    internal static class PlaymodeTintSettingChecker {
+        private static readonly Color unsupportedPlaymodeColor = new Color(1f, 0.8f, 0f, 1f);
+        private static readonly Color compilePlaymodeErrorColor = new Color(1f, 0.7f, 0.7f, 1f);
+        
+        public static void Apply() {
+            if (HotReloadPrefs.AppliedEditorTint != null || !UnitySettingsHelper.I.playmodeTintSupported) {
+                return;
+            }
+            var defaultPref = HotReloadPrefs.DefaultEditorTint ?? UnitySettingsHelper.I.GetCurrentPlaymodeColor();
+            if (defaultPref == null) {
+                return;
+            }
+            HotReloadPrefs.DefaultEditorTint = defaultPref.Value;
+            var currentPlaymodeTint = GetModifiedPlaymodeTint() ?? defaultPref.Value;
+            SetPlaymodeTint(currentPlaymodeTint);
+        }
+        
+        public static void Check() {
+            if (HotReloadPrefs.AppliedEditorTint == null || !UnitySettingsHelper.I.playmodeTintSupported) {
+                return;
+            }
+            // if user modifies the settings manually, prevent the setting to be changed
+            if (HotReloadPrefs.DefaultEditorTint == null || UnitySettingsHelper.I.GetCurrentPlaymodeColor() != HotReloadPrefs.AppliedEditorTint) {
+                HotReloadPrefs.DefaultEditorTint = null;
+                return;
+            }
+            var color = GetModifiedPlaymodeTint();
+            if (color != null && color != HotReloadPrefs.AppliedEditorTint) {
+                SetPlaymodeTint(color.Value);
+            }
+        }
+        
+
+        public static void Reset() {
+            if (HotReloadPrefs.AppliedEditorTint == null || !UnitySettingsHelper.I.playmodeTintSupported) {
+                return;
+            }
+            var color = HotReloadPrefs.DefaultEditorTint;
+            if (color != null && UnitySettingsHelper.I.GetCurrentPlaymodeColor() == HotReloadPrefs.AppliedEditorTint) {
+                SetPlaymodeTint(color.Value);
+            }
+            
+            HotReloadPrefs.DefaultEditorTint = null;
+            HotReloadPrefs.AppliedEditorTint = null;
+        }
+        
+        
+        private static void SetPlaymodeTint(Color color) {
+            UnitySettingsHelper.I.SetPlaymodeTint(color);
+            HotReloadPrefs.AppliedEditorTint = color;
+        }
+
+        private static Color? GetModifiedPlaymodeTint() {
+            switch (EditorIndicationState.CurrentIndicationStatus) {
+                case IndicationStatus.CompileErrors:
+                    return compilePlaymodeErrorColor;
+                case IndicationStatus.Unsupported:
+                    return unsupportedPlaymodeColor;
+                default:
+                    return HotReloadPrefs.DefaultEditorTint;
+            }
+        }
+    }
+    
+    internal static class CompileMethodDetourer {
+        static bool detouredMethod;
+        static List<IDisposable> reverters = new List<IDisposable>();
+
+        public static void Apply() {
+            if (detouredMethod) {
+                return;
+            }
+            detouredMethod = true;
+
+            var originAssetRefresh = typeof(AssetDatabase).GetMethod(nameof(AssetDatabase.Refresh), Type.EmptyTypes);
+            var targetAssetRefresh = typeof(CompileMethodDetourer).GetMethod(nameof(DetouredAssetRefresh));
+
+            DetourMethod(originAssetRefresh, targetAssetRefresh);
+            
+            var originAssetRefreshWithParams = typeof(AssetDatabase).GetMethod(nameof(AssetDatabase.Refresh), new[] { typeof(ImportAssetOptions) });
+            var targetAssetRefreshWithParams = typeof(CompileMethodDetourer).GetMethod(nameof(DetouredAssetRefresh));
+
+            DetourMethod(originAssetRefreshWithParams, targetAssetRefreshWithParams);
+            
+            var originCompilation = typeof(CompilationPipeline).GetMethod(nameof(CompilationPipeline.RequestScriptCompilation), Type.EmptyTypes);
+            var targetCompilation = typeof(CompileMethodDetourer).GetMethod(nameof(RequestScriptCompilation));
+
+            DetourMethod(originCompilation, targetCompilation);
+        }
+
+        static void DetourMethod(MethodBase original, MethodBase replacement) {
+            DetourResult result;
+            DetourApi.DetourMethod(original, replacement, out result);
+
+            if (!result.success) {
+                Debug.LogWarning($"Detouring {original.Name} method failed. {result.exception?.GetType()} {result.exception}");
+            } else {
+                reverters.Add(result.patchRecord);
+            }
+        }
+
+        public static void Reset() {
+            if (!detouredMethod) {
+                return;
+            }
+
+            detouredMethod = false;
+
+            // don't revert for now
+            // foreach (var reverter in reverters) {
+            //     try {
+            //         reverter.Dispose(); 
+            //     } catch (Exception exc) {
+            //         Debug.LogWarning($"Reverting method detour failed. {exc.GetType()} {exc}");
+            //     }
+            // }
+
+            reverters.Clear();
+
+            // hack to undo changes to Editor assemblies.
+            // Doing this when starting hotreload cancels the start
+            // Exit playmode right away to prevent delayed compiling
+            EditorApplication.isPlaying = false;
+            
+            EditorApplication.ExecuteMenuItem("Assets/Refresh");
+            EditorUtility.RequestScriptReload(); //this will undo the modifications to the assemblies
+        }
+
+        public static void DetouredAssetRefresh(ImportAssetOptions options) { }
+        public static void RequestScriptCompilation() { }
     }
 }

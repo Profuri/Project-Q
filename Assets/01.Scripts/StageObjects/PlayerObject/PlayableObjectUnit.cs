@@ -54,7 +54,9 @@ namespace StageStructureConvertSystem
 
         private void CheckObject(EAxisType axisType)
         {
-            var origin = _prevObjectInfo.position + _characterController.center + Vector3.up * (_prevObjectInfo.scale.y / 2f);
+            Debug.Log($"{_objectInfo.position} : {_prevObjectInfo.position}");
+            Vector3 basePos = StageManager.Instance.CurStage.transform.position;
+            var origin = basePos + _prevObjectInfo.position + _characterController.center + Vector3.up * (_prevObjectInfo.scale.y / 2f);
             var dir = Vector3.down;
 
             var isHit = Physics.Raycast(origin, dir, out var hit, _rayDistance, _standableObjectMask);
@@ -69,6 +71,8 @@ namespace StageStructureConvertSystem
                 return;
             }
 
+
+            Debug.Log("isHIt");
             switch (axisType)
             {
                 case EAxisType.X:

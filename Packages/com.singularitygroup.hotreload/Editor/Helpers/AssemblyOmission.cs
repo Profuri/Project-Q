@@ -144,6 +144,13 @@ namespace SingularityGroup.HotReload.Editor {
                 }
             }
             
+            // Unity Define Constraints syntax is described in the docs https://docs.unity3d.com/Manual/class-AssemblyDefinitionImporter.html
+            static readonly Dictionary<string, string> syntaxMap = new Dictionary<string, string> {
+                    { "OR", "||" },
+                    { "AND", "&&" },
+                    { "NOT", "!" }
+                };
+            
             /// <summary>
             /// Evaluate a define constraint like 'UNITY_ANDROID || UNITY_IOS'
             /// </summary>
@@ -151,33 +158,24 @@ namespace SingularityGroup.HotReload.Editor {
             /// <param name="defineSymbols"></param>
             /// <returns></returns>
             public static bool EvaluateDefineConstraint(string input, string[] defineSymbols) {
-                foreach (var defineSymbol in defineSymbols) {
-                    input = input.Replace(defineSymbol, "true");
-                }
-
-                // Unity Define Constraints syntax is described in the docs https://docs.unity3d.com/Manual/class-AssemblyDefinitionImporter.html
-                var syntaxMap = new Dictionary<string, string> {
-                    { "||", "OR" },
-                    { "&&", "AND" },
-                    { "!", "NOT" }
-                };
                 // map Unity defineConstraints syntax to DataTable syntax (unity supports both)
                 foreach (var item in syntaxMap) {
                     // surround with space because || may not have spaces around it
-                    input = input.Replace(item.Key, $" {item.Value} ");
+                    input = input.Replace(item.Value, $" {item.Key} ");
                 }
 
                 // remove any extra spaces we just created
                 input = input.Replace("  ", " ");
 
-                var allPossibleSyntax = syntaxMap.Values.Concat(new[] { "true", "false" });
-
                 var tokens = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                // known define symbols already replaced, so any unknown syntax is a missing define symbol
-                var notFoundDefineSymbols =
-                    tokens.Where(token => !allPossibleSyntax.Contains(token));
-                foreach (var defineSymbol in notFoundDefineSymbols) {
-                    input = input.Replace(defineSymbol, "false");
+
+                foreach (var token in tokens) {
+                    if (!syntaxMap.ContainsKey(token) && token != "false" && token != "true") {
+                        var index = input.IndexOf(token, StringComparison.Ordinal);
+                        
+                        // replace symbols with true or false depending if they are in the array or not.
+                        input = input.Substring(0, index) + defineSymbols.Contains(token) + input.Substring(index + token.Length);
+                    }
                 }
 
                 var dt = new DataTable();

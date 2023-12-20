@@ -419,7 +419,7 @@ namespace SingularityGroup.HotReload.Editor {
                 }
                 
                 // remove button
-                if (timelineType == TimelineType.Suggestions) {
+                if (timelineType == TimelineType.Suggestions && alertEntry.hasExitButton) {
                     var isClick = GUI.Button(new Rect(startRect.x + startRect.width - 20, startRect.y + 2, 20, 20), new GUIContent(GUIHelper.GetInvertibleIcon(InvertibleIcon.Close)), HotReloadWindowStyles.RemoveIconStyle);
                     if (isClick) {
                         HotReloadTimelineHelper.EventsTimeline.Remove(alertEntry);
@@ -538,7 +538,9 @@ namespace SingularityGroup.HotReload.Editor {
                                 GUILayout.FlexibleSpace();
                                 if (HotReloadTimelineHelper.EventsTimeline.Count > 0 && GUILayout.Button("Clear")) {
                                     HotReloadTimelineHelper.ClearEntries();
+                                    if (HotReloadWindow.Current) {
                                     HotReloadWindow.Current.Repaint();
+                                }
                                 }
                                 GUILayout.Space(3);
                             }
@@ -667,6 +669,8 @@ namespace SingularityGroup.HotReload.Editor {
         public static void Recompile() {
             recompiling = true;
             EditorApplication.isPlaying = false;
+
+            CompileMethodDetourer.Reset();
             AssetDatabase.Refresh();
             CompilationPipeline.RequestScriptCompilation();
         }
