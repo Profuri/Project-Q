@@ -3,7 +3,7 @@ using InteractableSystem;
 using StageStructureConvertSystem;
 using UnityEngine;
 
-public class ThornObject : InteractableObject
+public class ObstacleObject : InteractableObject
 {
     [SerializeField] private LayerMask _damageableMask;
 
@@ -22,7 +22,7 @@ public class ThornObject : InteractableObject
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         var pos = transform.position + _boxCollider.center;
-        var checkSize = _boxCollider.size;
+        var checkSize = transform.localScale.Multiply(_boxCollider.size);
         var rotation = transform.rotation;
 
         var cols = new Collider[10];
