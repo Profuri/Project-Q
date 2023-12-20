@@ -82,6 +82,14 @@ public class PressurePlate : InteractableObject
             * (_pressureObjTrm.localScale.y * _pressureMainTrm.localScale.y / 2 + _pressureObjTrm.localScale.y / 2);
         var checkSize = _pressureObjTrm.localScale;
         Gizmos.DrawWireCube(checkPos, checkSize);
+
+        if (_affectedObject == null)
+        {
+            return;
+        }
+        
+        Gizmos.color = Color.black;
+        Gizmos.DrawLine(transform.position, _affectedObject.transform.position);
     }
 #endif
 }
