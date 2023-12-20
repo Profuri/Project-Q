@@ -11,16 +11,16 @@ public class AirMaxHeightController : MonoBehaviour
         transform.localPosition = new Vector3(0, height, 0);
     }
     
-    public Vector3 GetCenterPos()
-    {
-        return transform.position;
-    }
-
-    public Vector3 GetColSize()
+    public Vector3 GetWorldColSize()
     {
         var parentScale = transform.parent.localScale;
         var colScale = _boxCollider.size;
         return parentScale.Multiply(colScale);
+    }
+
+    public Vector3 GetLocalColSize()
+    {
+        return _boxCollider.size;
     }
 
     public void StopParticle()
