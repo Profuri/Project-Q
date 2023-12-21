@@ -44,9 +44,8 @@ public class PlayerController : BaseModuleController
     public void SetParent(Transform stage)
     {
         transform.SetParent(stage);
-        Init();
+        _converter = transform.parent.GetComponent<StructureConverter>();
         Converter.Init();
-        base.Start();
     }
 
     public bool GetAxisEnabled(EAxisType axis)
@@ -100,7 +99,6 @@ public class PlayerController : BaseModuleController
 
     public void ConvertDimension(EAxisType axis)
     {
-        Debug.Log(1);
         PlayerMovementModule movement = GetModule<PlayerMovementModule>();
         movement.SetEnableMove(false);
         movement.StopImmediately();

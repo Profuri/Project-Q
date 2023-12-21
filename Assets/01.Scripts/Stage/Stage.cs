@@ -21,8 +21,8 @@ public class Stage : MonoBehaviour
     public void Awake()
     {
         _bridgeList = new ();
-         //ÇÒ´çÀº ¸ðµÎ StageManager¿¡¼­ ÇØÁÙ²¨¾ß
-         // stage eventÃß°¡
+         //ï¿½Ò´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ StageManagerï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù²ï¿½ï¿½ï¿½
+         // stage eventï¿½ß°ï¿½
          //OnStageChange += () => gameObject.SetActive(true);
     }
 
@@ -37,7 +37,7 @@ public class Stage : MonoBehaviour
         else
         {
             ReloadPoint = Vector3.zero;
-            Debug.Log($"{transform.gameObject.name} : RestartPos ÁöÁ¤ÇØ");
+            Debug.Log($"{transform.gameObject.name} : RestartPos ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
         }
     }
 
@@ -68,7 +68,7 @@ public class Stage : MonoBehaviour
         ////seq.Append(camerTrm.DOMove(GameManager.Instance.Player.transform.position + cameraDiff, 0.5f));
         seq.OnComplete(() =>
         {
-            //ÇÃ·¹ÀÌ¾î ´Ù½Ã ¿òÁ÷ÀÌ°Ô
+            //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì°ï¿½
             MakeBridge();
             GameManager.Instance.Player.SetEnableInput(true);
         });
@@ -98,11 +98,11 @@ public class Stage : MonoBehaviour
         while(t < 1)
         {
             Vector3 pos = Vector3.Lerp(startPos, endPos, t);
-            float angle = Quaternion.FromToRotation(Vector3.forward, (endPos - startPos).normalized).eulerAngles.y; 
-            BridgeObject bridgeObj = Instantiate(
-                    StageManager.Instance.BridgePrefab
-                    , pos + Vector3.down * 10f
-                    , Quaternion.Euler(0, angle, 0)).GetComponent<BridgeObject>();
+            float angle = Quaternion.FromToRotation(Vector3.forward, (endPos - startPos).normalized).eulerAngles.y;
+            var bridgeObj = PoolManager.Instance.Pop("Bridge") as BridgeObject;
+            bridgeObj.transform.position = pos + Vector3.down * 10f;
+            bridgeObj.transform.rotation = Quaternion.Euler(0, angle, 0);
+            
             bridgeObj.Move(pos, 0.45f);
             BridgeList.Add(bridgeObj);
 
@@ -113,7 +113,6 @@ public class Stage : MonoBehaviour
 
     public void EnterStage()
     {
-        Debug.LogError("1");
         GameManager.Instance.Player.SetParent(transform);
         StageManager.Instance.SetStageNext();
         //GameManager.Instance.Player.PlayerUnit.ReSetOriginPos(stageStartPos);
@@ -143,7 +142,7 @@ public class Stage : MonoBehaviour
             IsPlayerEnter = true;
             Transform camerTrm = CameraManager.Instance.CameraContainerTrm;
             Vector3 camerDiff = CameraManager.Instance.CameraDiff;
-            //¾ê´Â Next³Ñ¾î ¿ÔÀ» ¶§ ¾²ÀÓ °í·Î ÇöÀç Æ÷Áö¼ÇÀ¸·Î ¼³Á¤ÇØÁà¾ß ÇÔ
+            //ï¿½ï¿½ï¿½ Nextï¿½Ñ¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
             Vector3 nextPos = transform.position + camerDiff;
 
             camerTrm.DOMove(nextPos, 0.5f).SetEase(Ease.OutQuad);
