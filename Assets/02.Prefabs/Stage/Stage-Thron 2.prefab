@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2794135485762881218}
   - component: {fileID: 6513694820203422493}
   - component: {fileID: 2147007959584826096}
+  - component: {fileID: 2602793259308104925}
   m_Layer: 8
   m_Name: Goal
   m_TagString: Untagged
@@ -49,6 +50,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 0
+  _outlineSetting: 1
+  _interatableYAxis: 0
+  _rigidobySetting: 0
 --- !u!114 &6513694820203422493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +88,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2602793259308104925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850792028570890158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &1433123135346875319
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,6 +119,7 @@ GameObject:
   - component: {fileID: 5378396285156040603}
   - component: {fileID: 7046196545126147477}
   - component: {fileID: 8743743773618457661}
+  - component: {fileID: 8410396147493414649}
   m_Layer: 7
   m_Name: Wall (3)
   m_TagString: Untagged
@@ -204,6 +227,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 1
+  _outlineSetting: 1
+  _interatableYAxis: 0
+  _rigidobySetting: 0
+--- !u!114 &8410396147493414649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433123135346875319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &2024107046462208241
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,6 +534,7 @@ GameObject:
   - component: {fileID: 716922202919880970}
   - component: {fileID: 875592433083873162}
   - component: {fileID: 4767820789737894989}
+  - component: {fileID: 8296756574213384324}
   m_Layer: 7
   m_Name: Wall (2)
   m_TagString: Untagged
@@ -597,6 +642,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 1
+  _outlineSetting: 1
+  _interatableYAxis: 0
+  _rigidobySetting: 0
+--- !u!114 &8296756574213384324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4719996615824002944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &7726627576999368153
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,6 +673,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3750513011890819203}
   - component: {fileID: 3409207336192544303}
+  - component: {fileID: 4157483305679439454}
   m_Layer: 0
   m_Name: Stage-Thron 2
   m_TagString: Untagged
@@ -646,6 +713,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f975e98f4bcf47c38f04f8533d511d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4157483305679439454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7726627576999368153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a20ae8a59cd4e1b4eaebd92ae706779d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrevStage: {fileID: 0}
+  NextStage: {fileID: 0}
+  IsEndStage: 0
+  CurStageNum: 0
+  IsPlayerEnter: 0
+  ReloadPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &8787657324033058033
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,6 +744,7 @@ GameObject:
   - component: {fileID: 3164606507008981756}
   - component: {fileID: 7912923608269711920}
   - component: {fileID: 6299517283210315804}
+  - component: {fileID: 3339658965796547332}
   m_Layer: 7
   m_Name: Wall (4)
   m_TagString: Untagged
@@ -766,6 +852,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 1
+  _outlineSetting: 1
+  _interatableYAxis: 0
+  _rigidobySetting: 0
+--- !u!114 &3339658965796547332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8787657324033058033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &9156320833724068787
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,11 +1534,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3750513011890819203}
     m_Modifications:
-    - target: {fileID: 2165570085718572125, guid: 06d202e9f43744e8fb8e27dedbdff6c3,
-        type: 3}
-      propertyPath: _groundMask.m_Bits
-      value: 960
-      objectReference: {fileID: 0}
     - target: {fileID: 3521114569831783098, guid: 06d202e9f43744e8fb8e27dedbdff6c3,
         type: 3}
       propertyPath: m_Name

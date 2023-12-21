@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: 3218699309716665484}
   - component: {fileID: 7723709644300692909}
   - component: {fileID: 1512550391421140502}
+  - component: {fileID: 2444061805942554270}
   m_Layer: 8
   m_Name: Goal
   m_TagString: Untagged
@@ -259,6 +260,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 0
+  _outlineSetting: 1
+  _interatableYAxis: 0
+  _rigidobySetting: 0
 --- !u!114 &7723709644300692909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,6 +298,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2444061805942554270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3568748352057048572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &4463808240966520343
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,6 +326,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1231733117326115999}
   - component: {fileID: 3178134850609661612}
+  - component: {fileID: 7295215391482374928}
   m_Layer: 0
   m_Name: Stage-Thron 1
   m_TagString: Untagged
@@ -343,6 +366,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f975e98f4bcf47c38f04f8533d511d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7295215391482374928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4463808240966520343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a20ae8a59cd4e1b4eaebd92ae706779d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrevStage: {fileID: 0}
+  NextStage: {fileID: 0}
+  IsEndStage: 0
+  CurStageNum: 0
+  IsPlayerEnter: 0
+  ReloadPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &6444331715954412064
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,6 +564,7 @@ GameObject:
   - component: {fileID: 1429765509804192150}
   - component: {fileID: 1892055726704558705}
   - component: {fileID: 1966039230211553203}
+  - component: {fileID: 2820738369104931108}
   m_Layer: 7
   m_Name: Wall (2)
   m_TagString: Untagged
@@ -630,6 +672,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 1
+  _outlineSetting: 1
+  _interatableYAxis: 0
+  _rigidobySetting: 0
+--- !u!114 &2820738369104931108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7795883355247269502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &8223953873831669783
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,6 +706,7 @@ GameObject:
   - component: {fileID: 1131235763999855883}
   - component: {fileID: 2619174701140583647}
   - component: {fileID: 1672305317208598096}
+  - component: {fileID: 4018007652768513120}
   m_Layer: 7
   m_Name: Wall
   m_TagString: Untagged
@@ -750,6 +814,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _materialRenderSetting: 1
   _colliderSetting: 1
+  _outlineSetting: 1
+  _interatableYAxis: 0
+  _rigidobySetting: 0
+--- !u!114 &4018007652768513120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8223953873831669783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &1152587732448095548
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1128,11 +1213,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1231733117326115999}
     m_Modifications:
-    - target: {fileID: 2165570085718572125, guid: 06d202e9f43744e8fb8e27dedbdff6c3,
-        type: 3}
-      propertyPath: _groundMask.m_Bits
-      value: 960
-      objectReference: {fileID: 0}
     - target: {fileID: 3521114569831783098, guid: 06d202e9f43744e8fb8e27dedbdff6c3,
         type: 3}
       propertyPath: m_Name

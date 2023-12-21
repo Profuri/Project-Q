@@ -18,8 +18,6 @@ public class StageManager : BaseManager<StageManager>
 
     private List<Stage> stages;
 
-    public GameObject BridgePrefab;
-
     public Vector3 ReloadPoint => CurStage.ReloadPoint;
 
     public override void StartManager()
@@ -33,7 +31,6 @@ public class StageManager : BaseManager<StageManager>
 
     public override void UpdateManager()
     {
-                
     }
 
 
@@ -66,7 +63,6 @@ public class StageManager : BaseManager<StageManager>
     {
         stageTrmMain = GameObject.Find("StageTrmMain").transform;
 
-        //stage생성
         List<Stage> tempstages = _chapterDataSO.Chapters[chapter].Stages;
         tempstages.ForEach((stage) =>
         {
@@ -78,7 +74,6 @@ public class StageManager : BaseManager<StageManager>
 
         for (int i = 0; i < stages.Count; i++)
         {
-            //일단은 stage에 있는 player코드로 지워줌 나중엔 프리팹 내에서 없애야 함
             if(i != 0)
             {
                 Transform playerTrm = stages[i].transform.Find("Player");
@@ -93,8 +88,7 @@ public class StageManager : BaseManager<StageManager>
             stages[i].transform.SetParent(stageTrmMain.GetChild(i));
             stages[i].transform.localPosition = Vector3.zero;
             stages[i].transform.localRotation = Quaternion.identity;
-
-            //챕터별 마지막 스테이지
+            
             if (i == stages.Count - 1)
             {
                 stages[i].IsEndStage = true;
@@ -111,7 +105,7 @@ public class StageManager : BaseManager<StageManager>
         _curStage.gameObject.SetActive(true);
     }
 
-    public void ReleaseStage() //Chapter변경될때
+    public void ReleaseStage()
     {
         _curStage = null;
         stages.Clear();
