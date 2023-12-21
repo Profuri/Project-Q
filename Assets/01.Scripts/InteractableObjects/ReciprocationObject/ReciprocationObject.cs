@@ -20,7 +20,7 @@ public class ReciprocationObject : InteractableObject
 
     private void OnEnable()
     {
-        _originPos = transform.position;
+        _originPos = transform.localPosition;
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
         if(_converter == null)
         {
@@ -34,7 +34,7 @@ public class ReciprocationObject : InteractableObject
 
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
-        var curPos = transform.position;  
+        var curPos = transform.localPosition;  
         var destPos = interactValue ? _destPos : _originPos;
 
         switch (_converter.AxisType)
@@ -52,14 +52,14 @@ public class ReciprocationObject : InteractableObject
 
         if (Vector3.Distance(curPos, destPos) <= 0.01f)
         {
-            transform.position = destPos;
+            transform.localPosition = destPos;
             InterEnd = true;
             return;
         }
         
         var lerpPos = Vector3.Lerp(curPos, destPos, _reciprocationSpeed * Time.deltaTime);
         
-        transform.position = lerpPos;
+        transform.localPosition = lerpPos;
     }
 
 #if UNITY_EDITOR

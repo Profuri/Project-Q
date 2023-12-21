@@ -12,8 +12,6 @@ public class StageManager : BaseManager<StageManager>
     private Stage _curStage;
     public Stage CurStage => _curStage;
 
-    public int CurChapterNum = 0;
-
     private Transform stageTrmMain;
 
     private List<Stage> stages;
@@ -25,7 +23,6 @@ public class StageManager : BaseManager<StageManager>
         _curStage = null;
         stages = new();
 
-        //Debuging
         StartStage(0);
     }        
 
