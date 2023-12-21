@@ -140,8 +140,8 @@ namespace StageStructureConvertSystem
 
         public virtual void ReloadObject()
         {
-            Debug.Log("OrigionPos : " + _originPos);
-            _objectInfo.position = _originPos;
+            Debug.Log("ReloadPoint : " + StageManager.Instance.ReloadPoint);
+            _objectInfo.position = StageManager.Instance.ReloadPoint;
             _objectInfo.scale = _originScale;
             TransformSynchronization(_converter.AxisType);
             ObjectSetting();
@@ -193,14 +193,14 @@ namespace StageStructureConvertSystem
             _converter.RemoveObject(this);
         }
 
-        public void ReSetOriginPos(Vector3 pos)
-        {
-            _originPos = pos;
-            _originScale = transform.localScale;
+        //public void ReSetOriginPos(Vector3 pos)
+        //{
+        //    _originPos = pos;
+        //    _originScale = transform.localScale;
 
-            _objectInfo.position = _originPos;
-            _objectInfo.scale = _originScale;
-            _objectInfo.axis = EAxisType.NONE;
-        }
+        //    _objectInfo.position = _originPos;
+        //    _objectInfo.scale = _originScale;
+        //    _objectInfo.axis = EAxisType.NONE;
+        //}
     }
 }

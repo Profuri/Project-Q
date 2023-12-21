@@ -20,6 +20,8 @@ public class StageManager : BaseManager<StageManager>
 
     public GameObject BridgePrefab;
 
+    public Vector3 ReloadPoint => CurStage.ReloadPoint;
+
     public override void StartManager()
     {
         _curStage = null;
@@ -47,6 +49,11 @@ public class StageManager : BaseManager<StageManager>
             return;
         }
         _curStage?.GoNext();
+        //SetStageNext();
+    }
+
+    public void SetStageNext()
+    {
         _curStage = _curStage.NextStage;
     }
 
@@ -74,7 +81,9 @@ public class StageManager : BaseManager<StageManager>
             //일단은 stage에 있는 player코드로 지워줌 나중엔 프리팹 내에서 없애야 함
             if(i != 0)
             {
-                Destroy(stages[i].transform.Find("Player").gameObject);
+                Transform playerTrm = stages[i].transform.Find("Player");
+                if(playerTrm != null)
+                    Destroy(stages[i].transform.Find("Player").gameObject);
                 stages[i].PrevStage = stages[i - 1];
             }
             
