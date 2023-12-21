@@ -20,11 +20,26 @@ public class MovingObject : InteractableObject
     private void Awake()
     {
         _objectUnit = GetComponent<StructureObjectUnitBase>();
-        
-        var scale = _movingAxis == EMovingAxis.X ? transform.localScale.x : transform.localScale.z;
-        var trackScale = _movingAxis == EMovingAxis.X ? _movingTrackTrm.localScale.x : _movingTrackTrm.localScale.z;
-        _minLimitPos = -trackScale / 2f + scale / 2f;
-        _maxLimitPos = trackScale / 2f - scale / 2f;
+
+        var scale = 0f;
+        var trackScale = 0f;
+        var origin = 0f;
+
+        if (_movingAxis == EMovingAxis.X)
+        {
+            scale = transform.localScale.x;
+            trackScale = _movingTrackTrm.localScale.x;
+            origin = transform.position.x;
+        }
+        else
+        {
+            scale = transform.localScale.z;
+            trackScale = _movingTrackTrm.localScale.z;
+            origin = transform.position.z;
+        }
+
+        _minLimitPos = origin + -trackScale / 2f + scale / 2f;
+        _maxLimitPos = origin + trackScale / 2f - scale / 2f;
     }
 
     private void Update()

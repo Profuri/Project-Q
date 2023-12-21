@@ -21,6 +21,9 @@ public class PlayerController : BaseModuleController
     private PlayableObjectUnit _playerUnit;
     public PlayableObjectUnit PlayerUnit => _playerUnit;
 
+    private CharacterController _charController;
+    public CharacterController CharController => _charController;
+
     private ushort _enableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
 
     public override void Start()
@@ -35,6 +38,7 @@ public class PlayerController : BaseModuleController
         _converter = transform.parent.GetComponent<StructureConverter>();
         _playerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         _playerUnit = GetComponent<PlayableObjectUnit>();
+        _charController = GetComponent<CharacterController>();
     }
 
     public void SetParent(Transform stage)
@@ -42,6 +46,7 @@ public class PlayerController : BaseModuleController
         transform.SetParent(stage);
         Init();
         Converter.Init();
+        base.Start();
     }
 
     public bool GetAxisEnabled(EAxisType axis)

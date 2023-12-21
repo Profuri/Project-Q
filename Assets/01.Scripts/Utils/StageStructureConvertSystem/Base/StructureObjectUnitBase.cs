@@ -13,6 +13,7 @@ namespace StageStructureConvertSystem
         protected ObjectInfo _prevObjectInfo;
         protected ObjectInfo _objectInfo;
 
+        protected Rigidbody _rigidbody;
         protected MeshRenderer _meshRenderer;
         protected Material _material;
         protected Collider _collider;
@@ -21,10 +22,14 @@ namespace StageStructureConvertSystem
         public ObjectInfo PrevObjectInfo => _prevObjectInfo;
         public ObjectInfo ObjectInfo => _objectInfo;
 
+        [Header("Property setting toggle")]
         [SerializeField] private bool _materialRenderSetting = true;
         [SerializeField] private bool _colliderSetting = true;
         [SerializeField] private bool _outlineSetting = true;
         [SerializeField] private bool _interatableYAxis = false;
+        [SerializeField] private bool _rigidobySetting = false;
+
+        private int _defaultRenderQueue;
 
         public virtual void Init(StructureConverter converter)
         {
@@ -37,10 +42,12 @@ namespace StageStructureConvertSystem
             _collider = GetComponent<Collider>();
             _outline = GetComponent<Outline>();
             _outline.enabled = false;
+            _rigidbody = GetComponent<Rigidbody>();
 
             if (_meshRenderer)
             {
                 _material = _meshRenderer.material;
+                _defaultRenderQueue = _material.renderQueue;
             }
 
             _objectInfo.position = _originPos;
@@ -128,6 +135,7 @@ namespace StageStructureConvertSystem
             MaterialRenderSetting();
             ColliderSetting();
             OutlineSetting();
+            RigidbodySetting();
             
             transform.localPosition = _objectInfo.position;
             transform.localScale = _objectInfo.scale;
@@ -156,6 +164,9 @@ namespace StageStructureConvertSystem
             
             switch (_objectInfo.axis)
             {
+                case EAxisType.NONE:
+                    _material.renderQueue = _defaultRenderQueue;
+                    break;
                 case EAxisType.X:
                     _material.renderQueue = Mathf.CeilToInt(_prevObjectInfo.position.x + 5f);
                     break;
@@ -180,12 +191,22 @@ namespace StageStructureConvertSystem
 
         private void OutlineSetting()
         {
-            if (_objectInfo.axis != EAxisType.Y || !_outlineSetting)
+            if (!_outlineSetting)
             {
                 return;
             }
 
-            _outline.enabled = !_interatableYAxis;
+            _outline.enabled = _objectInfo.axis == EAxisType.Y && !_interatableYAxis;
+        }
+
+        private void RigidbodySetting()
+        {
+            if (_rigidbody is null || !_rigidobySetting)
+            {
+                return;
+            }
+            
+            _rigidbody.useGravity = _objectInfo.axis != EAxisType.Y;
         }
 
         public void RemoveUnit()
