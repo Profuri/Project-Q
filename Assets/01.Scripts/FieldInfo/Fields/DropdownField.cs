@@ -12,11 +12,13 @@ public class DropdownField : PanelField
     private VisualElement _registerParentElem;
 
     private VisualElement _textElement;    
-    public DropdownField(VisualTreeAsset field, FieldInfo info) : base(field, info)
+    public DropdownField(VisualElement root,VisualTreeAsset field, FieldInfo info) : base(root,field, info)
     {
         //두 번째에 있는 Element를 찾아옴.
-        _registerParentElem = _root.Q<VisualElement>("VisualElement");
+        _registerParentElem = _fieldRoot.Q<VisualElement>("VisualElement");
         _textElement = _registerParentElem.Q<VisualElement>("TextElement");
+
+        Init(info);
     }
     
     public override void Init(FieldInfo info)

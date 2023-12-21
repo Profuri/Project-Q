@@ -17,7 +17,7 @@ namespace Fabgrid
         private Dictionary<string, VisualTreeAsset> panelAssets = new Dictionary<string, VisualTreeAsset>();
         private FSM fsm;
         private List<Panel> panels = new List<Panel>();
-
+        
         private StyleSheet darkTheme;
         private StyleSheet lightTheme;
 
@@ -79,9 +79,10 @@ namespace Fabgrid
                     $"{PathUtility.PanelsPath}/FormatPanel.uxml",
                     new Help(root),
                     $"{fabgridFolder}/Textures/HelpButtonIcon.png",
-                    tilemap));
+                    tilemap,
+                    root));
 
-            fsm = new FSM();
+                                                                        fsm = new FSM();
             SetupPanelAssets();
 
             AddStyleSheets();
@@ -159,6 +160,7 @@ namespace Fabgrid
         {
             root.Clear();
             root.Add(visualTree.CloneTree());
+            
             SetupControls();
             SelectPanel("paint-panel", root.Q<Button>("paint-panel-button"), new Paint(root, tilemap));
             return root;

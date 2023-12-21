@@ -530,7 +530,12 @@ namespace Fabgrid
                 FocusOnSceneView();
             }
 
-            tilemap.selectedGameObject = HandleUtility.PickGameObject(e.mousePosition, true);
+            GameObject obj = HandleUtility.PickGameObject(e.mousePosition, true);
+            if (tilemap.selectedGameObject != obj)
+            {
+                tilemap.selectedGameObject = obj;
+                tilemap.OnSelectedObjectChanged?.Invoke();
+            }
             currentTool.OnMouseMove(e);
         }
 

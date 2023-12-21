@@ -62,6 +62,8 @@ namespace Fabgrid
         public List<Category> categories = new List<Category>();
         public Category selectedCategory = null;
         public Action OnRefresh { get; set; }
+        public Action OnSelectedObjectChanged { get; set; }
+        
 
         public Vector3 GetFloorPosition()
         {
