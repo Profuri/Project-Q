@@ -17,7 +17,7 @@ public class MovingObject : InteractableObject
     private float _minLimitPos;
     private float _maxLimitPos;
     
-    private void Awake()
+    private void OnEnable()
     {
         _objectUnit = GetComponent<StructureObjectUnitBase>();
 
@@ -29,13 +29,13 @@ public class MovingObject : InteractableObject
         {
             scale = transform.localScale.x;
             trackScale = _movingTrackTrm.localScale.x;
-            origin = transform.position.x;
+            origin = _movingTrackTrm.position.x;
         }
         else
         {
             scale = transform.localScale.z;
             trackScale = _movingTrackTrm.localScale.z;
-            origin = transform.position.z;
+            origin = _movingTrackTrm.position.z;
         }
 
         _minLimitPos = origin + -trackScale / 2f + scale / 2f;
@@ -82,16 +82,16 @@ public class MovingObject : InteractableObject
 
     private void ClampingPosition()
     {
-        var localPos = transform.localPosition;
+        var pos = transform.position;
         if (_movingAxis == EMovingAxis.X)
         {
-            localPos.x = Mathf.Clamp(localPos.x, _minLimitPos, _maxLimitPos);
+            pos.x = Mathf.Clamp(pos.x, _minLimitPos, _maxLimitPos);
         }
         else
         {
-            localPos.z = Math.Clamp(localPos.z, _minLimitPos, _maxLimitPos);
+            pos.z = Math.Clamp(pos.z, _minLimitPos, _maxLimitPos);
         }
-        transform.localPosition = localPos;
+        transform.position = pos;
     }
 
     private bool IsPulling(Vector3 playerOrigin, Vector3 movementVelocity, out Vector3 dir)

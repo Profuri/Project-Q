@@ -44,6 +44,7 @@ public class PlayerController : BaseModuleController
     public void SetParent(Transform stage)
     {
         transform.SetParent(stage);
+        _converter = transform.parent.GetComponent<StructureConverter>();
         Converter.Init();
     }
 
