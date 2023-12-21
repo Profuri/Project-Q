@@ -29,6 +29,8 @@ namespace StageStructureConvertSystem
         [SerializeField] private bool _interatableYAxis = false;
         [SerializeField] private bool _rigidobySetting = false;
 
+        private int _defaultRenderQueue;
+
         public virtual void Init(StructureConverter converter)
         {
             _originPos = transform.localPosition;
@@ -45,6 +47,7 @@ namespace StageStructureConvertSystem
             if (_meshRenderer)
             {
                 _material = _meshRenderer.material;
+                _defaultRenderQueue = _material.renderQueue;
             }
 
             _objectInfo.position = _originPos;
@@ -160,6 +163,9 @@ namespace StageStructureConvertSystem
             
             switch (_objectInfo.axis)
             {
+                case EAxisType.NONE:
+                    _material.renderQueue = _defaultRenderQueue;
+                    break;
                 case EAxisType.X:
                     _material.renderQueue = Mathf.CeilToInt(_prevObjectInfo.position.x + 5f);
                     break;
