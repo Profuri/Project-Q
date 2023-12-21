@@ -32,7 +32,7 @@ public class LaserToggleObject : InteractableObject
     {
         if(_isToggle)
         {
-            for (var i = 0; i <= _interactableIndex; i++)
+            for (var i = 0; i < _affectedObjects.Count && i <= _interactableIndex; i++)
             {
                 _affectedObjects[i].OnInteraction(null, _isToggle);
             }
@@ -44,7 +44,10 @@ public class LaserToggleObject : InteractableObject
         }
         else
         {
-            _affectedObjects[_interactableIndex].OnInteraction(null, _isToggle);
+            if (_affectedObjects.Count != 0)
+            {
+                _affectedObjects[_interactableIndex].OnInteraction(null, _isToggle);
+            }
         }
     }
 
