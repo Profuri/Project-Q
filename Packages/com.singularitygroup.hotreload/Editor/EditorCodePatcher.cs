@@ -17,11 +17,19 @@ using Debug = UnityEngine.Debug;
 using Task = System.Threading.Tasks.Task;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using SingularityGroup.HotReload.Newtonsoft.Json;
 using UnityEditor.Compilation;
 
 [assembly: InternalsVisibleTo("SingularityGroup.HotReload.IntegrationTests")]
 
 namespace SingularityGroup.HotReload.Editor {
+    internal class Config {
+        public bool patchEditModeOnlyOnEditorFocus;
+        public string[] assetBlacklist;
+        public bool changePlaymodeTint;
+        public bool disableCompilingFromEditorScripts;
+    }
+    
     [InitializeOnLoad]
     internal static class EditorCodePatcher {
         const string sessionFilePath = PackageConst.LibraryCachePath + "/sessionId.txt";
@@ -43,11 +51,19 @@ namespace SingularityGroup.HotReload.Editor {
         
         internal static event Action OnPatchHandled;
 
+        
+        internal static Config config;
+
         static bool quitting;
         static EditorCodePatcher() {
             if(init) {
                 //Avoid infinite recursion in case the static constructor gets accessed via `InitPatchesBlocked` below
                 return;
+            }
+            if (File.Exists(PackageConst.ConfigFileName)) {
+                config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(PackageConst.ConfigFileName));
+            } else {
+                config = new Config();
             }
             init = true;
             UnityHelper.Init();
@@ -85,7 +101,9 @@ namespace SingularityGroup.HotReload.Editor {
                 // if it wasn't removed, settings will get handled by OnIntervalMainThread
                 AutoRefreshSettingChecker.Reset();
                 ScriptCompilationSettingChecker.Reset();
+                PlaymodeTintSettingChecker.Reset();
                 HotReloadRunTab.recompiling = false;
+                CompileMethodDetourer.Reset();
             };
             DetectEditorStart();
             DetectVersionUpdate();
@@ -113,13 +131,23 @@ namespace SingularityGroup.HotReload.Editor {
             } else {
                 HotReloadSuggestionsHelper.SetSuggestionInactive(HotReloadSuggestionKind.UnityBestDevelopmentToolAward2023);
             }
+            
+            EditorApplication.playModeStateChanged += state => {
+                if (state == PlayModeStateChange.EnteredEditMode && HotReloadPrefs.AutoRecompileUnsupportedChangesOnExitPlayMode) {
+                    if (TryRecompileUnsupportedChanges()) {
+                        HotReloadState.RecompiledUnsupportedChangesOnExitPlaymode = true;
+                    }
+                }
+            };
         }
 
         public static void ResetSettingsOnQuit() {
             quitting = true;
             AutoRefreshSettingChecker.Reset();
             ScriptCompilationSettingChecker.Reset();
+            PlaymodeTintSettingChecker.Reset();
             HotReloadCli.StopAsync().Forget();
+            CompileMethodDetourer.Reset();
         }
 
         public static bool autoRecompileUnsupportedChangesSupported;
@@ -138,18 +166,21 @@ namespace SingularityGroup.HotReload.Editor {
             }
         }
 
-        private static void TryRecompileUnsupportedChanges() {
+        public static bool TryRecompileUnsupportedChanges() {
             if (!HotReloadPrefs.AutoRecompileUnsupportedChanges 
                 || HotReloadTimelineHelper.UnsupportedChangesCount == 0
+                    && (!HotReloadPrefs.AutoRecompilePartiallyUnsupportedChanges || HotReloadTimelineHelper.PartiallySupportedChangesCount == 0)
                 || _compileError 
                 || EditorApplication.isPlaying && !HotReloadPrefs.AutoRecompileUnsupportedChangesInPlayMode
             ) {
-                return;
+                return false;
             }
-            if (EditorWindow.focusedWindow) {
-                EditorWindow.focusedWindow.ShowNotification(new GUIContent("[Hot Reload] Unsupported Changes Detected! Recompiling..."));
+
+            if (HotReloadPrefs.ShowCompilingUnsupportedNotifications) {
+                EditorWindowHelper.ShowNotification(EditorWindowHelper.NotificationStatus.NeedsRecompile);
             }
             HotReloadRunTab.Recompile();
+            return true;
         }
 
         private static DateTime lastPrepareBuildInfo = DateTime.UtcNow;
@@ -288,7 +319,16 @@ namespace SingularityGroup.HotReload.Editor {
                 return;
             }
             foreach (var responseWarning in response.warnings) {
+                if (responseWarning.Contains("Scripts have compile errors")) {
+                    Log.Error(responseWarning);
+                } else {
                 Log.Warning(responseWarning);
+            }
+
+                if (responseWarning.Contains("Multidimensional arrays are not supported")) {
+                    await ThreadUtility.SwitchToMainThread();
+                    HotReloadSuggestionsHelper.SetSuggestionsShown(HotReloadSuggestionKind.MultidimensionalArrays);
+                }
             }
             foreach (var responseError in response.errors) {
                 Log.Error(responseError);
@@ -301,7 +341,7 @@ namespace SingularityGroup.HotReload.Editor {
             HotReloadSuggestionsHelper.Check();
             if(ServerHealthCheck.I.IsServerHealthy) {
                 TryPrepareBuildInfo();
-                if (!requestingCompile) {
+                if (!requestingCompile && (!config.patchEditModeOnlyOnEditorFocus || Application.isPlaying || UnityEditorInternal.InternalEditorUtility.isApplicationActive)) {
                     RequestHelper.PollMethodPatches(HotReloadState.LastPatchId, resp => HandleResponseReceived(resp));
                 }
                 RequestHelper.PollPatchStatus(resp => {
@@ -311,6 +351,11 @@ namespace SingularityGroup.HotReload.Editor {
                     }
                     if (patchStatus == PatchStatus.Patching) {
                         firstPatchAttempted = true;
+                        if (HotReloadPrefs.ShowPatchingNotifications) {
+                            EditorWindowHelper.ShowNotification(EditorWindowHelper.NotificationStatus.Patching, maxDuration: 10);
+                        }
+                    } else if (HotReloadPrefs.ShowPatchingNotifications) {
+                        EditorWindowHelper.RemoveNotification();
                     }
                 }, patchStatus);
                 if (HotReloadPrefs.AllAssetChanges) {
@@ -335,6 +380,8 @@ namespace SingularityGroup.HotReload.Editor {
             }
             CheckAutoRefresh();
             CheckScriptCompilation();
+            CheckPlaymodeTint();
+            CheckAssetDatabaseRefresh();
         }
 
         static void CheckAutoRefresh() {
@@ -364,7 +411,7 @@ namespace SingularityGroup.HotReload.Editor {
             // debug files
             ".mdb",
             ".pdb",
-            ".shader",
+            // ".shader", //use assetBlacklist instead
         };
 
         public static string[] compileFiles = new[] {
@@ -414,10 +461,23 @@ namespace SingularityGroup.HotReload.Editor {
                     return;
                 }
             }
-            // ignore file extensiosn that trigger domain reload
+
+            // ignore file extensions that trigger domain reload
+            if (!HotReloadPrefs.IncludeShaderChanges) { 
+                if (assetPath.EndsWith(".shader", StringComparison.Ordinal)) {
+                    return;
+                }
+            }
             foreach (var blacklisted in assetExtensionBlacklist) {
                 if (assetPath.EndsWith(blacklisted, StringComparison.Ordinal)) {
                     return;
+                }
+            }
+            if (config?.assetBlacklist != null) {
+                foreach (var blacklisted in config.assetBlacklist) {
+                    if (assetPath.EndsWith(blacklisted, StringComparison.Ordinal)) {
+                        return;
+                    }
                 }
             }
             var relativePath = GetRelativePath(assetPath, Path.GetFullPath("Assets"));
@@ -445,6 +505,23 @@ namespace SingularityGroup.HotReload.Editor {
             return Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
         }
         
+        static void CheckPlaymodeTint() {
+            if (config.changePlaymodeTint && ServerHealthCheck.I.IsServerHealthy && Application.isPlaying) {
+                PlaymodeTintSettingChecker.Apply();
+                PlaymodeTintSettingChecker.Check();
+            } else {
+                PlaymodeTintSettingChecker.Reset();
+            }
+        }
+        
+        static void CheckAssetDatabaseRefresh() {
+            if (config.disableCompilingFromEditorScripts && ServerHealthCheck.I.IsServerHealthy) {
+                CompileMethodDetourer.Apply();
+            } else {
+                CompileMethodDetourer.Reset();
+            }
+        }
+
         static void HandleResponseReceived(MethodPatchResponse response) {
             HandleRemovedUnityMethods(response.removedMethod);
             
@@ -495,6 +572,10 @@ namespace SingularityGroup.HotReload.Editor {
                     HotReloadTimelineHelper.CreatePartiallyAppliedEventEntry(responsePartiallySupportedChange, entryType: EntryType.Child, detailed: false);
                 }
                 HotReloadTimelineHelper.CreateReloadPartiallyAppliedEventEntry();
+                
+                if (HotReloadPrefs.AutoRecompileUnsupportedChangesImmediately || UnityEditorInternal.InternalEditorUtility.isApplicationActive) {
+                    TryRecompileUnsupportedChanges();
+                }
             } else {
                 HotReloadTimelineHelper.CreateReloadFinishedEventEntry();
             }

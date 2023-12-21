@@ -14,9 +14,11 @@ namespace SingularityGroup.HotReload.Editor {
     public enum HotReloadSuggestionKind {
         UnsupportedChanges,
         UnsupportedPackages,
-        SymbolicLinks,
+        [Obsolete] SymbolicLinks,
         AutoRecompiledWhenPlaymodeStateChanges,
         UnityBestDevelopmentToolAward2023,
+        AutoRecompiledWhenPlaymodeStateChanges2022,
+        MultidimensionalArrays,
     }
     
 	internal static class HotReloadSuggestionsHelper {
@@ -115,23 +117,6 @@ namespace SingularityGroup.HotReload.Editor {
                 timestamp: DateTime.Now,
                 entryType: EntryType.Foldout
             )},
-            { HotReloadSuggestionKind.SymbolicLinks, new AlertEntry(
-                AlertType.Suggestion, 
-                "Symbolic links are not fully supported",
-                "We’ve detected symbolically linked files in your project. Please note that changes to these files will be ignored. Contact us if symbolic links are a big part of your project",
-                iconType: AlertType.UnsupportedChange,
-                actionData: () => {
-                    GUILayout.Space(10f);
-                    using (new EditorGUILayout.HorizontalScope()) {
-                        HotReloadAboutTab.discordButton.OnGUI();
-                        GUILayout.Space(5f);
-                        HotReloadAboutTab.contactButton.OnGUI();
-                        GUILayout.FlexibleSpace();
-                    }
-                },
-                timestamp: DateTime.Now,
-                entryType: EntryType.Foldout
-             )},
             { HotReloadSuggestionKind.AutoRecompiledWhenPlaymodeStateChanges, new AlertEntry(
                 AlertType.Suggestion, 
                 "Unity recompiles on enter/exit play mode?",
@@ -150,9 +135,52 @@ namespace SingularityGroup.HotReload.Editor {
                 timestamp: DateTime.Now,
                 entryType: EntryType.Foldout
             )},
+#if UNITY_2022_1_OR_NEWER
+            { HotReloadSuggestionKind.AutoRecompiledWhenPlaymodeStateChanges2022, new AlertEntry(
+                AlertType.Suggestion, 
+                "Unsupported setting detected",
+                "The 'Sprite Packer Mode' setting can cause unintended recompilations if set to 'Sprite Atlas V1 - Always Enabled'",
+                iconType: AlertType.UnsupportedChange,
+                actionData: () => {
+                    GUILayout.Space(10f);
+                    using (new EditorGUILayout.HorizontalScope()) {
+                        if (GUILayout.Button(" Use \"Sprite Atlas V2\" ")) {
+                            EditorSettings.spritePackerMode = SpritePackerMode.SpriteAtlasV2;
+                        }
+                        if (GUILayout.Button(" Open Settings ")) {
+                            SettingsService.OpenProjectSettings("Project/Editor");
+                        }
+                        if (GUILayout.Button(" Ignore suggestion ")) {
+                            SetSuggestionInactive(HotReloadSuggestionKind.AutoRecompiledWhenPlaymodeStateChanges2022);
+                        }
+                        
+                        GUILayout.FlexibleSpace();
+                    }
+                },
+                timestamp: DateTime.Now,
+                entryType: EntryType.Foldout,
+                hasExitButton: false
+            )},
+#endif
+            { HotReloadSuggestionKind.MultidimensionalArrays, new AlertEntry(
+                AlertType.Suggestion, 
+                "Multidimensional arrays are not supported. Use jagged arrays instead",
+                "Hot Reload doesn't support multidimensional ([,]) arrays. Jagged arrays ([][]) are a better alternative, and Microsoft recommends using them instead",
+                iconType: AlertType.UnsupportedChange,
+                actionData: () => {
+                    GUILayout.Space(10f);
+                    using (new EditorGUILayout.HorizontalScope()) {
+                        if (GUILayout.Button(" Learn more ")) {
+                            Application.OpenURL("https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1814");
+                        }
+                        GUILayout.FlexibleSpace();
+                    }
+                },
+                timestamp: DateTime.Now,
+                entryType: EntryType.Foldout
+            )},
         };
         
-        static TaskCompletionSource<bool> symbolicLinkChecker { get; set; }
         static ListRequest listRequest;
         static string[] unsupportedPackages = new[] {
             "com.unity.entities",
@@ -168,11 +196,11 @@ namespace SingularityGroup.HotReload.Editor {
                 lastPlaymodeChange = DateTime.UtcNow;
             };
             CompilationPipeline.compilationStarted += obj => {
-                if (DateTime.UtcNow - lastPlaymodeChange < TimeSpan.FromSeconds(1)) {
+                if (DateTime.UtcNow - lastPlaymodeChange < TimeSpan.FromSeconds(1) && !HotReloadState.RecompiledUnsupportedChangesOnExitPlaymode) {
                     SetSuggestionsShown(HotReloadSuggestionKind.AutoRecompiledWhenPlaymodeStateChanges);
                 }
+                HotReloadState.RecompiledUnsupportedChangesOnExitPlaymode = false;
             };
-            StartCheckingSymlinks(Path.GetFullPath("Assets")).Forget();
             InitSuggestions();
         }
 
@@ -189,55 +217,15 @@ namespace SingularityGroup.HotReload.Editor {
                     SetSuggestionsShown(HotReloadSuggestionKind.UnsupportedPackages);
                 }
             }
-            if (symbolicLinkChecker.Task.IsCompleted && symbolicLinkChecker.Task.Result) {
-                SetSuggestionsShown(HotReloadSuggestionKind.SymbolicLinks);
-            }
-        }
-        
-        public static async Task StartCheckingSymlinks(string assetsPath) {
-            if (symbolicLinkChecker == null) {
-                symbolicLinkChecker = new TaskCompletionSource<bool>();
-            }
-            if (symbolicLinkChecker.Task.IsCompleted) {
-                return;
-            }
-            await Task.Run(() => {
-                symbolicLinkChecker.TrySetResult(HasSymbolicLinks(assetsPath));
-            });
-        }
 
-        static bool HasSymbolicLinks(string directoryPath) {
-            try {
-                // Check for symbolic links in the current directory.
-                foreach (string filePath in Directory.GetFiles(directoryPath)) {
-                    if (IsSymbolicLink(filePath)) {
-                        return true;
-                    }
-                }
-
-                // Recursively check subdirectories.
-                foreach (string subdirectoryPath in Directory.GetDirectories(directoryPath)) {
-                    var hasSymbolicLinks = HasSymbolicLinks(subdirectoryPath);
-                    if (hasSymbolicLinks) {
-                        return true;
-                    }
-                }
-            } catch {
-                // best effort
+#if UNITY_2022_1_OR_NEWER
+            if (EditorSettings.spritePackerMode == SpritePackerMode.AlwaysOnAtlas) {
+                SetSuggestionsShown(HotReloadSuggestionKind.AutoRecompiledWhenPlaymodeStateChanges2022);
+            } else if (CheckSuggestionActive(HotReloadSuggestionKind.AutoRecompiledWhenPlaymodeStateChanges2022)) { 
+                SetSuggestionInactive(HotReloadSuggestionKind.AutoRecompiledWhenPlaymodeStateChanges2022);
+                EditorPrefs.SetBool($"HotReloadWindow.SuggestionsShown.{HotReloadSuggestionKind.AutoRecompiledWhenPlaymodeStateChanges2022}", false);
             }
-            return false;
-        }
-
-        static bool IsSymbolicLink(string path) {
-            try {
-                FileAttributes attributes = File.GetAttributes(path);
-
-                // Check if the ReparsePoint flag is set in the file attributes.
-                return (attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint;
-            } catch {
-                return false; // Treat as non-symbolic link if there's an error.
-            }
+#endif
         }
 	}
-
 }

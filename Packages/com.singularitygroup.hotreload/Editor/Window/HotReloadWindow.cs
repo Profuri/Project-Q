@@ -146,6 +146,8 @@ namespace SingularityGroup.HotReload.Editor {
                 InstallUtility.CheckForNewInstall();
                 EditorPrefs.DeleteKey(Attribution.LastLoginKey);
                 File.Delete(RedeemLicenseHelper.registerOutcomePath);
+
+                CompileMethodDetourer.Reset();
                 AssetDatabase.Refresh();
             }
         }
