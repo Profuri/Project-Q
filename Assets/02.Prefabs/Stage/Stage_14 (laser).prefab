@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1831311081220881514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4020677647391687417}
+  m_Layer: 0
+  m_Name: RestartPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4020677647391687417
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831311081220881514}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.005438618, y: -0.70891184, z: -0.005160819, w: 0.7052573}
+  m_LocalPosition: {x: -4.145, y: 1.2, z: -5.786}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 785774967493583767}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3113180841518895659
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,6 +262,72 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d88d55370113e402d95f16c93e8d8442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6049830370429891619
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7384768086093609714}
+  - component: {fileID: 4740413927184451503}
+  - component: {fileID: 7160015317105855181}
+  m_Layer: 0
+  m_Name: PlayerEnterCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7384768086093609714
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6049830370429891619}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.005438618, y: -0.70891184, z: -0.005160819, w: 0.7052573}
+  m_LocalPosition: {x: -4.84, y: 2.03, z: -3.15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 785774967493583767}
+  m_LocalEulerAnglesHint: {x: -0.859, y: -90.296, z: 0.025}
+--- !u!65 &4740413927184451503
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6049830370429891619}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 7, y: 3, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7160015317105855181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6049830370429891619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f00dd1a8a81c9c438f0aff022a89935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7362717170057673490
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,8 +445,9 @@ GameObject:
   - component: {fileID: 785774967493583767}
   - component: {fileID: 3526445515685821575}
   - component: {fileID: 971078847934363890}
+  - component: {fileID: 4268923873699850227}
   m_Layer: 0
-  m_Name: LaserStage2
+  m_Name: Stage_14 (laser)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -368,6 +466,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4271985168746829209}
+  - {fileID: 7384768086093609714}
+  - {fileID: 4020677647391687417}
   - {fileID: 228318527612468472}
   - {fileID: 7930676447615180404}
   - {fileID: 8029800375725594363}
@@ -405,6 +506,27 @@ MonoBehaviour:
   CurStageNum: 0
   IsPlayerEnter: 0
   ReloadPoint: {x: 0, y: 0, z: 0}
+--- !u!65 &4268923873699850227
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8342396842370978753}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 16, y: 5, z: 16}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &8774712120621461752
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,6 +560,37 @@ Transform:
   - {fileID: 4947387256802189142}
   - {fileID: 6828301364592782747}
   - {fileID: 6070767975506203439}
+  m_Father: {fileID: 785774967493583767}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8799156217230327296
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4271985168746829209}
+  m_Layer: 0
+  m_Name: BridgeEndPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4271985168746829209
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8799156217230327296}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6.64, y: 0.61, z: -4.98}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 785774967493583767}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1495889772910646916

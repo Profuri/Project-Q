@@ -18,13 +18,13 @@ public class ReciprocationObject : InteractableObject
 
     [SerializeField] private StructureConverter _converter;
 
-    private void Awake()
+    private void OnEnable()
     {
         _originPos = transform.position;
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
         if(_converter == null)
         {
-            _converter = transform.parent.parent.GetComponent<StructureConverter>();
+            _converter = transform.GetComponentInParent<StructureConverter>();
             if(_converter == null)
             {
                 Debug.LogError("Set Converter to this Reciprocation Object");

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &88702812155021926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6720752262116920064}
+  m_Layer: 0
+  m_Name: RestartPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6720752262116920064
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88702812155021926}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.005438618, y: -0.70891184, z: -0.005160819, w: 0.7052573}
+  m_LocalPosition: {x: -7.39, y: 1.25, z: -0.62}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1060585474788218692}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1370937736983873590
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,8 +42,9 @@ GameObject:
   - component: {fileID: 1060585474788218692}
   - component: {fileID: 1834643304651167485}
   - component: {fileID: 5649779813424756912}
+  - component: {fileID: 8788147067144216105}
   m_Layer: 0
-  m_Name: PictureObjectStage1
+  m_Name: Stage_9 (picture)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,6 +63,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 9205214129362415229}
+  - {fileID: 6720752262116920064}
+  - {fileID: 5545462722547902938}
+  - {fileID: 4346825800510744101}
   - {fileID: 1686402999086136709}
   - {fileID: 1665281443521767117}
   - {fileID: 5033742218884538675}
@@ -62,9 +98,99 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a20ae8a59cd4e1b4eaebd92ae706779d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PrevStage: {fileID: 0}
   NextStage: {fileID: 0}
   IsEndStage: 0
   CurStageNum: 0
+  IsPlayerEnter: 0
+  ReloadPoint: {x: 0, y: 0, z: 0}
+--- !u!65 &8788147067144216105
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370937736983873590}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 20, y: 5, z: 20}
+  m_Center: {x: 0, y: 2, z: 0}
+--- !u!1 &1557079135620827050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5545462722547902938}
+  - component: {fileID: 5164003027794821484}
+  - component: {fileID: 3266554536351724482}
+  m_Layer: 0
+  m_Name: PlayerEnterCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5545462722547902938
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557079135620827050}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.005438618, y: -0.70891184, z: -0.005160819, w: 0.7052573}
+  m_LocalPosition: {x: -7.19, y: 2.06, z: -0.65}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1060585474788218692}
+  m_LocalEulerAnglesHint: {x: -0.859, y: -90.296, z: 0.025}
+--- !u!65 &5164003027794821484
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557079135620827050}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 7, y: 3, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3266554536351724482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557079135620827050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f00dd1a8a81c9c438f0aff022a89935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1874520765187431840
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,6 +1067,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enableAxis: 4
+--- !u!1 &7660621781620180077
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4346825800510744101}
+  m_Layer: 0
+  m_Name: BridgeStartPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4346825800510744101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7660621781620180077}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6.61, y: 0.12, z: 6.78}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1060585474788218692}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7904824591651034447
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,6 +1217,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enableAxis: 4
+--- !u!1 &8762249073686138658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9205214129362415229}
+  m_Layer: 0
+  m_Name: BridgeEndPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9205214129362415229
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8762249073686138658}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -8.99, y: 0.61, z: -0.29}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1060585474788218692}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &574054167899582896
 PrefabInstance:
   m_ObjectHideFlags: 0
