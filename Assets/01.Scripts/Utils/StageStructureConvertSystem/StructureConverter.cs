@@ -14,18 +14,12 @@ namespace StageStructureConvertSystem
 
         private bool _isConvertable;
 
-        private void Awake()
-        {
-            _axisType = EAxisType.NONE;
-            Init();
-        }
-
         public void Init()
         {
+            _axisType = EAxisType.NONE;
             _isConvertable = true;
-            if(_convertableUnits != null)
-                _convertableUnits.Clear();
-            _convertableUnits = new List<StructureObjectUnitBase>();
+            _convertableUnits ??= new List<StructureObjectUnitBase>();
+            _convertableUnits.Clear();
             GetComponentsInChildren(_convertableUnits);
             _convertableUnits.ForEach(unit => unit.Init(this));
         }

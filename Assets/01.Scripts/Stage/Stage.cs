@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using DG.Tweening;
+using StageStructureConvertSystem;
 
 public class Stage : PoolableMono
 {
     [Header("Chapter Setting")]
     [SerializeField] private ChapterType _chapter;
-    [SerializeField] private int _order;
+    public ChapterType Chapter => _chapter;
+    [SerializeField] private int _stageOrder;
+    public int stageOrder => _stageOrder;
 
     [Header("Stage Setting")]
     [SerializeField] private Vector3 _stageEnterPoint;
@@ -21,25 +25,47 @@ public class Stage : PoolableMono
     public Vector3 CenterPosition { get; private set; }
     private bool _activeStage;
 
+    public StructureConverter Converter { get; private set; }
+
+    private void Awake()
+    {
+        Converter = GetComponent<StructureConverter>();
+    }
+
     public void GenerateStage(Vector3 position)
     {
         transform.position = position - Vector3.up * 5;
         CenterPosition = position;
-        StartCoroutine(StageMoveRoutine(CenterPosition));
+        StartCoroutine(StageMoveRoutine(CenterPosition, () =>
+        {
+            Converter.Init();
+        }));
     }
 
     public void DisappearStage()
     {
-        _activeStage = false;
-        StartCoroutine(StageMoveRoutine(CenterPosition - Vector3.up * 5));
+        StartCoroutine(StageMoveRoutine(CenterPosition - Vector3.up * 5, () =>
+        {
+            PoolManager.Instance.Push(this);
+        }));
     }
 
-    private IEnumerator StageMoveRoutine(Vector3 dest)
+    public void EnableStage()
+    {
+        _activeStage = true;
+    }
+    
+    public void DisableStage()
+    {
+        _activeStage = false;
+    }
+
+    private IEnumerator StageMoveRoutine(Vector3 dest, Action CallBack = null)
     {
         while (true)
         {
             var pos = transform.position;
-            var lerp = Vector3.Lerp(pos, dest, 0.3f);
+            var lerp = Vector3.Lerp(pos, dest, 0.1f);
             transform.position = lerp;
             
             if (Vector3.Distance(pos, dest) <= 0.01f)
@@ -51,6 +77,7 @@ public class Stage : PoolableMono
         }
 
         transform.position = dest;
+        CallBack?.Invoke();
     }
     
     public override void Init()
@@ -61,7 +88,7 @@ public class Stage : PoolableMono
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        gameObject.name = $"{_chapter}_Stage_{_order}";
+        gameObject.name = $"{_chapter}_Stage_{_stageOrder}";
     }
 
     private void OnDrawGizmos()

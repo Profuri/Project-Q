@@ -32,23 +32,21 @@ public class PlayerController : BaseModuleController
         base.Start();
     }
 
-    public void Init()
+    private void Init()
     {
         _modelTrm = transform.Find("Model");
-        _converter = transform.parent.GetComponent<StructureConverter>();
         _playerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         _playerUnit = GetComponent<PlayableObjectUnit>();
         _charController = GetComponent<CharacterController>();
     }
 
-    public void SetParent(Transform stage)
+    public void SetStage(Stage stage)
     {
-        transform.SetParent(stage);
-        _converter = transform.parent.GetComponent<StructureConverter>();
-        Converter.Init();
+        transform.SetParent(stage.transform);
+        _converter = stage.Converter;
     }
 
-    public bool GetAxisEnabled(EAxisType axis)
+    private bool GetAxisEnabled(EAxisType axis)
     {
         return (_enableAxis & (ushort)axis) != 0;
     }

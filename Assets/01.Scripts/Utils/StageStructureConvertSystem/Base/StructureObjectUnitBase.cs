@@ -153,7 +153,7 @@ namespace StageStructureConvertSystem
 
         public virtual void ReloadObject()
         {
-            _objectInfo.position = StageManager.Instance.CurrentStage.CenterPosition + _originPos;
+            _objectInfo.position = _originPos;
             _objectInfo.rotation = _originRotation;
             _objectInfo.scale = _originScale;
             TransformSynchronization(_converter.AxisType);
