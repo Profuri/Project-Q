@@ -1,9 +1,11 @@
+using InputControl;
 using ModuleSystem;
 using StageStructureConvertSystem;
 using UnityEngine;
 
 public class PlayerController : BaseModuleController
 {
+    [SerializeField] private InputReader _inputReader;
     [SerializeField] private PlayerDataSO _dataSO;
     public PlayerDataSO DataSO => _dataSO;
 
@@ -16,17 +18,31 @@ public class PlayerController : BaseModuleController
     private StructureConverter _converter;
     public StructureConverter Converter => _converter;
 
+    private PlayableObjectUnit _playerUnit;
+    public PlayableObjectUnit PlayerUnit => _playerUnit;
+
+    private CharacterController _charController;
+    public CharacterController CharController => _charController;
+
     private ushort _enableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
 
-    public override void Start()
+    public override void Init()
     {
         _modelTrm = transform.Find("Model");
-        _converter = transform.parent.GetComponent<StructureConverter>();
         _playerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
-        base.Start();
+        _playerUnit = GetComponent<PlayableObjectUnit>();
+        _charController = GetComponent<CharacterController>();
+        base.Init();
     }
 
-    public bool GetAxisEnabled(EAxisType axis)
+    public void SetStage(Stage stage)
+    {
+        transform.SetParent(stage.transform);
+        _converter = stage.Converter;
+        _playerUnit.SetOriginPos();
+    }
+
+    private bool GetAxisEnabled(EAxisType axis)
     {
         return (_enableAxis & (ushort)axis) != 0;
     }
@@ -47,9 +63,16 @@ public class PlayerController : BaseModuleController
         }
     }
 
+    public void SetEnableInput(bool enabled)
+    {
+        _inputReader.SetEnableInput(enabled);
+    }
+
     public override void Update()
     {
         base.Update();
+        
+        // test key
         if (Input.GetKeyDown(KeyCode.V))
         {
             ConvertDimension(EAxisType.NONE);
@@ -68,7 +91,7 @@ public class PlayerController : BaseModuleController
         }
     }
 
-    private void ConvertDimension(EAxisType axis)
+    public void ConvertDimension(EAxisType axis)
     {
         PlayerMovementModule movement = GetModule<PlayerMovementModule>();
         movement.SetEnableMove(false);

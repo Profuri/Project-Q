@@ -38,7 +38,7 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
 
     private void OnInteraction()
     {
-        _selectedInteractable?.OnInteraction(Controller, true);
+        _selectedInteractable?.OnInteraction(Controller.PlayerUnit, true);
     }
 
     private InteractableObject FindInteractable()
@@ -52,7 +52,11 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
             
             for(int j = 0; j < interactables.Length; ++j)
             {
-                if (interactables[j] == null) continue;
+                if (interactables[j] is null)
+                {
+                    continue;
+                }
+                
                 if(interactables[j].InteractType == EInteractType.INPUT_RECEIVE)
                 {
                     return interactables[j];

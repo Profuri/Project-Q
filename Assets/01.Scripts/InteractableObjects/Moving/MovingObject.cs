@@ -17,14 +17,29 @@ public class MovingObject : InteractableObject
     private float _minLimitPos;
     private float _maxLimitPos;
     
-    private void Awake()
+    private void OnEnable()
     {
         _objectUnit = GetComponent<StructureObjectUnitBase>();
-        
-        var scale = _movingAxis == EMovingAxis.X ? transform.localScale.x : transform.localScale.z;
-        var trackScale = _movingAxis == EMovingAxis.X ? _movingTrackTrm.localScale.x : _movingTrackTrm.localScale.z;
-        _minLimitPos = -trackScale / 2f + scale / 2f;
-        _maxLimitPos = trackScale / 2f - scale / 2f;
+
+        var scale = 0f;
+        var trackScale = 0f;
+        var origin = 0f;
+
+        if (_movingAxis == EMovingAxis.X)
+        {
+            scale = transform.localScale.x;
+            trackScale = _movingTrackTrm.localScale.x;
+            origin = _movingTrackTrm.position.x;
+        }
+        else
+        {
+            scale = transform.localScale.z;
+            trackScale = _movingTrackTrm.localScale.z;
+            origin = _movingTrackTrm.position.z;
+        }
+
+        _minLimitPos = origin + -trackScale / 2f + scale / 2f;
+        _maxLimitPos = origin + trackScale / 2f - scale / 2f;
     }
 
     private void Update()
@@ -39,16 +54,17 @@ public class MovingObject : InteractableObject
             return;
         }
         
-        if (!cols[0].TryGetComponent<PlayerController>(out var playerController))
+        if (!cols[0].TryGetComponent<PlayableObjectUnit>(out var playerUnit))
         {
             return;
         }   
             
-        OnInteraction(playerController, true);
+        OnInteraction(playerUnit, true);
     }
 
-    public override void OnInteraction(PlayerController player, bool interactValue)
+    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
+        var player = ((PlayableObjectUnit)communicator).PlayerController;
         var playerMovementModule = player.GetModule<PlayerMovementModule>();
 
         if (!playerMovementModule.IsMovement)
@@ -56,7 +72,7 @@ public class MovingObject : InteractableObject
             return;
         }
 
-        if (IsPulling(player.transform.position, playerMovementModule.MoveVelocity, out var dir))
+        if (IsPulling(communicator.transform.position, playerMovementModule.MoveVelocity, out var dir))
         {
             var speed = player.DataSO.walkSpeed / 2f;
             transform.position += dir * (speed * Time.deltaTime);
@@ -66,16 +82,16 @@ public class MovingObject : InteractableObject
 
     private void ClampingPosition()
     {
-        var localPos = transform.localPosition;
+        var pos = transform.position;
         if (_movingAxis == EMovingAxis.X)
         {
-            localPos.x = Mathf.Clamp(localPos.x, _minLimitPos, _maxLimitPos);
+            pos.x = Mathf.Clamp(pos.x, _minLimitPos, _maxLimitPos);
         }
         else
         {
-            localPos.z = Math.Clamp(localPos.z, _minLimitPos, _maxLimitPos);
+            pos.z = Math.Clamp(pos.z, _minLimitPos, _maxLimitPos);
         }
-        transform.localPosition = localPos;
+        transform.position = pos;
     }
 
     private bool IsPulling(Vector3 playerOrigin, Vector3 movementVelocity, out Vector3 dir)

@@ -11,12 +11,10 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     [SerializeField] private LayerMask _groundMask;
     [SerializeField] private float _maxGroundCheckDistance;
 
-    private CharacterController _characterController;
-
     private Vector3 _inputDir;
-    
+
+    private Vector3 _force;
     private Vector3 _moveVelocity;
-    private Vector3 _verticalVelocity;
 
     private bool _canMove = true;
 
@@ -29,8 +27,6 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     public override void Init(Transform root)
     {
         base.Init(root);
-
-        _characterController = root.GetComponent<CharacterController>();
 
         CanJump = true;
 
@@ -48,7 +44,10 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public override void FixedUpdateModule()
     {
-        _characterController.Move(_moveVelocity * Time.deltaTime);
+        if (_moveVelocity != Vector3.zero)
+        {
+            Controller.CharController.Move(_moveVelocity * Time.deltaTime);
+        }
     }
 
     public override void DisableModule()
@@ -81,22 +80,44 @@ public class PlayerMovementModule : BaseModule<PlayerController>
                 _moveVelocity = new Vector3(_inputDir.x, 0, 0) * Controller.DataSO.walkSpeed;
                 break;
         }
-        
-        _moveVelocity += _verticalVelocity;
 
-        if (IsGround && _verticalVelocity.y < 0f)
+        _moveVelocity += _force;
+        
+        if(IsGround && _force.y < 0f)
         {
-            _verticalVelocity.y = -1f;
+            SetVerticalVelocity(-1f);
         }
         else
         {
-            _verticalVelocity.y += Controller.DataSO.gravity * Time.deltaTime;
+            AddVerticalVelocity(Controller.DataSO.gravity * Time.deltaTime);
         }
+
+        _force = new Vector3(0, _force.y, 0);
+    }
+
+    private void SetVerticalVelocity(float value)
+    {
+        _force.y = value;
+    }
+
+    private void AddVerticalVelocity(float value)
+    {
+        _force.y += value;
+    }
+
+    public void SetForce(Vector3 force)
+    {
+        _force = force;
+    }
+
+    public void AddForce(Vector3 force)
+    {
+        _force += force;
     }
 
     private bool CheckGround()
     {
-        var size = _characterController.bounds.size * 0.8f;
+        var size = Controller.CharController.bounds.size * 0.8f;
         size.y = 0.1f;
         var trm = transform;
         var isHit = Physics.BoxCast(
@@ -114,7 +135,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public void StopImmediately()
     {
-        _verticalVelocity.y = -1f;
+        _force = new Vector3(0, -1f, 0);
         _moveVelocity = Vector3.zero;
     }
 
@@ -127,7 +148,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     {
         if (IsGround && CanJump)
         {
-            _verticalVelocity.y = Controller.DataSO.jumpPower;
+            SetVerticalVelocity(Controller.DataSO.jumpPower);
         }
     }
     
@@ -136,12 +157,12 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     {
         Gizmos.color = Color.cyan;
 
-        if (_characterController == null)
+        if (Controller == null || Controller.CharController == null)
         {
             return;
         }
 
-        var size = _characterController.bounds.size * 0.8f;
+        var size = Controller.CharController.bounds.size * 0.8f;
         size.y = 0.1f;
         var trm = transform;
         Gizmos.DrawCube(trm.position - trm.up * _maxGroundCheckDistance, size);

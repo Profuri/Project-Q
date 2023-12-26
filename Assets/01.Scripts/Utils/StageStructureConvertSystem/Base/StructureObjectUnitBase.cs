@@ -2,76 +2,72 @@ using UnityEngine;
 
 namespace StageStructureConvertSystem
 {
+    [RequireComponent(typeof(Outline))]
     public class StructureObjectUnitBase : MonoBehaviour, IStructureObject
     {
-        private Vector3 _originPos;
-        private Vector3 _originScale;
+        protected Vector3 _originPos;
+        protected Quaternion _originRotation;
+        protected Vector3 _originScale;
 
         private StructureConverter _converter;
 
         protected ObjectInfo _prevObjectInfo;
         protected ObjectInfo _objectInfo;
 
+        protected Rigidbody _rigidbody;
         protected MeshRenderer _meshRenderer;
         protected Material _material;
         protected Collider _collider;
+        protected Outline _outline;
 
         public ObjectInfo PrevObjectInfo => _prevObjectInfo;
         public ObjectInfo ObjectInfo => _objectInfo;
 
+        [Header("Property setting toggle")]
         [SerializeField] private bool _materialRenderSetting = true;
         [SerializeField] private bool _colliderSetting = true;
-        [SerializeField, Tooltip("y축 압축상태에 플레이어를 막으려면 false,")] private bool _yAxisInteraction = false;
+        [SerializeField] private bool _outlineSetting = true;
+        [SerializeField] private bool _interatableYAxis = false;
+        [SerializeField] private bool _rigidobySetting = false;
 
+        private int _defaultRenderQueue;
 
         public virtual void Init(StructureConverter converter)
         {
             _originPos = transform.localPosition;
+            _originRotation = transform.rotation;
             _originScale = transform.localScale;
 
             _converter = converter;
 
             _meshRenderer = GetComponent<MeshRenderer>();
             _collider = GetComponent<Collider>();
+            _outline = GetComponent<Outline>();
+            _outline.enabled = false;
+            _rigidbody = GetComponent<Rigidbody>();
 
             if (_meshRenderer)
             {
                 _material = _meshRenderer.material;
+                _defaultRenderQueue = _material.renderQueue;
             }
 
             _objectInfo.position = _originPos;
+            _objectInfo.rotation = _originRotation;
             _objectInfo.scale = _originScale;
             _objectInfo.axis = EAxisType.NONE;
-
-            if (_yAxisInteraction && GetComponent<Outline>() == null)
-                Debug.LogError("이 옵션을 사용하시려면 OutLineComponent를 추가하세요");
         }
-
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            Outline outline = GetComponent<Outline>();
-            if(outline != null)
-            {
-                if (_yAxisInteraction)
-                {
-                    outline.enabled = true;
-                }
-                else
-                {
-                    outline.enabled = false;
-                }
-            }
-        }
-#endif
-
 
         public virtual void ConvertDimension(EAxisType axisType)
         {
             _objectInfo.position = transform.localPosition;
+            _objectInfo.rotation = transform.rotation;
             _objectInfo.scale = transform.localScale;
+            SwappingObjectInfo(axisType);
+        }
 
+        private void SwappingObjectInfo(EAxisType axisType)
+        {
             // convert to 3D
             if (axisType == EAxisType.NONE)
             {
@@ -87,28 +83,20 @@ namespace StageStructureConvertSystem
 
         public virtual void TransformSynchronization(EAxisType axisType)
         {
+            if (axisType == EAxisType.NONE)
+            {
+                PrevTransformSynchronization(_prevObjectInfo.axis);
+            }
+            else
+            {
+                NextTransformSynchronization(axisType);
+            }
+        }
+
+        private void NextTransformSynchronization(EAxisType axisType)
+        {
             switch (axisType)
             {
-                case EAxisType.NONE:
-                    switch (_prevObjectInfo.axis)
-                    {
-                        // x compress
-                        case EAxisType.X:
-                            _objectInfo.position.y = _prevObjectInfo.position.y;
-                            _objectInfo.position.z = _prevObjectInfo.position.z;
-                            break;
-                        // y compress
-                        case EAxisType.Y:
-                            _objectInfo.position.x = _prevObjectInfo.position.x;
-                            _objectInfo.position.z = _prevObjectInfo.position.z;
-                            break;
-                        // z compress
-                        case EAxisType.Z:
-                            _objectInfo.position.x = _prevObjectInfo.position.x;
-                            _objectInfo.position.y = _prevObjectInfo.position.y;
-                            break;
-                    }
-                    break;
                 case EAxisType.X:
                     _objectInfo.position.x = 0;
                     _objectInfo.scale.x = Mathf.Min(_objectInfo.scale.x, 1);
@@ -124,12 +112,37 @@ namespace StageStructureConvertSystem
             }
         }
 
+        private void PrevTransformSynchronization(EAxisType prevAxis)
+        {
+            switch (prevAxis)
+            {
+                // x compress
+                case EAxisType.X:
+                    _objectInfo.position.y = _prevObjectInfo.position.y;
+                    _objectInfo.position.z = _prevObjectInfo.position.z;
+                    break;
+                // y compress
+                case EAxisType.Y:
+                    _objectInfo.position.x = _prevObjectInfo.position.x;
+                    _objectInfo.position.z = _prevObjectInfo.position.z;
+                    break;
+                // z compress
+                case EAxisType.Z:
+                    _objectInfo.position.x = _prevObjectInfo.position.x;
+                    _objectInfo.position.y = _prevObjectInfo.position.y;
+                    break;
+            }
+        }
+
         public virtual void ObjectSetting()
         {
             MaterialRenderSetting();
             ColliderSetting();
+            OutlineSetting();
+            RigidbodySetting();
             
             transform.localPosition = _objectInfo.position;
+            transform.rotation = _objectInfo.rotation;
             transform.localScale = _objectInfo.scale;
 
             if (_meshRenderer)
@@ -141,12 +154,13 @@ namespace StageStructureConvertSystem
         public virtual void ReloadObject()
         {
             _objectInfo.position = _originPos;
+            _objectInfo.rotation = _originRotation;
             _objectInfo.scale = _originScale;
             TransformSynchronization(_converter.AxisType);
             ObjectSetting();
         }
 
-        public virtual void MaterialRenderSetting()
+        protected virtual void MaterialRenderSetting()
         {
             if (!_material || !_materialRenderSetting)
             {
@@ -155,6 +169,9 @@ namespace StageStructureConvertSystem
             
             switch (_objectInfo.axis)
             {
+                case EAxisType.NONE:
+                    _material.renderQueue = _defaultRenderQueue;
+                    break;
                 case EAxisType.X:
                     _material.renderQueue = Mathf.CeilToInt(_prevObjectInfo.position.x + 5f);
                     break;
@@ -167,14 +184,34 @@ namespace StageStructureConvertSystem
             }
         }
 
-        public virtual void ColliderSetting()
+        protected virtual void ColliderSetting()
         {
             if (!_collider || !_colliderSetting)
             {
                 return;
             }
 
-            _collider.isTrigger = _objectInfo.axis == EAxisType.Y && _yAxisInteraction;
+            _collider.isTrigger = _objectInfo.axis == EAxisType.Y && _interatableYAxis;
+        }
+
+        private void OutlineSetting()
+        {
+            if (!_outlineSetting)
+            {
+                return;
+            }
+
+            _outline.enabled = _objectInfo.axis == EAxisType.Y && !_interatableYAxis;
+        }
+
+        private void RigidbodySetting()
+        {
+            if (_rigidbody is null || !_rigidobySetting)
+            {
+                return;
+            }
+            
+            _rigidbody.useGravity = _objectInfo.axis != EAxisType.Y;
         }
 
         public void RemoveUnit()

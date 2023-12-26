@@ -197,7 +197,7 @@ namespace SingularityGroup.HotReload {
                         var response = responses[i];
                         // Avoid importing assets twice
                         if (responses.Contains(response + ".meta")) {
-                            Log.Info($"Ignoring asset change inside Unity: {response}");
+                            Log.Debug($"Ignoring asset change inside Unity: {response}");
                             continue;
                         }
                         onResponseReceived(response);

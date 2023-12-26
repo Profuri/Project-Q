@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace StageStructureConvertSystem
 {
+    [RequireComponent(typeof(Stage))]
     public class StructureConverter : MonoBehaviour
     {
         private List<StructureObjectUnitBase> _convertableUnits;
@@ -13,11 +14,12 @@ namespace StageStructureConvertSystem
 
         private bool _isConvertable;
 
-        private void Awake()
+        public void Init()
         {
             _axisType = EAxisType.NONE;
             _isConvertable = true;
-            _convertableUnits = new List<StructureObjectUnitBase>();
+            _convertableUnits ??= new List<StructureObjectUnitBase>();
+            _convertableUnits.Clear();
             GetComponentsInChildren(_convertableUnits);
             _convertableUnits.ForEach(unit => unit.Init(this));
         }

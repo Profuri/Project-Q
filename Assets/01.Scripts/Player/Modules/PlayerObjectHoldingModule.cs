@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerObjectHoldingModule : BaseModule<PlayerController>
 {
     [SerializeField] private Transform _holdPoint;
+    [SerializeField] private float _holdRadius;
     
     private HoldableObject _heldObject;
     public HoldableObject HeldObject => _heldObject;
@@ -50,15 +51,14 @@ public class PlayerObjectHoldingModule : BaseModule<PlayerController>
     {
         var holdPoint = _holdPoint.position;
         var height = _holdPoint.localPosition.y;
-        var origin = Controller.transform.position + Vector3.up * height;
-        var radius = Mathf.Round(Vector3.Distance(origin, holdPoint));
+        var origin = Controller.transform.position + Controller.CharController.center + Vector3.up * height;
 
         var originDir = (holdPoint - origin).normalized;  
         var destDir = Controller.ModelTrm.forward;
 
         var lerpDir = Vector3.Lerp(originDir, destDir, Controller.DataSO.rotationSpeed * Time.deltaTime);
 
-        var destPos = origin + lerpDir * radius;
+        var destPos = origin + lerpDir * _holdRadius;
 
         _holdPoint.position = destPos;
     }

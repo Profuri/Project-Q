@@ -162,6 +162,13 @@ namespace SingularityGroup.HotReload.Demo {
             // Debug.Log(string.Join(", ", numbers));
             
         }
+        
+        // This function gets invoked every time it's patched
+        [InvokeOnHotReloadLocal]
+        static void OnHotReloadMe() {
+            // change the string to see the method getting invoked
+            Debug.Log("Hello there");
+        }
 
         // // 8. Adding event functions
         // void OnDisable() {

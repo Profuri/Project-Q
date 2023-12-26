@@ -22,12 +22,53 @@ namespace SingularityGroup.HotReload {
 
             foreach (var m in methods) {
                 if (m.IsStatic) {
-                    InvokeStaticMethod(m);
+                    InvokeStaticMethod(m, nameof(InvokeOnHotReload));
                 } else {
                     foreach (var go in GameObject.FindObjectsOfType(m.DeclaringType)) {
                         InvokeInstanceMethod(m, go);
                     }
                 }
+            }
+        }
+
+        public static void OnHotReloadLocal(MethodBase originalMethod, MethodBase patchMethod) {
+            if (!Attribute.IsDefined(originalMethod, typeof(InvokeOnHotReloadLocal))) {
+                return;
+            }
+            var attrib = Attribute.GetCustomAttribute(originalMethod, typeof(InvokeOnHotReloadLocal)) as InvokeOnHotReloadLocal;
+
+            if (!string.IsNullOrEmpty(attrib?.methodToInvoke)) {
+                OnHotReloadLocalCustom(originalMethod, attrib);
+                return;
+            }
+            var patchMethodParams = patchMethod.GetParameters();
+            if (patchMethodParams.Length == 0) {
+                InvokeStaticMethod(patchMethod, nameof(InvokeOnHotReloadLocal));
+            } else if (typeof(MonoBehaviour).IsAssignableFrom(patchMethodParams[0].ParameterType)) {
+                foreach (var go in GameObject.FindObjectsOfType(patchMethodParams[0].ParameterType)) {
+                    InvokeInstanceMethodStatic(patchMethod, go);
+                }
+            } else {
+                Log.Warning($"[{nameof(InvokeOnHotReloadLocal)}] {patchMethod.DeclaringType?.Name} {patchMethod.Name} failed. Make sure it's a method with 0 parameters either static or defined on MonoBehaviour.");
+            }
+        }
+
+        public static void OnHotReloadLocalCustom(MethodBase origianlMethod, InvokeOnHotReloadLocal attrib) {
+            var reloadForType = origianlMethod.DeclaringType;
+            var reloadMethod = reloadForType?.GetMethod(attrib.methodToInvoke, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+            if (reloadMethod == null) {
+                Log.Warning($"[{nameof(InvokeOnHotReloadLocal)}] failed to find method {attrib.methodToInvoke}. Make sure it exists within the same class.");
+                return;
+            }
+            if (reloadMethod.IsStatic) {
+                InvokeStaticMethod(reloadMethod, nameof(InvokeOnHotReloadLocal));
+            } else if (typeof(MonoBehaviour).IsAssignableFrom(reloadForType)) {
+                foreach (var go in GameObject.FindObjectsOfType(reloadForType)) {
+                    InvokeInstanceMethod(reloadMethod, go);
+                }
+            } else {
+                Log.Warning($"[{nameof(InvokeOnHotReloadLocal)}] {reloadMethod.DeclaringType?.Name} {reloadMethod.Name} failed. Make sure it's a method with 0 parameters either static or defined on MonoBehaviour.");
             }
         }
 
@@ -105,29 +146,42 @@ namespace SingularityGroup.HotReload {
             return methods;
         }
 
-        private static void InvokeStaticMethod(MethodInfo m) {
+        private static void InvokeStaticMethod(MethodBase m, string attrName) {
             try {
                 m.Invoke(null, new object[] { });
             } catch (Exception e) {
                 if (m.GetParameters().Length != 0) {
-                    Log.Exception(new AggregateException($"[InvokeOnHotReload] {m.DeclaringType?.Name} {m.Name} failed. Make sure it has 0 parameters", e));
+                    Log.Warning($"[{attrName}] {m.DeclaringType?.Name} {m.Name} failed. Make sure it has 0 parameters. Exception:\n{e}");
                 } else {
-                    Log.Exception(new AggregateException($"[InvokeOnHotReload] {m.DeclaringType?.Name} {m.Name} failed", e));
+                    Log.Warning($"[{attrName}] {m.DeclaringType?.Name} {m.Name} failed. Exception\n{e}");
                 }
             }
         }
 
-        private static void InvokeInstanceMethod(MethodInfo m, Object go) {
+        private static void InvokeInstanceMethod(MethodBase m, Object go) {
             try {
                 m.Invoke(go, new object[] { });
             } catch (Exception e) {
                 if (m.GetParameters().Length != 0) {
-                    Log.Exception(new AggregateException($"[InvokeOnHotReload] {m.DeclaringType?.Name} {m.Name} failed. Make sure it has 0 parameters", e));
+                    Log.Warning($"[InvokeOnHotReload] {m.DeclaringType?.Name} {m.Name} failed. Make sure it has 0 parameters. Exception:\n{e}");
                 } else {
-                    Log.Exception(new AggregateException($"[InvokeOnHotReload] {m.DeclaringType?.Name} {m.Name} failed", e));
+                    Log.Warning($"[InvokeOnHotReload] {m.DeclaringType?.Name} {m.Name} failed. Exception:\n{e}");
                 }
             }
         }
+        
+        private static void InvokeInstanceMethodStatic(MethodBase m, Object go) {
+            try {
+                m.Invoke(null, new object[] { go });
+            } catch (Exception e) {
+                if (m.GetParameters().Length != 0) {
+                    Log.Warning($"[InvokeOnHotReloadLocal] {m.DeclaringType?.Name} {m.Name} failed. Make sure it has 0 parameters. Exception:\n{e}");
+                } else {
+                    Log.Warning($"[InvokeOnHotReloadLocal] {m.DeclaringType?.Name} {m.Name} failed. Exception:\n{e}");
+                }
+            }
+        }
+
     }
 }
 #endif
