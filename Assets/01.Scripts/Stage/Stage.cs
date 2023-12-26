@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using DG.Tweening;
 using StageStructureConvertSystem;
 
+[RequireComponent(typeof(StructureConverter), typeof(StageCollisionChecker))]
 public class Stage : PoolableMono
 {
     [Header("Chapter Setting")]
@@ -23,7 +23,7 @@ public class Stage : PoolableMono
     public Vector3 PlayerResetPoint => _playerResetPoint;
 
     public Vector3 CenterPosition { get; private set; }
-    private bool _activeStage;
+    public bool ActiveStage { get; private set; }
 
     public StructureConverter Converter { get; private set; }
 
@@ -36,10 +36,7 @@ public class Stage : PoolableMono
     {
         transform.position = position - Vector3.up * 5;
         CenterPosition = position;
-        StartCoroutine(StageMoveRoutine(CenterPosition, () =>
-        {
-            Converter.Init();
-        }));
+        StartCoroutine(StageMoveRoutine(CenterPosition));
     }
 
     public void DisappearStage()
@@ -52,12 +49,13 @@ public class Stage : PoolableMono
 
     public void EnableStage()
     {
-        _activeStage = true;
+        ActiveStage = true;
+        Converter.Init();
     }
     
     public void DisableStage()
     {
-        _activeStage = false;
+        ActiveStage = false;
     }
 
     private IEnumerator StageMoveRoutine(Vector3 dest, Action CallBack = null)
@@ -82,7 +80,7 @@ public class Stage : PoolableMono
     
     public override void Init()
     {
-        _activeStage = false;
+        DisableStage();
     }
     
 #if UNITY_EDITOR

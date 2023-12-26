@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8606647248281597747}
   - component: {fileID: 5937647196674516872}
   - component: {fileID: 2910719805825807890}
+  - component: {fileID: 902451930023373715}
   m_Layer: 0
   m_Name: MAINBOARD_Stage_0
   m_TagString: Untagged
@@ -66,7 +67,7 @@ MonoBehaviour:
   _stageOrder: 0
   _stageEnterPoint: {x: 0, y: 0, z: -5.5}
   _stageExitPoint: {x: 3, y: 0, z: 5.5}
-  _playerResetPoint: {x: 0, y: 0, z: 0}
+  _playerResetPoint: {x: 0, y: 3, z: -3}
 --- !u!65 &2910719805825807890
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -86,8 +87,21 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 14, y: 5, z: 14}
+  m_Size: {x: 13, y: 5, z: 13}
   m_Center: {x: 0, y: 2, z: 0}
+--- !u!114 &902451930023373715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28423110865202235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f00dd1a8a81c9c438f0aff022a89935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stageBoundSize: {x: 13, y: 5, z: 13}
 --- !u!1 &1358743725588849896
 GameObject:
   m_ObjectHideFlags: 0

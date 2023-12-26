@@ -1,5 +1,4 @@
 using ManagingSystem;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,16 +31,23 @@ public class StageManager : BaseManager<StageManager>
         CurrentStage = null;
         NextStage = null;
         _bridgeObjects = new List<BridgeObject>();
-        
+    
         NextStage = PoolManager.Instance.Pop($"{_startChapter.ToString()}_Stage_{_startStage.ToString()}") as Stage;
         NextStage.GenerateStage(Vector3.zero);
-        ChangeToNextStage();
+    
+        var player = PoolManager.Instance.Pop("Player") as PlayerController;
+        player.transform.position = new Vector3(0, 10, 0);
+        ChangeToNextStage(player);
     }        
 
     public override void UpdateManager()
     {
         // Do nothing
 
+        if (Keyboard.current.iKey.wasPressedThisFrame)
+        {
+        }
+        
         if (Keyboard.current.oKey.wasPressedThisFrame)
         {
             StageClear();
@@ -62,7 +68,7 @@ public class StageManager : BaseManager<StageManager>
         NextStage.GenerateStage(nextStageCenter);
     }
     
-    public void ChangeToNextStage()
+    public void ChangeToNextStage(PlayerController player)
     {
         if (CurrentStage is not null)
         {
@@ -72,7 +78,7 @@ public class StageManager : BaseManager<StageManager>
         RemoveBridge();
 
         CurrentStage = NextStage;
-        GameManager.Instance.Player.SetStage(CurrentStage);
+        player.SetStage(CurrentStage);
         CurrentStage.EnableStage();
     }
 
