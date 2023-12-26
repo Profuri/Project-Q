@@ -59,6 +59,16 @@ public class StageManager : BaseManager<StageManager>
         NextStage = PoolManager.Instance.Pop($"{chapter.ToString()}_Stage_{stage.ToString()}") as Stage;
 
         var dir = (CurrentStage.StageExitPoint - NextStage.StageEnterPoint).normalized;
+
+        if (dir.x > dir.z)
+        {
+            dir = new Vector3(Mathf.Sign(dir.x), 0, 0);
+        }
+        else
+        {
+            dir = new Vector3(0, 0, Mathf.Sign(dir.z));
+        }
+        
         var exitPoint = CurrentStage.CenterPosition + CurrentStage.StageExitPoint;
         var enterPoint = exitPoint + (dir * _stageIntervalDistance);
         var nextStageCenter = enterPoint - 
