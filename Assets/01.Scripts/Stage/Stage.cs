@@ -44,6 +44,7 @@ public class Stage : PoolableMono
         StartCoroutine(StageMoveRoutine(CenterPosition - Vector3.up * 5, () =>
         {
             PoolManager.Instance.Push(this);
+            ActiveStage = false;
         }));
     }
 
@@ -51,11 +52,6 @@ public class Stage : PoolableMono
     {
         ActiveStage = true;
         Converter.Init();
-    }
-    
-    public void DisableStage()
-    {
-        ActiveStage = false;
     }
 
     private IEnumerator StageMoveRoutine(Vector3 dest, Action CallBack = null)
@@ -80,7 +76,7 @@ public class Stage : PoolableMono
     
     public override void Init()
     {
-        DisableStage();
+        ActiveStage = false;
     }
     
 #if UNITY_EDITOR

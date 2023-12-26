@@ -18,6 +18,7 @@ public class CameraManager : BaseManager<CameraManager>
     public Transform CameraContainerTrm => _mainCam.transform.parent;
     public Vector3 CameraDiff => _cameraDiff;
     private Vector3 _cameraDiff;
+    
     public override void StartManager()
     {
         _mainCam = Camera.main;
