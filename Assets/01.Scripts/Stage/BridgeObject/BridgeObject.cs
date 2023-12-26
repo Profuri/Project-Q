@@ -31,7 +31,7 @@ public class BridgeObject : PoolableMono
         while (true)
         {
             var pos = transform.position;
-            var lerp = Vector3.Lerp(pos, dest, 0.3f);
+            var lerp = Vector3.Lerp(pos, dest, 0.1f);
             transform.position = lerp;
             
             if (Vector3.Distance(pos, dest) <= 0.01f)

@@ -16,7 +16,8 @@ public class StageManager : BaseManager<StageManager>
     [Header("Stage Generate Setting")] 
     [SerializeField] private float _stageIntervalDistance;
 
-    [Header("Bridge Setting")]
+    [Header("Bridge Setting")] 
+    [SerializeField] private float _bridgeGenerateDelay;
     [SerializeField] private float _bridgeWidth;
     [SerializeField] private float _bridgeIntervalDistance;
 
@@ -49,15 +50,15 @@ public class StageManager : BaseManager<StageManager>
 
     public void GenerateNextStage(ChapterType chapter, int stage)
     {
-        var dir = (NextStage.StageEnterPoint - CurrentStage.StageExitPoint).normalized;
+        NextStage = PoolManager.Instance.Pop($"{chapter.ToString()}_Stage_{stage.ToString()}") as Stage;
+
+        var dir = (CurrentStage.StageExitPoint - NextStage.StageEnterPoint).normalized;
         var exitPoint = CurrentStage.CenterPosition + CurrentStage.StageExitPoint;
         var enterPoint = exitPoint + (dir * _stageIntervalDistance);
-        var nextStageCenter = enterPoint + 
-            (-NextStage.StageEnterPoint.normalized * NextStage.StageEnterPoint.magnitude);
+        var nextStageCenter = enterPoint - 
+            (new Vector3(NextStage.StageEnterPoint.x, 0, NextStage.StageEnterPoint.z).normalized * NextStage.StageEnterPoint.magnitude);
         
         GenerateBridge(exitPoint, enterPoint);
-        
-        NextStage = PoolManager.Instance.Pop($"{chapter.ToString()}_Stage_{stage.ToString()}") as Stage;
         NextStage.GenerateStage(nextStageCenter);
     }
     
@@ -77,12 +78,12 @@ public class StageManager : BaseManager<StageManager>
 
     private void GenerateBridge(Vector3 startPoint, Vector3 endPoint)
     {
-        StartCoroutine(BridgeGenerateRoutine(startPoint, endPoint, 0.1f));
+        StartCoroutine(BridgeGenerateRoutine(startPoint, endPoint, _bridgeGenerateDelay));
     }
 
     private void RemoveBridge()
     {
-        StartCoroutine(BridgeRemoveRoutine(0.1f));
+        StartCoroutine(BridgeRemoveRoutine(_bridgeGenerateDelay));
     }
 
     private IEnumerator BridgeGenerateRoutine(Vector3 startPoint, Vector3 endPoint, float delay)
@@ -95,10 +96,10 @@ public class StageManager : BaseManager<StageManager>
         var bridgeDir = (endPoint - startPoint).normalized;
         var bridgeRotation = Quaternion.LookRotation(bridgeDir);
 
-        for (var i = 0; i < bridgeCount; i++)
+        for (var i = 1; i <= bridgeCount; i++)
         {
             var bridge = PoolManager.Instance.Pop("Bridge") as BridgeObject;
-            var bridgePos = startPoint + bridgeDir * (i * (bridgeSize / 2));
+            var bridgePos = startPoint + (bridgeDir * (i * bridgeSize) - bridgeDir * (bridgeSize / 2f));
             
             bridge.SetWidth(_bridgeWidth);
             bridge.Generate(bridgePos, bridgeRotation);
