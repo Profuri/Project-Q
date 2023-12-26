@@ -26,29 +26,23 @@ public class PlayerController : BaseModuleController
 
     private ushort _enableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
 
-    public override void Start()
-    {
-        Init();  
-        base.Start();
-    }
-
-    public void Init()
+    public override void Init()
     {
         _modelTrm = transform.Find("Model");
-        _converter = transform.parent.GetComponent<StructureConverter>();
         _playerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         _playerUnit = GetComponent<PlayableObjectUnit>();
         _charController = GetComponent<CharacterController>();
+        base.Init();
     }
 
-    public void SetParent(Transform stage)
+    public void SetStage(Stage stage)
     {
-        transform.SetParent(stage);
-        _converter = transform.parent.GetComponent<StructureConverter>();
-        Converter.Init();
+        transform.SetParent(stage.transform);
+        _converter = stage.Converter;
+        _playerUnit.SetOriginPos();
     }
 
-    public bool GetAxisEnabled(EAxisType axis)
+    private bool GetAxisEnabled(EAxisType axis)
     {
         return (_enableAxis & (ushort)axis) != 0;
     }

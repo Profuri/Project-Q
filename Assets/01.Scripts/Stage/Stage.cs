@@ -1,161 +1,104 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
+using StageStructureConvertSystem;
 
-public class Stage : MonoBehaviour
+[RequireComponent(typeof(StructureConverter), typeof(StageCollisionChecker))]
+public class Stage : PoolableMono
 {
-    [HideInInspector] public Stage  PrevStage = null;
-    [HideInInspector] public Stage  NextStage = null;
-    [HideInInspector] public bool   IsEndStage = false;
-    [HideInInspector] public int    CurStageNum = 0;
-    public event Action OnStageChange;
-    public bool IsPlayerEnter;
+    [Header("Chapter Setting")]
+    [SerializeField] private ChapterType _chapter;
+    public ChapterType Chapter => _chapter;
+    [SerializeField] private int _stageOrder;
+    public int stageOrder => _stageOrder;
 
-    private List<BridgeObject> _bridgeList;
-    public List<BridgeObject> BridgeList => _bridgeList;
+    [Header("Stage Setting")]
+    [SerializeField] private Vector3 _stageEnterPoint;
+    public Vector3 StageEnterPoint => _stageEnterPoint;
+    
+    [SerializeField] private Vector3 _stageExitPoint;
+    public Vector3 StageExitPoint => _stageExitPoint;
 
-    public Vector3 ReloadPoint;
+    [SerializeField] private Vector3 _playerResetPoint;
+    public Vector3 PlayerResetPoint => _playerResetPoint;
 
-    public void Awake()
+    public Vector3 CenterPosition { get; private set; }
+    public bool ActiveStage { get; private set; }
+
+    public StructureConverter Converter { get; private set; }
+
+    private void Awake()
     {
-        _bridgeList = new ();
-         //�Ҵ��� ��� StageManager���� ���ٲ���
-         // stage event�߰�
-         //OnStageChange += () => gameObject.SetActive(true);
+        Converter = GetComponent<StructureConverter>();
     }
 
-    private void OnEnable()
+    public void GenerateStage(Vector3 position)
     {
-        Transform reloadPoint = transform.Find("RestartPos");
-        if (reloadPoint != null)
+        transform.position = position - Vector3.up * 5;
+        CenterPosition = position;
+        StartCoroutine(StageMoveRoutine(CenterPosition));
+    }
+
+    public void DisappearStage()
+    {
+        StartCoroutine(StageMoveRoutine(CenterPosition - Vector3.up * 5, () =>
         {
-            ReloadPoint = reloadPoint.localPosition;
-            Debug.Log($"{transform.gameObject.name}");
-        }
-        else
+            PoolManager.Instance.Push(this);
+        }));
+    }
+
+    public void EnableStage()
+    {
+        ActiveStage = true;
+        Converter.Init();
+    }
+    
+    public void DisableStage()
+    {
+        ActiveStage = false;
+    }
+
+    private IEnumerator StageMoveRoutine(Vector3 dest, Action CallBack = null)
+    {
+        while (true)
         {
-            ReloadPoint = Vector3.zero;
-            Debug.Log($"{transform.gameObject.name} : RestartPos ������");
-        }
-    }
-
-    public void ActiveStage()
-    {
-        Debug.Log($"Active : {this.gameObject.name}");
-        OnStageChange?.Invoke();
-        gameObject.SetActive(true);
-    }
-
-    public void GoNext()
-    {
-        NextStage.ActiveStage();
-        EmphasisNextStage();
-    }
-
-    private void EmphasisNextStage()
-    {
-        //Transform camerTrm = CameraManager.Instance.CameraContainerTrm;
-        //Vector3 cameraDiff = CameraManager.Instance.CameraDiff;
-        //Vector3 nextPos = NextStage.transform.position + cameraDiff;
-
-        Sequence seq = DOTween.Sequence();
-        seq.AppendInterval(0.5f);
-        //seq.Append(camerTrm.DOMove(nextPos, 1f)).SetEase(Ease.OutCirc);
-        //seq.AppendInterval(0.3f);
-        //seq.Append(camerTrm.DOMove(transform.position + cameraDiff, 0.3f).SetEase(Ease.Unset));
-        ////seq.Append(camerTrm.DOMove(GameManager.Instance.Player.transform.position + cameraDiff, 0.5f));
-        seq.OnComplete(() =>
-        {
-            //�÷��̾� �ٽ� �����̰�
-            MakeBridge();
-            GameManager.Instance.Player.SetEnableInput(true);
-        });
-    }
-
-
-    private void MakeBridge()
-    {
-        Transform bridgeStart = transform.Find("BridgeStartPos");
-        Vector3 startPos = bridgeStart == null 
-            ? GameManager.Instance.Player.transform.position
-            : bridgeStart.position;
-
-
-        Transform bridgeEnd = NextStage.transform.Find("BridgeEndPos");
-        Vector3 endPos = bridgeEnd == null
-            ? (NextStage.transform.position - bridgeStart.position).normalized * 10f
-            : bridgeEnd.position;
-
-        float interval = 0.2f;
-        StartCoroutine(MakeBridgeCor(startPos, endPos, interval));
-    }
-
-    private IEnumerator MakeBridgeCor(Vector3 startPos, Vector3 endPos, float interval = 0.05f)
-    {
-        float t = interval / 2;
-        while(t < 1)
-        {
-            Vector3 pos = Vector3.Lerp(startPos, endPos, t);
-            float angle = Quaternion.FromToRotation(Vector3.forward, (endPos - startPos).normalized).eulerAngles.y;
-            var bridgeObj = PoolManager.Instance.Pop("Bridge") as BridgeObject;
-            bridgeObj.transform.position = pos + Vector3.down * 10f;
-            bridgeObj.transform.rotation = Quaternion.Euler(0, angle, 0);
+            var pos = transform.position;
+            var lerp = Vector3.Lerp(pos, dest, 0.1f);
+            transform.position = lerp;
             
-            bridgeObj.Move(pos, 0.45f);
-            BridgeList.Add(bridgeObj);
+            if (Vector3.Distance(pos, dest) <= 0.01f)
+            {
+                break;
+            }
 
-            t += interval;
-            yield return new WaitForSeconds(0.3f);
+            yield return null;
         }
-    }
 
-    public void EnterStage()
+        transform.position = dest;
+        CallBack?.Invoke();
+    }
+    
+    public override void Init()
     {
-        GameManager.Instance.Player.SetParent(transform);
-        StageManager.Instance.SetStageNext();
-        //GameManager.Instance.Player.PlayerUnit.ReSetOriginPos(stageStartPos);
-        if (PrevStage.BridgeList.Count > 0)
-        {
-            StartCoroutine(RemoveBridge(0.3f));
-        }
+        DisableStage();
     }
-
-    private IEnumerator RemoveBridge(float delay)
+    
+#if UNITY_EDITOR
+    private void OnValidate()
     {
-        for(int i = PrevStage.BridgeList.Count-1; i >= 0; i--)
-        {
-            BridgeObject bridge = PrevStage.BridgeList[i];
-            bridge.Move(bridge.transform.position + Vector3.down * 10, 0.45f, true);
-            yield return new WaitForSeconds(delay);
-        }    
-        PrevStage.gameObject.SetActive(false);
-        PrevStage.BridgeList.Clear();
+        gameObject.name = $"{_chapter}_Stage_{_stageOrder}";
     }
 
-    private void OnTriggerEnter(Collider collider)
+    private void OnDrawGizmos()
     {
-        PlayerController player;
-        if(collider.TryGetComponent<PlayerController>(out player) && !IsPlayerEnter)
-        {
-            IsPlayerEnter = true;
-            Transform camerTrm = CameraManager.Instance.CameraContainerTrm;
-            Vector3 camerDiff = CameraManager.Instance.CameraDiff;
-            //��� Next�Ѿ� ���� �� ���� ��� ���� ���������� ��������� ��
-            Vector3 nextPos = transform.position + camerDiff;
-
-            camerTrm.DOMove(nextPos, 0.5f).SetEase(Ease.OutQuad);
-            //GetComponent<Collider>().enabled = false;
-        }
+        Gizmos.color = new Color(0, 0, 1, 0.5f);
+        Gizmos.DrawSphere(_stageEnterPoint, 0.5f);
+        
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.DrawSphere(_stageExitPoint, 0.5f);
+        
+        Gizmos.color = new Color(0, 1, 0, 0.5f);
+        Gizmos.DrawSphere(_playerResetPoint, 0.5f);
     }
-
-    private void OnTriggerExit(Collider other)
-    {
-        PlayerController player;
-        if (other.TryGetComponent<PlayerController>(out player))
-        {
-            IsPlayerEnter = false;
-        }
-    }
+#endif
 }

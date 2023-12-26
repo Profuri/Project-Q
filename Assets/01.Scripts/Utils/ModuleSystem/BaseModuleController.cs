@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ModuleSystem
 {
-    public class BaseModuleController : MonoBehaviour
+    public class BaseModuleController : PoolableMono
     {
         private Dictionary<Type, IModule> _modules;
 
@@ -12,9 +12,14 @@ namespace ModuleSystem
         public event Action OnFixedUpdateEvent = null;
         public event Action OnDisableEvent = null;
 
-        public virtual void Start()
+        public override void Init()
         {
-            _modules = new Dictionary<Type, IModule>();
+            if (_modules is null)
+            {
+                _modules = new Dictionary<Type, IModule>();
+            }
+            _modules.Clear();
+            
             var modules = transform.GetComponentsInChildren<IModule>();
             foreach (var module in modules)
             {

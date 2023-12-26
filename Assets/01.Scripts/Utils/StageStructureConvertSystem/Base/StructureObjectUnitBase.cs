@@ -5,8 +5,9 @@ namespace StageStructureConvertSystem
     [RequireComponent(typeof(Outline))]
     public class StructureObjectUnitBase : MonoBehaviour, IStructureObject
     {
-        private Vector3 _originPos;
-        private Vector3 _originScale;
+        protected Vector3 _originPos;
+        protected Quaternion _originRotation;
+        protected Vector3 _originScale;
 
         private StructureConverter _converter;
 
@@ -34,6 +35,7 @@ namespace StageStructureConvertSystem
         public virtual void Init(StructureConverter converter)
         {
             _originPos = transform.localPosition;
+            _originRotation = transform.rotation;
             _originScale = transform.localScale;
 
             _converter = converter;
@@ -51,6 +53,7 @@ namespace StageStructureConvertSystem
             }
 
             _objectInfo.position = _originPos;
+            _objectInfo.rotation = _originRotation;
             _objectInfo.scale = _originScale;
             _objectInfo.axis = EAxisType.NONE;
         }
@@ -58,6 +61,7 @@ namespace StageStructureConvertSystem
         public virtual void ConvertDimension(EAxisType axisType)
         {
             _objectInfo.position = transform.localPosition;
+            _objectInfo.rotation = transform.rotation;
             _objectInfo.scale = transform.localScale;
             SwappingObjectInfo(axisType);
         }
@@ -138,6 +142,7 @@ namespace StageStructureConvertSystem
             RigidbodySetting();
             
             transform.localPosition = _objectInfo.position;
+            transform.rotation = _objectInfo.rotation;
             transform.localScale = _objectInfo.scale;
 
             if (_meshRenderer)
@@ -148,8 +153,8 @@ namespace StageStructureConvertSystem
 
         public virtual void ReloadObject()
         {
-            Debug.Log("ReloadPoint : " + StageManager.Instance.ReloadPoint);
-            _objectInfo.position = StageManager.Instance.ReloadPoint;
+            _objectInfo.position = _originPos;
+            _objectInfo.rotation = _originRotation;
             _objectInfo.scale = _originScale;
             TransformSynchronization(_converter.AxisType);
             ObjectSetting();
@@ -213,15 +218,5 @@ namespace StageStructureConvertSystem
         {
             _converter.RemoveObject(this);
         }
-
-        //public void ReSetOriginPos(Vector3 pos)
-        //{
-        //    _originPos = pos;
-        //    _originScale = transform.localScale;
-
-        //    _objectInfo.position = _originPos;
-        //    _objectInfo.scale = _originScale;
-        //    _objectInfo.axis = EAxisType.NONE;
-        //}
     }
 }

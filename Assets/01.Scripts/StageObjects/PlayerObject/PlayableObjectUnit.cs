@@ -19,6 +19,11 @@ public class PlayableObjectUnit : StructureObjectUnitBase
         _characterController = GetComponent<CharacterController>();
     }
 
+    public void SetOriginPos()
+    {
+        _originPos = StageManager.Instance.CurrentStage.PlayerResetPoint;
+    }
+
     public override void TransformSynchronization(EAxisType axisType)
     {
         base.TransformSynchronization(axisType);
@@ -53,7 +58,7 @@ public class PlayableObjectUnit : StructureObjectUnitBase
 
     private void CheckObject(EAxisType axisType)
     {
-        Vector3 basePos = StageManager.Instance.CurStage.transform.position;
+        Vector3 basePos = StageManager.Instance.CurrentStage.transform.position;
         var origin = basePos + _prevObjectInfo.position + _characterController.center + Vector3.up * (_prevObjectInfo.scale.y / 2f);
         var dir = Vector3.down;
 
