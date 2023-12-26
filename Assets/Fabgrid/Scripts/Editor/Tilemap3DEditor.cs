@@ -17,7 +17,7 @@ namespace Fabgrid
         private Dictionary<string, VisualTreeAsset> panelAssets = new Dictionary<string, VisualTreeAsset>();
         private FSM fsm;
         private List<Panel> panels = new List<Panel>();
-        
+
         private StyleSheet darkTheme;
         private StyleSheet lightTheme;
 
@@ -73,6 +73,8 @@ namespace Fabgrid
                 new Help(root),
                 $"{fabgridFolder}/Textures/HelpButtonIcon.png"));
 
+
+            //여기에 있는 root를 바꿔주어야함
             panels.Add(
                 new FormatPanel("format-panel",
                     $"{PathUtility.PanelsPath}/ConfigurationPanel.uss",
@@ -82,7 +84,7 @@ namespace Fabgrid
                     tilemap,
                     root));
 
-                                                                        fsm = new FSM();
+            fsm = new FSM();
             SetupPanelAssets();
 
             AddStyleSheets();
@@ -160,7 +162,6 @@ namespace Fabgrid
         {
             root.Clear();
             root.Add(visualTree.CloneTree());
-            
             SetupControls();
             SelectPanel("paint-panel", root.Q<Button>("paint-panel-button"), new Paint(root, tilemap));
             return root;

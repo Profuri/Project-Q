@@ -3,21 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class DropdownField : PanelField
 {
-    private VisualElement _registerParentElem;
-
-    private VisualElement _textElement;    
+    private EnumField _enumField;
     public DropdownField(VisualElement root,VisualTreeAsset field, FieldInfo info) : base(root,field, info)
     {
+        _enumField = _fieldRoot.Q<EnumField>();
         //두 번째에 있는 Element를 찾아옴.
-        _registerParentElem = _fieldRoot.Q<VisualElement>("VisualElement");
-        _textElement = _registerParentElem.Q<VisualElement>("TextElement");
-
         Init(info);
     }
     
@@ -28,8 +23,7 @@ public class DropdownField : PanelField
         {
             UnityEngine.UIElements.TextElement textElement = new TextElement();
             textElement.text = value.ToString();
-            //textElement.
-            _registerParentElem.Add(textElement);            
+            _enumField.Add(textElement);
         }
     }
 }

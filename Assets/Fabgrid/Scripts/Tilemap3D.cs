@@ -63,7 +63,6 @@ namespace Fabgrid
         public Category selectedCategory = null;
         public Action OnRefresh { get; set; }
         public Action OnSelectedObjectChanged { get; set; }
-        
 
         public Vector3 GetFloorPosition()
         {
@@ -125,6 +124,7 @@ namespace Fabgrid
                 OnTransformChanged();
                 transform.hasChanged = false;
             }
+
         }
 
         private void OnTransformChanged()
@@ -138,6 +138,12 @@ namespace Fabgrid
             if (Application.isEditor)
             {
                 OnEditorUpdate();
+            }
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                Debug.Log("OnSelectedObjectChangedInvoke");
+                Tilemap3D tilemap = FindObjectOfType<Tilemap3D>();
+                tilemap.OnSelectedObjectChanged?.Invoke();
             }
         }
 

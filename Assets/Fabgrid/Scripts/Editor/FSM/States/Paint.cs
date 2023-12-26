@@ -253,7 +253,7 @@ namespace Fabgrid
         {
             filterButton.clickable.clickedWithEventInfo -= OnClickFilterButton;
 
-            root.Q<VisualElement>("main-container").UnregisterCallback<PointerDownEvent>(OnClickMainContainer);
+            root.Q<VisualElement>("main-container")?.UnregisterCallback<PointerDownEvent>(OnClickMainContainer);
 
             toolTypeField.UnregisterCallback<ChangeEvent<System.Enum>>(e => SwitchTool((ToolType)e.newValue));
         }

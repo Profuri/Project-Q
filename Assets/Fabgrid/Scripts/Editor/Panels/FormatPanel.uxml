@@ -1,12 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="floor-spacing-field" src="project://database/Assets/Fabgrid/Scripts/Editor/Panels/Fields/floor-spacing-field.uxml?fileID=9197481963319205126&amp;guid=7b6c015e56906f34bb9d83db91022507&amp;type=3#floor-spacing-field" />
-    <ui:Template name="snap-option-field" src="project://database/Assets/Fabgrid/Scripts/Editor/Panels/Fields/snap-option-field.uxml?fileID=9197481963319205126&amp;guid=b9f7a9a5ad4a0bc4387e8cb618e0d401&amp;type=3#snap-option-field" />
-    <ui:Template name="replace-existing-tile-toggle" src="project://database/Assets/Fabgrid/Scripts/Editor/Panels/Fields/replace-existing-tile-toggle.uxml?fileID=9197481963319205126&amp;guid=398b89afc12a4604f988e88f32029826&amp;type=3#replace-existing-tile-toggle" />
-    <ui:VisualElement name="format-panel" class="panel">
-        <ui:VisualElement name="VisualElement" class="sub-panel rounded-panel">
-            <ui:Instance template="floor-spacing-field" name="floor-spacing-field" />
-            <ui:Instance template="snap-option-field" name="snap-option-field" />
-            <ui:Instance template="replace-existing-tile-toggle" name="replace-existing-tile-toggle" />
+    <ui:Template name="InputField" src="project://database/Assets/Fabgrid/Scripts/Editor/Fields/InputField.uxml?fileID=9197481963319205126&amp;guid=477ddd958ee29ec40b84d22e2bd0eea8&amp;type=3#InputField" />
+    <ui:Template name="ToggleField" src="project://database/Assets/Fabgrid/Scripts/Editor/Fields/ToggleField.uxml?fileID=9197481963319205126&amp;guid=8d4ada2bb77a3bc4cb49b36c7ae90ecd&amp;type=3#ToggleField" />
+    <ui:Template name="DropdownFIeld" src="project://database/Assets/Fabgrid/Scripts/Editor/Fields/DropdownFIeld.uxml?fileID=9197481963319205126&amp;guid=01883cd1d45dd3344872ca6bda839b98&amp;type=3#DropdownFIeld" />
+    <ui:VisualElement name="configuration-panel" class="panel">
+        <ui:VisualElement class="sub-panel rounded-panel">
+            <uie:ColorField name="grid-color-field" label="Grid Color" class="field" />
+            <ui:Instance template="InputField" name="InputField" />
+        </ui:VisualElement>
+        <ui:VisualElement class="sub-panel rounded-panel">
+            <ui:Instance template="ToggleField" name="ToggleField" />
+        </ui:VisualElement>
+        <ui:VisualElement class="sub-panel rounded-panel">
+            <ui:Instance template="DropdownFIeld" name="DropdownFIeld" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

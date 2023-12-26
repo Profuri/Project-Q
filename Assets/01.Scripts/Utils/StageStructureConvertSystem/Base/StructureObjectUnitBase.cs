@@ -1,9 +1,12 @@
+using System.Collections.Generic;
+using System.Reflection;
+using Fabgrid;
 using UnityEngine;
 
 namespace StageStructureConvertSystem
 {
     [RequireComponent(typeof(Outline))]
-    public class StructureObjectUnitBase : MonoBehaviour, IStructureObject
+    public class StructureObjectUnitBase : ProvidableBase, IStructureObject
     {
         private Vector3 _originPos;
         private Vector3 _originScale;
