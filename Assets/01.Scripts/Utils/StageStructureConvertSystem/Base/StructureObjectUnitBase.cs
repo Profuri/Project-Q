@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace StageStructureConvertSystem
@@ -141,7 +140,7 @@ namespace StageStructureConvertSystem
             ColliderSetting();
             OutlineSetting();
             RigidbodySetting();
-            
+
             transform.localPosition = _objectInfo.position;
             transform.rotation = _objectInfo.rotation;
             transform.localScale = _objectInfo.scale;
@@ -157,6 +156,7 @@ namespace StageStructureConvertSystem
             _objectInfo.position = _originPos;
             _objectInfo.rotation = _originRotation;
             _objectInfo.scale = _originScale;
+            
             TransformSynchronization(_converter.AxisType);
             ObjectSetting();
         }

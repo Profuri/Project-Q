@@ -17,9 +17,10 @@ public class PlayableObjectUnit : StructureObjectUnitBase
         base.Init(converter);
         _playerController = GetComponent<PlayerController>();
         _characterController = GetComponent<CharacterController>();
+        SetOriginPos();
     }
 
-    public void SetOriginPos()
+    private void SetOriginPos()
     {
         _originPos = StageManager.Instance.CurrentStage.PlayerResetPoint;
     }

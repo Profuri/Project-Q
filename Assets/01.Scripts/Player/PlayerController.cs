@@ -39,7 +39,6 @@ public class PlayerController : BaseModuleController
     {
         transform.SetParent(stage.transform);
         _converter = stage.Converter;
-        _playerUnit.SetOriginPos();
     }
 
     private bool GetAxisEnabled(EAxisType axis)
