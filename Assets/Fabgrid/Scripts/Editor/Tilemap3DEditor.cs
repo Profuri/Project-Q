@@ -28,6 +28,8 @@ namespace Fabgrid
         public VisualElement Root => root;
         private VisualElement _currentPanelRoot;
 
+        public FormatPanel FormatPanel => panels.Find(p => p.GetType() == typeof(FormatPanel)) as FormatPanel;
+
         private void OnEnable()
         {
             fabgridFolder = PathUtility.GetFabgridFolder();
@@ -211,8 +213,8 @@ namespace Fabgrid
             VisualElement curRoot = instantiatedTemplate.Q<VisualElement>("format-panel");
             _currentPanelRoot = curRoot;
 
-            FormatPanel formatPanel = panels.Find(p => p.GetType() == typeof(FormatPanel)) as FormatPanel;
-            formatPanel.SetRoot(_currentPanelRoot);
+
+            FormatPanel.SetRoot(_currentPanelRoot);
 
             tilemap.OnSelectedPanelChanged?.Invoke();
 

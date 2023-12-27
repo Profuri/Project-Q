@@ -56,6 +56,12 @@ namespace Fabgrid
                 return;
 
             GameObject tile = (GameObject)PrefabUtility.InstantiatePrefab(tilemap.selectedTile.prefab);
+
+            if (tile.TryGetComponent(out IProvidableFieldInfo providableInfo))
+            {
+                //providableInfo.SetFieldInfos();
+            }
+
             if (tilemap.selectedLayer != null) tile.transform.SetParent(tilemap.selectedLayer.transform);
             else tile.transform.SetParent(tilemap.transform);
             tile.transform.position = position;

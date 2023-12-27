@@ -65,6 +65,7 @@ namespace Fabgrid
         public Action OnRefresh { get; set; }
         public Action OnSelectedPanelChanged { get; set; }
 
+
         public Vector3 GetFloorPosition()
         {
             return transform.position + (Vector3.up * floorIndex * floorSpacing);
@@ -140,7 +141,6 @@ namespace Fabgrid
             {
                 OnEditorUpdate();
             }
-
         }
 
         public bool HasSelectedVisibleLayer()

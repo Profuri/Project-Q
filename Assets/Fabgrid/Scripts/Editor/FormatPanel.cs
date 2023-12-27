@@ -12,12 +12,6 @@ using UnityEngine.UIElements;
 
 namespace Fabgrid
 {
-    public enum ETEST
-    {
-        NORMAL = 0,
-        EASY  = 1,
-        HARD = 2
-    }
     public class FormatPanel : Panel
     {
         private readonly Tilemap3D _tilemap;
@@ -31,9 +25,6 @@ namespace Fabgrid
         private VisualTreeAsset _toggleField;
         private VisualTreeAsset _dropDownField;
         private VisualTreeAsset _inputField;
-
-        public bool _test;
-        public ETEST _eTest;
 
         private static readonly string removeString = "FormatPanel.uxml";
         private static readonly string[] uxmlNames = new string[3]

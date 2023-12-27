@@ -5,5 +5,6 @@ using System;
 using System.Reflection;
 public interface IProvidableFieldInfo
 {
-    public List<FieldInfo> GetFieldInfos();    
+    public List<FieldInfo> GetFieldInfos();
+    public void SetFieldInfos(List<FieldInfo> infos);
 }
