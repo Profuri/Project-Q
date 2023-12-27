@@ -77,14 +77,15 @@ namespace Fabgrid
 
             //여기에 있는 root를 바꿔주어야함
             //어떤 방식으로 할지 고민 해야됨
-                panels.Add(
-                    new FormatPanel("format-panel",
-                        $"{PathUtility.PanelsPath}/ConfigurationPanel.uss",
-                        $"{PathUtility.PanelsPath}/FormatPanel.uxml",
-                        new Help(root),
-                        $"{fabgridFolder}/Textures/HelpButtonIcon.png",
-                        tilemap,
-                        ref _currentPanelRoot));
+
+            panels.Add(
+                new FormatPanel("format-panel",
+                    $"{PathUtility.PanelsPath}/ConfigurationPanel.uss",
+                    $"{PathUtility.PanelsPath}/FormatPanel.uxml",
+                    new Help(root),
+                    $"{fabgridFolder}/Textures/HelpButtonIcon.png",
+                    tilemap,
+                    ref _currentPanelRoot));
 
             fsm = new FSM();
             SetupPanelAssets();
@@ -214,10 +215,6 @@ namespace Fabgrid
             formatPanel.SetRoot(_currentPanelRoot);
 
             tilemap.OnSelectedPanelChanged?.Invoke();
-            Debug.Log($"CurPanelRoot: {_currentPanelRoot}");
-
-
-            //Debug.Log($"InstantiatedTemplate {instantiatedTemplate.Q<VisualElement>("format-panel")}");
 
             navigationBarButton.AddToClassList("selected-navigation-bar-button");
             fsm.Transition(state);

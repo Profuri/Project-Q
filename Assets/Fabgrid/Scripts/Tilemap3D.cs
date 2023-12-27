@@ -34,6 +34,7 @@ namespace Fabgrid
         public Quaternion tileRotation = Quaternion.identity; // Old
         public List<Tile> tiles = new List<Tile>();
         public GameObject selectedGameObject;
+        public GameObject lastSelectedGameObject;
         public Mesh tilePreviewMesh;
         public Material tilePreviewMaterial;
         public bool replaceExistingTile = true;

@@ -91,38 +91,32 @@ namespace Fabgrid
         [ContextMenu("LoadFieldInfo")]
         public void LoadFieldInfo()
         {
+            if (_tilemap.lastSelectedGameObject == null)
+            {
+                Debug.Log($"TilemapLastSelectedGameObject is null!");
+                return;
+            }
+
+
             Debug.Log("LoadFieldInfo");
-
-            //if (_tilemap.selectedGameObject == null) return;
-
             _fieldDictionary.Clear();
 
             _root?.Clear();
 
-            FieldInfo fieldInfo = GetType().GetField("_test");
-            FieldInfo fieldInfo2 = GetType().GetField("_eTest");
-            CreateVisualTree(fieldInfo);
-            CreateVisualTree(fieldInfo2);
 
+            if (_tilemap.lastSelectedGameObject.TryGetComponent(out IProvidableFieldInfo provideInfo))
+            {
+                var fieldInfoList = new List<FieldInfo>();
 
+                fieldInfoList = provideInfo.GetFieldInfos();
 
-            //var fieldInfoList = new List<FieldInfo>();
+                foreach (var fieldInfo in fieldInfoList)
+                {
+                    if (_fieldDictionary.ContainsKey(fieldInfo)) continue;
 
-            //if (_tilemap.selectedGameObject.TryGetComponent(out IProvidableFieldInfo provideInfo))
-            //{
-            //    fieldInfoList = provideInfo.GetFieldInfos();
-
-            //    foreach (var fieldInfo in fieldInfoList)
-            //    {
-            //        if (_fieldDictionary.ContainsKey(fieldInfo)) continue;
-
-            //        CreateVisualTree(fieldInfo);
-            //    }
-            //}
-            //else
-            //{
-            //    return;
-            //}
+                    CreateVisualTree(fieldInfo);
+                }
+            }
         }
 
         private void CreateVisualTree(FieldInfo info)

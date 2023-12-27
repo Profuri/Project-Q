@@ -531,10 +531,11 @@ namespace Fabgrid
             }
 
             GameObject obj = HandleUtility.PickGameObject(e.mousePosition, true);
-            if (tilemap.selectedGameObject != obj)
+            tilemap.selectedGameObject = obj;
+
+            if (tilemap.lastSelectedGameObject != obj && obj != null)
             {
-                tilemap.selectedGameObject = obj;
-                tilemap.OnSelectedPanelChanged?.Invoke();
+                tilemap.lastSelectedGameObject = obj;
             }
             currentTool.OnMouseMove(e);
         }
