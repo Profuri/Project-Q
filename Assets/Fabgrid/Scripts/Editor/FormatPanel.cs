@@ -12,6 +12,12 @@ using UnityEngine.UIElements;
 
 namespace Fabgrid
 {
+    public enum ETEST
+    {
+        NORMAL = 0,
+        EASY  = 1,
+        HARD = 2
+    }
     public class FormatPanel : Panel
     {
         private readonly Tilemap3D _tilemap;
@@ -27,6 +33,7 @@ namespace Fabgrid
         private VisualTreeAsset _inputField;
 
         public bool _test;
+        public ETEST _eTest;
 
         private static readonly string removeString = "FormatPanel.uxml";
         private static readonly string[] uxmlNames = new string[3]
@@ -34,8 +41,14 @@ namespace Fabgrid
 
         private Dictionary<FieldInfo, PanelField> _fieldDictionary;
 
+        //This is test Code. Will be changed.
+        public void SetRoot(VisualElement root)
+        {
+            _root = root;
+        }
+
         public FormatPanel(string name, string stylesheetPath, string visualTreeAssetPath, State state,
-            string buttonIconPath, Tilemap3D tilemap, VisualElement root) : base(name, stylesheetPath, visualTreeAssetPath, state,
+            string buttonIconPath, Tilemap3D tilemap, ref VisualElement root) : base(name, stylesheetPath, visualTreeAssetPath, state,
             buttonIconPath)
         {
             Name = name;
@@ -69,13 +82,9 @@ namespace Fabgrid
 
             _toggleField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[0]);
             _dropDownField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[1]);
-            _inputField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[2]);
+            _inputField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[2]);    
 
-            Debug.Log($"ToggleField: {_toggleField}");
-            Debug.Log($"DropdownField: {_dropDownField}");
-            Debug.Log($"InputField: {_inputField}");
-
-            _tilemap.OnSelectedObjectChanged += LoadFieldInfo;
+            _tilemap.OnSelectedPanelChanged += LoadFieldInfo;
         }
 
         //selectedGameObject가 바뀌었을 때 이벤트 형식으로 구독하여 실행해주거나 다른 방식으로라도 구독형식으로 만들면 될 것 같음.
@@ -83,16 +92,20 @@ namespace Fabgrid
         public void LoadFieldInfo()
         {
             Debug.Log("LoadFieldInfo");
-            //After refactoring by interface;
 
-            if (_tilemap.selectedGameObject == null) return;
+            //if (_tilemap.selectedGameObject == null) return;
 
             _fieldDictionary.Clear();
 
             _root?.Clear();
 
             FieldInfo fieldInfo = GetType().GetField("_test");
+            FieldInfo fieldInfo2 = GetType().GetField("_eTest");
             CreateVisualTree(fieldInfo);
+            CreateVisualTree(fieldInfo2);
+
+
+
             //var fieldInfoList = new List<FieldInfo>();
 
             //if (_tilemap.selectedGameObject.TryGetComponent(out IProvidableFieldInfo provideInfo))
@@ -120,6 +133,12 @@ namespace Fabgrid
             if (_fieldDictionary.ContainsKey(info)) return;
 
             PanelField panelField = null;
+
+            if (_root == null)
+            {
+                Debug.LogError($"FieldRoot is {_root}!!!!!!");
+                return;
+            }
 
             if (type.IsEnum)
                 panelField = new DropdownField(_root, _dropDownField, info);

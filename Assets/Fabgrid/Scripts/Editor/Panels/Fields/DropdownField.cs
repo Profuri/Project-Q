@@ -5,6 +5,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Fabgrid;
 
 public class DropdownField : PanelField
 {
@@ -18,12 +19,19 @@ public class DropdownField : PanelField
     
     public override void Init(FieldInfo info)
     {
-        Type type = info.GetType();
+        Type type = info.FieldType;
+        var enumValue = Activator.CreateInstance(type);
+        if (enumValue is Enum)
+        {
+            Enum enumField = enumValue as Enum;
+            _enumField.Init(enumField);
+        }
         foreach (Enum value in Enum.GetValues(type))
         {
             UnityEngine.UIElements.TextElement textElement = new TextElement();
             textElement.text = value.ToString();
             _enumField.Add(textElement);
+            //_enumField.
         }
     }
 }

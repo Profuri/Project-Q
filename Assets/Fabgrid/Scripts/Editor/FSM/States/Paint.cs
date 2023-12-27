@@ -534,7 +534,7 @@ namespace Fabgrid
             if (tilemap.selectedGameObject != obj)
             {
                 tilemap.selectedGameObject = obj;
-                tilemap.OnSelectedObjectChanged?.Invoke();
+                tilemap.OnSelectedPanelChanged?.Invoke();
             }
             currentTool.OnMouseMove(e);
         }

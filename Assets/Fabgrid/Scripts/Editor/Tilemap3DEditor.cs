@@ -26,6 +26,7 @@ namespace Fabgrid
         public State CurrentState => fsm.CurrentState;
 
         public VisualElement Root => root;
+        private VisualElement _currentPanelRoot;
 
         private void OnEnable()
         {
@@ -75,14 +76,15 @@ namespace Fabgrid
 
 
             //여기에 있는 root를 바꿔주어야함
-            panels.Add(
-                new FormatPanel("format-panel",
-                    $"{PathUtility.PanelsPath}/ConfigurationPanel.uss",
-                    $"{PathUtility.PanelsPath}/FormatPanel.uxml",
-                    new Help(root),
-                    $"{fabgridFolder}/Textures/HelpButtonIcon.png",
-                    tilemap,
-                    root));
+            //어떤 방식으로 할지 고민 해야됨
+                panels.Add(
+                    new FormatPanel("format-panel",
+                        $"{PathUtility.PanelsPath}/ConfigurationPanel.uss",
+                        $"{PathUtility.PanelsPath}/FormatPanel.uxml",
+                        new Help(root),
+                        $"{fabgridFolder}/Textures/HelpButtonIcon.png",
+                        tilemap,
+                        ref _currentPanelRoot));
 
             fsm = new FSM();
             SetupPanelAssets();
@@ -185,6 +187,7 @@ namespace Fabgrid
 
         private void SelectPanel(string panelName, Button navigationBarButton, State state)
         {
+
             root.Query<Button>(null, "navigation-bar-button").ForEach(button =>
             {
                 if (button.ClassListContains("selected-navigation-bar-button"))
@@ -203,6 +206,18 @@ namespace Fabgrid
             var instantiatedTemplate = panelAssets[panelName].CloneTree();
             panelContainer.Add(instantiatedTemplate);
             selectedPanel = instantiatedTemplate;
+
+            VisualElement curRoot = instantiatedTemplate.Q<VisualElement>("format-panel");
+            _currentPanelRoot = curRoot;
+
+            FormatPanel formatPanel = panels.Find(p => p.GetType() == typeof(FormatPanel)) as FormatPanel;
+            formatPanel.SetRoot(_currentPanelRoot);
+
+            tilemap.OnSelectedPanelChanged?.Invoke();
+            Debug.Log($"CurPanelRoot: {_currentPanelRoot}");
+
+
+            //Debug.Log($"InstantiatedTemplate {instantiatedTemplate.Q<VisualElement>("format-panel")}");
 
             navigationBarButton.AddToClassList("selected-navigation-bar-button");
             fsm.Transition(state);

@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
 using UnityEngine.UIElements;
+using System.Linq;
 
 public abstract class PanelField
 {
     private VisualElement _root;
     protected VisualElement _fieldRoot;
     
+
     protected PanelField(VisualElement root,VisualTreeAsset field, FieldInfo info)
     {
         _root = root;
         
-        //루트에 자식으로 들어감 그런데 이 루트 말고 다른 루트에서 가져와여 될 것 같기도 함.
+        //루트에 자식으로 넣는데 기존에 있는 자식이 사라지고 있는 것 같음
+        Debug.Log($"AbstractPanelFieldRoot: {root}");
         var container = field.Instantiate();
-        root.Add(container);
+        _root?.Add(container);
 
         _fieldRoot = container;
     }

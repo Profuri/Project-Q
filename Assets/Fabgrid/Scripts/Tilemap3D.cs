@@ -62,7 +62,7 @@ namespace Fabgrid
         public List<Category> categories = new List<Category>();
         public Category selectedCategory = null;
         public Action OnRefresh { get; set; }
-        public Action OnSelectedObjectChanged { get; set; }
+        public Action OnSelectedPanelChanged { get; set; }
 
         public Vector3 GetFloorPosition()
         {
@@ -139,12 +139,7 @@ namespace Fabgrid
             {
                 OnEditorUpdate();
             }
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                Debug.Log("OnSelectedObjectChangedInvoke");
-                Tilemap3D tilemap = FindObjectOfType<Tilemap3D>();
-                tilemap.OnSelectedObjectChanged?.Invoke();
-            }
+
         }
 
         public bool HasSelectedVisibleLayer()
