@@ -18,29 +18,18 @@ public class StageCollisionChecker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_stage.ActiveStage)
+        if(!_stage.ActiveStage && other.TryGetComponent<PlayerController>(out var player))
         {
-            return;
+            _stage.StageEnterEvent(player);
         }
-        
-        if(!other.TryGetComponent<PlayerController>(out var player))
-        {
-            return;
-        }
-        
-        StageManager.Instance.ChangeToNextStage(player);
-        // camera setting
-        // stage init setting
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.TryGetComponent<PlayerController>(out var player))
+        if (other.TryGetComponent<PlayerController>(out var player))
         {
-            return;
+            _stage.StageExitEvent(player);
         }
-        
-        // camera setting
     }
     
 #if UNITY_EDITOR

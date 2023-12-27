@@ -20,7 +20,8 @@ public class StageManager : BaseManager<StageManager>
     [SerializeField] private float _bridgeWidth;
     [SerializeField] private float _bridgeIntervalDistance;
 
-    [Space(30), Header("For Debugging")]
+    [Space(30), Header("For Debugging")] 
+    [SerializeField] private bool _generateStageOnStart;
     [SerializeField] private ChapterType _startChapter;
     [SerializeField] private int _startStage;
 
@@ -31,13 +32,17 @@ public class StageManager : BaseManager<StageManager>
         CurrentStage = null;
         NextStage = null;
         _bridgeObjects = new List<BridgeObject>();
-    
-        NextStage = PoolManager.Instance.Pop($"{_startChapter.ToString()}_Stage_{_startStage.ToString()}") as Stage;
-        NextStage.GenerateStage(Vector3.zero);
-    
-        var player = PoolManager.Instance.Pop("Player") as PlayerController;
-        player.transform.position = new Vector3(0, 10, 0);
-        ChangeToNextStage(player);
+
+        if (_generateStageOnStart)
+        {
+            NextStage = PoolManager.Instance.Pop($"{_startChapter.ToString()}_Stage_{_startStage.ToString()}") as Stage;
+            NextStage.GenerateStage(Vector3.zero);
+        
+            var player = PoolManager.Instance.Pop("Player") as PlayerController;
+            player.transform.position = new Vector3(0, 10, 0);
+            
+            NextStage.StageEnterEvent(player);
+        }
     }        
 
     public override void UpdateManager()
@@ -85,7 +90,7 @@ public class StageManager : BaseManager<StageManager>
 
         CurrentStage = NextStage;
         player.SetStage(CurrentStage);
-        CurrentStage.EnableStage();
+        CurrentStage.InitStage();
     }
 
     private void GenerateBridge(Vector3 startPoint, Vector3 endPoint)

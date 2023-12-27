@@ -48,10 +48,30 @@ public class Stage : PoolableMono
         }));
     }
 
-    public void EnableStage()
+    public void InitStage()
     {
         ActiveStage = true;
         Converter.Init();
+    }
+
+    public void StageEnterEvent(PlayerController player)
+    {
+        Converter.SetConvertable(true);
+        CameraManager.Instance.ChangeVCamController(VirtualCamType.STAGE);
+        ((StageCamController)CameraManager.Instance.CurrentCamController).SetStage(this);
+        Converter.ConvertDimension(EAxisType.NONE);
+        
+        if (StageManager.Instance.NextStage == this) 
+        {
+            StageManager.Instance.ChangeToNextStage(player);
+        }
+    }
+
+    public void StageExitEvent(PlayerController player)
+    {
+        Converter.SetConvertable(false);
+        CameraManager.Instance.ChangeVCamController(VirtualCamType.PLAYER);
+        ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetPlayer(player);
     }
 
     private IEnumerator StageMoveRoutine(Vector3 dest, Action CallBack = null)

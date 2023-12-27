@@ -24,6 +24,11 @@ namespace StageStructureConvertSystem
             _convertableUnits.ForEach(unit => unit.Init(this));
         }
 
+        public void SetConvertable(bool convertable)
+        {
+            _isConvertable = convertable;
+        }
+
         public void ConvertDimension(EAxisType axisType, Action callback = null)
         {
             if (!_isConvertable || _axisType == axisType || (_axisType != EAxisType.NONE && axisType != EAxisType.NONE))
@@ -39,16 +44,19 @@ namespace StageStructureConvertSystem
                 ChangeAxis(axisType);
             }
 
-            CameraManager.Instance.ChangeCamera(axisType, () =>
+            if (CameraManager.Instance.CurrentCamController is StageCamController)
             {
-                if(axisType != EAxisType.NONE)
+                ((StageCamController)CameraManager.Instance.CurrentCamController).ChangeStageCamera(axisType, () =>
                 {
-                    ChangeAxis(axisType);
-                }
-
-                _isConvertable = true;
-                callback?.Invoke();
-            });
+                    if(axisType != EAxisType.NONE)
+                    {
+                        ChangeAxis(axisType);
+                    }
+            
+                    _isConvertable = true;
+                    callback?.Invoke();
+                });
+            }
         }
 
         private void ChangeAxis(EAxisType axisType)
