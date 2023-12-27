@@ -6,7 +6,6 @@ public class PlayerCamController : VirtualCamController
     {
         base.Init();
         CurrentSelectedCam = _virtualCams[0];
-        SetCurrentCam();
     }
 
     public void SetPlayer(PlayerController player)

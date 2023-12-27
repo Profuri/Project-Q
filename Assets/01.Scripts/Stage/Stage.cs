@@ -44,14 +44,18 @@ public class Stage : PoolableMono
         StartCoroutine(StageMoveRoutine(CenterPosition - Vector3.up * 5, () =>
         {
             PoolManager.Instance.Push(this);
-            ActiveStage = false;
         }));
     }
 
     public void InitStage()
     {
-        ActiveStage = true;
+        SetActive(true);
         Converter.Init();
+    }
+
+    public void SetActive(bool value)
+    {
+        ActiveStage = value;
     }
 
     public void StageEnterEvent(PlayerController player)
@@ -59,7 +63,7 @@ public class Stage : PoolableMono
         Converter.SetConvertable(true);
         CameraManager.Instance.ChangeVCamController(VirtualCamType.STAGE);
         ((StageCamController)CameraManager.Instance.CurrentCamController).SetStage(this);
-        Converter.ConvertDimension(EAxisType.NONE);
+        ((StageCamController)CameraManager.Instance.CurrentCamController).ChangeStageCamera(EAxisType.NONE);
         
         if (StageManager.Instance.NextStage == this) 
         {
@@ -72,6 +76,7 @@ public class Stage : PoolableMono
         Converter.SetConvertable(false);
         CameraManager.Instance.ChangeVCamController(VirtualCamType.PLAYER);
         ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetPlayer(player);
+        ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetCurrentCam();
     }
 
     private IEnumerator StageMoveRoutine(Vector3 dest, Action CallBack = null)
@@ -96,7 +101,7 @@ public class Stage : PoolableMono
     
     public override void Init()
     {
-        ActiveStage = false;
+        SetActive(false);
     }
     
 #if UNITY_EDITOR

@@ -91,6 +91,8 @@ public class StageManager : BaseManager<StageManager>
         CurrentStage = NextStage;
         player.SetStage(CurrentStage);
         CurrentStage.InitStage();
+
+        NextStage = null;
     }
 
     private void GenerateBridge(Vector3 startPoint, Vector3 endPoint)
@@ -142,6 +144,7 @@ public class StageManager : BaseManager<StageManager>
     public void StageClear()
     {
         CurrentStage.Converter.ConvertDimension(EAxisType.NONE);
+        CurrentStage.SetActive(false);
 
         var curChapter = CurrentStage.Chapter;
         var nextChapter = CurrentStage.stageOrder + 1;

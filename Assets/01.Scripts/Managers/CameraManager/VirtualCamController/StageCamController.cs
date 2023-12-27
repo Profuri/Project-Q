@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using VirtualCam;
 
 public class StageCamController : VirtualCamController
@@ -18,7 +19,7 @@ public class StageCamController : VirtualCamController
         }   
     }
 
-    public void ChangeStageCamera(EAxisType type, Action callBack)
+    public void ChangeStageCamera(EAxisType type, Action callBack = null)
     {
         CurrentSelectedCam = _virtualCamDiction[type];
         SetCurrentCam(callBack);

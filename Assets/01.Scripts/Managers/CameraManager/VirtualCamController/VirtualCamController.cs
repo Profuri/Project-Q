@@ -9,6 +9,10 @@ public abstract class VirtualCamController : MonoBehaviour
 
     public virtual void Init()
     {
+        foreach (var vCam in _virtualCams)
+        {
+            vCam.ExitCam();
+        }
         CurrentSelectedCam = null;
     }
 

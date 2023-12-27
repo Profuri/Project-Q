@@ -26,7 +26,7 @@ public class StageCollisionChecker : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent<PlayerController>(out var player))
+        if (!_stage.ActiveStage && other.TryGetComponent<PlayerController>(out var player))
         {
             _stage.StageExitEvent(player);
         }
