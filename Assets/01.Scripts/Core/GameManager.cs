@@ -1,6 +1,6 @@
-using System;
+using ManagingSystem;
 using Singleton;
-using UnityEngine.InputSystem;
+using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -9,6 +9,15 @@ public class GameManager : MonoSingleton<GameManager>
     
     public event UnityEventListener OnStartEvent = null;
     public event UnityEventListener OnUpdateEvent = null;
+
+    private void Awake()
+    {
+        var managers = GetComponentsInChildren<IManager>();
+        foreach (var manager in managers)
+        {
+            manager.Init();
+        }
+    }
 
     private void Start()
     {
