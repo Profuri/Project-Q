@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,8 +11,8 @@ namespace InputControl
         
         public event InputEventListener<Vector2> OnMovementEvent = null;
         public event InputEventListener OnJumpEvent = null;
-        public event InputEventListener OnAxisControlEvent = null;
         public event InputEventListener OnInteractionEvent = null;
+        public event InputEventListener OnAxisControlEvent = null;
 
         private InputControls _inputControls;
 
@@ -38,7 +37,7 @@ namespace InputControl
 
         public void OnMovement(InputAction.CallbackContext context)
         {
-            Vector2 value = context.ReadValue<Vector2>();
+            var value = context.ReadValue<Vector2>();
             OnMovementEvent?.Invoke(value);
         }
 
@@ -50,19 +49,19 @@ namespace InputControl
             }
         }
 
-        public void OnAxisControl(InputAction.CallbackContext context)
-        {
-            if (context.performed || context.canceled)
-            {
-                OnAxisControlEvent?.Invoke();
-            }
-        }
-
         public void OnInteraction(InputAction.CallbackContext context)
         {
             if (context.performed)
             {
                 OnInteractionEvent?.Invoke();
+            }
+        }
+
+        public void OnAxisControl(InputAction.CallbackContext context)
+        {
+            if (context.performed || context.canceled)
+            {
+                OnAxisControlEvent?.Invoke();   
             }
         }
     }

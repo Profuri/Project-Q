@@ -20,7 +20,8 @@ public class StageManager : BaseManager<StageManager>
     [SerializeField] private float _bridgeWidth;
     [SerializeField] private float _bridgeIntervalDistance;
 
-    [Space(30), Header("For Debugging")]
+    [Space(30), Header("For Debugging")] 
+    [SerializeField] private bool _generateStageOnStart;
     [SerializeField] private ChapterType _startChapter;
     [SerializeField] private int _startStage;
 
@@ -31,23 +32,23 @@ public class StageManager : BaseManager<StageManager>
         CurrentStage = null;
         NextStage = null;
         _bridgeObjects = new List<BridgeObject>();
-    
-        NextStage = PoolManager.Instance.Pop($"{_startChapter.ToString()}_Stage_{_startStage.ToString()}") as Stage;
-        NextStage.GenerateStage(Vector3.zero);
-    
-        var player = PoolManager.Instance.Pop("Player") as PlayerController;
-        player.transform.position = new Vector3(0, 10, 0);
-        ChangeToNextStage(player);
+
+        if (_generateStageOnStart)
+        {
+            NextStage = PoolManager.Instance.Pop($"{_startChapter.ToString()}_Stage_{_startStage.ToString()}") as Stage;
+            NextStage.GenerateStage(Vector3.zero);
+        
+            var player = PoolManager.Instance.Pop("Player") as PlayerController;
+            player.transform.position = new Vector3(0, 10, 0);
+            
+            NextStage.StageEnterEvent(player);
+        }
     }        
 
     public override void UpdateManager()
     {
         // Do nothing
 
-        if (Keyboard.current.iKey.wasPressedThisFrame)
-        {
-        }
-        
         if (Keyboard.current.oKey.wasPressedThisFrame)
         {
             StageClear();
@@ -59,6 +60,16 @@ public class StageManager : BaseManager<StageManager>
         NextStage = PoolManager.Instance.Pop($"{chapter.ToString()}_Stage_{stage.ToString()}") as Stage;
 
         var dir = (CurrentStage.StageExitPoint - NextStage.StageEnterPoint).normalized;
+
+        if (dir.x > dir.z)
+        {
+            dir = new Vector3(Mathf.Sign(dir.x), 0, 0);
+        }
+        else
+        {
+            dir = new Vector3(0, 0, Mathf.Sign(dir.z));
+        }
+        
         var exitPoint = CurrentStage.CenterPosition + CurrentStage.StageExitPoint;
         var enterPoint = exitPoint + (dir * _stageIntervalDistance);
         var nextStageCenter = enterPoint - 
@@ -79,7 +90,9 @@ public class StageManager : BaseManager<StageManager>
 
         CurrentStage = NextStage;
         player.SetStage(CurrentStage);
-        CurrentStage.EnableStage();
+        CurrentStage.InitStage();
+
+        NextStage = null;
     }
 
     private void GenerateBridge(Vector3 startPoint, Vector3 endPoint)
@@ -131,6 +144,7 @@ public class StageManager : BaseManager<StageManager>
     public void StageClear()
     {
         CurrentStage.Converter.ConvertDimension(EAxisType.NONE);
+        CurrentStage.SetActive(false);
 
         var curChapter = CurrentStage.Chapter;
         var nextChapter = CurrentStage.stageOrder + 1;
@@ -147,64 +161,6 @@ public class StageManager : BaseManager<StageManager>
             }
         }
         
-        CurrentStage.DisableStage();
         GenerateNextStage(curChapter, nextChapter);
     }
-    
-    //
-    // public void SetStageNext()
-    // {
-    //     // _currentStage = _currentStage.NextStage;
-    // }
-    //
-    // private void EndChapter()
-    // {
-    //     Debug.Log("Chapter Clear!");
-    // }
-    //
-    // public void StartStage(int chapter)
-    // {
-    //     // stageTrmMain = GameObject.Find("StageTrmMain").transform;
-    //     //
-    //     // // List<Stage> tempstages = _chapterDataSO.Chapters[chapter].Stages;
-    //     // tempstages.ForEach((stage) =>
-    //     // {
-    //     //     Stage newStage = Instantiate(stage);
-    //     //     newStage.gameObject.SetActive(false);
-    //     //     stages.Add(newStage);
-    //     // }); 
-    //     //
-    //     //
-    //     // for (int i = 0; i < stages.Count; i++)
-    //     // {
-    //     //     if(i != 0)
-    //     //     {
-    //     //         Transform playerTrm = stages[i].transform.Find("Player");
-    //     //         if(playerTrm != null)
-    //     //             Destroy(stages[i].transform.Find("Player").gameObject);
-    //     //         stages[i].PrevStage = stages[i - 1];
-    //     //     }
-    //     //     
-    //     //     stages[i].IsPlayerEnter = false;
-    //     //     stages[i].CurStageNum = i;
-    //     //
-    //     //     stages[i].transform.SetParent(stageTrmMain.GetChild(i));
-    //     //     stages[i].transform.localPosition = Vector3.zero;
-    //     //     stages[i].transform.localRotation = Quaternion.identity;
-    //     //     
-    //     //     if (i == stages.Count - 1)
-    //     //     {
-    //     //         stages[i].IsEndStage = true;
-    //     //         stages[i].NextStage = null;
-    //     //         break;
-    //     //     }
-    //     //
-    //     //     stages[i].IsEndStage = false;
-    //     //     stages[i].NextStage = stages[i + 1];
-    //     // }
-    //     //
-    //     // _currentStage = stages[0];
-    //     // _currentStage.IsPlayerEnter = true;
-    //     // _currentStage.gameObject.SetActive(true);
-    // }
 }

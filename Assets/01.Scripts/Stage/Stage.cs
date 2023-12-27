@@ -47,15 +47,36 @@ public class Stage : PoolableMono
         }));
     }
 
-    public void EnableStage()
+    public void InitStage()
     {
-        ActiveStage = true;
+        SetActive(true);
         Converter.Init();
     }
-    
-    public void DisableStage()
+
+    public void SetActive(bool value)
     {
-        ActiveStage = false;
+        ActiveStage = value;
+    }
+
+    public void StageEnterEvent(PlayerController player)
+    {
+        Converter.SetConvertable(true);
+        CameraManager.Instance.ChangeVCamController(VirtualCamType.STAGE);
+        ((StageCamController)CameraManager.Instance.CurrentCamController).SetStage(this);
+        ((StageCamController)CameraManager.Instance.CurrentCamController).ChangeStageCamera(EAxisType.NONE);
+        
+        if (StageManager.Instance.NextStage == this) 
+        {
+            StageManager.Instance.ChangeToNextStage(player);
+        }
+    }
+
+    public void StageExitEvent(PlayerController player)
+    {
+        Converter.SetConvertable(false);
+        CameraManager.Instance.ChangeVCamController(VirtualCamType.PLAYER);
+        ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetPlayer(player);
+        ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetCurrentCam();
     }
 
     private IEnumerator StageMoveRoutine(Vector3 dest, Action CallBack = null)
@@ -80,7 +101,7 @@ public class Stage : PoolableMono
     
     public override void Init()
     {
-        DisableStage();
+        SetActive(false);
     }
     
 #if UNITY_EDITOR
