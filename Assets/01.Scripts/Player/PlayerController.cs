@@ -24,10 +24,11 @@ public class PlayerController : BaseModuleController
     private CharacterController _charController;
     public CharacterController CharController => _charController;
 
-    private ushort _enableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
+    public ushort EnableAxis { get; private set; }
 
     public override void Init()
     {
+        EnableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
         _modelTrm = transform.Find("Model");
         _playerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         _playerUnit = GetComponent<PlayableObjectUnit>();
@@ -43,18 +44,18 @@ public class PlayerController : BaseModuleController
 
     private bool GetAxisEnabled(EAxisType axis)
     {
-        return (_enableAxis & (ushort)axis) != 0;
+        return (EnableAxis & (ushort)axis) != 0;
     }
 
     public void SetEnableAxis(EAxisType axis, bool enabled)
     {
         if(enabled)
         {
-            _enableAxis |= (ushort)axis;
+            EnableAxis |= (ushort)axis;
         }
         else
         {
-            _enableAxis ^= (ushort)axis;
+            EnableAxis ^= (ushort)axis;
             if(axis == _converter.AxisType)
             {
                 ConvertDimension(EAxisType.NONE);
@@ -71,23 +72,23 @@ public class PlayerController : BaseModuleController
     {
         base.Update();
         
-        // test key
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            ConvertDimension(EAxisType.NONE);
-        }
-        if (Input.GetKeyDown(KeyCode.B) && GetAxisEnabled(EAxisType.X)) 
-        {
-            ConvertDimension(EAxisType.X);
-        }
-        if (Input.GetKeyDown(KeyCode.N) && GetAxisEnabled(EAxisType.Y))
-        {
-            ConvertDimension(EAxisType.Y);
-        }
-        if (Input.GetKeyDown(KeyCode.M) && GetAxisEnabled(EAxisType.Z))
-        {
-            ConvertDimension(EAxisType.Z);
-        }
+        // // test key
+        // if (Input.GetKeyDown(KeyCode.V))
+        // {
+        //     ConvertDimension(EAxisType.NONE);
+        // }
+        // if (Input.GetKeyDown(KeyCode.B) && GetAxisEnabled(EAxisType.X)) 
+        // {
+        //     ConvertDimension(EAxisType.X);
+        // }
+        // if (Input.GetKeyDown(KeyCode.N) && GetAxisEnabled(EAxisType.Y))
+        // {
+        //     ConvertDimension(EAxisType.Y);
+        // }
+        // if (Input.GetKeyDown(KeyCode.M) && GetAxisEnabled(EAxisType.Z))
+        // {
+        //     ConvertDimension(EAxisType.Z);
+        // }
     }
 
     public void ConvertDimension(EAxisType axis)

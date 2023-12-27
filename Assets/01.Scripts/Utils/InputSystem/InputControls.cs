@@ -48,18 +48,18 @@ namespace InputControl
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""AxisControl"",
+                    ""name"": ""Interaction"",
                     ""type"": ""Button"",
-                    ""id"": ""bc9ef101-2a75-4864-95b7-9935ec57eb0f"",
+                    ""id"": ""043858ae-c34a-4cf1-a083-a73b2ccd9f34"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Interaction"",
+                    ""name"": ""AxisControl"",
                     ""type"": ""Button"",
-                    ""id"": ""043858ae-c34a-4cf1-a083-a73b2ccd9f34"",
+                    ""id"": ""50db877a-ab43-496e-9f06-083c49564ae2"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -135,23 +135,23 @@ namespace InputControl
                 },
                 {
                     ""name"": """",
-                    ""id"": ""cd07c412-d980-46c4-bde7-c0b6cb123e5f"",
-                    ""path"": ""<Keyboard>/capsLock"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""AxisControl"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""3697c80f-d747-4b78-8fd3-45d1ddd08ce1"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""649b2138-67b1-4eaa-a07b-d3ce13883325"",
+                    ""path"": ""<Keyboard>/capsLock"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""AxisControl"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -269,8 +269,8 @@ namespace InputControl
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-            m_Player_AxisControl = m_Player.FindAction("AxisControl", throwIfNotFound: true);
             m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
+            m_Player_AxisControl = m_Player.FindAction("AxisControl", throwIfNotFound: true);
             // Editor
             m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
             m_Editor_XCameraSwitcher = m_Editor.FindAction("X-CameraSwitcher", throwIfNotFound: true);
@@ -340,16 +340,16 @@ namespace InputControl
         private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
         private readonly InputAction m_Player_Movement;
         private readonly InputAction m_Player_Jump;
-        private readonly InputAction m_Player_AxisControl;
         private readonly InputAction m_Player_Interaction;
+        private readonly InputAction m_Player_AxisControl;
         public struct PlayerActions
         {
             private @InputControls m_Wrapper;
             public PlayerActions(@InputControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Movement => m_Wrapper.m_Player_Movement;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
-            public InputAction @AxisControl => m_Wrapper.m_Player_AxisControl;
             public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
+            public InputAction @AxisControl => m_Wrapper.m_Player_AxisControl;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -365,12 +365,12 @@ namespace InputControl
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @AxisControl.started += instance.OnAxisControl;
-                @AxisControl.performed += instance.OnAxisControl;
-                @AxisControl.canceled += instance.OnAxisControl;
                 @Interaction.started += instance.OnInteraction;
                 @Interaction.performed += instance.OnInteraction;
                 @Interaction.canceled += instance.OnInteraction;
+                @AxisControl.started += instance.OnAxisControl;
+                @AxisControl.performed += instance.OnAxisControl;
+                @AxisControl.canceled += instance.OnAxisControl;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -381,12 +381,12 @@ namespace InputControl
                 @Jump.started -= instance.OnJump;
                 @Jump.performed -= instance.OnJump;
                 @Jump.canceled -= instance.OnJump;
-                @AxisControl.started -= instance.OnAxisControl;
-                @AxisControl.performed -= instance.OnAxisControl;
-                @AxisControl.canceled -= instance.OnAxisControl;
                 @Interaction.started -= instance.OnInteraction;
                 @Interaction.performed -= instance.OnInteraction;
                 @Interaction.canceled -= instance.OnInteraction;
+                @AxisControl.started -= instance.OnAxisControl;
+                @AxisControl.performed -= instance.OnAxisControl;
+                @AxisControl.canceled -= instance.OnAxisControl;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -487,8 +487,8 @@ namespace InputControl
         {
             void OnMovement(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
-            void OnAxisControl(InputAction.CallbackContext context);
             void OnInteraction(InputAction.CallbackContext context);
+            void OnAxisControl(InputAction.CallbackContext context);
         }
         public interface IEditorActions
         {
