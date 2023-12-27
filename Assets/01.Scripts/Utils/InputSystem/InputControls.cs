@@ -64,6 +64,15 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateObj"",
+                    ""type"": ""Value"",
+                    ""id"": ""908c3949-7084-4e99-b749-1ad1215ca934"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -154,6 +163,61 @@ namespace InputControl
                     ""action"": ""Interaction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""id"": ""14ecdd3c-a1e8-4edc-9a3f-c20cfdbacd5d"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateObj"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""ac1725c9-b0da-4ad6-bf82-97511c13a615"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RotateObj"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""7144d0c5-f805-4607-9951-eadebd17868f"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RotateObj"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""7d512375-9e2f-4c34-b3e9-886e1fe4284b"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RotateObj"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""543ac9b7-428b-4797-8810-53ece03a6498"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RotateObj"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -271,6 +335,7 @@ namespace InputControl
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_AxisControl = m_Player.FindAction("AxisControl", throwIfNotFound: true);
             m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
+            m_Player_RotateObj = m_Player.FindAction("RotateObj", throwIfNotFound: true);
             // Editor
             m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
             m_Editor_XCameraSwitcher = m_Editor.FindAction("X-CameraSwitcher", throwIfNotFound: true);
@@ -342,6 +407,7 @@ namespace InputControl
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_AxisControl;
         private readonly InputAction m_Player_Interaction;
+        private readonly InputAction m_Player_RotateObj;
         public struct PlayerActions
         {
             private @InputControls m_Wrapper;
@@ -350,6 +416,7 @@ namespace InputControl
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @AxisControl => m_Wrapper.m_Player_AxisControl;
             public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
+            public InputAction @RotateObj => m_Wrapper.m_Player_RotateObj;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -371,6 +438,9 @@ namespace InputControl
                 @Interaction.started += instance.OnInteraction;
                 @Interaction.performed += instance.OnInteraction;
                 @Interaction.canceled += instance.OnInteraction;
+                @RotateObj.started += instance.OnRotateObj;
+                @RotateObj.performed += instance.OnRotateObj;
+                @RotateObj.canceled += instance.OnRotateObj;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -387,6 +457,9 @@ namespace InputControl
                 @Interaction.started -= instance.OnInteraction;
                 @Interaction.performed -= instance.OnInteraction;
                 @Interaction.canceled -= instance.OnInteraction;
+                @RotateObj.started -= instance.OnRotateObj;
+                @RotateObj.performed -= instance.OnRotateObj;
+                @RotateObj.canceled -= instance.OnRotateObj;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -489,6 +562,7 @@ namespace InputControl
             void OnJump(InputAction.CallbackContext context);
             void OnAxisControl(InputAction.CallbackContext context);
             void OnInteraction(InputAction.CallbackContext context);
+            void OnRotateObj(InputAction.CallbackContext context);
         }
         public interface IEditorActions
         {

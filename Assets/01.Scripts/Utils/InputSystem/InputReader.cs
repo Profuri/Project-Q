@@ -11,6 +11,7 @@ namespace InputControl
         public delegate void InputEventListener<in T>(T value);
         
         public event InputEventListener<Vector2> OnMovementEvent = null;
+        public event InputEventListener<Vector2> OnRotateEvent = null;
         public event InputEventListener OnJumpEvent = null;
         public event InputEventListener OnAxisControlEvent = null;
         public event InputEventListener OnInteractionEvent = null;
@@ -64,6 +65,13 @@ namespace InputControl
             {
                 OnInteractionEvent?.Invoke();
             }
+        }
+
+        public void OnRotateObj(InputAction.CallbackContext context)
+        {
+          
+            Vector2 value = context.ReadValue<Vector2>();
+            OnRotateEvent?.Invoke(value);
         }
     }
 }
