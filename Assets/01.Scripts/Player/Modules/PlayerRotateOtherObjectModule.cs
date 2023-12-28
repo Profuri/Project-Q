@@ -26,6 +26,7 @@ public class PlayerRotateOtherObjectModule : BaseModule<PlayerController>
     {
         value.x *= _rotatePower;
         value.y *= _rotatePower;
+        
         _rotateValue = value;
     }
 
@@ -48,19 +49,19 @@ public class PlayerRotateOtherObjectModule : BaseModule<PlayerController>
         {
             case EAxisType.X:
                 //x가 회전돌아야 함
-                _selectedObj.transform.Rotate(_rotateValue.x, 0, 0);
+                _selectedObj.transform.Rotate(_rotateValue.x, 0, 0, Space.Self);
                 break;
             case EAxisType.Y:
                 //y가 회전돌아야 함
-                _selectedObj.transform.Rotate(0, _rotateValue.x, 0);
+                _selectedObj.transform.Rotate(0, _rotateValue.x, 0, Space.Self);
                 break;
             case EAxisType.Z:
                 //z가 회전돌아야 함
-                _selectedObj.transform.Rotate(0, 0, _rotateValue.x);
+                _selectedObj.transform.Rotate(0, 0, _rotateValue.x, Space.Self);
                 break;
             case EAxisType.NONE:
                 //상관없이 돌아야 함
-                _selectedObj.transform.Rotate(0, _rotateValue.x, _rotateValue.y);
+                _selectedObj.transform.Rotate(_rotateValue.y, _rotateValue.x, 0, Space.Self);
                 break;
         }
     }

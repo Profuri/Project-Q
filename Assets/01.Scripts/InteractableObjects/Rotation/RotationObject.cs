@@ -24,12 +24,12 @@ public class RotationObject : InteractableObject
         if(IsInteract)
         {
             rotateModule.SetInteractObject(this);
-            _outLine.enabled = true;
+           // _outLine.enabled = true;
         }
         else
         {
             rotateModule.UnSetObject();
-            _outLine.enabled = false;
+            //_outLine.enabled = false;
         }
     }
 
