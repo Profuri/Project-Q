@@ -32,4 +32,9 @@ public class RotationObject : InteractableObject
             _outLine.enabled = false;
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.gameObject.name);
+    }
 }
