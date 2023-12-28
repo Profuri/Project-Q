@@ -39,6 +39,29 @@ public class AxisControlModule : BaseModule<PlayerController>
     {
         _isControllingAxis = !_isControllingAxis;
         
-        
+        if (_isControllingAxis)
+        {
+            ChangeAxisControlState();
+        }
+        else
+        {
+            ChangeNormalState();
+        }
+    }
+    
+    private void ChangeAxisControlState()
+    {
+        if (CameraManager.Instance.CurrentCamController is StageCamController)
+        {
+            ((StageCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(true);
+        }
+    }
+    
+    private void ChangeNormalState()
+    {
+        if (CameraManager.Instance.CurrentCamController is StageCamController)
+        {
+            ((StageCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(false);
+        }
     }
 }

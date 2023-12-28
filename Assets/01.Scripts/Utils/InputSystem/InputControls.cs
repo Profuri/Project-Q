@@ -147,7 +147,7 @@ namespace InputControl
                 {
                     ""name"": """",
                     ""id"": ""649b2138-67b1-4eaa-a07b-d3ce13883325"",
-                    ""path"": ""<Keyboard>/capsLock"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",

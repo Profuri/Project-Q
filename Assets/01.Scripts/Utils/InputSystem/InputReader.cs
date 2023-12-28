@@ -59,7 +59,7 @@ namespace InputControl
 
         public void OnAxisControl(InputAction.CallbackContext context)
         {
-            if (context.performed || context.canceled)
+            if (context.started || context.canceled)
             {
                 OnAxisControlEvent?.Invoke();   
             }
