@@ -16,7 +16,6 @@ public abstract class PanelField
         _root = root;
         
         //루트에 자식으로 넣는데 기존에 있는 자식이 사라지고 있는 것 같음
-        Debug.Log($"AbstractPanelFieldRoot: {root}");
         var container = field.Instantiate();
         _root?.Add(container);
 

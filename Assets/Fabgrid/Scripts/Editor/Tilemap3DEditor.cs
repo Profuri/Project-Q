@@ -28,7 +28,18 @@ namespace Fabgrid
         public VisualElement Root => root;
         private VisualElement _currentPanelRoot;
 
-        public FormatPanel FormatPanel => panels.Find(p => p.GetType() == typeof(FormatPanel)) as FormatPanel;
+        public FormatPanel FormatPanel
+        {
+            get
+            {
+                var panel = panels.Find(p => p.GetType() == typeof(FormatPanel)) as FormatPanel;
+                if (panel != null)
+                {
+                    tilemap.FormatPanel = panel;
+                }
+                return panel;
+            }
+        }
 
         private void OnEnable()
         {
@@ -36,6 +47,7 @@ namespace Fabgrid
 
             tilemap = target as Tilemap3D;
             tilemap.tileRotation = Quaternion.identity;
+
 
             root = new VisualElement();
 

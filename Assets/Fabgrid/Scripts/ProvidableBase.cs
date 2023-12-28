@@ -25,5 +25,18 @@ namespace Fabgrid
 
             return resultFieldInfoList;
         }
+
+        public virtual void SetFieldInfos(List<FieldInfo> infos)
+        {
+            //이거 나중에 안되면 수정 해야됨.
+            if (infos == null) return;
+            var fieldInfoList = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance).ToList();
+
+            foreach (FieldInfo fieldInfo in fieldInfoList)
+            {
+                FieldInfo matchInfo = infos.Find(info => info == fieldInfo);
+                matchInfo?.SetValue(this,infos);
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Codice.Client.Common.GameUI;
 using PanelEditor;
 using UnityEditor;
 using UnityEngine.UIElements;
@@ -27,10 +28,11 @@ namespace Fabgrid
         private VisualTreeAsset _inputField;
 
         private static readonly string removeString = "FormatPanel.uxml";
-        private static readonly string[] uxmlNames = new string[3]
+        private static readonly string[] uxmlNames = 
             { "Fields/ToggleField.uxml", "Fields/DropdownField.uxml", "Fields/InputField.uxml" };
 
         private Dictionary<FieldInfo, PanelField> _fieldDictionary;
+        public List<FieldInfo> GetFieldInfoList => _fieldDictionary.Keys.ToList();
 
         //This is test Code. Will be changed.
         public void SetRoot(VisualElement root)
@@ -56,6 +58,8 @@ namespace Fabgrid
 
             string[] fieldPathArray = new string[uxmlNames.Length];
 
+
+
             StringBuilder sBuilder = new StringBuilder();
 
             int panelNameStartIdx = VisualTreeAssetPath.Length - removeString.Length;
@@ -69,8 +73,6 @@ namespace Fabgrid
                 sBuilder.Remove(panelNameStartIdx,uxmlNames[i].Length);
             }
 
-
-
             _toggleField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[0]);
             _dropDownField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[1]);
             _inputField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[2]);    
@@ -78,13 +80,14 @@ namespace Fabgrid
             _tilemap.OnSelectedPanelChanged += LoadFieldInfo;
         }
 
+
         //selectedGameObject가 바뀌었을 때 이벤트 형식으로 구독하여 실행해주거나 다른 방식으로라도 구독형식으로 만들면 될 것 같음.
         [ContextMenu("LoadFieldInfo")]
         public void LoadFieldInfo()
         {
             if (_tilemap.lastSelectedGameObject == null)
             {
-                Debug.Log($"TilemapLastSelectedGameObject is null!");
+                Debug.Log($"TileMapLastSelectedGameObject is null!");
                 return;
             }
 
@@ -115,15 +118,16 @@ namespace Fabgrid
             Type type = info.FieldType;
             Debug.Log($"FieldInfoType: {type}");
 
-            if (_fieldDictionary.ContainsKey(info)) return;
+            if (_fieldDictionary.ContainsKey(info)) return;                                                                      
 
             PanelField panelField = null;
 
             if (_root == null)
             {
-                Debug.LogError($"FieldRoot is {_root}!!!!!!");
+                Debug.LogError($"FieldRoot is null: {_root}!!!!!!");
                 return;
             }
+            
 
             if (type.IsEnum)
                 panelField = new DropdownField(_root, _dropDownField, info);

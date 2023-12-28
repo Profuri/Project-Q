@@ -59,7 +59,7 @@ namespace Fabgrid
 
             if (tile.TryGetComponent(out IProvidableFieldInfo providableInfo))
             {
-                //providableInfo.SetFieldInfos();
+                providableInfo.SetFieldInfos(tilemap.FormatPanel.GetFieldInfoList);
             }
 
             if (tilemap.selectedLayer != null) tile.transform.SetParent(tilemap.selectedLayer.transform);
