@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ManagingSystem;
 using UnityEngine;
 
@@ -6,11 +7,11 @@ public class PoolManager : BaseManager<PoolManager>
 {
     private readonly Dictionary<string, Pool> _pools = new Dictionary<string, Pool>();
 
-    [SerializeField] private PoolingList _poolingList;
+    [SerializeField] private List<PoolingList> _poolingLists;
     
     public override void StartManager()
     {
-        foreach (var pair in _poolingList.poolingItems)
+        foreach (var pair in _poolingLists.SelectMany(poolingList => poolingList.poolingItems))
         {
             CreatePool(pair.prefab, transform, pair.cnt);
         }

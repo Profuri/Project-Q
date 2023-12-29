@@ -12,7 +12,8 @@ namespace InputControl
         public event InputEventListener<Vector2> OnMovementEvent = null;
         public event InputEventListener OnJumpEvent = null;
         public event InputEventListener OnInteractionEvent = null;
-        public event InputEventListener OnAxisControlEvent = null;
+        public event InputEventListener<bool> OnAxisControlToggleEvent = null;
+        public event InputEventListener OnClickEvent = null;
 
         private InputControls _inputControls;
 
@@ -57,11 +58,23 @@ namespace InputControl
             }
         }
 
-        public void OnAxisControl(InputAction.CallbackContext context)
+        public void OnAxisControlToggle(InputAction.CallbackContext context)
         {
-            if (context.performed || context.canceled)
+            if (context.started)
             {
-                OnAxisControlEvent?.Invoke();   
+                OnAxisControlToggleEvent?.Invoke(true);   
+            }
+            else if(context.canceled)
+            {
+                OnAxisControlToggleEvent?.Invoke(false);
+            }
+        }
+
+        public void OnClick(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                OnClickEvent?.Invoke();
             }
         }
     }

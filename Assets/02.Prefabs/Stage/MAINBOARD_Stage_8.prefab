@@ -43,8 +43,9 @@ GameObject:
   - component: {fileID: 1834643304651167485}
   - component: {fileID: 5649779813424756912}
   - component: {fileID: 8788147067144216105}
+  - component: {fileID: 7531806652691643998}
   m_Layer: 0
-  m_Name: Stage_9 (picture)
+  m_Name: MAINBOARD_Stage_8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,12 +99,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a20ae8a59cd4e1b4eaebd92ae706779d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PrevStage: {fileID: 0}
-  NextStage: {fileID: 0}
-  IsEndStage: 0
-  CurStageNum: 0
-  IsPlayerEnter: 0
-  ReloadPoint: {x: 0, y: 0, z: 0}
+  _chapter: 0
+  _stageOrder: 8
+  _stageEnterPoint: {x: 0, y: 0, z: 0}
+  _stageExitPoint: {x: 0, y: 0, z: 0}
+  _playerResetPoint: {x: 0, y: 0, z: 0}
 --- !u!65 &8788147067144216105
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -123,8 +123,21 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 20, y: 5, z: 20}
+  m_Size: {x: 0, y: 0, z: 0}
   m_Center: {x: 0, y: 2, z: 0}
+--- !u!114 &7531806652691643998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370937736983873590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f00dd1a8a81c9c438f0aff022a89935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stageBoundSize: {x: 0, y: 0, z: 0}
 --- !u!1 &1557079135620827050
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +190,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 7, y: 3, z: 2}
+  m_Size: {x: 0, y: 0, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3266554536351724482
 MonoBehaviour:
@@ -191,6 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f00dd1a8a81c9c438f0aff022a89935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stageBoundSize: {x: 0, y: 0, z: 0}
 --- !u!1 &1874520765187431840
 GameObject:
   m_ObjectHideFlags: 0
