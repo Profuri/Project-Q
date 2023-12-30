@@ -3,7 +3,7 @@ using ModuleSystem;
 using StageStructureConvertSystem;
 using UnityEngine;
 
-public class PlayerController : BaseModuleController
+public class PlayerController : BaseModuleController, IPortalObject
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private PlayerDataSO _dataSO;
@@ -24,12 +24,14 @@ public class PlayerController : BaseModuleController
     private CharacterController _charController;
     public CharacterController CharController => _charController;
 
+    public Transform VisualTrm => _modelTrm;
+
     private ushort _enableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
 
     public override void Init()
     {
-        _modelTrm = transform.Find("Model");
-        _playerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
+        _modelTrm = base.transform.Find("Model");
+        _playerUIController = base.transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         _playerUnit = GetComponent<PlayableObjectUnit>();
         _charController = GetComponent<CharacterController>();
         base.Init();
@@ -37,9 +39,10 @@ public class PlayerController : BaseModuleController
 
     public void SetStage(Stage stage)
     {
-        transform.SetParent(stage.transform);
+        base.transform.SetParent(stage.transform);
         _converter = stage.Converter;
         _playerUnit.SetOriginPos();
+        CameraManager.Instance.SetFreeLookFollowAndLookAt(stage.transform);
     }
 
     private bool GetAxisEnabled(EAxisType axis)

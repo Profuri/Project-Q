@@ -63,4 +63,11 @@ public class CameraManager : BaseManager<CameraManager>
     {
         _currentVCam.ShakeCam(intensity, time);
     }
+
+    public void SetFreeLookFollowAndLookAt(Transform target)
+    {
+        var freeLookCam = _virtualCamDiction[EAxisType.NONE].VirtualCam;
+        freeLookCam.Follow = target;
+        freeLookCam.LookAt = target;
+    }
 }
