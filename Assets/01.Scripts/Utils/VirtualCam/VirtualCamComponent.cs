@@ -64,7 +64,7 @@ namespace VirtualCam
             {
                 return freeLockCam.m_YAxis.Value;
             }
-
+            
             return 0f;
         }
 

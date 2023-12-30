@@ -11,6 +11,7 @@ public class CameraManager : BaseManager<CameraManager>
     public VirtualCamController CurrentCamController { get; private set; }
     
     public VirtualCamComponent ActiveVCam { get; private set; }
+    public Camera MainCam { get; private set; }
 
     [Header("Transition Setting")]
     [SerializeField] private AnimationCurve _camShakeCurve;
@@ -22,6 +23,7 @@ public class CameraManager : BaseManager<CameraManager>
         _vCamControllers = new Dictionary<VirtualCamType, VirtualCamController>();
         CurrentCamController = null;
         ActiveVCam = null;
+        MainCam = Camera.main;
 
         foreach (VirtualCamType camType in Enum.GetValues(typeof(VirtualCamType)))
         {

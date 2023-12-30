@@ -18,17 +18,11 @@ public class AxisControlModule : BaseModule<PlayerController>
 
     public override void UpdateModule()
     {
-        if (!_isControllingAxis)
-        {
-            return;
-        }
-
         GetCurrentControlAxis();
     }
 
     public override void FixedUpdateModule()
     {
-        
     }
     
     public override void DisableModule()
@@ -48,10 +42,32 @@ public class AxisControlModule : BaseModule<PlayerController>
             return EAxisType.Y;
         }
 
-        var lookDir = -vCam.transform.forward;
+        var lookDir = -CameraManager.Instance.MainCam.transform.forward;
         lookDir.y = 0;
-        var angle = Mathf.Atan2(-lookDir.z, -lookDir.x);
-        
+        var angle = Mathf.Atan2(-lookDir.z, -lookDir.x) * Mathf.Rad2Deg;
+
+        return GetLookAxis(angle);
+    }
+
+    private EAxisType GetLookAxis(float angle)
+    {
+        var isLookXAxis = angle is >= -180f and < -135f or > 135f and <= 180f;
+        var isLookReverseXAxis = angle is > -45f and <= 0f or >= 0f and < 45f;
+        var isLookZAxis = angle is >= 45f and <= 135f;
+        var isLookReverseZAxis = angle is >= -135f and <= -45f;
+
+        Debug.Log(isLookXAxis);
+        Debug.Log(isLookZAxis);
+
+        if (isLookXAxis)
+            return EAxisType.X;
+        if (isLookReverseXAxis)
+            return EAxisType.X;
+        if (isLookZAxis)
+            return EAxisType.Z;
+        if (isLookReverseZAxis)
+            return EAxisType.Z;
+
         return EAxisType.NONE;
     }
 
@@ -95,8 +111,8 @@ public class AxisControlModule : BaseModule<PlayerController>
         }
 
         _isControllingAxis = false;
-        ChangeNormalState();
         var axis = GetCurrentControlAxis();
+        ChangeNormalState();
         Controller.ConvertDimension(axis);
     }
 
