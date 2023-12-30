@@ -57,9 +57,18 @@ namespace InputControl
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""AxisControl"",
+                    ""name"": ""AxisControlToggle"",
                     ""type"": ""Button"",
                     ""id"": ""50db877a-ab43-496e-9f06-083c49564ae2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""cf55c8a6-9973-415e-b90d-e3e2210739d5"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -151,7 +160,18 @@ namespace InputControl
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""AxisControl"",
+                    ""action"": ""AxisControlToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""520047b9-0ba8-492e-a862-a2ff4f97b34e"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -270,7 +290,8 @@ namespace InputControl
             m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
-            m_Player_AxisControl = m_Player.FindAction("AxisControl", throwIfNotFound: true);
+            m_Player_AxisControlToggle = m_Player.FindAction("AxisControlToggle", throwIfNotFound: true);
+            m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
             // Editor
             m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
             m_Editor_XCameraSwitcher = m_Editor.FindAction("X-CameraSwitcher", throwIfNotFound: true);
@@ -341,7 +362,8 @@ namespace InputControl
         private readonly InputAction m_Player_Movement;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Interaction;
-        private readonly InputAction m_Player_AxisControl;
+        private readonly InputAction m_Player_AxisControlToggle;
+        private readonly InputAction m_Player_Click;
         public struct PlayerActions
         {
             private @InputControls m_Wrapper;
@@ -349,7 +371,8 @@ namespace InputControl
             public InputAction @Movement => m_Wrapper.m_Player_Movement;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
-            public InputAction @AxisControl => m_Wrapper.m_Player_AxisControl;
+            public InputAction @AxisControlToggle => m_Wrapper.m_Player_AxisControlToggle;
+            public InputAction @Click => m_Wrapper.m_Player_Click;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -368,9 +391,12 @@ namespace InputControl
                 @Interaction.started += instance.OnInteraction;
                 @Interaction.performed += instance.OnInteraction;
                 @Interaction.canceled += instance.OnInteraction;
-                @AxisControl.started += instance.OnAxisControl;
-                @AxisControl.performed += instance.OnAxisControl;
-                @AxisControl.canceled += instance.OnAxisControl;
+                @AxisControlToggle.started += instance.OnAxisControlToggle;
+                @AxisControlToggle.performed += instance.OnAxisControlToggle;
+                @AxisControlToggle.canceled += instance.OnAxisControlToggle;
+                @Click.started += instance.OnClick;
+                @Click.performed += instance.OnClick;
+                @Click.canceled += instance.OnClick;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -384,9 +410,12 @@ namespace InputControl
                 @Interaction.started -= instance.OnInteraction;
                 @Interaction.performed -= instance.OnInteraction;
                 @Interaction.canceled -= instance.OnInteraction;
-                @AxisControl.started -= instance.OnAxisControl;
-                @AxisControl.performed -= instance.OnAxisControl;
-                @AxisControl.canceled -= instance.OnAxisControl;
+                @AxisControlToggle.started -= instance.OnAxisControlToggle;
+                @AxisControlToggle.performed -= instance.OnAxisControlToggle;
+                @AxisControlToggle.canceled -= instance.OnAxisControlToggle;
+                @Click.started -= instance.OnClick;
+                @Click.performed -= instance.OnClick;
+                @Click.canceled -= instance.OnClick;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -488,7 +517,8 @@ namespace InputControl
             void OnMovement(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnInteraction(InputAction.CallbackContext context);
-            void OnAxisControl(InputAction.CallbackContext context);
+            void OnAxisControlToggle(InputAction.CallbackContext context);
+            void OnClick(InputAction.CallbackContext context);
         }
         public interface IEditorActions
         {

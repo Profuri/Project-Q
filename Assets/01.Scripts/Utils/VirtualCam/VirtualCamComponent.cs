@@ -58,6 +58,16 @@ namespace VirtualCam
             _runningRoutine = StartCoroutine(ShakeSequence(intensity, time));
         }
 
+        public float GetYValue()
+        {
+            if (_virtualCam is CinemachineFreeLook freeLockCam)
+            {
+                return freeLockCam.m_YAxis.Value;
+            }
+
+            return 0f;
+        }
+
         private IEnumerator ShakeSequence(float intensity, float time)
         {
             yield return StartCoroutine(ShakeRoutine(intensity, time / 2f));

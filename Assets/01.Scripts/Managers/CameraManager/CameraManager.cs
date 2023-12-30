@@ -10,8 +10,8 @@ public class CameraManager : BaseManager<CameraManager>
     private Dictionary<VirtualCamType, VirtualCamController> _vCamControllers;
     public VirtualCamController CurrentCamController { get; private set; }
     
-    private VirtualCamComponent _activeVCam;
-    
+    public VirtualCamComponent ActiveVCam { get; private set; }
+
     [Header("Transition Setting")]
     [SerializeField] private AnimationCurve _camShakeCurve;
     public AnimationCurve CamShakeCurve => _camShakeCurve;
@@ -21,7 +21,7 @@ public class CameraManager : BaseManager<CameraManager>
     {
         _vCamControllers = new Dictionary<VirtualCamType, VirtualCamController>();
         CurrentCamController = null;
-        _activeVCam = null;
+        ActiveVCam = null;
 
         foreach (VirtualCamType camType in Enum.GetValues(typeof(VirtualCamType)))
         {
@@ -38,7 +38,7 @@ public class CameraManager : BaseManager<CameraManager>
 
     public override void UpdateManager()
     {
-        _activeVCam.UpdateCam();
+        ActiveVCam.UpdateCam();
     }
 
     public void ChangeVCamController(VirtualCamType type)
@@ -53,14 +53,14 @@ public class CameraManager : BaseManager<CameraManager>
 
     private IEnumerator ChangeCamRoutine(VirtualCamComponent virtualCam, float time, Action callBack)
     {
-        if (_activeVCam is not null)
+        if (ActiveVCam is not null)
         {
-            _activeVCam.ExitCam();
-            _activeVCam = null;
+            ActiveVCam.ExitCam();
+            ActiveVCam = null;
         }
 
-        _activeVCam = virtualCam;
-        _activeVCam.EnterCam();
+        ActiveVCam = virtualCam;
+        ActiveVCam.EnterCam();
 
         yield return new WaitForSeconds(time);
             
@@ -69,6 +69,6 @@ public class CameraManager : BaseManager<CameraManager>
 
     public void ShakeCam(float intensity, float time)
     {
-        _activeVCam.ShakeCam(intensity, time);
+        ActiveVCam.ShakeCam(intensity, time);
     }
 }
