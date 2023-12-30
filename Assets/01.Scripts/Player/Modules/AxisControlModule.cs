@@ -7,6 +7,7 @@ public class AxisControlModule : BaseModule<PlayerController>
     [SerializeField] private InputReader _inputReader;
 
     private bool _isControllingAxis;
+    private EAxisType _currentControlAxis;
 
     public override void Init(Transform root)
     {
@@ -18,7 +19,13 @@ public class AxisControlModule : BaseModule<PlayerController>
 
     public override void UpdateModule()
     {
-        GetCurrentControlAxis();
+        if(!_isControllingAxis)
+        {
+            return;
+        }
+        
+        _currentControlAxis = GetCurrentControlAxis();
+        LightManager.Instance.SetAxisLight(_currentControlAxis);
     }
 
     public override void FixedUpdateModule()
@@ -55,9 +62,6 @@ public class AxisControlModule : BaseModule<PlayerController>
         var isLookReverseXAxis = angle is > -45f and <= 0f or >= 0f and < 45f;
         var isLookZAxis = angle is >= 45f and <= 135f;
         var isLookReverseZAxis = angle is >= -135f and <= -45f;
-
-        Debug.Log(isLookXAxis);
-        Debug.Log(isLookZAxis);
 
         if (isLookXAxis)
             return EAxisType.X;
@@ -111,15 +115,15 @@ public class AxisControlModule : BaseModule<PlayerController>
         }
 
         _isControllingAxis = false;
-        var axis = GetCurrentControlAxis();
         ChangeNormalState();
-        Controller.ConvertDimension(axis);
+        Controller.ConvertDimension(_currentControlAxis);
     }
 
     private void ChangeAxisControlState()
     {
         if (CameraManager.Instance.CurrentCamController is StageCamController)
         {
+            VolumeManager.Instance.SetAxisControlVolume(true, 0.7f);
             ((StageCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(true);
         }
     }
@@ -128,6 +132,8 @@ public class AxisControlModule : BaseModule<PlayerController>
     {
         if (CameraManager.Instance.CurrentCamController is StageCamController)
         {
+            VolumeManager.Instance.SetAxisControlVolume(false, 0.7f);
+            LightManager.Instance.SetAxisLight(EAxisType.NONE);
             ((StageCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(false);
         }
     }
