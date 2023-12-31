@@ -33,14 +33,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3675528655405350461}
   - {fileID: 2264141598892674897}
   - {fileID: 1849799549252081530}
   - {fileID: 388199914934518130}
   - {fileID: 4685774574114482542}
-  - {fileID: 8785927129448783126}
-  - {fileID: 1112847670938700268}
-  - {fileID: 6641788312827929985}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5581716620336733881
@@ -69,9 +65,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chapter: 0
   _stageOrder: 2
-  _stageEnterPoint: {x: 0, y: 0, z: 0}
-  _stageExitPoint: {x: 0, y: 0, z: 0}
-  _playerResetPoint: {x: 0, y: 0, z: 0}
+  _stageEnterPoint: {x: -5.5, y: 0, z: 2}
+  _stageExitPoint: {x: 4, y: 0, z: 5.5}
+  _playerResetPoint: {x: -3, y: 2, z: 2}
 --- !u!65 &8591389454119459246
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -91,7 +87,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0, y: 0, z: 0}
+  m_Size: {x: 13, y: 10, z: 13}
   m_Center: {x: 0, y: 2, z: 0}
 --- !u!114 &7664494234265822930
 MonoBehaviour:
@@ -105,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f00dd1a8a81c9c438f0aff022a89935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stageBoundSize: {x: 0, y: 0, z: 0}
+  _stageBoundSize: {x: 13, y: 10, z: 13}
 --- !u!1 &1311217144319049981
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,37 +196,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d88d55370113e402d95f16c93e8d8442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &2562432479443696210
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6641788312827929985}
-  m_Layer: 0
-  m_Name: BridgeStartPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6641788312827929985
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2562432479443696210}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.7, y: 0.12, z: 5.35}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5178242983972473309}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2910960123851740423
 GameObject:
   m_ObjectHideFlags: 0
@@ -514,104 +479,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!1 &6340761843680589676
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1112847670938700268}
-  m_Layer: 0
-  m_Name: RestartPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1112847670938700268
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6340761843680589676}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.005438618, y: -0.70891184, z: -0.005160819, w: 0.7052573}
-  m_LocalPosition: {x: -3.951056, y: 1.2035356, z: 3.789333}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5178242983972473309}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7510248232920257788
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3675528655405350461}
-  - component: {fileID: 4412491564476179100}
-  - component: {fileID: 3525691249867657269}
-  m_Layer: 0
-  m_Name: PlayerEnterCheck
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3675528655405350461
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7510248232920257788}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.0054386184, y: -0.7089119, z: -0.0051608193, w: 0.70525736}
-  m_LocalPosition: {x: -3.75, y: 2.01, z: 2.06}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5178242983972473309}
-  m_LocalEulerAnglesHint: {x: -0.859, y: -90.296, z: 0.025}
---- !u!65 &4412491564476179100
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7510248232920257788}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0, y: 0, z: 0}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3525691249867657269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7510248232920257788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f00dd1a8a81c9c438f0aff022a89935, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stageBoundSize: {x: 0, y: 0, z: 0}
 --- !u!1 &7739969114059502878
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,37 +584,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &7811675001236360733
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8785927129448783126}
-  m_Layer: 0
-  m_Name: BridgeEndPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8785927129448783126
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7811675001236360733}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.86, y: 0.61, z: 3.57}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5178242983972473309}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8866300722033292457
 GameObject:
   m_ObjectHideFlags: 0
