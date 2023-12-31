@@ -43,7 +43,7 @@ public class ReciprocationObject : InteractableObject
                 destPos.x = 0f;
                 break;
             case EAxisType.Y:
-                destPos.y = 0f;
+                // destPos.y = 0f;
                 break;
             case EAxisType.Z:
                 destPos.z = 0f;
@@ -58,7 +58,7 @@ public class ReciprocationObject : InteractableObject
         }
         
         var lerpPos = Vector3.Lerp(curPos, destPos, _reciprocationSpeed * Time.deltaTime);
-        
+
         transform.localPosition = lerpPos;
     }
 
