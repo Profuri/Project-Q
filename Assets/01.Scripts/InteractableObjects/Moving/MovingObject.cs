@@ -29,13 +29,13 @@ public class MovingObject : InteractableObject
         {
             scale = transform.localScale.x;
             trackScale = _movingTrackTrm.localScale.x;
-            origin = _movingTrackTrm.position.x;
+            origin = _movingTrackTrm.localPosition.x;
         }
         else
         {
             scale = transform.localScale.z;
             trackScale = _movingTrackTrm.localScale.z;
-            origin = _movingTrackTrm.position.z;
+            origin = _movingTrackTrm.localPosition.z;
         }
 
         _minLimitPos = origin + -trackScale / 2f + scale / 2f;
@@ -75,14 +75,14 @@ public class MovingObject : InteractableObject
         if (IsPulling(communicator.transform.position, playerMovementModule.MoveVelocity, out var dir))
         {
             var speed = player.DataSO.walkSpeed / 2f;
-            transform.position += dir * (speed * Time.deltaTime);
+            transform.localPosition += dir * (speed * Time.deltaTime);
             ClampingPosition();
         }
     }
 
     private void ClampingPosition()
     {
-        var pos = transform.position;
+        var pos = transform.localPosition;
         if (_movingAxis == EMovingAxis.X)
         {
             pos.x = Mathf.Clamp(pos.x, _minLimitPos, _maxLimitPos);
@@ -91,7 +91,7 @@ public class MovingObject : InteractableObject
         {
             pos.z = Math.Clamp(pos.z, _minLimitPos, _maxLimitPos);
         }
-        transform.position = pos;
+        transform.localPosition = pos;
     }
 
     private bool IsPulling(Vector3 playerOrigin, Vector3 movementVelocity, out Vector3 dir)
