@@ -44,7 +44,7 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
     private InteractableObject FindInteractable()
     {
         var cols = new Collider[_InteractableCheckLimit];
-        var size = Physics.OverlapSphereNonAlloc(Controller.transform.position, _interactableRadius, cols, _interactableMask);
+        var size = Physics.OverlapSphereNonAlloc(Controller.CenterPoint.position, _interactableRadius, cols, _interactableMask);
 
         for(var i = 0; i < size; ++i)
         {
@@ -81,13 +81,13 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
         
         if (Controller)
         {
-            Gizmos.DrawWireSphere(Controller.transform.position, _interactableRadius);
+            Gizmos.DrawWireSphere(Controller.CenterPoint.position, _interactableRadius);
         }
         
         if (_selectedInteractable != null)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(Controller.transform.position, _selectedInteractable.transform.position);
+            Gizmos.DrawLine(Controller.CenterPoint.position, _selectedInteractable.transform.position);
         }
     }
 #endif

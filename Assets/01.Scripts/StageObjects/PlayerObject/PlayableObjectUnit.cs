@@ -8,15 +8,18 @@ public class PlayableObjectUnit : StructureObjectUnitBase
     [SerializeField] private float _rayDistance;
 
     private PlayerController _playerController;
+    public PlayerController PlayerController => _playerController;
+    
     private CharacterController _characterController;
 
-    public PlayerController PlayerController => _playerController;
+    private Vector3 _colliderCenter; 
 
     public override void Init(StructureConverter converter)
     {
         base.Init(converter);
         _playerController = GetComponent<PlayerController>();
         _characterController = GetComponent<CharacterController>();
+        _colliderCenter = _characterController.center;
         SetOriginPos();
     }
 
@@ -34,18 +37,18 @@ public class PlayableObjectUnit : StructureObjectUnitBase
         {
             case EAxisType.NONE:
                 CheckObject(_prevObjectInfo.axis);
-                _characterController.center = Vector3.zero;
+                _characterController.center = _colliderCenter;
                 break;
             case EAxisType.X:
                 _objectInfo.position.x = 1f;
-                _characterController.center = new Vector3(-1, 0, 0);
+                _characterController.center = _colliderCenter + new Vector3(-1, 0, 0);
                 break;
             case EAxisType.Y:
                 _objectInfo.position.y = 1f;
                 break;
             case EAxisType.Z:
                 _objectInfo.position.z = -1f;
-                _characterController.center = new Vector3(0, 0, 1);
+                _characterController.center = _colliderCenter + new Vector3(0, 0, 1);
                 break;
         }
     }
@@ -106,6 +109,7 @@ public class PlayableObjectUnit : StructureObjectUnitBase
     public override void ReloadObject()
     {
         _playerController.GetModule<PlayerMovementModule>().StopImmediately();
+        _playerController.PlayerAnimatorController.UnActive();
         base.ReloadObject();
     }
 }
