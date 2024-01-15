@@ -9,37 +9,31 @@ public class PlayerController : BaseModuleController
     [SerializeField] private PlayerDataSO _dataSO;
     public PlayerDataSO DataSO => _dataSO;
 
-    private Transform _modelTrm;
-    public Transform ModelTrm => _modelTrm;
-
-    private PlayerUIController _playerUIController;
-    public PlayerUIController PlayerUIController => _playerUIController;
-
-    private StructureConverter _converter;
-    public StructureConverter Converter => _converter;
-
-    private PlayableObjectUnit _playerUnit;
-    public PlayableObjectUnit PlayerUnit => _playerUnit;
-
-    private CharacterController _charController;
-    public CharacterController CharController => _charController;
+    public Transform ModelTrm { get; private set; }
+    public Transform CenterPoint { get; private set; }
+    
+    public PlayerUIController PlayerUIController { get; private set; }
+    public StructureConverter Converter { get; private set; }
+    public PlayableObjectUnit PlayerUnit { get; private set; }
+    public CharacterController CharController { get; private set; }
 
     public ushort EnableAxis { get; private set; }
 
     public override void Init()
     {
         EnableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
-        _modelTrm = transform.Find("Model");
-        _playerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
-        _playerUnit = GetComponent<PlayableObjectUnit>();
-        _charController = GetComponent<CharacterController>();
+        ModelTrm = transform.Find("Model");
+        CenterPoint = transform.Find("CenterPoint");
+        PlayerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
+        PlayerUnit = GetComponent<PlayableObjectUnit>();
+        CharController = GetComponent<CharacterController>();
         base.Init();
     }
 
     public void SetStage(Stage stage)
     {
         transform.SetParent(stage.transform);
-        _converter = stage.Converter;
+        Converter = stage.Converter;
     }
 
     private bool GetAxisEnabled(EAxisType axis)
@@ -56,7 +50,7 @@ public class PlayerController : BaseModuleController
         else
         {
             EnableAxis ^= (ushort)axis;
-            if(axis == _converter.AxisType)
+            if(axis == Converter.AxisType)
             {
                 ConvertDimension(EAxisType.NONE);
             }
@@ -93,9 +87,9 @@ public class PlayerController : BaseModuleController
 
     public void ConvertDimension(EAxisType axis)
     {
-        PlayerMovementModule movement = GetModule<PlayerMovementModule>();
+        var movement = GetModule<PlayerMovementModule>();
         movement.SetEnableMove(false);
         movement.StopImmediately();
-        _converter.ConvertDimension(axis, () => movement.SetEnableMove(true));
+        Converter.ConvertDimension(axis, () => movement.SetEnableMove(true));
     }
 }
