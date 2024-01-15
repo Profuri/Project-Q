@@ -29,7 +29,7 @@ public class PressurePlate : InteractableObject
 
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
-        _affectedObject?.OnInteraction(null, interactValue);
+        _affectedObject?.OnInteraction(null, interactValue,param);
         
         var current = _pressureMainTrm.localScale.y;
         var dest = interactValue ? _minHeight : _maxHeight;

@@ -38,7 +38,7 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
 
     private void OnInteraction()
     {
-        _selectedInteractable?.OnInteraction(Controller.PlayerUnit, true);
+        _selectedInteractable?.OnInteraction(Controller.PlayerUnit, true,Controller.Converter.AxisType);
     }
 
     private InteractableObject FindInteractable()
