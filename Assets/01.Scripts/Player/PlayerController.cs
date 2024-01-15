@@ -1,6 +1,7 @@
 using InputControl;
 using ModuleSystem;
 using StageStructureConvertSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : BaseModuleController
@@ -13,6 +14,7 @@ public class PlayerController : BaseModuleController
     public Transform CenterPoint { get; private set; }
     
     public PlayerUIController PlayerUIController { get; private set; }
+    public PlayerAnimatorController PlayerAnimatorController { get; private set; }
     public StructureConverter Converter { get; private set; }
     public PlayableObjectUnit PlayerUnit { get; private set; }
     public CharacterController CharController { get; private set; }
@@ -23,6 +25,7 @@ public class PlayerController : BaseModuleController
     {
         EnableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
         ModelTrm = transform.Find("Model");
+        PlayerAnimatorController = ModelTrm.GetComponent<PlayerAnimatorController>();
         CenterPoint = transform.Find("CenterPoint");
         PlayerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         PlayerUnit = GetComponent<PlayableObjectUnit>();
@@ -33,6 +36,7 @@ public class PlayerController : BaseModuleController
     public void SetStage(Stage stage)
     {
         transform.SetParent(stage.transform);
+        transform.position = stage.PlayerResetPoint;
         Converter = stage.Converter;
     }
 

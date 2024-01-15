@@ -39,19 +39,22 @@ public class PlayerObjectHoldingModule : BaseModule<PlayerController>
             return;
         }
         
+        Controller.PlayerAnimatorController.IsHold(true);
         _heldObject = obj;
     }
 
     public void DetachObject()
     {
+        Controller.PlayerAnimatorController.IsHold(false);
         _heldObject = null;
     }
 
     private void HoldingPointMovement()
     {
         var holdPoint = _holdPoint.position;
-        var height = _holdPoint.localPosition.y;
-        var origin = Controller.transform.position + Controller.CharController.center + Vector3.up * height;
+        
+        var origin = Controller.CenterPoint.position;
+        origin.y = holdPoint.y;
 
         var originDir = (holdPoint - origin).normalized;  
         var destDir = Controller.ModelTrm.forward;

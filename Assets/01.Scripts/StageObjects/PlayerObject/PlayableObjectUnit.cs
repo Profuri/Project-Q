@@ -109,6 +109,7 @@ public class PlayableObjectUnit : StructureObjectUnitBase
     public override void ReloadObject()
     {
         _playerController.GetModule<PlayerMovementModule>().StopImmediately();
+        _playerController.PlayerAnimatorController.UnActive();
         base.ReloadObject();
     }
 }

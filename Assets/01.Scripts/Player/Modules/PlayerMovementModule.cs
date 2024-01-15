@@ -22,7 +22,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public bool CanJump { get; set; }
     public bool IsMovement => _inputDir.sqrMagnitude > 0f;
-    public bool IsGround => CheckGround();
+    public bool IsGround { get; private set; }
 
     public override void Init(Transform root)
     {
@@ -36,6 +36,10 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public override void UpdateModule()
     {
+        IsGround = CheckGround();
+        Controller.PlayerAnimatorController.IsGround(IsGround);
+        Controller.PlayerAnimatorController.Movement(_inputDir.sqrMagnitude >= 0.05f);
+        
         if(_canMove)
         {
             CalcMovement();
@@ -44,7 +48,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public override void FixedUpdateModule()
     {
-        if (_moveVelocity != Vector3.zero)
+        if (_moveVelocity.sqrMagnitude >= 0.05f)
         {
             Controller.CharController.Move(_moveVelocity * Time.deltaTime);
         }
@@ -128,7 +132,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
             _maxGroundCheckDistance,
             _groundMask
         );
-
+        
         return isHit && !hit.collider.isTrigger;
     }
 
