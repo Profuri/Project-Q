@@ -17,7 +17,7 @@ public class MovingObject : InteractableObject
     private float _minLimitPos;
     private float _maxLimitPos;
     
-    private void Awake()
+    private void OnEnable()
     {
         _objectUnit = GetComponent<StructureObjectUnitBase>();
 
@@ -29,13 +29,13 @@ public class MovingObject : InteractableObject
         {
             scale = transform.localScale.x;
             trackScale = _movingTrackTrm.localScale.x;
-            origin = transform.position.x;
+            origin = _movingTrackTrm.localPosition.x;
         }
         else
         {
             scale = transform.localScale.z;
             trackScale = _movingTrackTrm.localScale.z;
-            origin = transform.position.z;
+            origin = _movingTrackTrm.localPosition.z;
         }
 
         _minLimitPos = origin + -trackScale / 2f + scale / 2f;
@@ -75,23 +75,23 @@ public class MovingObject : InteractableObject
         if (IsPulling(communicator.transform.position, playerMovementModule.MoveVelocity, out var dir))
         {
             var speed = player.DataSO.walkSpeed / 2f;
-            transform.position += dir * (speed * Time.deltaTime);
+            transform.localPosition += dir * (speed * Time.deltaTime);
             ClampingPosition();
         }
     }
 
     private void ClampingPosition()
     {
-        var localPos = transform.localPosition;
+        var pos = transform.localPosition;
         if (_movingAxis == EMovingAxis.X)
         {
-            localPos.x = Mathf.Clamp(localPos.x, _minLimitPos, _maxLimitPos);
+            pos.x = Mathf.Clamp(pos.x, _minLimitPos, _maxLimitPos);
         }
         else
         {
-            localPos.z = Math.Clamp(localPos.z, _minLimitPos, _maxLimitPos);
+            pos.z = Math.Clamp(pos.z, _minLimitPos, _maxLimitPos);
         }
-        transform.localPosition = localPos;
+        transform.localPosition = pos;
     }
 
     private bool IsPulling(Vector3 playerOrigin, Vector3 movementVelocity, out Vector3 dir)

@@ -59,6 +59,7 @@ namespace SingularityGroup.HotReload.Editor {
         private static GUIStyle dynamicSectionHelpTab;
         private static GUIStyle helpTabButton;
         private static GUIStyle indicationHelpBox;
+        private static GUIStyle notificationsTitleStyle;
         
         private static Color32? darkModeLinkColor;
         private static Color32? lightModeModeLinkColor;
@@ -125,6 +126,17 @@ namespace SingularityGroup.HotReload.Editor {
                     h3TitleStyle.padding.bottom = 5;
                 }
                 return h3TitleStyle;
+            }
+        }
+                
+        public static GUIStyle NotificationsTitleStyle {
+            get {
+                if (notificationsTitleStyle == null) {
+                    notificationsTitleStyle = new GUIStyle(HotReloadWindowStyles.H3TitleStyle);
+                    notificationsTitleStyle.padding.bottom = 0;
+                    notificationsTitleStyle.padding.top = 0;
+                }
+                return notificationsTitleStyle;
             }
         }
         
@@ -425,7 +437,7 @@ namespace SingularityGroup.HotReload.Editor {
                     sectionInnerBoxWideStyle = new GUIStyle(EditorStyles.helpBox);
                     sectionInnerBoxWideStyle.padding.top = 15;
                     sectionInnerBoxWideStyle.padding.bottom = 15;
-                    sectionInnerBoxWideStyle.padding.left = 5;
+                    sectionInnerBoxWideStyle.padding.left = 10;
                     sectionInnerBoxWideStyle.padding.right = 10;
                 }
                 return sectionInnerBoxWideStyle;

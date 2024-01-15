@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,8 +11,9 @@ namespace InputControl
         
         public event InputEventListener<Vector2> OnMovementEvent = null;
         public event InputEventListener OnJumpEvent = null;
-        public event InputEventListener OnAxisControlEvent = null;
         public event InputEventListener OnInteractionEvent = null;
+        public event InputEventListener<bool> OnAxisControlToggleEvent = null;
+        public event InputEventListener OnClickEvent = null;
 
         private InputControls _inputControls;
 
@@ -28,9 +28,17 @@ namespace InputControl
             _inputControls.Player.Enable();
         }
 
+        public void SetEnableInput(bool enabled)
+        {
+            if (enabled)
+                _inputControls.Player.Enable();
+            else
+                _inputControls.Player.Disable();
+        }
+
         public void OnMovement(InputAction.CallbackContext context)
         {
-            Vector2 value = context.ReadValue<Vector2>();
+            var value = context.ReadValue<Vector2>();
             OnMovementEvent?.Invoke(value);
         }
 
@@ -42,19 +50,31 @@ namespace InputControl
             }
         }
 
-        public void OnAxisControl(InputAction.CallbackContext context)
-        {
-            if (context.performed || context.canceled)
-            {
-                OnAxisControlEvent?.Invoke();
-            }
-        }
-
         public void OnInteraction(InputAction.CallbackContext context)
         {
             if (context.performed)
             {
                 OnInteractionEvent?.Invoke();
+            }
+        }
+
+        public void OnAxisControlToggle(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                OnAxisControlToggleEvent?.Invoke(true);   
+            }
+            else if(context.canceled)
+            {
+                OnAxisControlToggleEvent?.Invoke(false);
+            }
+        }
+
+        public void OnClick(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                OnClickEvent?.Invoke();
             }
         }
     }

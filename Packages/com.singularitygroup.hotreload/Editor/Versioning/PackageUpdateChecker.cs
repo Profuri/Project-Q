@@ -47,7 +47,8 @@ namespace SingularityGroup.HotReload.Editor {
         }
         
         public bool TryGetNewVersion(out SemVersion version) {
-             return !ReferenceEquals(version = newVersionDetected, null);
+            var currentVersion = SemVersion.Parse(PackageConst.Version, strict: true);
+            return !ReferenceEquals(version = newVersionDetected, null) && newVersionDetected > currentVersion;
         }
         
         async Task PerformVersionCheck() { 
@@ -160,6 +161,7 @@ namespace SingularityGroup.HotReload.Editor {
                         #if UNITY_2020_3_OR_NEWER
                         UnityEditor.PackageManager.Client.Resolve();
                         #else
+                        CompileMethodDetourer.Reset();
                         AssetDatabase.Refresh();
                         #endif
                     }
@@ -168,6 +170,7 @@ namespace SingularityGroup.HotReload.Editor {
                     if(err != null) {
                         Log.Warning("Failed to update package: {0}", err);
                     } else {
+                        CompileMethodDetourer.Reset();
                         AssetDatabase.Refresh();
                     }
                 }

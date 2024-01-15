@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2038122065828059661}
   - component: {fileID: 491903271994271103}
   - component: {fileID: 3884799675123802490}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: PressureObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -473,7 +473,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 16384
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -686,6 +686,8 @@ GameObject:
   - component: {fileID: 734781931107040198}
   - component: {fileID: 9051760982490156419}
   - component: {fileID: 4265645842136147024}
+  - component: {fileID: 7835291974165568813}
+  - component: {fileID: 2051397431072422025}
   m_Layer: 8
   m_Name: TogglePlate
   m_TagString: Untagged
@@ -701,7 +703,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7317772573301592566}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -723,14 +725,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interactType: 0
-  _attribute: -1
+  _attribute: 0
   _pressionorMask:
     serializedVersion: 2
     m_Bits: 1280
   _pressSpeed: 10
   _maxHeight: 1
   _minHeight: 0.35
-  _affectedObjects: []
+  _affectedObjects:
+  - {fileID: 0}
   _useDelay: 0
   _rollbackReverse: 0
   _delayTime: 0.5
@@ -746,6 +749,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _materialRenderSetting: 1
+  _colliderSetting: 1
+  _outlineSetting: 0
+  _interatableYAxis: 0
+  _rigidobySetting: 0
+--- !u!114 &7835291974165568813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7317772573301592566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!65 &2051397431072422025
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7317772573301592566}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7469134504128164661
 GameObject:
   m_ObjectHideFlags: 0

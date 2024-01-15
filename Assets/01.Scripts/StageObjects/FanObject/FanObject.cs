@@ -1,8 +1,6 @@
 using InteractableSystem;
 using StageStructureConvertSystem;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using Color = UnityEngine.Color;
 
 public class FanObject : InteractableObject
 {
@@ -21,12 +19,14 @@ public class FanObject : InteractableObject
     [SerializeField] private float _fanDecelerator;
 
     private float _currentFanSpeed;
+    private Vector3 _poweredDir;
 
     private bool _enabled;
     public bool Enabled => _enabled;
 
     private void Update()
     {
+        _poweredDir = transform.up;
         RotateFan();
         FloatingOther();
     }
@@ -80,7 +80,8 @@ public class FanObject : InteractableObject
             if (hit.collider.TryGetComponent(out PlayerController playerController))
             {
                 var movementModule = playerController.GetModule<PlayerMovementModule>();
-                movementModule.SetVerticalVelocity(_airPower);
+                movementModule.SetForce(_poweredDir * _airPower);
+                // movementModule.SetVerticalVelocity(_airPower);
             }
 
             if (hit.collider.TryGetComponent(out InteractableObject interactableObject))
@@ -100,9 +101,7 @@ public class FanObject : InteractableObject
                     continue;
                 }
                 
-                var velocity = rigid.velocity;
-                velocity.y = _airPower;
-                rigid.velocity = velocity;
+                rigid.velocity = _poweredDir * _airPower;
             }
         }
     }
@@ -112,10 +111,10 @@ public class FanObject : InteractableObject
         hits = new RaycastHit[10];
         size = Physics.BoxCastNonAlloc(
             transform.position,
-            _maxHeightController.GetColSize() / 2f,
-            transform.up,
+            _maxHeightController.GetWorldColSize() / 2f,
+            _poweredDir,
             hits, 
-            Quaternion.identity,
+            transform.rotation,
             _airMaxHeight / 2f,
             _effectedMask
         );
@@ -139,16 +138,21 @@ public class FanObject : InteractableObject
         }
         
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(_maxHeightController.GetCenterPos(), _maxHeightController.GetColSize());
+        Gizmos.matrix = _maxHeightController.transform.localToWorldMatrix;
+        Gizmos.DrawWireCube(Vector3.zero, _maxHeightController.GetLocalColSize());
     }
     
     private void OnValidate()
     {
-        if (_maxHeightController == null)
+        if (_maxHeightController == null || _airParticle == null)
         {
             return;
         }
+        
         _maxHeightController.SetHeight(_airMaxHeight);
+
+        var particleMainSetting = _airParticle.main;
+        particleMainSetting.startLifetime = _airMaxHeight / 10f * 1.5f;
     }
 
 #endif

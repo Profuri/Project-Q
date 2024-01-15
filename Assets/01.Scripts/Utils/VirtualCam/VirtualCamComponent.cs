@@ -6,15 +6,9 @@ using UnityEngine;
 namespace VirtualCam
 {
     [RequireComponent(typeof(CinemachineVirtualCameraBase))]
-    public sealed class VirtualCamComponent : MonoBehaviour, IVirtualCam
+    public class VirtualCamComponent : MonoBehaviour, IVirtualCam
     {
         private CinemachineVirtualCameraBase _virtualCam;
-        [SerializeField] private EAxisType _type;
-
-        [SerializeField] private AnimationCurve _easingCurve;
-
-        public CinemachineVirtualCameraBase VirtualCam => _virtualCam;
-        public EAxisType Type => _type;
 
         public event Action OnEnter = null;
         public event Action OnUpdate = null;
@@ -44,6 +38,16 @@ namespace VirtualCam
             OnExit?.Invoke();
         }
 
+        public void SetFollowTarget(Transform followTarget)
+        {
+            _virtualCam.Follow = followTarget;
+        }
+
+        public void SetLookAtTarget(Transform lookAtTarget)
+        {
+            _virtualCam.LookAt = lookAtTarget;
+        }
+
         public void ShakeCam(float intensity, float time)
         {
             if (_runningRoutine != null)
@@ -52,6 +56,16 @@ namespace VirtualCam
                 _runningRoutine = null;
             }
             _runningRoutine = StartCoroutine(ShakeSequence(intensity, time));
+        }
+
+        public float GetYValue()
+        {
+            if (_virtualCam is CinemachineFreeLook freeLockCam)
+            {
+                return freeLockCam.m_YAxis.Value;
+            }
+            
+            return 0f;
         }
 
         private IEnumerator ShakeSequence(float intensity, float time)
@@ -74,8 +88,7 @@ namespace VirtualCam
             while (percent < 1f)
             {
                 currentTime += Time.deltaTime;
-                percent = currentTime / time;
-                percent = _easingCurve.Evaluate(percent);
+                percent = CameraManager.Instance.CamShakeCurve.Evaluate(currentTime / time);
                 virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(origin, origin + intensity, percent);
                 yield return null;
             }

@@ -13,13 +13,19 @@ namespace StageStructureConvertSystem
 
         private bool _isConvertable;
 
-        private void Awake()
+        public void Init()
         {
             _axisType = EAxisType.NONE;
             _isConvertable = true;
-            _convertableUnits = new List<StructureObjectUnitBase>();
+            _convertableUnits ??= new List<StructureObjectUnitBase>();
+            _convertableUnits.Clear();
             GetComponentsInChildren(_convertableUnits);
             _convertableUnits.ForEach(unit => unit.Init(this));
+        }
+
+        public void SetConvertable(bool convertable)
+        {
+            _isConvertable = convertable;
         }
 
         public void ConvertDimension(EAxisType axisType, Action callback = null)
@@ -37,16 +43,19 @@ namespace StageStructureConvertSystem
                 ChangeAxis(axisType);
             }
 
-            CameraManager.Instance.ChangeCamera(axisType, () =>
+            if (CameraManager.Instance.CurrentCamController is StageCamController)
             {
-                if(axisType != EAxisType.NONE)
+                ((StageCamController)CameraManager.Instance.CurrentCamController).ChangeStageCamera(axisType, () =>
                 {
-                    ChangeAxis(axisType);
-                }
-
-                _isConvertable = true;
-                callback?.Invoke();
-            });
+                    if(axisType != EAxisType.NONE)
+                    {
+                        ChangeAxis(axisType);
+                    }
+            
+                    _isConvertable = true;
+                    callback?.Invoke();
+                });
+            }
         }
 
         private void ChangeAxis(EAxisType axisType)

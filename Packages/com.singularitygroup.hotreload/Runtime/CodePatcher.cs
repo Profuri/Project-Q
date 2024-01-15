@@ -209,6 +209,11 @@ namespace SingularityGroup.HotReload {
                 DetourApi.DetourMethod(state.match, patchMethod, out result);
                 if (result.success) {
                     patchesResult.patchedMethods.Add(sOriginalMethod);
+                    try {
+                        Dispatch.OnHotReloadLocal(state.match, patchMethod);
+                    } catch {
+                        // best effort
+                    }
                     return null;
                 } else {
                     if(result.exception is InvalidProgramException && containsBurstJobs) {

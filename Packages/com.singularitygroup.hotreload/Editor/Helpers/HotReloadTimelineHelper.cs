@@ -78,8 +78,9 @@ namespace SingularityGroup.HotReload.Editor {
         internal readonly string shortDescription;
         internal readonly EntryType entryType;
         internal readonly AlertData alertData;
-        
-        internal AlertEntry(AlertType alertType, string title, string description, DateTime timestamp, string shortDescription = null, Action actionData = null, AlertType? iconType = null, EntryType entryType = EntryType.Standalone, AlertData alertData = default(AlertData)) {
+        internal readonly bool hasExitButton;
+
+        internal AlertEntry(AlertType alertType, string title, string description, DateTime timestamp, string shortDescription = null, Action actionData = null, AlertType? iconType = null, EntryType entryType = EntryType.Standalone, AlertData alertData = default(AlertData), bool hasExitButton = true) {
             this.alertType = alertType;
             this.title = title;
             this.description = description;
@@ -89,6 +90,7 @@ namespace SingularityGroup.HotReload.Editor {
             this.timestamp = timestamp;
             this.entryType = entryType;
             this.alertData = alertData;
+            this.hasExitButton = hasExitButton;
         }
     }
 

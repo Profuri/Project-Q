@@ -71,17 +71,21 @@ public class PressurePlate : InteractableObject
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (!_pressureObjTrm)
+        if (_pressureObjTrm)
         {
-            return;
+            Gizmos.color = Color.yellow;
+            var checkPos = _pressureObjTrm.position
+                + Vector3.up 
+                * (_pressureObjTrm.localScale.y * _pressureMainTrm.localScale.y / 2 + _pressureObjTrm.localScale.y / 2);
+            var checkSize = _pressureObjTrm.localScale;
+            Gizmos.DrawWireCube(checkPos, checkSize);
         }
-        
-        Gizmos.color = Color.yellow;
-        var checkPos = _pressureObjTrm.position
-            + Vector3.up 
-            * (_pressureObjTrm.localScale.y * _pressureMainTrm.localScale.y / 2 + _pressureObjTrm.localScale.y / 2);
-        var checkSize = _pressureObjTrm.localScale;
-        Gizmos.DrawWireCube(checkPos, checkSize);
+
+        if (_affectedObject != null)
+        {
+            Gizmos.color = Color.black;
+            Gizmos.DrawLine(transform.position, _affectedObject.transform.position);
+        }
     }
 #endif
 }

@@ -18,13 +18,13 @@ public class ReciprocationObject : InteractableObject
 
     [SerializeField] private StructureConverter _converter;
 
-    private void Awake()
+    private void OnEnable()
     {
-        _originPos = transform.position;
+        _originPos = transform.localPosition;
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
         if(_converter == null)
         {
-            _converter = transform.parent.parent.GetComponent<StructureConverter>();
+            _converter = transform.GetComponentInParent<StructureConverter>();
             if(_converter == null)
             {
                 Debug.LogError("Set Converter to this Reciprocation Object");
@@ -34,7 +34,7 @@ public class ReciprocationObject : InteractableObject
 
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
-        var curPos = transform.position;  
+        var curPos = transform.localPosition;  
         var destPos = interactValue ? _destPos : _originPos;
 
         switch (_converter.AxisType)
@@ -43,7 +43,7 @@ public class ReciprocationObject : InteractableObject
                 destPos.x = 0f;
                 break;
             case EAxisType.Y:
-                destPos.y = 0f;
+                // destPos.y = 0f;
                 break;
             case EAxisType.Z:
                 destPos.z = 0f;
@@ -52,14 +52,14 @@ public class ReciprocationObject : InteractableObject
 
         if (Vector3.Distance(curPos, destPos) <= 0.01f)
         {
-            transform.position = destPos;
+            transform.localPosition = destPos;
             InterEnd = true;
             return;
         }
         
         var lerpPos = Vector3.Lerp(curPos, destPos, _reciprocationSpeed * Time.deltaTime);
-        
-        transform.position = lerpPos;
+
+        transform.localPosition = lerpPos;
     }
 
 #if UNITY_EDITOR

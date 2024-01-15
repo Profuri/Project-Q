@@ -8,8 +8,9 @@ namespace StageStructureConvertSystem
     [RequireComponent(typeof(Outline))]
     public class StructureObjectUnitBase : ProvidableBase, IStructureObject
     {
-        private Vector3 _originPos;
-        private Vector3 _originScale;
+        protected Vector3 _originPos;
+        protected Quaternion _originRotation;
+        protected Vector3 _originScale;
 
         private StructureConverter _converter;
 
@@ -32,9 +33,12 @@ namespace StageStructureConvertSystem
         [SerializeField] private bool _interatableYAxis = false;
         [SerializeField] private bool _rigidobySetting = false;
 
+        private int _defaultRenderQueue;
+
         public virtual void Init(StructureConverter converter)
         {
             _originPos = transform.localPosition;
+            _originRotation = transform.rotation;
             _originScale = transform.localScale;
 
             _converter = converter;
@@ -48,9 +52,11 @@ namespace StageStructureConvertSystem
             if (_meshRenderer)
             {
                 _material = _meshRenderer.material;
+                _defaultRenderQueue = _material.renderQueue;
             }
 
             _objectInfo.position = _originPos;
+            _objectInfo.rotation = _originRotation;
             _objectInfo.scale = _originScale;
             _objectInfo.axis = EAxisType.NONE;
         }
@@ -58,6 +64,7 @@ namespace StageStructureConvertSystem
         public virtual void ConvertDimension(EAxisType axisType)
         {
             _objectInfo.position = transform.localPosition;
+            _objectInfo.rotation = transform.rotation;
             _objectInfo.scale = transform.localScale;
             SwappingObjectInfo(axisType);
         }
@@ -136,8 +143,9 @@ namespace StageStructureConvertSystem
             ColliderSetting();
             OutlineSetting();
             RigidbodySetting();
-            
+
             transform.localPosition = _objectInfo.position;
+            transform.rotation = _objectInfo.rotation;
             transform.localScale = _objectInfo.scale;
 
             if (_meshRenderer)
@@ -149,7 +157,9 @@ namespace StageStructureConvertSystem
         public virtual void ReloadObject()
         {
             _objectInfo.position = _originPos;
+            _objectInfo.rotation = _originRotation;
             _objectInfo.scale = _originScale;
+            
             TransformSynchronization(_converter.AxisType);
             ObjectSetting();
         }
@@ -163,6 +173,9 @@ namespace StageStructureConvertSystem
             
             switch (_objectInfo.axis)
             {
+                case EAxisType.NONE:
+                    _material.renderQueue = _defaultRenderQueue;
+                    break;
                 case EAxisType.X:
                     _material.renderQueue = Mathf.CeilToInt(_prevObjectInfo.position.x + 5f);
                     break;

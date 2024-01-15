@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using Cinemachine;
 using InputControl;
 using System.Collections;
@@ -33,3 +35,5 @@ public class SwitcherEditor : Editor
         }
     }
 }
+
+#endif

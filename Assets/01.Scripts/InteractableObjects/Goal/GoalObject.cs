@@ -15,6 +15,7 @@ public class GoalObject : InteractableObject
     {
         if(!_isToggle)
         {
+            Debug.Log("Clear");
             StageManager.Instance.StageClear();  
             _isToggle = true;
         }
