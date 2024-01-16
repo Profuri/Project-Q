@@ -151,6 +151,16 @@ namespace StageStructureConvertSystem
             }
         }
 
+        public void SetObjectInfo(Vector3 localPos, Quaternion rotation, Vector3 scale)
+        {
+            _objectInfo.position = localPos;
+            _objectInfo.rotation = rotation;
+            _objectInfo.scale = scale;
+
+            TransformSynchronization(_converter.AxisType);
+            ObjectSetting();
+        }
+
         public virtual void ReloadObject()
         {
             _objectInfo.position = _originPos;
