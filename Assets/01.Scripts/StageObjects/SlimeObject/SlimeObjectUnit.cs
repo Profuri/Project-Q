@@ -19,51 +19,86 @@ public class SlimeObjectUnit : StructureObjectUnitBase
     [Tooltip("If you setting this Vector3.zero, it will be set default settings")]
     [SerializeField] private Vector3 _checkScale = Vector3.zero;
 
+    private bool _canImpact = false;
+    //이거 나중에 인터페이스로 바꿔야될거 같음.
+    private PlayerMovementModule _movementModule;
+    private Vector3 _bounceDirection;
+    private bool _canFindModule;
     private EAxisType _prevAxisType = EAxisType.NONE;
 
     public override void Init(StructureConverter converter)
     {
+        _canFindModule = true;
         base.Init(converter);
     }
 
-    public override void ConvertDimension(EAxisType axisType)
+    public override void TransformSynchronization(EAxisType axisType)
     {
-        bool canImpact = false;                         
+        base.TransformSynchronization(axisType);
+
 
 
         if (axisType == EAxisType.NONE)
         {
-            canImpact = (_applyAxisType & _prevAxisType) != 0;
+            _canImpact = (_applyAxisType & _prevAxisType) != 0;
+            _canFindModule = true;
+        }
+        else
+        {
+            _canFindModule = false;
         }
 
         _prevAxisType = axisType;
 
-
-        Debug.Log($"CanImpact: {canImpact}");
-
-
-        base.ConvertDimension(axisType);
-
-        if (canImpact)
+        if (_canImpact)
         {
+            //이게 플레이어의 위치가 옮겨지고 실행되어야하는 부분
             SlimeImpact();
+        }
+    }
+
+    private void Update()
+    {
+        Debug.Log(_movementModule);
+        if (_canFindModule)
+        {
+            _movementModule = GetPlayerMovementModule();
+            if (_movementModule != null)
+            {
+                _bounceDirection = _movementModule.transform.position - transform.position;
+            }
+            else
+            {
+                _bounceDirection = Vector3.zero;
+            }
         }
     }
 
     private void SlimeImpact()
     {
-        Debug.Log($"PlayerColliderPos: {GameManager.Instance.PlayerController.CharController.transform.position}");
-        Debug.Break();
+        if (_movementModule != null)
+        {
+            //_movementModule.CanJump = true;
 
+
+            Debug.Log($"BounceDirection: {_bounceDirection}");
+            _movementModule.SetForce(_bounceDirection * _bouncePower);
+        }
+        _canImpact = false;
+    }
+
+    private PlayerMovementModule GetPlayerMovementModule()
+    {
+        PlayerMovementModule movementModule = null;
         Vector3 halfExtents = _checkScale * 0.5f;
         Quaternion rotation = transform.rotation;
-        Collider[] cols = Physics.OverlapBox(_checkCenterPos,halfExtents,rotation,_targetLayer);
+
+        Collider[] cols = Physics.OverlapBox(_checkCenterPos, halfExtents, rotation, _targetLayer);
 
         if (cols.Length > 0)
         {
             foreach (Collider col in cols)
             {
-                Debug.Log($"ObjName: {col.gameObject.name}");
                 //if (col.TryGetComponent(out IBounceable bounceable))
                 //{
                 //    bounceable.BounceOff();
@@ -71,16 +106,12 @@ public class SlimeObjectUnit : StructureObjectUnitBase
 
                 if (col.TryGetComponent(out PlayerController playerController))
                 {
-                    Debug.Log("PlayerIsNow");
-                    var movementModule = playerController.GetModule<PlayerMovementModule>();
-
-                    Vector3 bounceDirection = playerController.transform.position - transform.position;
-                    movementModule.AddForce(bounceDirection * _bouncePower);
+                    movementModule = playerController.GetModule<PlayerMovementModule>();
                 }
             }
         }
+        return movementModule;
     }
-
 
     private void OnDrawGizmos()
     {
