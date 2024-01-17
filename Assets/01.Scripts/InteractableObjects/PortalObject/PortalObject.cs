@@ -7,7 +7,7 @@ public class PortalObject : InteractableObject
 {
     [SerializeField] private PortalObject _linkedPortal;
     [SerializeField] private EAxisType _portalAxis;
-
+    
     private StructureObjectUnitBase _parentUnit;
 
     private void Awake()
@@ -28,13 +28,13 @@ public class PortalObject : InteractableObject
                     dir = Vector3.right;
                     break;
                 case EAxisType.Y:
-                    dir += Vector3.up;
+                    dir = Vector3.up;
                     break;
                 case EAxisType.Z:
-                    dir += Vector3.back;
+                    dir = Vector3.back;
                     break;
             }
-            
+
             playerUnit.SetObjectInfo(
                 destPos + dir,
                 playerUnit.transform.rotation,
