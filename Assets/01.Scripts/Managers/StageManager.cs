@@ -39,8 +39,6 @@ public class StageManager : BaseManager<StageManager>
             NextStage.GenerateStage(Vector3.zero);
         
             var player = PoolManager.Instance.Pop("Player") as PlayerController;
-            player.transform.position = new Vector3(0, 10, 0);
-            
             NextStage.StageEnterEvent(player);
         }
     }        

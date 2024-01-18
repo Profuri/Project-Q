@@ -22,7 +22,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public bool CanJump { get; set; }
     public bool IsMovement => _inputDir.sqrMagnitude > 0f;
-    public bool IsGround => CheckGround();
+    public bool IsGround { get; private set; }
 
     public override void Init(Transform root)
     {
@@ -36,6 +36,10 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public override void UpdateModule()
     {
+        IsGround = CheckGround();
+        Controller.PlayerAnimatorController.IsGround(IsGround);
+        Controller.PlayerAnimatorController.Movement(_inputDir.sqrMagnitude >= 0.05f);
+        
         if(_canMove)
         {
             CalcMovement();
@@ -44,7 +48,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public override void FixedUpdateModule()
     {
-        if (_moveVelocity != Vector3.zero)
+        if (_moveVelocity.sqrMagnitude >= 0.05f)
         {
             Controller.CharController.Move(_moveVelocity * Time.deltaTime);
         }
@@ -119,17 +123,16 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     {
         var size = Controller.CharController.bounds.size * 0.8f;
         size.y = 0.1f;
-        var trm = transform;
         var isHit = Physics.BoxCast(
-            trm.position,
+            Controller.CenterPoint.position,
             size,
-            -trm.up,
+            -transform.up,
             out var hit,
             Controller.ModelTrm.rotation,
             _maxGroundCheckDistance,
             _groundMask
         );
-
+        
         return isHit && !hit.collider.isTrigger;
     }
 
@@ -165,7 +168,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
         var size = Controller.CharController.bounds.size * 0.8f;
         size.y = 0.1f;
         var trm = transform;
-        Gizmos.DrawCube(trm.position - trm.up * _maxGroundCheckDistance, size);
+        Gizmos.DrawCube(Controller.CenterPoint.position - trm.up * _maxGroundCheckDistance, size);
     }
 #endif
 }
