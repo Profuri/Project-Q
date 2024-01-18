@@ -1,6 +1,8 @@
+using System;
 using StageStructureConvertSystem;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 
 using UnityEngine;
 [RequireComponent(typeof(Collider))]
@@ -11,13 +13,14 @@ public class SlimeObjectUnit : StructureObjectUnitBase
     [SerializeField] private float _bouncePower = 5f;
     [SerializeField] private LayerMask _targetLayer;
     [SerializeField] private EAxisType _applyAxisType;
-
+    [SerializeField] private float _bounceTime = 0.5f;
 
     [Header("SlimeCollisionSettings")]
     [Tooltip("If you setting this Vector3.zero, it will be set default settings")]
     [SerializeField] private Vector3 _checkCenterPos = Vector3.zero;
     [Tooltip("If you setting this Vector3.zero, it will be set default settings")]
     [SerializeField] private Vector3 _checkScale = Vector3.zero;
+
 
     private bool _canImpact = false;
     //이거 나중에 인터페이스로 바꿔야될거 같음.
@@ -53,8 +56,9 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         if (_canImpact)
         {
             //이게 플레이어의 위치가 옮겨지고 실행되어야하는 부분
-            SlimeImpact();
+            ShowBounceEffect(SlimeImpact);
         }
+
     }
 
     private void Update()
@@ -87,6 +91,16 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         _canImpact = false;
     }
 
+    private void ShowBounceEffect(Action Callback)
+    {
+        Vector3 originScale = transform.localScale;
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(transform.DOScale(originScale * 0.8f,_bounceTime * 0.5f)).SetEase(Ease.InBounce);
+        seq.Append(transform.DOScale(originScale * 1.2f,_bounceTime * 0.5f)).SetEase(Ease.InBounce);
+        seq.Append(transform.DOScale(originScale, _bounceTime * 0.5f)).SetEase(Ease.InBounce);
+        seq.AppendCallback(() => Callback?.Invoke());
+    }
     private PlayerMovementModule GetPlayerMovementModule()
     {
         PlayerMovementModule movementModule = null;
