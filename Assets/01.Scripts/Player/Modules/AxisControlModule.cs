@@ -72,6 +72,11 @@ public class AxisControlModule : BaseModule<PlayerController>
 
     private void AxisControlToggleHandle(bool enter)
     {
+        if (!StageManager.Instance.CurrentStage.ActiveStage)
+        {
+            return;
+        }
+        
         if (Controller.Converter.AxisType == EAxisType.NONE)
         {
             if (_isControllingAxis == enter)
