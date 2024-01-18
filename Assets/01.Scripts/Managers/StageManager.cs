@@ -9,6 +9,8 @@ public class StageManager : BaseManager<StageManager>
     public Stage CurrentStage { get; private set; }
     public Stage NextStage { get; private set; }
 
+    public EAxisType CurrentStageAxis => CurrentStage.Converter.AxisType;
+
     [Header("Chapter Data")] 
     [SerializeField] private ChapterDataSO _chapterData;
 
