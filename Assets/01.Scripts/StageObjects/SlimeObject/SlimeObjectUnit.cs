@@ -126,7 +126,7 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         }
         return movementModule;
     }
-
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
@@ -142,4 +142,5 @@ public class SlimeObjectUnit : StructureObjectUnitBase
 
         Gizmos.DrawCube(_checkCenterPos,_checkScale);
     }
+#endif
 }
