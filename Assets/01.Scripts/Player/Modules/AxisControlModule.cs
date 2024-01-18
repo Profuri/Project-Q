@@ -59,17 +59,11 @@ public class AxisControlModule : BaseModule<PlayerController>
     private EAxisType GetLookAxis(float angle)
     {
         var isLookXAxis = angle is >= -180f and < -135f or > 135f and <= 180f;
-        var isLookReverseXAxis = angle is > -45f and <= 0f or >= 0f and < 45f;
         var isLookZAxis = angle is >= 45f and <= 135f;
-        var isLookReverseZAxis = angle is >= -135f and <= -45f;
 
         if (isLookXAxis)
             return EAxisType.X;
-        if (isLookReverseXAxis)
-            return EAxisType.X;
         if (isLookZAxis)
-            return EAxisType.Z;
-        if (isLookReverseZAxis)
             return EAxisType.Z;
 
         return EAxisType.NONE;
