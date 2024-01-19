@@ -10,6 +10,12 @@ public class DoorObject : InteractableObject
     [SerializeField] private bool _isOn;
     [SerializeField] private Vector3 _targetPos;
     [SerializeField] private float _moveTime = 5f;
+    [Tooltip("Toggle이 켜져있으면 한번 불이 들어오면 다시 꺼지지 않음")]
+    [SerializeField] private bool _redstoneToggle = false;
+
+
+
+
 
     private Vector3 _originPos;
 
@@ -37,6 +43,10 @@ public class DoorObject : InteractableObject
 
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
+        if (_redstoneToggle && _isOn)
+        {
+            return;
+        }
         _isOn = interactValue;
     }
 
