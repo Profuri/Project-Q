@@ -74,6 +74,7 @@ public class Stage : PoolableMono
     public void StageExitEvent(PlayerController player)
     {
         Converter.SetConvertable(false);
+        
         CameraManager.Instance.ChangeVCamController(VirtualCamType.PLAYER);
         ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetPlayer(player);
         ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetCurrentCam();

@@ -44,7 +44,7 @@ public class AxisControlModule : BaseModule<PlayerController>
         var vCam = CameraManager.Instance.ActiveVCam;
         var camYValue = vCam.GetYValue();
 
-        if (camYValue >= 0.5f)
+        if (camYValue >= 45f)
         {
             return EAxisType.Y;
         }
