@@ -24,14 +24,14 @@ public class SlimeObjectUnit : StructureObjectUnitBase
 
     private bool _canImpact = false;
     //�̰� ���߿� �������̽��� �ٲ�ߵɰ� ����.
-    private PlayerMovementModule _movementModule;
-    private Vector3 _bounceDirection;
+    private List<Tuple<PlayerMovementModule,Vector3>> _movementModuleList;
     private bool _canFindModule;
     private EAxisType _prevAxisType = EAxisType.NONE;
 
     public override void Init(StructureConverter converter)
     {
         _canFindModule = true;
+        _movementModuleList = new ();
         base.Init(converter);
     }
 
@@ -63,31 +63,44 @@ public class SlimeObjectUnit : StructureObjectUnitBase
 
     private void Update()
     {
-        Debug.Log(_movementModule);
         if (_canFindModule)
         {
-            _movementModule = GetPlayerMovementModule();
-            if (_movementModule != null)
+            _movementModuleList.Clear();
+            var moduleList = GetPlayerMovementModule();
+            
+            foreach(var movementModule in moduleList)
             {
-                _bounceDirection = _movementModule.transform.position - transform.position;
-            }
-            else
-            {
-                _bounceDirection = Vector3.zero;
+                Vector3 bounceDirection;
+                if (movementModule != null)
+                {
+                    bounceDirection = movementModule.transform.position - transform.position;
+                }
+                else
+                {
+                    bounceDirection = Vector3.zero;
+                }
+                
+                var tuple = Tuple.Create(movementModule,bounceDirection);
+                _movementModuleList.Add(tuple);
             }
         }
     }
 
     private void SlimeImpact()
     {
-        if (_movementModule != null)
+        foreach(var movementModule in _movementModuleList)
         {
-            //_movementModule.CanJump = true;
+            if (movementModule != null)
+            {
+                //_movementModule.CanJump = true;
+                Vector3 bounceDirection = movementModule.Item2;
+                PlayerMovementModule playerMovementMoudle = movementModule.Item1;
 
-
-            Debug.Log($"BounceDirection: {_bounceDirection}");
-            _movementModule.SetForce(_bounceDirection * _bouncePower);
+                Debug.Log($"BounceDirection: {bounceDirection}");
+                playerMovementMoudle.SetForce(bounceDirection * _bouncePower);
+            }
         }
+
         _canImpact = false;
     }
 
@@ -101,13 +114,13 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         seq.Append(transform.DOScale(originScale, _bounceTime * 0.5f)).SetEase(Ease.InBounce);
         seq.AppendCallback(() => Callback?.Invoke());
     }
-    private PlayerMovementModule GetPlayerMovementModule()
+    private List<PlayerMovementModule> GetPlayerMovementModule()
     {
-        PlayerMovementModule movementModule = null;
         Vector3 halfExtents = _checkScale * 0.5f;
         Quaternion rotation = transform.rotation;
 
         Collider[] cols = Physics.OverlapBox(_checkCenterPos, halfExtents, rotation, _targetLayer);
+        List<PlayerMovementModule> movementModuleList = new List<PlayerMovementModule>();
 
         if (cols.Length > 0)
         {
@@ -120,11 +133,12 @@ public class SlimeObjectUnit : StructureObjectUnitBase
 
                 if (col.TryGetComponent(out PlayerController playerController))
                 {
-                    movementModule = playerController.GetModule<PlayerMovementModule>();
+                    var movementModule = playerController.GetModule<PlayerMovementModule>();
+                    movementModuleList.Add(movementModule);
                 }
             }
         }
-        return movementModule;
+        return movementModuleList;
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
