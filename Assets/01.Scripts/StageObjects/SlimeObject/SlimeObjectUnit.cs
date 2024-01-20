@@ -23,7 +23,7 @@ public class SlimeObjectUnit : StructureObjectUnitBase
 
 
     private bool _canImpact = false;
-    //ÀÌ°Å ³ªÁß¿¡ ÀÎÅÍÆäÀÌ½º·Î ¹Ù²ã¾ßµÉ°Å °°À½.
+    //ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ßµÉ°ï¿½ ï¿½ï¿½ï¿½ï¿½.
     private PlayerMovementModule _movementModule;
     private Vector3 _bounceDirection;
     private bool _canFindModule;
@@ -55,7 +55,7 @@ public class SlimeObjectUnit : StructureObjectUnitBase
 
         if (_canImpact)
         {
-            //ÀÌ°Ô ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡°¡ ¿Å°ÜÁö°í ½ÇÇàµÇ¾î¾ßÇÏ´Â ºÎºÐ
+            //ï¿½Ì°ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Îºï¿½
             ShowBounceEffect(SlimeImpact);
         }
 
@@ -136,7 +136,7 @@ public class SlimeObjectUnit : StructureObjectUnitBase
             _collider = GetComponent<Collider>();
         }
 
-        //center À§Ä¡¸¦ ¼öÁ¤ÇØ¾ßµÊ
+        //center ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ßµï¿½
         if (_checkCenterPos == Vector3.zero) _checkCenterPos = transform.position;
         if (_checkScale == Vector3.zero) _checkScale = _collider.bounds.size;
 
