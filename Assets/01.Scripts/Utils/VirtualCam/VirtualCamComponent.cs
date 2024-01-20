@@ -60,12 +60,11 @@ namespace VirtualCam
 
         public float GetYValue()
         {
-            if (_virtualCam is CinemachineFreeLook freeLockCam)
-            {
-                return freeLockCam.m_YAxis.Value;
-            }
+            if (_virtualCam is not CinemachineVirtualCamera vCam) 
+                return 0f;
             
-            return 0f;
+            var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
+            return pov.m_VerticalAxis.Value;
         }
 
         private IEnumerator ShakeSequence(float intensity, float time)

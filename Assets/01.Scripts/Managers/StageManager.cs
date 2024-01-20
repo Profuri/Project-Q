@@ -2,7 +2,6 @@ using ManagingSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class StageManager : BaseManager<StageManager>
 {
@@ -39,20 +38,13 @@ public class StageManager : BaseManager<StageManager>
         {
             NextStage = PoolManager.Instance.Pop($"{_startChapter.ToString()}_Stage_{_startStage.ToString()}") as Stage;
             NextStage.GenerateStage(Vector3.zero);
-        
-            var player = PoolManager.Instance.Pop("Player") as PlayerController;
-            NextStage.StageEnterEvent(player);
+            PoolManager.Instance.Pop("Player");
         }
     }        
 
     public override void UpdateManager()
     {
         // Do nothing
-
-        if (Keyboard.current.oKey.wasPressedThisFrame)
-        {
-            StageClear();
-        }
     }
 
     public void GenerateNextStage(ChapterType chapter, int stage)
@@ -91,8 +83,6 @@ public class StageManager : BaseManager<StageManager>
         CurrentStage = NextStage;
         player.SetStage(CurrentStage);
         CurrentStage.InitStage();
-
-        NextStage = null;
     }
 
     private void GenerateBridge(Vector3 startPoint, Vector3 endPoint)
@@ -144,7 +134,6 @@ public class StageManager : BaseManager<StageManager>
     public void StageClear()
     {
         CurrentStage.Converter.ConvertDimension(EAxisType.NONE);
-        CurrentStage.SetActive(false);
 
         var curChapter = CurrentStage.Chapter;
         var nextChapter = CurrentStage.stageOrder + 1;
