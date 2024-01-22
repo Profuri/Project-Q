@@ -23,14 +23,24 @@ public class RedstoneObjectUnit : InteractableObject
     //레드스톤을 바닥으로 깔았을 경우에는 y나 3d나 똑같이 작용해야됨.
 
     //3d 상태일떄도 전이되게 만들어 놓을건지 정해야됨.
-    private bool _isOn = false;
+    [SerializeField] private bool _isOn = false;
     private StructureConverter _converter;
 
     [SerializeField] private MeshRenderer _renderer;
-    
+    [SerializeField] private bool _isToggle;
+
+    private void Update()
+    {
+        if(_isToggle && _isOn)
+        {
+            OnInteraction(null,true);
+        }        
+    }
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         _isOn = interactValue;
+        
+
         Debug.Log($"ObjectName: {this.gameObject.name} Value: {_isOn}");
 
         if (interactValue)
@@ -55,9 +65,14 @@ public class RedstoneObjectUnit : InteractableObject
 
             foreach (RedstoneInteractable interactable in _redstoneInteractableList)
             {
-                if (currentAxisType == interactable.applyAxisType)
+                var applyAxisType = interactable.applyAxisType;
+                if (currentAxisType == applyAxisType)
                 {
                     interactable.OnInteraction(communicator, interactValue, param);
+                }
+                else if (applyAxisType == EAxisType.X && applyAxisType == EAxisType.Y && applyAxisType == EAxisType.Z)
+                {
+                    interactable.OnInteraction(communicator,interactValue,param);
                 }
                 else
                 {
