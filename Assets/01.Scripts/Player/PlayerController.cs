@@ -36,7 +36,6 @@ public class PlayerController : BaseModuleController
     public void SetStage(Stage stage)
     {
         transform.SetParent(stage.transform);
-        transform.position = stage.PlayerResetPoint;
         Converter = stage.Converter;
     }
 

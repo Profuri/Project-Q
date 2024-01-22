@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using StageStructureConvertSystem;
+using UnityEngine.Rendering.UI;
 
 [RequireComponent(typeof(StructureConverter), typeof(StageCollisionChecker))]
 public class Stage : PoolableMono
@@ -49,18 +50,16 @@ public class Stage : PoolableMono
 
     public void InitStage()
     {
-        SetActive(true);
         Converter.Init();
-    }
-
-    public void SetActive(bool value)
-    {
-        ActiveStage = value;
     }
 
     public void StageEnterEvent(PlayerController player)
     {
+        Debug.Log("enter");
+        
         Converter.SetConvertable(true);
+        ActiveStage = true;
+        
         CameraManager.Instance.ChangeVCamController(VirtualCamType.STAGE);
         ((StageCamController)CameraManager.Instance.CurrentCamController).SetStage(this);
         ((StageCamController)CameraManager.Instance.CurrentCamController).ChangeStageCamera(EAxisType.NONE);
@@ -74,6 +73,8 @@ public class Stage : PoolableMono
     public void StageExitEvent(PlayerController player)
     {
         Converter.SetConvertable(false);
+        ActiveStage = false;
+        
         CameraManager.Instance.ChangeVCamController(VirtualCamType.PLAYER);
         ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetPlayer(player);
         ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetCurrentCam();
@@ -101,7 +102,7 @@ public class Stage : PoolableMono
     
     public override void Init()
     {
-        SetActive(false);
+        ActiveStage = false;
     }
     
 #if UNITY_EDITOR

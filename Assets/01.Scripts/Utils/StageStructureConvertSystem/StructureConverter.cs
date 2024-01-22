@@ -11,12 +11,12 @@ namespace StageStructureConvertSystem
         private EAxisType _axisType;
         public EAxisType AxisType => _axisType;
 
-        private bool _isConvertable;
+        public bool Convertable { get; private set; }
 
         public void Init()
         {
             _axisType = EAxisType.NONE;
-            _isConvertable = true;
+            Convertable = true;
             _convertableUnits ??= new List<StructureObjectUnitBase>();
             _convertableUnits.Clear();
             GetComponentsInChildren(_convertableUnits);
@@ -25,18 +25,18 @@ namespace StageStructureConvertSystem
 
         public void SetConvertable(bool convertable)
         {
-            _isConvertable = convertable;
+            Convertable = convertable;
         }
 
         public void ConvertDimension(EAxisType axisType, Action callback = null)
         {
-            if (!_isConvertable || _axisType == axisType || (_axisType != EAxisType.NONE && axisType != EAxisType.NONE))
+            if (!Convertable || _axisType == axisType || (_axisType != EAxisType.NONE && axisType != EAxisType.NONE))
             {
                 callback?.Invoke();
                 return;
             }
 
-            _isConvertable = false;
+            Convertable = false;
 
             if(axisType == EAxisType.NONE)
             {
@@ -52,7 +52,7 @@ namespace StageStructureConvertSystem
                         ChangeAxis(axisType);
                     }
             
-                    _isConvertable = true;
+                    Convertable = true;
                     callback?.Invoke();
                 });
             }
