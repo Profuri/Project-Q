@@ -31,27 +31,24 @@ public class RedstoneObjectUnit : InteractableObject
 
     private void Update()
     {
-        if(_isToggle && _isOn)
+        if(_isToggle)
         {
-            OnInteraction(null,true);
+            OnInteraction(null,_isOn);
         }        
     }
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
-        _isOn = interactValue;
-        
-
-        Debug.Log($"ObjectName: {this.gameObject.name} Value: {_isOn}");
-
-        if (interactValue)
+        if (!_isToggle)
         {
-            _renderer.material.color = new Color(0, 0, 255);
+            _isOn = interactValue;
         }
         else
         {
-            _renderer.material.color = new Color(255, 0, 0);
+            //토글 되어있는 상태
+            _isOn = _isOn || interactValue;
         }
-
+        
+        _renderer.material.color = _isOn ? Color.blue : Color.red;
 
         int paramIndex = 0;
         try
@@ -66,25 +63,28 @@ public class RedstoneObjectUnit : InteractableObject
             foreach (RedstoneInteractable interactable in _redstoneInteractableList)
             {
                 var applyAxisType = interactable.applyAxisType;
-                if (currentAxisType == applyAxisType)
+
+                if (applyAxisType == EAxisType.NONE)
                 {
-                    interactable.OnInteraction(communicator, interactValue, param);
+                    interactable.OnInteraction(communicator, _isOn, param);
                 }
-                else if (applyAxisType == EAxisType.X && applyAxisType == EAxisType.Y && applyAxisType == EAxisType.Z)
+                else if ((currentAxisType & applyAxisType) != 0)
                 {
-                    interactable.OnInteraction(communicator,interactValue,param);
+                    interactable.OnInteraction(communicator, true, param);
                 }
                 else
                 {
                     //만약에 레드스톤을 사용하는 발판이 여러개면 수정되어야 할 수도 있음.
-                    //This can be fixed. 
+                    //This can be fixed1. 
                     interactable.OnInteraction(communicator, false, param);
                 }
             }
         }
         catch
         {
-            Debug.LogError($"Can't convert params index: {paramIndex} to EAxisType");
+            Debug.LogError($"Can't Load from CurrentAxisType: {GameManager.Instance.PlayerController.Converter}");
+            //Debug.LogError($"Can't convert params index: {paramIndex} to EAxisType");
         }
+
     }
 }
