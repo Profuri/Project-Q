@@ -34,7 +34,7 @@ public class RedstoneObjectUnit : InteractableObject
         if(_isToggle)
         {
             OnInteraction(null,_isOn);
-        }        
+        }       
     }
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
@@ -49,7 +49,6 @@ public class RedstoneObjectUnit : InteractableObject
         }
         
         _renderer.material.color = _isOn ? Color.blue : Color.red;
-
         int paramIndex = 0;
         try
         {
@@ -60,7 +59,7 @@ public class RedstoneObjectUnit : InteractableObject
 
             Debug.Log($"CurrentAxisType: {currentAxisType}");
 
-            foreach (RedstoneInteractable interactable in _redstoneInteractableList)
+            foreach(RedstoneInteractable interactable in _redstoneInteractableList)
             {
                 var applyAxisType = interactable.applyAxisType;
 
@@ -75,7 +74,7 @@ public class RedstoneObjectUnit : InteractableObject
                 else
                 {
                     //만약에 레드스톤을 사용하는 발판이 여러개면 수정되어야 할 수도 있음.
-                    //This can be fixed1. 
+                    //This can be fixed. 
                     interactable.OnInteraction(communicator, false, param);
                 }
             }
