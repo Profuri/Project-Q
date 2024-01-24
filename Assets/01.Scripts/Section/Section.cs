@@ -3,14 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SectionCollisionChecker))]
 public class Section : PoolableMono
 {
     [SerializeField] private Vector3 _enterPoint;
-    public Vector3 EnterPoint => _enterPoint;
-    
     [SerializeField] private Vector3 _exitPoint;
-    public Vector3 ExitPoint => _exitPoint;
-
     [SerializeField] private Vector3 _playerResetPoint;
     public Vector3 PlayerResetPoint => _playerResetPoint;
 
@@ -18,6 +15,8 @@ public class Section : PoolableMono
 
     private List<BridgeObject> _bridgeObjects;
 
+    public bool Active { get; private set; }
+    public bool Lock { get; set; }
     public Vector3 CenterPosition { get; private set; }
 
     public virtual void Awake()
@@ -39,10 +38,25 @@ public class Section : PoolableMono
             PoolManager.Instance.Push(this);
         }));
     }
+
+    public virtual void OnEnter(PlayerController player)
+    {
+        Active = true;
+        CameraManager.Instance.ChangeVCamController(VirtualCamType.STAGE);
+        ((SectionCamController)CameraManager.Instance.CurrentCamController).SetSection(this);
+    }
+
+    public virtual void OnExit(PlayerController player)
+    {
+        Active = false;
+        CameraManager.Instance.ChangeVCamController(VirtualCamType.PLAYER);
+        ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetPlayer(player);
+        ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetCurrentCam();
+    }
     
     public void ConnectOtherSection(Section other)
     {
-        var dir = (ExitPoint - other.EnterPoint).normalized;
+        var dir = (_exitPoint - other._enterPoint).normalized;
 
         if (dir.x > dir.z)
         {
@@ -53,10 +67,10 @@ public class Section : PoolableMono
             dir = new Vector3(0, 0, Mathf.Sign(dir.z));
         }
         
-        var exitPoint = CenterPosition + ExitPoint;
+        var exitPoint = CenterPosition + _exitPoint;
         var enterPoint = exitPoint + (dir * _sectionData.sectionIntervalDistance);
         var nextStageCenter = enterPoint - 
-                              (new Vector3(other.EnterPoint.x, 0, other.EnterPoint.z).normalized * other.EnterPoint.magnitude);
+                              (new Vector3(other._enterPoint.x, 0, other._enterPoint.z).normalized * other._enterPoint.magnitude);
         
         GenerateBridge(exitPoint, enterPoint);
         other.Generate(nextStageCenter);

@@ -8,32 +8,27 @@ public class StageManager : BaseManager<StageManager>
     public Stage CurrentStage { get; private set; }
     public Stage NextStage { get; private set; }
 
+    private ChapterData _currentPlayChapterData;
+
     public EAxisType CurrentStageAxis => CurrentStage.Converter.AxisType;
-
-    [Header("Chapter Data")] 
-    [SerializeField] private ChapterDataSO _chapterData;
-
-    [Header("For Debugging")] 
-    [SerializeField] private bool _generateStageOnStart;
-    [SerializeField] private ChapterType _startChapter;
-    [SerializeField] private int _startStage;
 
     public override void StartManager()
     {
         CurrentStage = null;
         NextStage = null;
-
-        if (_generateStageOnStart)
-        {
-            NextStage = PoolManager.Instance.Pop($"{_startChapter.ToString()}_Stage_{_startStage.ToString()}") as Stage;
-            NextStage.Generate(Vector3.zero);
-            PoolManager.Instance.Pop("Player");
-        }
     }        
 
     public override void UpdateManager()
     {
         // Do nothing
+    }
+
+    public void StartNewChapter(ChapterData chapterData)
+    {
+        _currentPlayChapterData = chapterData;
+        NextStage = PoolManager.Instance.Pop($"{chapterData.chapter.ToString()}_Stage_0") as Stage;
+        NextStage.Generate(Vector3.zero);
+        PoolManager.Instance.Pop("Player");
     }
 
     public void GenerateNextStage(ChapterType chapter, int stage)
@@ -58,22 +53,15 @@ public class StageManager : BaseManager<StageManager>
     public void StageClear()
     {
         CurrentStage.Converter.ConvertDimension(EAxisType.NONE);
-
-        var curChapter = CurrentStage.Chapter;
+        CurrentStage.Lock = false;
         var nextChapter = CurrentStage.stageOrder + 1;
 
-        if (nextChapter >= _chapterData.GetStageCnt(curChapter))
+        if (nextChapter >= _currentPlayChapterData.stageCnt)
         {
-            curChapter++;
-            nextChapter = 0;
-
-            if (curChapter >= ChapterType.CNT)
-            {
-                Debug.Log("this is a last stage game clear!!!");
-                return;
-            }
+            Debug.Log("this is a last stage game clear!!!");
+            return;
         }
         
-        GenerateNextStage(curChapter, nextChapter);
+        GenerateNextStage(_currentPlayChapterData.chapter, nextChapter);
     }
 }

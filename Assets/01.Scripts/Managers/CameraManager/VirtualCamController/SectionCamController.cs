@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using VirtualCam;
 
-public class StageCamController : VirtualCamController
+public class SectionCamController : VirtualCamController
 {
     private readonly Dictionary<EAxisType, VirtualCamComponent> _virtualCamDiction =
         new Dictionary<EAxisType, VirtualCamComponent>();
@@ -44,26 +44,31 @@ public class StageCamController : VirtualCamController
         SetCurrentCam(callBack);
     }
 
-    public void ChangeStageCamera(EAxisType type, Action callBack = null)
+    public void ChangeCameraAxis(EAxisType type, Action callBack = null)
     {
         CurrentSelectedCam = _virtualCamDiction[type];
         SetCurrentCam(callBack);
     }
 
-    public void SetStage(Stage stage)
+    public void SetSection(Section section, bool changeNoneAxis = true)
     {
-        var stageTrm = stage.transform;
+        var sectionTrm = section.transform;
         
-        _axisControlCam.SetFollowTarget(stageTrm);
-        _axisControlCam.SetLookAtTarget(stageTrm);
+        _axisControlCam.SetFollowTarget(sectionTrm);
+        _axisControlCam.SetLookAtTarget(sectionTrm);
         
         foreach (EAxisType axis in Enum.GetValues(typeof(EAxisType)))
         {
-            _virtualCamDiction[axis].SetFollowTarget(stageTrm);
+            _virtualCamDiction[axis].SetFollowTarget(sectionTrm);
             if (axis == EAxisType.NONE)
             {
-                _virtualCamDiction[axis].SetLookAtTarget(stageTrm);
+                _virtualCamDiction[axis].SetLookAtTarget(sectionTrm);
             }
+        }
+
+        if (changeNoneAxis)
+        {
+            ChangeCameraAxis(EAxisType.NONE);
         }
     }
 }

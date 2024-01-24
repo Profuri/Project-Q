@@ -44,9 +44,9 @@ namespace StageStructureConvertSystem
                 ChangeAxis(axisType);
             }
 
-            if (CameraManager.Instance.CurrentCamController is StageCamController)
+            if (CameraManager.Instance.CurrentCamController is SectionCamController)
             {
-                ((StageCamController)CameraManager.Instance.CurrentCamController).ChangeStageCamera(axisType, () =>
+                ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(axisType, () =>
                 {
                     if(axisType != EAxisType.NONE)
                     {

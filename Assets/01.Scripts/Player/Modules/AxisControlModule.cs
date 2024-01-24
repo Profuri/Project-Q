@@ -120,20 +120,20 @@ public class AxisControlModule : BaseModule<PlayerController>
 
     private void ChangeAxisControlState()
     {
-        if (CameraManager.Instance.CurrentCamController is StageCamController)
+        if (CameraManager.Instance.CurrentCamController is SectionCamController)
         {
             VolumeManager.Instance.SetAxisControlVolume(true, 0.7f);
-            ((StageCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(true);
+            ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(true);
         }
     }
     
     private void ChangeNormalState()
     {
-        if (CameraManager.Instance.CurrentCamController is StageCamController)
+        if (CameraManager.Instance.CurrentCamController is SectionCamController)
         {
             VolumeManager.Instance.SetAxisControlVolume(false, 0.7f);
             LightManager.Instance.SetAxisLight(EAxisType.NONE);
-            ((StageCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(false);
+            ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(false);
         }
     }
 }
