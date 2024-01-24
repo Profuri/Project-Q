@@ -466,7 +466,7 @@ GameObject:
   - component: {fileID: 690832311766205563}
   - component: {fileID: 4024293487976421721}
   - component: {fileID: 3877423488393508544}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WallObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -573,7 +573,8 @@ GameObject:
   - component: {fileID: 6630313933485668971}
   - component: {fileID: 1010199950056493736}
   - component: {fileID: 6279253252574422077}
-  m_Layer: 0
+  - component: {fileID: 7431965075683700678}
+  m_Layer: 6
   m_Name: SlimeObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -707,8 +708,37 @@ MonoBehaviour:
     m_Bits: 1024
   _applyAxisType: 6
   _bounceTime: 1
+  _bounceDirection: {x: 0, y: 0, z: 0}
+  _slimeMass: 0.2
   _checkCenterPos: {x: 0, y: 2, z: 0}
   _checkScale: {x: 1, y: 1.0000002, z: 1}
+--- !u!54 &7431965075683700678
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8658525083584166168}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1001 &6121207905930528086
 PrefabInstance:
   m_ObjectHideFlags: 0

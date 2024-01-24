@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 
 using UnityEngine;
-[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Collider),typeof(Rigidbody))]
 
 public class SlimeObjectUnit : StructureObjectUnitBase
 {
@@ -14,6 +14,9 @@ public class SlimeObjectUnit : StructureObjectUnitBase
     [SerializeField] private LayerMask _targetLayer;
     [SerializeField] private EAxisType _applyAxisType;
     [SerializeField] private float _bounceTime = 0.5f;
+    [SerializeField] private Vector3 _bounceDirection;
+
+    [SerializeField] private float _slimeMass = 0.1f;
 
     [Header("SlimeCollisionSettings")]
     [Tooltip("If you setting this Vector3.zero, it will be set default settings")]
@@ -34,6 +37,8 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         _movementModuleList = new ();
         base.Init(converter);
     }
+
+    
 
     public override void TransformSynchronization(EAxisType axisType)
     {
@@ -63,6 +68,16 @@ public class SlimeObjectUnit : StructureObjectUnitBase
 
     private void Update()
     {
+        var collisionModuleList = GetCollisionModules();
+        foreach (var collisionModule in collisionModuleList)
+        {
+            if (collisionModule != null)
+            {
+                Vector3 bounceDirection = collisionModule.transform.position - transform.position;
+                SlimeEffect(Tuple.Create(collisionModule,bounceDirection.normalized));
+            }
+        }
+
         if (_canFindModule)
         {
             _movementModuleList.Clear();
@@ -86,6 +101,23 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         }
     }
 
+
+    //이건 통통 튀기는거.
+    private void SlimeEffect(Tuple<PlayerMovementModule,Vector3> tuple)
+    {
+        Debug.Log($"SlimeEffect, Module: {tuple.Item1}");
+        var movementModule = tuple.Item1;
+        Vector3 bounceDirection = tuple.Item2;
+
+        Vector3 velocity = movementModule.MoveVelocity;
+        float bouncePower = velocity.magnitude * _slimeMass;
+
+        if (bouncePower > 0.1f)
+        {
+            movementModule.AddForce(bounceDirection * bouncePower);
+        }
+    }
+    //이건 압축 해제되었을 때 팍 튕겨나가는거.
     private void SlimeImpact()
     {
         foreach(var movementModule in _movementModuleList)
@@ -139,6 +171,29 @@ public class SlimeObjectUnit : StructureObjectUnitBase
             }
         }
         return movementModuleList;
+    }
+
+    private List<PlayerMovementModule> GetCollisionModules()
+    {
+        Vector3 halfExtents = _collider.bounds.extents * 0.55f;
+        Quaternion rotation = transform.rotation;
+
+        List<PlayerMovementModule> moduleList = new List<PlayerMovementModule>();
+        Collider[] cols = Physics.OverlapBox(_checkCenterPos, halfExtents, rotation, _targetLayer);
+
+        if (cols.Length > 0)
+        {
+            foreach (Collider col in cols)
+            {
+                if (col.TryGetComponent(out PlayerController playerController))
+                {
+                    var movementModule = playerController.GetModule<PlayerMovementModule>();
+                    moduleList.Add(movementModule);
+                }
+            }
+        }
+
+        return moduleList;
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
