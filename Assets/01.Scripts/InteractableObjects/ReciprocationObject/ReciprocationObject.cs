@@ -27,7 +27,7 @@ public class ReciprocationObject : InteractableObject
             _converter = transform.GetComponentInParent<StructureConverter>();
             if(_converter == null)
             {
-                Debug.LogError("Set Converter to this Reciprocation Object");
+                Debug.LogError("[ReciprocationObject] Set Converter to this Reciprocation Object");
             }
         }
     }

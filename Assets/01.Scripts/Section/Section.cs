@@ -42,7 +42,7 @@ public class Section : PoolableMono
     public virtual void OnEnter(PlayerController player)
     {
         Active = true;
-        CameraManager.Instance.ChangeVCamController(VirtualCamType.STAGE);
+        CameraManager.Instance.ChangeVCamController(VirtualCamType.SECTION);
         ((SectionCamController)CameraManager.Instance.CurrentCamController).SetSection(this);
     }
 

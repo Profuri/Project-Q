@@ -29,7 +29,7 @@ public class CameraManager : BaseManager<CameraManager>
         {
             if (GetComponent($"{camType.ToString().ToUpperFirstChar()}CamController") is not VirtualCamController camController)
             {
-                Debug.LogError("please attack all type of cam controller this object");
+                Debug.LogError("[CameraManager] please attach all type of cam controller this object");
                 return;
             }
             
