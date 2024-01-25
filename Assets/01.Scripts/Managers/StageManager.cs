@@ -10,7 +10,7 @@ public class StageManager : BaseManager<StageManager>
 
     private ChapterData _currentPlayChapterData;
 
-    public EAxisType CurrentStageAxis => CurrentStage.Converter.AxisType;
+    // public EAxisType CurrentStageAxis => CurrentStage.Converter.AxisType;
 
     public override void StartManager()
     {
@@ -28,7 +28,6 @@ public class StageManager : BaseManager<StageManager>
         _currentPlayChapterData = chapterData;
         NextStage = PoolManager.Instance.Pop($"{chapterData.chapter.ToString()}_Stage_0") as Stage;
         NextStage.Generate(Vector3.zero);
-        PoolManager.Instance.Pop("Player");
     }
 
     public void GenerateNextStage(ChapterType chapter, int stage)
@@ -46,19 +45,16 @@ public class StageManager : BaseManager<StageManager>
         }
 
         CurrentStage = NextStage;
-        player.SetStage(CurrentStage);
-        CurrentStage.InitStage();
     }
 
     public void StageClear()
     {
-        CurrentStage.Converter.ConvertDimension(EAxisType.NONE);
         CurrentStage.Lock = false;
         var nextChapter = CurrentStage.stageOrder + 1;
 
         if (nextChapter >= _currentPlayChapterData.stageCnt)
         {
-            Debug.Log("this is a last stage game clear!!!");
+            Debug.Log("this is a last stage chapter clear!!!");
             return;
         }
         

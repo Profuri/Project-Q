@@ -1,7 +1,6 @@
 using UnityEngine;
 using StageStructureConvertSystem;
 
-[RequireComponent(typeof(StructureConverter))]
 public class Stage : Section
 {
     [Header("Chapter Setting")]
@@ -9,23 +8,10 @@ public class Stage : Section
     [SerializeField] private int _stageOrder;
     public int stageOrder => _stageOrder;
 
-    public StructureConverter Converter { get; private set; }
-
-    public override void Awake()
-    {
-        base.Awake();
-        Converter = GetComponent<StructureConverter>();
-    }
-
-    public void InitStage()
-    {
-        Converter.Init();
-    }
-
     public override void OnEnter(PlayerController player)
     {
         base.OnEnter(player);
-        Converter.SetConvertable(true);
+        player.Converter.SetConvertable(true);
 
         if (StageManager.Instance.NextStage == this) 
         {
@@ -36,7 +22,7 @@ public class Stage : Section
     public override void OnExit(PlayerController player)
     {
         base.OnExit(player);
-        Converter.SetConvertable(false);
+        player.Converter.SetConvertable(false);
     }
     
 #if UNITY_EDITOR

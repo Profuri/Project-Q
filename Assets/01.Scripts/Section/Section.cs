@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 [RequireComponent(typeof(SectionCollisionChecker))]
@@ -21,6 +22,8 @@ public class Section : PoolableMono
 
     public virtual void Awake()
     {
+        Active = false;
+        Lock = false;
         _bridgeObjects = new List<BridgeObject>();
     }
 
@@ -42,6 +45,7 @@ public class Section : PoolableMono
     public virtual void OnEnter(PlayerController player)
     {
         Active = true;
+        player.SetSection(this);
         CameraManager.Instance.ChangeVCamController(VirtualCamType.SECTION);
         ((SectionCamController)CameraManager.Instance.CurrentCamController).SetSection(this);
     }
@@ -144,6 +148,8 @@ public class Section : PoolableMono
     
     public override void Init()
     {
+        Active = false;
+        Lock = false;
     }
     
 #if UNITY_EDITOR

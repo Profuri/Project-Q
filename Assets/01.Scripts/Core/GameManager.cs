@@ -5,7 +5,6 @@ using UnityEngine;
 public class GameManager : MonoSingleton<GameManager>
 {
     public delegate void UnityEventListener();
-    public delegate void ObserverListener<in T>(T value);
     
     public event UnityEventListener OnStartEvent = null;
     public event UnityEventListener OnUpdateEvent = null;
@@ -22,6 +21,7 @@ public class GameManager : MonoSingleton<GameManager>
     private void Start()
     {
         OnStartEvent?.Invoke();
+        PoolManager.Instance.Pop("Player");
     }
 
     private void Update()

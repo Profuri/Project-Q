@@ -30,13 +30,14 @@ public class PlayerController : BaseModuleController
         PlayerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         PlayerUnit = GetComponent<PlayableObjectUnit>();
         CharController = GetComponent<CharacterController>();
+        Converter = GetComponent<StructureConverter>();
         base.Init();
     }
 
-    public void SetStage(Stage stage)
+    public void SetSection(Section section)
     {
-        transform.SetParent(stage.transform);
-        Converter = stage.Converter;
+        transform.SetParent(section.transform);
+        Converter.Init(section);
     }
 
     private bool GetAxisEnabled(EAxisType axis)
