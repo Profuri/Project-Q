@@ -14,7 +14,6 @@ public class SlimeObjectUnit : StructureObjectUnitBase
     [SerializeField] private LayerMask _targetLayer;
     [SerializeField] private EAxisType _applyAxisType;
     [SerializeField] private float _bounceTime = 0.5f;
-    [SerializeField] private Vector3 _bounceDirection;
 
     [SerializeField] private float _slimeMass = 0.1f;
 
@@ -68,16 +67,6 @@ public class SlimeObjectUnit : StructureObjectUnitBase
 
     private void Update()
     {
-        var collisionModuleList = GetCollisionModules();
-        foreach (var collisionModule in collisionModuleList)
-        {
-            if (collisionModule != null)
-            {
-                Vector3 bounceDirection = collisionModule.transform.position - transform.position;
-                SlimeEffect(Tuple.Create(collisionModule,bounceDirection.normalized));
-            }
-        }
-
         if (_canFindModule)
         {
             _movementModuleList.Clear();
@@ -146,6 +135,25 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         seq.Append(transform.DOScale(originScale, _bounceTime * 0.5f)).SetEase(Ease.InBounce);
         seq.AppendCallback(() => Callback?.Invoke());
     }
+
+    private Vector3 GetBounceDirection(Vector3 modulePos)
+    {
+        Vector3 diffPos = modulePos - transform.position;
+        Vector3 returnDirection = Vector3.up;
+
+        if(diffPos.x > diffPos.y)
+        {
+            if(diffPos.z > diffPos.x)
+            {
+                returnDirection = Vector3.back;
+            }
+            else
+            {
+                returnDirection = Vector3.right;
+            }
+        }
+        return returnDirection;
+    }
     private List<PlayerMovementModule> GetPlayerMovementModule()
     {
         Vector3 halfExtents = _checkScale * 0.5f;
@@ -173,28 +181,6 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         return movementModuleList;
     }
 
-    private List<PlayerMovementModule> GetCollisionModules()
-    {
-        Vector3 halfExtents = _collider.bounds.extents * 0.55f;
-        Quaternion rotation = transform.rotation;
-
-        List<PlayerMovementModule> moduleList = new List<PlayerMovementModule>();
-        Collider[] cols = Physics.OverlapBox(_checkCenterPos, halfExtents, rotation, _targetLayer);
-
-        if (cols.Length > 0)
-        {
-            foreach (Collider col in cols)
-            {
-                if (col.TryGetComponent(out PlayerController playerController))
-                {
-                    var movementModule = playerController.GetModule<PlayerMovementModule>();
-                    moduleList.Add(movementModule);
-                }
-            }
-        }
-
-        return moduleList;
-    }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
