@@ -18,11 +18,6 @@ public class StageManager : BaseManager<StageManager>
         NextStage = null;
     }        
 
-    public override void UpdateManager()
-    {
-        // Do nothing
-    }
-
     public void StartNewChapter(ChapterData chapterData)
     {
         _currentPlayChapterData = chapterData;

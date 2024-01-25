@@ -16,11 +16,6 @@ public class VolumeManager : BaseManager<VolumeManager>
         _axisControlVolume.weight = 0;
     }
 
-    public override void UpdateManager()
-    {
-        // Do Nothing
-    }
-
     public void SetAxisControlVolume(bool enable, float time)
     {
         if (enable)
