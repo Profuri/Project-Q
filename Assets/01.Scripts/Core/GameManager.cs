@@ -7,7 +7,6 @@ public class GameManager : MonoSingleton<GameManager>
     public delegate void UnityEventListener();
     
     public event UnityEventListener OnStartEvent = null;
-    public event UnityEventListener OnUpdateEvent = null;
 
     private void Awake()
     {
@@ -22,10 +21,5 @@ public class GameManager : MonoSingleton<GameManager>
     {
         OnStartEvent?.Invoke();
         PoolManager.Instance.Pop("Player");
-    }
-
-    private void Update()
-    {
-        OnUpdateEvent?.Invoke();
     }
 }

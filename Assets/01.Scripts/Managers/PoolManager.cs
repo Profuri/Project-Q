@@ -17,10 +17,6 @@ public class PoolManager : BaseManager<PoolManager>
         }
     }
         
-    public override void UpdateManager()
-    {
-    }
-
     private void CreatePool(PoolableMono prefab, Transform parent, int cnt)
     {
         if (_pools.ContainsKey(prefab.name))

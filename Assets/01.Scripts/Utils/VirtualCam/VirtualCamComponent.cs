@@ -27,11 +27,6 @@ namespace VirtualCam
             OnEnter?.Invoke();
         }
 
-        public void UpdateCam()
-        {
-            OnUpdate?.Invoke();
-        }
-
         public void ExitCam()
         {
             _virtualCam.m_Priority = 0;

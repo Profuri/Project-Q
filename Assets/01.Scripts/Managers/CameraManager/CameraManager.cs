@@ -38,14 +38,6 @@ public class CameraManager : BaseManager<CameraManager>
         }
     }
 
-    public override void UpdateManager()
-    {
-        if (ActiveVCam is not null)
-        {
-            ActiveVCam.UpdateCam();
-        }
-    }
-
     public void ChangeVCamController(VirtualCamType type)
     {
         CurrentCamController = _vCamControllers[type];
