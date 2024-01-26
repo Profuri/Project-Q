@@ -1,6 +1,6 @@
 public enum SceneType
 {
-    TITLE,
-    STAGE,
-    CREDIT
+    Title,
+    Chapter,
+    Stage
 }

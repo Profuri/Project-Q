@@ -20,6 +20,5 @@ public class GameManager : MonoSingleton<GameManager>
     private void Start()
     {
         OnStartEvent?.Invoke();
-        PoolManager.Instance.Pop("Player");
     }
 }
