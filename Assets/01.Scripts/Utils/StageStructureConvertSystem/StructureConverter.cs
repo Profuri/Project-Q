@@ -17,6 +17,7 @@ namespace StageStructureConvertSystem
         public void Init(Section section)
         {
             _axisType = EAxisType.NONE;
+            Debug.Log(section.name);
             SetConvertable(section is Stage);
 
             if (section is Stage)

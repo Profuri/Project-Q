@@ -8,6 +8,10 @@ public class Chapter : InteractableObject
     
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
-        StageManager.Instance.StartNewChapter(_data);    
+        SceneControlManager.Instance.LoadScene(SceneType.Stage, () =>
+        {
+            StageManager.Instance.StartNewChapter(_data);
+            PoolManager.Instance.Pop("Player");
+        });
     }
 }

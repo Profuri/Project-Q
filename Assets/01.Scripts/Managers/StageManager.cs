@@ -21,8 +21,8 @@ public class StageManager : BaseManager<StageManager>
     public void StartNewChapter(ChapterData chapterData)
     {
         _currentPlayChapterData = chapterData;
-        NextStage = PoolManager.Instance.Pop($"{chapterData.chapter.ToString()}_Stage_0") as Stage;
-        NextStage.Generate(Vector3.zero);
+        CurrentStage = PoolManager.Instance.Pop($"{chapterData.chapter.ToString()}_Stage_0") as Stage;
+        CurrentStage.Generate(Vector3.zero);
     }
 
     public void GenerateNextStage(ChapterType chapter, int stage)
