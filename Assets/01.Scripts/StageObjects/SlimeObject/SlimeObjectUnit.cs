@@ -33,11 +33,24 @@ public class SlimeObjectUnit : StructureObjectUnitBase
     public override void Init(StructureConverter converter)
     {
         _canFindModule = true;
-        _movementModuleList = new ();
+        _movementModuleList = new();
         base.Init(converter);
     }
 
-    
+    private void OnCollisionEnter(Collision collision)
+    {
+        GameObject collisionObj = collision.collider.gameObject;
+        Debug.Log($"CollisionObject: {collisionObj}");
+
+        if (collisionObj.CompareTag("Player"))
+        {
+            var controller = collisionObj.GetComponent<PlayerController>();
+            var movementModule = controller.GetModule<PlayerMovementModule>();
+            Vector3 bounceDirection = GetBounceDirection(movementModule.transform.position);
+            var tuple = Tuple.Create(movementModule, bounceDirection);
+            SlimeEffect(tuple);
+        }
+    }
 
     public override void TransformSynchronization(EAxisType axisType)
     {
@@ -62,29 +75,28 @@ public class SlimeObjectUnit : StructureObjectUnitBase
             //�̰� �÷��̾��� ��ġ�� �Ű����� ����Ǿ���ϴ� �κ�
             ShowBounceEffect(SlimeImpact);
         }
-
     }
 
     private void Update()
     {
         if (_canFindModule)
         {
-            _movementModuleList.Clear();
-            var moduleList = GetPlayerMovementModule();
-            
-            foreach(var movementModule in moduleList)
+            FindModule();
+        }
+    }
+
+    private void FindModule()
+    {
+        _movementModuleList.Clear();
+        var moduleList = GetPlayerMovementModule();
+
+        foreach (var movementModule in moduleList)
+        {
+            if (movementModule != null)
             {
-                Vector3 bounceDirection;
-                if (movementModule != null)
-                {
-                    bounceDirection = movementModule.transform.position - transform.position;
-                }
-                else
-                {
-                    bounceDirection = Vector3.zero;
-                }
-                
-                var tuple = Tuple.Create(movementModule,bounceDirection);
+                Vector3 bounceDirection = GetBounceDirection(movementModule.transform.position);
+
+                var tuple = Tuple.Create(movementModule, bounceDirection);
                 _movementModuleList.Add(tuple);
             }
         }
@@ -106,6 +118,7 @@ public class SlimeObjectUnit : StructureObjectUnitBase
             movementModule.AddForce(bounceDirection * bouncePower);
         }
     }
+
     //이건 압축 해제되었을 때 팍 튕겨나가는거.
     private void SlimeImpact()
     {
@@ -154,6 +167,7 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         }
         return returnDirection;
     }
+
     private List<PlayerMovementModule> GetPlayerMovementModule()
     {
         Vector3 halfExtents = _checkScale * 0.5f;
@@ -180,6 +194,8 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         }
         return movementModuleList;
     }
+
+
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
