@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using VirtualCam;
 
 public class SectionCamController : VirtualCamController
@@ -8,7 +9,6 @@ public class SectionCamController : VirtualCamController
         new Dictionary<EAxisType, VirtualCamComponent>();
 
     private VirtualCamComponent _axisControlCam;
-    private VirtualCamComponent _prevStageCam;
 
     public override void Init()
     {
@@ -33,15 +33,17 @@ public class SectionCamController : VirtualCamController
     {
         if (value)
         {
-            _prevStageCam = CurrentSelectedCam;
+            _axisControlCam.SetAxisXValue(CurrentSelectedCam.GetAxisXValue());
+            _axisControlCam.SetAxisYValue(CurrentSelectedCam.GetAxisYValue());
+            
             CurrentSelectedCam = _axisControlCam;
+            SetCurrentCam(callBack);
         }
         else
         {
-            CurrentSelectedCam = _prevStageCam;
+            ChangeCameraAxis(EAxisType.NONE);
         }
         
-        SetCurrentCam(callBack);
     }
 
     public void ChangeCameraAxis(EAxisType type, Action callBack = null)
