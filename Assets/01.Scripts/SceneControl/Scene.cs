@@ -1,22 +1,46 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Scene : PoolableMono
 {
     [SerializeField] private SceneType _type;
     public SceneType Type => _type;
-    
-    private List<Transform> _sceneObjs;
+
+    private List<PoolableMono> _objects;
 
     private void Awake()
     {
-        _sceneObjs = new List<Transform>();
+        _objects = new List<PoolableMono>();
     }
 
-    public override void Init()
+    public override void OnPop()
     {
+        AddObject("Player");
     }
-    
+
+    public override void OnPush()
+    {
+        while (_objects.Count > 0)
+        {
+            DeleteObject(_objects.First());
+        }
+        _objects.Clear();
+    }
+
+    public PoolableMono AddObject(string id)
+    {
+        var obj = PoolManager.Instance.Pop(id);
+        _objects.Add(obj);
+        return obj;
+    }
+
+    public void DeleteObject(PoolableMono obj)
+    {
+        PoolManager.Instance.Push(obj);
+        _objects.Remove(obj);
+    }
+
 #if UNITY_EDITOR
 
     private void OnValidate()

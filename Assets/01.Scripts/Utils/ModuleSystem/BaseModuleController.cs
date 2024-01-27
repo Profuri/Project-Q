@@ -12,7 +12,7 @@ namespace ModuleSystem
         public event Action OnFixedUpdateEvent = null;
         public event Action OnDisableEvent = null;
 
-        public override void Init()
+        public override void OnPop()
         {
             if (_modules is null)
             {
@@ -26,6 +26,10 @@ namespace ModuleSystem
                 _modules.Add(module.GetType(), module);
                 module.Init(transform);
             }
+        }
+        
+        public override void OnPush()
+        {
         }
 
         public virtual void Update()

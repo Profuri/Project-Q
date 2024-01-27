@@ -122,7 +122,7 @@ public class Section : PoolableMono
 
         for (var i = 1; i <= bridgeCount; i++)
         {
-            var bridge = PoolManager.Instance.Pop("Bridge") as BridgeObject;
+            var bridge = SceneControlManager.Instance.AddObject("Bridge") as BridgeObject;
             var bridgePos = startPoint + (bridgeDir * (i * bridgeSize) - bridgeDir * (bridgeSize / 2f));
             
             bridge.SetWidth(_sectionData.bridgeWidth);
@@ -146,12 +146,16 @@ public class Section : PoolableMono
         _bridgeObjects.Clear();
     }
     
-    public override void Init()
+    public override void OnPop()
     {
         Active = false;
         Lock = false;
     }
-    
+
+    public override void OnPush()
+    {
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

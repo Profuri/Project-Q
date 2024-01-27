@@ -22,7 +22,7 @@ public class BridgeObject : PoolableMono
     {
         StartCoroutine(MoveRoutine(transform.position - Vector3.up * 5, () =>
         {
-            PoolManager.Instance.Push(this);
+            SceneControlManager.Instance.DeleteObject(this);
         }));
     }
 
@@ -46,7 +46,11 @@ public class BridgeObject : PoolableMono
         CallBack?.Invoke();
     }
 
-    public override void Init()
+    public override void OnPop()
+    {
+    }
+
+    public override void OnPush()
     {
     }
 }

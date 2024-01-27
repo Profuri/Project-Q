@@ -21,13 +21,13 @@ public class StageManager : BaseManager<StageManager>
     public void StartNewChapter(ChapterData chapterData)
     {
         _currentPlayChapterData = chapterData;
-        CurrentStage = PoolManager.Instance.Pop($"{chapterData.chapter.ToString()}_Stage_0") as Stage;
+        CurrentStage = SceneControlManager.Instance.AddObject($"{chapterData.chapter.ToString()}_Stage_0") as Stage;
         CurrentStage.Generate(Vector3.zero);
     }
 
     public void GenerateNextStage(ChapterType chapter, int stage)
     {
-        NextStage = PoolManager.Instance.Pop($"{chapter.ToString()}_Stage_{stage.ToString()}") as Stage;
+        NextStage = SceneControlManager.Instance.AddObject($"{chapter.ToString()}_Stage_{stage.ToString()}") as Stage;
         CurrentStage.ConnectOtherSection(NextStage);
     }
     

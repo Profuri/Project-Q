@@ -11,7 +11,6 @@ public class Chapter : InteractableObject
         SceneControlManager.Instance.LoadScene(SceneType.Stage, () =>
         {
             StageManager.Instance.StartNewChapter(_data);
-            PoolManager.Instance.Pop("Player");
         });
     }
 }
