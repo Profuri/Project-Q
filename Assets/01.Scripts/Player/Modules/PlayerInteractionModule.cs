@@ -16,7 +16,7 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
 
     [SerializeField] private int _InteractableCheckLimit;
 
-    private InteractableObject _selectedInteractable = null;
+    [SerializeField] private InteractableObject _selectedInteractable = null;
 
     public override void Init(Transform root)
     {

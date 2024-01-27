@@ -15,7 +15,7 @@ public class GoalObject : InteractableObject
     {
         if(!_isToggle)
         {
-            Debug.Log("Clear");
+            ((PlayableObjectUnit)communicator).PlayerController.Converter.ConvertDimension(EAxisType.NONE);
             StageManager.Instance.StageClear();  
             _isToggle = true;
         }

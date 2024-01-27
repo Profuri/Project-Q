@@ -29,20 +29,12 @@ public class CameraManager : BaseManager<CameraManager>
         {
             if (GetComponent($"{camType.ToString().ToUpperFirstChar()}CamController") is not VirtualCamController camController)
             {
-                Debug.LogError("please attack all type of cam controller this object");
+                Debug.LogError("[CameraManager] please attach all type of cam controller this object");
                 return;
             }
             
             camController.Init();
             _vCamControllers.Add(camType, camController);
-        }
-    }
-
-    public override void UpdateManager()
-    {
-        if (ActiveVCam is not null)
-        {
-            ActiveVCam.UpdateCam();
         }
     }
 

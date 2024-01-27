@@ -7,7 +7,6 @@ namespace VirtualCam
     public interface IVirtualCam
     {
         public void EnterCam();
-        public void UpdateCam();
         public void ExitCam();
     }
 }

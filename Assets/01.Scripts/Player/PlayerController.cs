@@ -21,7 +21,7 @@ public class PlayerController : BaseModuleController
 
     public ushort EnableAxis { get; private set; }
 
-    public override void Init()
+    public override void OnPop()
     {
         EnableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
         ModelTrm = transform.Find("Model");
@@ -30,13 +30,14 @@ public class PlayerController : BaseModuleController
         PlayerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         PlayerUnit = GetComponent<PlayableObjectUnit>();
         CharController = GetComponent<CharacterController>();
-        base.Init();
+        Converter = GetComponent<StructureConverter>();
+        base.OnPop();
     }
 
-    public void SetStage(Stage stage)
+    public void SetSection(Section section)
     {
-        transform.SetParent(stage.transform);
-        Converter = stage.Converter;
+        transform.SetParent(section.transform);
+        Converter.Init(section);
     }
 
     private bool GetAxisEnabled(EAxisType axis)

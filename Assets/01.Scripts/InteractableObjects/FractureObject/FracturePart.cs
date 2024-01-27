@@ -119,8 +119,12 @@ public class FracturePart : PoolableMono
         PoolManager.Instance.Push(this);
     }
 
-    public override void Init()
+    public override void OnPop()
     {
         StartCoroutine(LifeRoutine());
+    }
+
+    public override void OnPush()
+    {
     }
 }

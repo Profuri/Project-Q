@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace InputControl
 {
-    [CreateAssetMenu(menuName = "SO/New Input System/InputReader")]
+    [CreateAssetMenu(menuName = "SO/InputReader")]
     public class InputReader : ScriptableObject, InputControls.IPlayerActions
     {
         public delegate void InputEventListener();
