@@ -27,15 +27,21 @@ public class RedstoneObjectUnit : InteractableObject
     private StructureConverter _converter;
 
     [SerializeField] private MeshRenderer _renderer;
+    [SerializeField] private Color _targetColor = Color.red;
+    [SerializeField] private Color _originColor = new Color(200,100,100);
+
     [SerializeField] private bool _isToggle;
 
     private void Update()
     {
-        if(_isToggle)
+        _renderer.material.color = _isOn ? _targetColor : _originColor;
+
+        if (_isToggle)
         {
             OnInteraction(null,_isOn);
         }       
     }
+
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
         if (!_isToggle)
@@ -48,7 +54,7 @@ public class RedstoneObjectUnit : InteractableObject
             _isOn = _isOn || interactValue;
         }
         
-        _renderer.material.color = _isOn ? Color.blue : Color.red;
+        _renderer.material.color = _isOn ? _targetColor : _originColor;
         int paramIndex = 0;
         try
         {
