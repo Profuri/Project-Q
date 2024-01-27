@@ -45,6 +45,7 @@ public class Section : PoolableMono
     public virtual void OnEnter(PlayerController player)
     {
         Active = true;
+        Lock = true;
         player.SetSection(this);
         CameraManager.Instance.ChangeVCamController(VirtualCamType.SECTION);
         ((SectionCamController)CameraManager.Instance.CurrentCamController).SetSection(this);
