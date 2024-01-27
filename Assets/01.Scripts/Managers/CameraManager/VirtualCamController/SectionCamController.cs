@@ -60,10 +60,6 @@ public class SectionCamController : VirtualCamController
         foreach (EAxisType axis in Enum.GetValues(typeof(EAxisType)))
         {
             _virtualCamDiction[axis].SetFollowTarget(sectionTrm);
-            if (axis == EAxisType.NONE)
-            {
-                _virtualCamDiction[axis].SetLookAtTarget(sectionTrm);
-            }
         }
 
         if (changeNoneAxis)
