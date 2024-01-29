@@ -36,10 +36,11 @@ public class RedstoneObjectUnit : InteractableObject
     {
         _renderer.material.color = _isOn ? _targetColor : _originColor;
 
+
         if (_isToggle)
         {
-            OnInteraction(null,_isOn);
-        }       
+            OnInteraction(null, _isOn);
+        }
     }
 
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
@@ -75,7 +76,7 @@ public class RedstoneObjectUnit : InteractableObject
                 }
                 else if ((currentAxisType & applyAxisType) != 0)
                 {
-                    interactable.OnInteraction(communicator, true, param);
+                    interactable.OnInteraction(communicator, _isOn, param);
                 }
                 else
                 {

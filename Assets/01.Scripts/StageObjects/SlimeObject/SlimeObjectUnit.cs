@@ -23,7 +23,7 @@ public class SlimeObjectUnit : StructureObjectUnitBase
     [Tooltip("If you setting this Vector3.zero, it will be set default settings")]
     [SerializeField] private Vector3 _checkScale = Vector3.zero;
 
-
+    //x z 콜라이더 꺼
     private bool _canImpact = false;
     //�̰� ���߿� �������̽��� �ٲ�ߵɰ� ����.
     private List<Tuple<PlayerMovementModule,Vector3>> _movementModuleList;
@@ -52,6 +52,12 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        GameObject collisionObj = other.gameObject;
+        Debug.Log($"Name:{collisionObj}");
+
+    }
     public override void TransformSynchronization(EAxisType axisType)
     {
         base.TransformSynchronization(axisType);
