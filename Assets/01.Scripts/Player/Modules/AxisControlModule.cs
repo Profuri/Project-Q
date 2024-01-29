@@ -68,6 +68,8 @@ public class AxisControlModule : BaseModule<PlayerController>
             return;
         }
         
+        Controller.GetModule<PlayerMovementModule>().SetEnableMove(!enter);
+        
         if (Controller.Converter.AxisType == EAxisType.NONE)
         {
             if (_isControllingAxis == enter)
