@@ -36,12 +36,11 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public override void UpdateModule()
     {
-        IsGround = CheckGround();
-        Controller.PlayerAnimatorController.IsGround(IsGround);
-        Controller.PlayerAnimatorController.Movement(_inputDir.sqrMagnitude >= 0.05f);
-        
         if(_canMove)
         {
+            IsGround = CheckGround();
+            Controller.PlayerAnimatorController.IsGround(IsGround);
+            Controller.PlayerAnimatorController.Movement(_inputDir.sqrMagnitude >= 0.05f);
             CalcMovement();
         }
     }
@@ -64,6 +63,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
     public void SetEnableMove(bool value)
     {
+        StopImmediately();
         _canMove = value;
     }
 

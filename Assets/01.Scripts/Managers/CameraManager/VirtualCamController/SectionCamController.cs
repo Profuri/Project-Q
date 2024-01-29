@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using VirtualCam;
 
 public class SectionCamController : VirtualCamController
@@ -8,7 +9,6 @@ public class SectionCamController : VirtualCamController
         new Dictionary<EAxisType, VirtualCamComponent>();
 
     private VirtualCamComponent _axisControlCam;
-    private VirtualCamComponent _prevStageCam;
 
     public override void Init()
     {
@@ -33,15 +33,17 @@ public class SectionCamController : VirtualCamController
     {
         if (value)
         {
-            _prevStageCam = CurrentSelectedCam;
+            _axisControlCam.SetAxisXValue(CurrentSelectedCam.GetAxisXValue());
+            _axisControlCam.SetAxisYValue(CurrentSelectedCam.GetAxisYValue());
+            
             CurrentSelectedCam = _axisControlCam;
+            SetCurrentCam(callBack);
         }
         else
         {
-            CurrentSelectedCam = _prevStageCam;
+            ChangeCameraAxis(EAxisType.NONE);
         }
         
-        SetCurrentCam(callBack);
     }
 
     public void ChangeCameraAxis(EAxisType type, Action callBack = null)
@@ -50,25 +52,16 @@ public class SectionCamController : VirtualCamController
         SetCurrentCam(callBack);
     }
 
-    public void SetSection(Section section, bool changeNoneAxis = true)
+    public void SetPlayer(PlayerController player)
     {
-        var sectionTrm = section.transform;
+        var playerTrm = player.transform;
         
-        _axisControlCam.SetFollowTarget(sectionTrm);
-        _axisControlCam.SetLookAtTarget(sectionTrm);
-        
+        _axisControlCam.SetFollowTarget(playerTrm);
+        _axisControlCam.SetLookAtTarget(playerTrm);
+
         foreach (EAxisType axis in Enum.GetValues(typeof(EAxisType)))
         {
-            _virtualCamDiction[axis].SetFollowTarget(sectionTrm);
-            if (axis == EAxisType.NONE)
-            {
-                _virtualCamDiction[axis].SetLookAtTarget(sectionTrm);
-            }
-        }
-
-        if (changeNoneAxis)
-        {
-            ChangeCameraAxis(EAxisType.NONE);
+            _virtualCamDiction[axis].SetFollowTarget(playerTrm);
         }
     }
 }

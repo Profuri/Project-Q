@@ -66,29 +66,6 @@ public class PlayerController : BaseModuleController
         _inputReader.SetEnableInput(enabled);
     }
 
-    public override void Update()
-    {
-        base.Update();
-        
-        // test key
-        // if (Input.GetKeyDown(KeyCode.V))
-        // {
-        //     ConvertDimension(EAxisType.NONE);
-        // }
-        // if (Input.GetKeyDown(KeyCode.B) && GetAxisEnabled(EAxisType.X)) 
-        // {
-        //     ConvertDimension(EAxisType.X);
-        // }
-        // if (Input.GetKeyDown(KeyCode.N) && GetAxisEnabled(EAxisType.Y))
-        // {
-        //     ConvertDimension(EAxisType.Y);
-        // }
-        // if (Input.GetKeyDown(KeyCode.M) && GetAxisEnabled(EAxisType.Z))
-        // {
-        //     ConvertDimension(EAxisType.Z);
-        // }
-    }
-
     public void ConvertDimension(EAxisType axis)
     {
         var movement = GetModule<PlayerMovementModule>();

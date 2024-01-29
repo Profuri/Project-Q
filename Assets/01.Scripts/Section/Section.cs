@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 [RequireComponent(typeof(SectionCollisionChecker))]
@@ -45,9 +44,11 @@ public class Section : PoolableMono
     public virtual void OnEnter(PlayerController player)
     {
         Active = true;
+        Lock = true;
         player.SetSection(this);
         CameraManager.Instance.ChangeVCamController(VirtualCamType.SECTION);
-        ((SectionCamController)CameraManager.Instance.CurrentCamController).SetSection(this);
+        ((SectionCamController)CameraManager.Instance.CurrentCamController).SetPlayer(player);
+        ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(EAxisType.NONE);
     }
 
     public virtual void OnExit(PlayerController player)
