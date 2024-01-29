@@ -52,21 +52,16 @@ public class SectionCamController : VirtualCamController
         SetCurrentCam(callBack);
     }
 
-    public void SetSection(Section section, bool changeNoneAxis = true)
+    public void SetPlayer(PlayerController player)
     {
-        var sectionTrm = section.transform;
+        var playerTrm = player.transform;
         
-        _axisControlCam.SetFollowTarget(sectionTrm);
-        _axisControlCam.SetLookAtTarget(sectionTrm);
-        
+        _axisControlCam.SetFollowTarget(playerTrm);
+        _axisControlCam.SetLookAtTarget(playerTrm);
+
         foreach (EAxisType axis in Enum.GetValues(typeof(EAxisType)))
         {
-            _virtualCamDiction[axis].SetFollowTarget(sectionTrm);
-        }
-
-        if (changeNoneAxis)
-        {
-            ChangeCameraAxis(EAxisType.NONE);
+            _virtualCamDiction[axis].SetFollowTarget(playerTrm);
         }
     }
 }
