@@ -23,6 +23,7 @@ public class Scene : PoolableMono
 
     public override void OnPush()
     {
+        Player.InputReader.ClearInputEvent();
         while (_objects.Count > 0)
         {
             DeleteObject(_objects.First());

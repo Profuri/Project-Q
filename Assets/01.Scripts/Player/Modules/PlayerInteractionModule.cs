@@ -21,7 +21,6 @@ public class PlayerInteractionModule : BaseModule<PlayerController>
     public override void Init(Transform root)
     {
         base.Init(root);
-
         _inputReader.OnInteractionEvent += OnInteraction;
     }
 

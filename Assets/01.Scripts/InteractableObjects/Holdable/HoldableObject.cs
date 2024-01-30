@@ -23,6 +23,7 @@ public class HoldableObject : InteractableObject
         var player = ((PlayableObjectUnit)communicator).PlayerController;
         var holdingModule = player.GetModule<PlayerObjectHoldingModule>();
 
+        Debug.Log(IsInteract);
         if (IsInteract)
         {
             holdingModule.AttachObject(this);
