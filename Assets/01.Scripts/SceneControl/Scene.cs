@@ -6,6 +6,8 @@ public class Scene : PoolableMono
 {
     [SerializeField] private SceneType _type;
     public SceneType Type => _type;
+    
+    public PlayerController Player { get; private set; }
 
     private List<PoolableMono> _objects;
 
@@ -16,7 +18,7 @@ public class Scene : PoolableMono
 
     public override void OnPop()
     {
-        AddObject("Player");
+        Player = AddObject("Player") as PlayerController;
     }
 
     public override void OnPush()
