@@ -706,11 +706,12 @@ MonoBehaviour:
   _targetLayer:
     serializedVersion: 2
     m_Bits: 1024
-  _applyAxisType: 6
+  _applyAxisType: 4
   _bounceTime: 1
   _slimeMass: 0.2
-  _checkCenterPos: {x: 0, y: 2, z: 0}
-  _checkScale: {x: 1, y: 1.0000002, z: 1}
+  _collisionList:
+  - checkCenterPos: {x: 0, y: 1, z: -1}
+    checkScale: {x: 0, y: 0, z: 0}
 --- !u!54 &7431965075683700678
 Rigidbody:
   m_ObjectHideFlags: 0

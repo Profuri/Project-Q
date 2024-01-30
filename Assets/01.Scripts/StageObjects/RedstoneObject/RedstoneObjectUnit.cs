@@ -56,7 +56,7 @@ public class RedstoneObjectUnit : InteractableObject
         }
         
         _renderer.material.color = _isOn ? _targetColor : _originColor;
-        int paramIndex = 0;
+        //int paramIndex = 0;
         try
         {
             //EAxisType currentAxisType = (EAxisType)param[paramIndex];

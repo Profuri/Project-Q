@@ -7,6 +7,14 @@ using DG.Tweening;
 using UnityEngine;
 [RequireComponent(typeof(Collider),typeof(Rigidbody))]
 
+
+[System.Serializable]
+public class CheckCollision
+{
+    public Vector3 checkCenterPos = Vector3.zero;
+    public Vector3 checkScale = Vector3.zero;
+}
+
 public class SlimeObjectUnit : StructureObjectUnitBase
 {
     [Header("SlimeSettings")]
@@ -17,11 +25,8 @@ public class SlimeObjectUnit : StructureObjectUnitBase
 
     [SerializeField] private float _slimeMass = 0.1f;
 
-    [Header("SlimeCollisionSettings")]
-    [Tooltip("If you setting this Vector3.zero, it will be set default settings")]
-    [SerializeField] private Vector3 _checkCenterPos = Vector3.zero;
-    [Tooltip("If you setting this Vector3.zero, it will be set default settings")]
-    [SerializeField] private Vector3 _checkScale = Vector3.zero;
+    [SerializeField] private List<CheckCollision> _collisionList = new List<CheckCollision>();
+
 
     //x z 콜라이더 꺼
     private bool _canImpact = false;
@@ -71,6 +76,10 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         }
         else
         {
+            if(axisType != EAxisType.Y)
+            {
+                _collider.enabled = false;
+            }
             _canFindModule = false;
         }
 
@@ -138,6 +147,7 @@ public class SlimeObjectUnit : StructureObjectUnitBase
 
                 Debug.Log($"BounceDirection: {bounceDirection}");
                 playerMovementMoudle.SetForce(bounceDirection * _bouncePower);
+                Debug.Log($"Player Velocity: {playerMovementMoudle.MoveVelocity}");
             }
         }
 
@@ -176,25 +186,32 @@ public class SlimeObjectUnit : StructureObjectUnitBase
 
     private List<PlayerMovementModule> GetPlayerMovementModule()
     {
-        Vector3 halfExtents = _checkScale * 0.5f;
-        Quaternion rotation = transform.rotation;
-
-        Collider[] cols = Physics.OverlapBox(_checkCenterPos, halfExtents, rotation, _targetLayer);
         List<PlayerMovementModule> movementModuleList = new List<PlayerMovementModule>();
 
-        if (cols.Length > 0)
+        foreach (CheckCollision collision in _collisionList)
         {
-            foreach (Collider col in cols)
-            {
-                //if (col.TryGetComponent(out IBounceable bounceable))
-                //{
-                //    bounceable.BounceOff();
-                //}
+            Vector3 checkScale = collision.checkScale;
+            Vector3 checkCenterPos = collision.checkCenterPos;
+            Vector3 halfExtents = checkScale * 0.5f;
 
-                if (col.TryGetComponent(out PlayerController playerController))
+            Quaternion rotation = transform.rotation;
+
+            Collider[] cols = Physics.OverlapBox(checkCenterPos, halfExtents, rotation, _targetLayer);
+
+            if (cols.Length > 0)
+            {
+                foreach (Collider col in cols)
                 {
-                    var movementModule = playerController.GetModule<PlayerMovementModule>();
-                    movementModuleList.Add(movementModule);
+                    //if (col.TryGetComponent(out IBounceable bounceable))
+                    //{
+                    //    bounceable.BounceOff();
+                    //}
+
+                    if (col.TryGetComponent(out PlayerController playerController))
+                    {
+                        var movementModule = playerController.GetModule<PlayerMovementModule>();
+                        movementModuleList.Add(movementModule);
+                    }
                 }
             }
         }
@@ -213,11 +230,20 @@ public class SlimeObjectUnit : StructureObjectUnitBase
             _collider = GetComponent<Collider>();
         }
 
-        //center ��ġ�� �����ؾߵ�
-        if (_checkCenterPos == Vector3.zero) _checkCenterPos = transform.position;
-        if (_checkScale == Vector3.zero) _checkScale = _collider.bounds.size;
 
-        Gizmos.DrawCube(_checkCenterPos,_checkScale);
+        foreach(CheckCollision collision in _collisionList)
+        {
+
+            Vector3 checkCenterPos = collision.checkCenterPos;
+            Vector3 checkScale = collision.checkScale;
+            //center ��ġ�� �����ؾߵ�
+            if (checkCenterPos == Vector3.zero) checkCenterPos = transform.position;
+            if (checkScale == Vector3.zero) checkScale = _collider.bounds.size;
+
+            Gizmos.DrawCube(checkCenterPos, checkScale);
+        }
+
+
     }
 #endif
 }
