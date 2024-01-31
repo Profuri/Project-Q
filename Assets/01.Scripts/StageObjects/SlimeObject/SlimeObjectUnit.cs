@@ -56,27 +56,21 @@ public class SlimeObjectUnit : StructureObjectUnitBase
             SlimeEffect(tuple);
         }
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        GameObject collisionObj = other.gameObject;
-        Debug.Log($"Name:{collisionObj}");
-
-    }
+    
     public override void TransformSynchronization(EAxisType axisType)
     {
         base.TransformSynchronization(axisType);
-
-
 
         if (axisType == EAxisType.NONE)
         {
             _canImpact = (_applyAxisType & _prevAxisType) != 0;
             _canFindModule = true;
+            _collider.enabled = true;
+
         }
         else
         {
-            if(axisType != EAxisType.Y)
+            if (axisType != EAxisType.Y)
             {
                 _collider.enabled = false;
             }
@@ -192,8 +186,9 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         {
             Vector3 checkScale = collision.checkScale;
             Vector3 checkCenterPos = collision.checkCenterPos;
-            Vector3 halfExtents = checkScale * 0.5f;
 
+
+            Vector3 halfExtents = checkScale * 0.5f;
             Quaternion rotation = transform.rotation;
 
             Collider[] cols = Physics.OverlapBox(checkCenterPos, halfExtents, rotation, _targetLayer);
@@ -210,6 +205,7 @@ public class SlimeObjectUnit : StructureObjectUnitBase
                     if (col.TryGetComponent(out PlayerController playerController))
                     {
                         var movementModule = playerController.GetModule<PlayerMovementModule>();
+                        Debug.Log($"FindModule: {movementModule}");
                         movementModuleList.Add(movementModule);
                     }
                 }
