@@ -23,6 +23,9 @@ namespace StageStructureConvertSystem
         public ObjectInfo PrevObjectInfo => _prevObjectInfo;
         public ObjectInfo ObjectInfo => _objectInfo;
 
+        [SerializeField] private bool _reloadOnCollisionToObstacle = false;
+        public bool ReloadOnCollisionToObstacle => _reloadOnCollisionToObstacle;
+
         [Header("Property setting toggle")]
         [SerializeField] private bool _materialRenderSetting = true;
         [SerializeField] private bool _colliderSetting = true;

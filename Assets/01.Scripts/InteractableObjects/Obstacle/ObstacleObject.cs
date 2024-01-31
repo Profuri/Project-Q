@@ -30,9 +30,12 @@ public class ObstacleObject : InteractableObject
 
         for (var i = 0; i < size; i++)
         {
-            if (cols[i].TryGetComponent<PlayableObjectUnit>(out var playerUnit))
+            if (cols[i].TryGetComponent<StructureObjectUnitBase>(out var unit))
             {
-                playerUnit.ReloadObject();
+                if (unit.ReloadOnCollisionToObstacle)
+                {
+                    unit.ReloadObject();
+                }
             }
             else if (cols[i].TryGetComponent<InteractableObject>(out var interactable))
             {
