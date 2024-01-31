@@ -45,7 +45,6 @@ public class SlimeObjectUnit : StructureObjectUnitBase
     private void OnCollisionEnter(Collision collision)
     {
         GameObject collisionObj = collision.collider.gameObject;
-        Debug.Log($"CollisionObject: {collisionObj}");
 
         if (collisionObj.CompareTag("Player"))
         {
@@ -59,20 +58,18 @@ public class SlimeObjectUnit : StructureObjectUnitBase
     
     public override void TransformSynchronization(EAxisType axisType)
     {
-        base.TransformSynchronization(axisType);
-
+        Debug.Log($"AxisType: {axisType}");
         if (axisType == EAxisType.NONE)
         {
             _canImpact = (_applyAxisType & _prevAxisType) != 0;
             _canFindModule = true;
-            _collider.enabled = true;
-
+            _collider.isTrigger = false;
         }
         else
         {
             if (axisType != EAxisType.Y)
             {
-                _collider.enabled = false;
+                _collider.isTrigger = true;
             }
             _canFindModule = false;
         }
@@ -84,6 +81,10 @@ public class SlimeObjectUnit : StructureObjectUnitBase
             //�̰� �÷��̾��� ��ġ�� �Ű����� ����Ǿ���ϴ� �κ�
             ShowBounceEffect(SlimeImpact);
         }
+
+        base.TransformSynchronization(axisType);
+
+
     }
 
     private void Update()
