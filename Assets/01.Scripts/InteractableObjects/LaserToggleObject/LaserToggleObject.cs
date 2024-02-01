@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using InteractableSystem;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 
 public class LaserToggleObject : InteractableObject

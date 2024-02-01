@@ -1,4 +1,4 @@
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 
 public class DestroyZone : MonoBehaviour

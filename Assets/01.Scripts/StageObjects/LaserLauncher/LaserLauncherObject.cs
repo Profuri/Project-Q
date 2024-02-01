@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using InteractableSystem;
 using UnityEngine;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 
 [RequireComponent(typeof(LineRenderer))]
 public class LaserLauncherObject : StructureObjectUnitBase
@@ -24,7 +24,7 @@ public class LaserLauncherObject : StructureObjectUnitBase
 
     private bool _isActiveLaser;
 
-    public override void Init(StructureConverter converter)
+    public override void Init(AxisConverter converter)
     {
         _laserRenderer = GetComponent<LineRenderer>();
         _laserInfos = new Queue<LaserInfo>();

@@ -1,5 +1,5 @@
 using InteractableSystem;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 
 public class GoalObject : InteractableObject
@@ -15,7 +15,7 @@ public class GoalObject : InteractableObject
     {
         if(!_isToggle)
         {
-            ((PlayableObjectUnit)communicator).PlayerController.Converter.ConvertDimension(EAxisType.NONE);
+            ((PlayableObjectUnit)communicator).PlayerController.Converter.ConvertDimension(AxisType.None);
             StageManager.Instance.StageClear();  
             _isToggle = true;
         }

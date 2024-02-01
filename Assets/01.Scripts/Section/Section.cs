@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AxisConvertSystem;
 using UnityEngine;
 
 [RequireComponent(typeof(SectionCollisionChecker))]
@@ -48,7 +49,7 @@ public class Section : PoolableMono
         player.SetSection(this);
         CameraManager.Instance.ChangeVCamController(VirtualCamType.SECTION);
         ((SectionCamController)CameraManager.Instance.CurrentCamController).SetPlayer(player);
-        ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(EAxisType.NONE);
+        ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(AxisType.None);
     }
 
     public virtual void OnExit(PlayerController player)

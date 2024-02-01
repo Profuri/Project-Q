@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using InteractableSystem;
 using System;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 
 public class TogglePlateMany : InteractableObject
 {

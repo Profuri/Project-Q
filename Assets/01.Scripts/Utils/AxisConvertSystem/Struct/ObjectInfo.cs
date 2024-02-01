@@ -1,10 +1,10 @@
 using UnityEngine;
 
-namespace StageStructureConvertSystem
+namespace AxisConvertSystem
 {
     public struct ObjectInfo
     {
-        public EAxisType axis;
+        public AxisType axis;
         public Vector3 position;
         public Quaternion rotation;
         public Vector3 scale;

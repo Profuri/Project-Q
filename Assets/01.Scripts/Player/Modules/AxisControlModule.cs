@@ -1,3 +1,4 @@
+using AxisConvertSystem;
 using InputControl;
 using ModuleSystem;
 using UnityEngine;
@@ -7,7 +8,7 @@ public class AxisControlModule : BaseModule<PlayerController>
     [SerializeField] private InputReader _inputReader;
 
     private bool _isControllingAxis;
-    private EAxisType _currentControlAxis;
+    private AxisType _currentControlAxis;
 
     public override void Init(Transform root)
     {
@@ -39,7 +40,7 @@ public class AxisControlModule : BaseModule<PlayerController>
         _inputReader.OnClickEvent -= SelectAxisHandle;
     }
     
-    private EAxisType GetCurrentControlAxis()
+    private AxisType GetCurrentControlAxis()
     {
         var vCam = CameraManager.Instance.ActiveVCam;
         var camYValue = vCam.GetAxisYValue();
@@ -47,18 +48,18 @@ public class AxisControlModule : BaseModule<PlayerController>
 
         if (camYValue >= 45f)
         {
-            return EAxisType.Y;
+            return AxisType.Y;
         }
         if (camXValue >= -45f)
         {
-            return EAxisType.Z;
+            return AxisType.Z;
         } 
         if (camXValue >= -90f)
         {
-            return EAxisType.X;
+            return AxisType.X;
         }
 
-        return EAxisType.NONE;
+        return AxisType.None;
     }
 
     private void AxisControlToggleHandle(bool enter)
@@ -70,7 +71,7 @@ public class AxisControlModule : BaseModule<PlayerController>
         
         Controller.GetModule<PlayerMovementModule>().SetEnableMove(!enter);
         
-        if (Controller.Converter.AxisType == EAxisType.NONE)
+        if (Controller.Converter.AxisType == AxisType.None)
         {
             if (_isControllingAxis == enter)
             {
@@ -95,7 +96,7 @@ public class AxisControlModule : BaseModule<PlayerController>
                 return;
             }
             
-            Controller.ConvertDimension(EAxisType.NONE);
+            Controller.ConvertDimension(AxisType.None);
         }
     }
 
@@ -125,7 +126,7 @@ public class AxisControlModule : BaseModule<PlayerController>
         if (CameraManager.Instance.CurrentCamController is SectionCamController)
         {
             VolumeManager.Instance.SetAxisControlVolume(false, 0.2f);
-            LightManager.Instance.SetAxisLight(EAxisType.NONE);
+            LightManager.Instance.SetAxisLight(AxisType.None);
             ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(false);
         }
     }

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 
 public class PictureObject : StructureObjectUnitBase
 {
     private List<PictureUnit> _units;
 
-    public override void Init(StructureConverter converter)
+    public override void Init(AxisConverter converter)
     {
         _units = new List<PictureUnit>();
         transform.GetComponentsInChildren(_units);
@@ -22,7 +22,7 @@ public class PictureObject : StructureObjectUnitBase
         base.ObjectSetting();
     }
 
-    private void UnitSetting(EAxisType axis)
+    private void UnitSetting(AxisType axis)
     {
         foreach (var unit in _units)
         {
@@ -34,7 +34,7 @@ public class PictureObject : StructureObjectUnitBase
     {
         base.ColliderSetting();
 
-        if (_objectInfo.axis != EAxisType.Y && _objectInfo.axis != EAxisType.NONE)
+        if (_objectInfo.axis != AxisType.Y && _objectInfo.axis != AxisType.None)
         {
             _collider.isTrigger = true;
         }

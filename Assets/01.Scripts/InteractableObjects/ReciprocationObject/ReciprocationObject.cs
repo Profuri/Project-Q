@@ -1,5 +1,5 @@
 using InteractableSystem;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
@@ -26,13 +26,13 @@ public class ReciprocationObject : InteractableObject
 
         switch (StageManager.Instance.CurrentStageAxis)
         {
-            case EAxisType.X:
+            case AxisType.X:
                 destPos.x = 0f;
                 break;
-            case EAxisType.Y:
+            case AxisType.Y:
                 // destPos.y = 0f;
                 break;
-            case EAxisType.Z:
+            case AxisType.Z:
                 destPos.z = 0f;
                 break;
         }

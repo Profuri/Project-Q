@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace StageStructureConvertSystem
+namespace AxisConvertSystem
 {
     [RequireComponent(typeof(Outline))]
     public class StructureObjectUnitBase : MonoBehaviour, IStructureObject
@@ -9,7 +9,7 @@ namespace StageStructureConvertSystem
         protected Quaternion _originRotation;
         protected Vector3 _originScale;
 
-        private StructureConverter _converter;
+        private AxisConverter _converter;
 
         protected ObjectInfo _prevObjectInfo;
         protected ObjectInfo _objectInfo;
@@ -35,7 +35,7 @@ namespace StageStructureConvertSystem
 
         private int _defaultRenderQueue;
 
-        public virtual void Init(StructureConverter converter)
+        public virtual void Init(AxisConverter converter)
         {
             _originPos = transform.localPosition;
             _originRotation = transform.rotation;
@@ -58,10 +58,10 @@ namespace StageStructureConvertSystem
             _objectInfo.position = _originPos;
             _objectInfo.rotation = _originRotation;
             _objectInfo.scale = _originScale;
-            _objectInfo.axis = EAxisType.NONE;
+            _objectInfo.axis = AxisType.None;
         }
 
-        public virtual void ConvertDimension(EAxisType axisType)
+        public virtual void ConvertDimension(AxisType axisType)
         {
             _objectInfo.position = transform.localPosition;
             _objectInfo.rotation = transform.rotation;
@@ -69,10 +69,10 @@ namespace StageStructureConvertSystem
             SwappingObjectInfo(axisType);
         }
 
-        private void SwappingObjectInfo(EAxisType axisType)
+        private void SwappingObjectInfo(AxisType axisType)
         {
             // convert to 3D
-            if (axisType == EAxisType.NONE)
+            if (axisType == AxisType.None)
             {
                 (_prevObjectInfo, _objectInfo) = (_objectInfo, _prevObjectInfo);
             }
@@ -84,9 +84,9 @@ namespace StageStructureConvertSystem
             }
         }
 
-        public virtual void TransformSynchronization(EAxisType axisType)
+        public virtual void TransformSynchronization(AxisType axisType)
         {
-            if (axisType == EAxisType.NONE)
+            if (axisType == AxisType.None)
             {
                 PrevTransformSynchronization(_prevObjectInfo.axis);
             }
@@ -96,41 +96,41 @@ namespace StageStructureConvertSystem
             }
         }
 
-        private void NextTransformSynchronization(EAxisType axisType)
+        private void NextTransformSynchronization(AxisType axisType)
         {
             switch (axisType)
             {
-                case EAxisType.X:
+                case AxisType.X:
                     _objectInfo.position.x = 0;
                     _objectInfo.scale.x = Mathf.Min(_objectInfo.scale.x, 1);
                     break;
-                case EAxisType.Y:
+                case AxisType.Y:
                     _objectInfo.position.y = 1;
                     _objectInfo.scale.y = Mathf.Min(_objectInfo.scale.y, 1);
                     break;
-                case EAxisType.Z:
+                case AxisType.Z:
                     _objectInfo.position.z = 0;
                     _objectInfo.scale.z = Mathf.Min(_objectInfo.scale.z, 1);
                     break;
             }
         }
 
-        private void PrevTransformSynchronization(EAxisType prevAxis)
+        private void PrevTransformSynchronization(AxisType prevAxis)
         {
             switch (prevAxis)
             {
                 // x compress
-                case EAxisType.X:
+                case AxisType.X:
                     _objectInfo.position.y = _prevObjectInfo.position.y;
                     _objectInfo.position.z = _prevObjectInfo.position.z;
                     break;
                 // y compress
-                case EAxisType.Y:
+                case AxisType.Y:
                     _objectInfo.position.x = _prevObjectInfo.position.x;
                     _objectInfo.position.z = _prevObjectInfo.position.z;
                     break;
                 // z compress
-                case EAxisType.Z:
+                case AxisType.Z:
                     _objectInfo.position.x = _prevObjectInfo.position.x;
                     _objectInfo.position.y = _prevObjectInfo.position.y;
                     break;
@@ -160,7 +160,7 @@ namespace StageStructureConvertSystem
             _objectInfo.rotation = rotation;
             _objectInfo.scale = scale;
 
-            if (_converter.AxisType != EAxisType.NONE)
+            if (_converter.AxisType != AxisType.None)
             {
                 TransformSynchronization(_converter.AxisType);
             }
@@ -181,16 +181,16 @@ namespace StageStructureConvertSystem
             
             switch (_objectInfo.axis)
             {
-                case EAxisType.NONE:
+                case AxisType.None:
                     _material.renderQueue = _defaultRenderQueue;
                     break;
-                case EAxisType.X:
+                case AxisType.X:
                     _material.renderQueue = Mathf.CeilToInt(_prevObjectInfo.position.x + 5f);
                     break;
-                case EAxisType.Y:
+                case AxisType.Y:
                     _material.renderQueue = Mathf.CeilToInt(_prevObjectInfo.position.y);
                     break;
-                case EAxisType.Z:
+                case AxisType.Z:
                     _material.renderQueue = Mathf.CeilToInt(Mathf.Abs(_prevObjectInfo.position.z - 5f));
                     break;
             }
@@ -203,7 +203,7 @@ namespace StageStructureConvertSystem
                 return;
             }
 
-            _collider.isTrigger = _objectInfo.axis == EAxisType.Y && _interatableYAxis;
+            _collider.isTrigger = _objectInfo.axis == AxisType.Y && _interatableYAxis;
         }
 
         private void OutlineSetting()
@@ -213,7 +213,7 @@ namespace StageStructureConvertSystem
                 return;
             }
 
-            _outline.enabled = _objectInfo.axis == EAxisType.Y && !_interatableYAxis;
+            _outline.enabled = _objectInfo.axis == AxisType.Y && !_interatableYAxis;
         }
 
         private void RigidbodySetting()
@@ -223,7 +223,7 @@ namespace StageStructureConvertSystem
                 return;
             }
             
-            _rigidbody.useGravity = _objectInfo.axis != EAxisType.Y;
+            _rigidbody.useGravity = _objectInfo.axis != AxisType.Y;
         }
 
         public void RemoveUnit()

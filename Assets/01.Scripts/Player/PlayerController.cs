@@ -1,6 +1,6 @@
 using InputControl;
 using ModuleSystem;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -17,7 +17,7 @@ public class PlayerController : BaseModuleController
     
     public PlayerUIController PlayerUIController { get; private set; }
     public PlayerAnimatorController PlayerAnimatorController { get; private set; }
-    public StructureConverter Converter { get; private set; }
+    public AxisConverter Converter { get; private set; }
     public PlayableObjectUnit PlayerUnit { get; private set; }
     public CharacterController CharController { get; private set; }
 
@@ -25,14 +25,14 @@ public class PlayerController : BaseModuleController
 
     public override void OnPop()
     {
-        EnableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
+        EnableAxis = (ushort)(AxisType.X | AxisType.Y | AxisType.Z);
         ModelTrm = transform.Find("Model");
         PlayerAnimatorController = ModelTrm.GetComponent<PlayerAnimatorController>();
         CenterPoint = transform.Find("CenterPoint");
         PlayerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         PlayerUnit = GetComponent<PlayableObjectUnit>();
         CharController = GetComponent<CharacterController>();
-        Converter = GetComponent<StructureConverter>();
+        Converter = GetComponent<AxisConverter>();
         base.OnPop();
     }
 
@@ -42,12 +42,12 @@ public class PlayerController : BaseModuleController
         Converter.Init(section);
     }
 
-    private bool GetAxisEnabled(EAxisType axis)
+    private bool GetAxisEnabled(AxisType axis)
     {
         return (EnableAxis & (ushort)axis) != 0;
     }
 
-    public void SetEnableAxis(EAxisType axis, bool enabled)
+    public void SetEnableAxis(AxisType axis, bool enabled)
     {
         if(enabled)
         {
@@ -58,7 +58,7 @@ public class PlayerController : BaseModuleController
             EnableAxis ^= (ushort)axis;
             if(axis == Converter.AxisType)
             {
-                ConvertDimension(EAxisType.NONE);
+                ConvertDimension(AxisType.None);
             }
         }
     }
@@ -68,7 +68,7 @@ public class PlayerController : BaseModuleController
         _inputReader.SetEnableInput(enabled);
     }
 
-    public void ConvertDimension(EAxisType axis)
+    public void ConvertDimension(AxisType axis)
     {
         var movement = GetModule<PlayerMovementModule>();
         movement.SetEnableMove(false);

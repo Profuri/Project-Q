@@ -1,4 +1,4 @@
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -9,34 +9,34 @@ public class DynamicObjectUnit : StructureObjectUnitBase
 
     private Rigidbody _rigidbody;
 
-    public override void Init(StructureConverter converter)
+    public override void Init(AxisConverter converter)
     {
         _rigidbody = GetComponent<Rigidbody>();
         base.Init(converter);
     }
 
-    public override void TransformSynchronization(EAxisType axisType)
+    public override void TransformSynchronization(AxisType axisType)
     {
         base.TransformSynchronization(axisType);
 
         switch (axisType)
         {
-            case EAxisType.NONE:
+            case AxisType.None:
                 CheckObject(_prevObjectInfo.axis);
                 break;
-            case EAxisType.X:
+            case AxisType.X:
                 _objectInfo.position.x = 1f;
                 break;
-            case EAxisType.Y:
+            case AxisType.Y:
                 _objectInfo.position.y = 1f;
                 break;
-            case EAxisType.Z:
+            case AxisType.Z:
                 _objectInfo.position.z = -1f;
                 break;
         }
     }
 
-    private void CheckObject(EAxisType axisType)
+    private void CheckObject(AxisType axisType)
     {
         var origin = _prevObjectInfo.position + Vector3.up * (_prevObjectInfo.scale.y / 2f);
         var dir = Vector3.down;
@@ -55,7 +55,7 @@ public class DynamicObjectUnit : StructureObjectUnitBase
 
         switch (axisType)
         {
-            case EAxisType.X:
+            case AxisType.X:
                 if (_objectInfo.position.x >= unit.ObjectInfo.position.x - unit.ObjectInfo.scale.x / 2f  &&
                     _objectInfo.position.x <= unit.ObjectInfo.position.x + unit.ObjectInfo.scale.x / 2f)
                 {
@@ -63,14 +63,14 @@ public class DynamicObjectUnit : StructureObjectUnitBase
                 }
                 _objectInfo.position.x = unit.ObjectInfo.position.x;
                 break;
-            case EAxisType.Y:
+            case AxisType.Y:
                 if (_objectInfo.position.y >= unit.ObjectInfo.position.y + unit.ObjectInfo.scale.y / 2f + _objectInfo.scale.y / 2f)
                 {
                     return;
                 }
                 _objectInfo.position.y = unit.ObjectInfo.position.y + unit.ObjectInfo.scale.y / 2f + _objectInfo.scale.y / 2f;
                 break;
-            case EAxisType.Z:
+            case AxisType.Z:
                 if (_objectInfo.position.z >= unit.ObjectInfo.position.z - unit.ObjectInfo.scale.z / 2f  &&
                     _objectInfo.position.z <= unit.ObjectInfo.position.z + unit.ObjectInfo.scale.z / 2f)
                 {

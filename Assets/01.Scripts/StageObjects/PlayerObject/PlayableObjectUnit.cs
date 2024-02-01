@@ -1,4 +1,4 @@
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerController))]
@@ -14,7 +14,7 @@ public class PlayableObjectUnit : StructureObjectUnitBase
 
     private Vector3 _colliderCenter; 
 
-    public override void Init(StructureConverter converter)
+    public override void Init(AxisConverter converter)
     {
         base.Init(converter);
         _playerController = GetComponent<PlayerController>();
@@ -28,25 +28,25 @@ public class PlayableObjectUnit : StructureObjectUnitBase
         _originPos = StageManager.Instance.CurrentStage.PlayerResetPoint;
     }
 
-    public override void TransformSynchronization(EAxisType axisType)
+    public override void TransformSynchronization(AxisType axisType)
     {
         base.TransformSynchronization(axisType);
-        _playerController.GetModule<PlayerMovementModule>().CanJump = axisType != EAxisType.Y;
+        _playerController.GetModule<PlayerMovementModule>().CanJump = axisType != AxisType.Y;
 
         switch (axisType)
         {
-            case EAxisType.NONE:
+            case AxisType.None:
                 CheckObject(_prevObjectInfo.axis);
                 _characterController.center = _colliderCenter;
                 break;
-            case EAxisType.X:
+            case AxisType.X:
                 _objectInfo.position.x = 1f;
                 _characterController.center = _colliderCenter + new Vector3(-1, 0, 0);
                 break;
-            case EAxisType.Y:
+            case AxisType.Y:
                 _objectInfo.position.y = 1f;
                 break;
-            case EAxisType.Z:
+            case AxisType.Z:
                 _objectInfo.position.z = -1f;
                 _characterController.center = _colliderCenter + new Vector3(0, 0, 1);
                 break;
@@ -60,7 +60,7 @@ public class PlayableObjectUnit : StructureObjectUnitBase
         _characterController.enabled = true;
     }
 
-    private void CheckObject(EAxisType axisType)
+    private void CheckObject(AxisType axisType)
     {
         Vector3 basePos = StageManager.Instance.CurrentStage.transform.position;
         var origin = basePos + _prevObjectInfo.position + _characterController.center + Vector3.up * (_prevObjectInfo.scale.y / 2f);
@@ -80,7 +80,7 @@ public class PlayableObjectUnit : StructureObjectUnitBase
 
         switch (axisType)
         {
-            case EAxisType.X:
+            case AxisType.X:
                 if (_objectInfo.position.x >= unit.ObjectInfo.position.x - unit.ObjectInfo.scale.x / 2f  &&
                     _objectInfo.position.x <= unit.ObjectInfo.position.x + unit.ObjectInfo.scale.x / 2f)
                 {
@@ -88,14 +88,14 @@ public class PlayableObjectUnit : StructureObjectUnitBase
                 }
                 _objectInfo.position.x = unit.ObjectInfo.position.x;
                 break;
-            case EAxisType.Y:
+            case AxisType.Y:
                 if (_objectInfo.position.y >= unit.ObjectInfo.position.y + unit.ObjectInfo.scale.y / 2f + _objectInfo.scale.y / 2f)
                 {
                     return;
                 }
                 _objectInfo.position.y = unit.ObjectInfo.position.y + unit.ObjectInfo.scale.y / 2f + _objectInfo.scale.y / 2f;
                 break;
-            case EAxisType.Z:
+            case AxisType.Z:
                 if (_objectInfo.position.z >= unit.ObjectInfo.position.z - unit.ObjectInfo.scale.z / 2f  &&
                     _objectInfo.position.z <= unit.ObjectInfo.position.z + unit.ObjectInfo.scale.z / 2f)
                 {
@@ -110,7 +110,7 @@ public class PlayableObjectUnit : StructureObjectUnitBase
     {
         _playerController.GetModule<PlayerMovementModule>().StopImmediately();
         _playerController.PlayerAnimatorController.UnActive();
-        _playerController.ConvertDimension(EAxisType.NONE);
+        _playerController.ConvertDimension(AxisType.None);
         base.ReloadObject();
     }
 }

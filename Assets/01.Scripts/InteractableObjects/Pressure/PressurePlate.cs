@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using InteractableSystem;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 using UnityEngine.Events;
 

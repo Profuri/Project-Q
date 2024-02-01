@@ -1,12 +1,12 @@
 using System;
 using InteractableSystem;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 
 public class PortalObject : InteractableObject
 {
     [SerializeField] private PortalObject _linkedPortal;
-    [SerializeField] private EAxisType _portalAxis;
+    [SerializeField] private AxisType _portalAxis;
 
     [SerializeField] private float _portalOutDistance = 1f;
     
@@ -26,13 +26,13 @@ public class PortalObject : InteractableObject
             
             switch (_linkedPortal._portalAxis)
             {
-                case EAxisType.X:
+                case AxisType.X:
                     dir = Vector3.right * _portalOutDistance;
                     break;
-                case EAxisType.Y:
+                case AxisType.Y:
                     dir = Vector3.up * _portalOutDistance;
                     break;
-                case EAxisType.Z:
+                case AxisType.Z:
                     dir = Vector3.back * _portalOutDistance;
                     break;
             }
@@ -51,15 +51,15 @@ public class PortalObject : InteractableObject
     {
         switch (_portalAxis)
         {
-            case EAxisType.X:
+            case AxisType.X:
                 transform.localScale = new Vector3(0, 1, 1);
                 transform.localPosition = new Vector3(0.51f, 0f, 0f);
                 break;
-            case EAxisType.Y:
+            case AxisType.Y:
                 transform.localScale = new Vector3(1, 0, 1);
                 transform.localPosition = new Vector3(0f, 0.51f, 0f);
                 break;
-            case EAxisType.Z:
+            case AxisType.Z:
                 transform.localScale = new Vector3(1, 1, 0);
                 transform.localPosition = new Vector3(0f, 0f, -0.51f);
                 break;

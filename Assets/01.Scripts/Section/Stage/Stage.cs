@@ -1,5 +1,5 @@
 using UnityEngine;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 
 public class Stage : Section
 {

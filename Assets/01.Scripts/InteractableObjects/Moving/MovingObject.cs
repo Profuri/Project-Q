@@ -1,6 +1,6 @@
 using System;
 using InteractableSystem;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 
 public class MovingObject : InteractableObject
@@ -44,7 +44,7 @@ public class MovingObject : InteractableObject
 
     private void Update()
     {
-        if (_objectUnit.ObjectInfo.axis != EAxisType.NONE)
+        if (_objectUnit.ObjectInfo.axis != AxisType.None)
         {
             return;
         }

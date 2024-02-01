@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
-namespace StageStructureConvertSystem
+namespace AxisConvertSystem
 {
-    public class StructureConverter : MonoBehaviour
+    public class AxisConverter : MonoBehaviour
     {
         private List<StructureObjectUnitBase> _convertableUnits;
 
-        private EAxisType _axisType;
-        public EAxisType AxisType => _axisType;
+        private AxisType _axisType;
+        public AxisType AxisType => _axisType;
 
         public bool Convertable { get; private set; }
 
         public void Init(Section section)
         {
-            _axisType = EAxisType.NONE;
+            _axisType = AxisType.None;
             SetConvertable(section is Stage);
 
             if (section is Stage)
@@ -33,9 +33,9 @@ namespace StageStructureConvertSystem
             Convertable = convertable;
         }
 
-        public void ConvertDimension(EAxisType axisType, Action callback = null)
+        public void ConvertDimension(AxisType axisType, Action callback = null)
         {
-            if (!Convertable || _axisType == axisType || (_axisType != EAxisType.NONE && axisType != EAxisType.NONE))
+            if (!Convertable || _axisType == axisType || (_axisType != AxisType.None && axisType != AxisType.None))
             {
                 callback?.Invoke();
                 return;
@@ -43,7 +43,7 @@ namespace StageStructureConvertSystem
 
             Convertable = false;
 
-            if(axisType == EAxisType.NONE)
+            if(axisType == AxisType.None)
             {
                 ChangeAxis(axisType);
             }
@@ -52,7 +52,7 @@ namespace StageStructureConvertSystem
             {
                 ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(axisType, () =>
                 {
-                    if(axisType != EAxisType.NONE)
+                    if(axisType != AxisType.None)
                     {
                         ChangeAxis(axisType);
                     }
@@ -63,11 +63,11 @@ namespace StageStructureConvertSystem
             }
         }
 
-        private void ChangeAxis(EAxisType axisType)
+        private void ChangeAxis(AxisType axisType)
         {
             CameraManager.Instance.ShakeCam(1f, 0.1f);
             VolumeManager.Instance.Highlight(0.2f);
-            LightManager.Instance.SetShadow(axisType == EAxisType.NONE ? LightShadows.Soft : LightShadows.None);
+            LightManager.Instance.SetShadow(axisType == AxisType.None ? LightShadows.Soft : LightShadows.None);
 
             _axisType = axisType;
 

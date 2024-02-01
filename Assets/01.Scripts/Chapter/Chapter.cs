@@ -1,5 +1,5 @@
 using InteractableSystem;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 
 public class Chapter : InteractableObject

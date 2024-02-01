@@ -1,6 +1,6 @@
 using System;
 using InteractableSystem;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 
 public class ObstacleObject : InteractableObject

@@ -1,6 +1,7 @@
 using ManagingSystem;
 using System.Collections;
 using System.Collections.Generic;
+using AxisConvertSystem;
 using UnityEngine;
 
 public class StageManager : BaseManager<StageManager>
@@ -10,7 +11,7 @@ public class StageManager : BaseManager<StageManager>
 
     private ChapterData _currentPlayChapterData;
 
-    public EAxisType CurrentStageAxis => SceneControlManager.Instance.Player.Converter.AxisType;
+    public AxisType CurrentStageAxis => SceneControlManager.Instance.Player.Converter.AxisType;
     
     public override void StartManager()
     {

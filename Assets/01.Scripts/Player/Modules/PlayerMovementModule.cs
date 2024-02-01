@@ -1,4 +1,5 @@
 using System;
+using AxisConvertSystem;
 using InputControl;
 using ModuleSystem;
 using UnityEngine;
@@ -71,16 +72,16 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     {
         switch (Controller.Converter.AxisType)
         {
-            case EAxisType.NONE:
+            case AxisType.None:
                 _moveVelocity = (_inputDir.x * MainCam.RightView() + _inputDir.z * MainCam.ForwardView()) * Controller.DataSO.walkSpeed;
                 break;
-            case EAxisType.Y:
+            case AxisType.Y:
                 _moveVelocity = (_inputDir.x * MainCam.RightView() + _inputDir.z * MainCam.UpView()) * Controller.DataSO.walkSpeed;
                 break;
-            case EAxisType.X:
+            case AxisType.X:
                 _moveVelocity = new Vector3(0, 0, _inputDir.x) * Controller.DataSO.walkSpeed;
                 break;
-            case EAxisType.Z:
+            case AxisType.Z:
                 _moveVelocity = new Vector3(_inputDir.x, 0, 0) * Controller.DataSO.walkSpeed;
                 break;
         }

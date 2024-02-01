@@ -1,3 +1,4 @@
+using AxisConvertSystem;
 using ModuleSystem;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ public class PlayerRotationModule : BaseModule<PlayerController>
 
         var rotateQuaternion = Quaternion.LookRotation(rotateDir);
         
-        if (Controller.Converter.AxisType == EAxisType.NONE)
+        if (Controller.Converter.AxisType == AxisType.None)
         {
             rotateQuaternion = Quaternion.Slerp(Controller.ModelTrm.rotation, rotateQuaternion, Controller.DataSO.rotationSpeed * Time.deltaTime);
         }
