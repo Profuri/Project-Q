@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 using InteractableSystem;
 using StageStructureConvertSystem;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.Events;
 
 public class PressurePlate : InteractableObject
 {
@@ -11,25 +12,38 @@ public class PressurePlate : InteractableObject
     [SerializeField] private float _maxHeight;
     [SerializeField] private float _minHeight;
 
-    [SerializeField] private InteractableObject _affectedObject;
-    
+    [SerializeField] private List<InteractableObject> _affectedObjects;
+
+    [SerializeField] private UnityEvent<bool> _onToggleChangeEvent;
+
     private Transform _pressureMainTrm;
     private Transform _pressureObjTrm;
 
+    private bool _lastToggleState;
+
     private void Awake()
     {
+        _lastToggleState = false;
         _pressureMainTrm = transform.Find("PressureMain");
         _pressureObjTrm = _pressureMainTrm.Find("PressureObject");
     }
 
     private void Update()
     {
-        OnInteraction(null, CheckPressed());
+        if (_lastToggleState != CheckPressed())
+        {
+            _lastToggleState = !_lastToggleState;
+            _onToggleChangeEvent?.Invoke(_lastToggleState);
+        }
+        OnInteraction(null, _lastToggleState);
     }
 
     public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
     {
-        _affectedObject?.OnInteraction(null, interactValue);
+        foreach (var obj in _affectedObjects)
+        {
+            obj?.OnInteraction(null, interactValue);
+        }
         
         var current = _pressureMainTrm.localScale.y;
         var dest = interactValue ? _minHeight : _maxHeight;
@@ -81,10 +95,13 @@ public class PressurePlate : InteractableObject
             Gizmos.DrawWireCube(checkPos, checkSize);
         }
 
-        if (_affectedObject != null)
+        if (_affectedObjects.Count > 0)
         {
             Gizmos.color = Color.black;
-            Gizmos.DrawLine(transform.position, _affectedObject.transform.position);
+            foreach (var obj in _affectedObjects)
+            {
+                Gizmos.DrawLine(transform.position, obj.transform.position);
+            }
         }
     }
 #endif

@@ -28,7 +28,7 @@ public class Stage : Section
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        gameObject.name = $"{_chapter}_Stage_{_stageOrder}";
+        gameObject.name = $"{_chapter.ToString().ToUpperFirstChar()}_Stage_{_stageOrder}";
     }
 #endif
 }

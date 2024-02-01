@@ -5,6 +5,7 @@ using UnityEngine;
 public class SceneControlManager : BaseManager<SceneControlManager>
 {
     private Scene _currentScene;
+    public PlayerController Player => _currentScene == null ? null : _currentScene.Player;
     
     public override void StartManager()
     {

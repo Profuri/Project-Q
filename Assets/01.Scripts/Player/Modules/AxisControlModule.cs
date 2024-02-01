@@ -115,7 +115,7 @@ public class AxisControlModule : BaseModule<PlayerController>
     {
         if (CameraManager.Instance.CurrentCamController is SectionCamController)
         {
-            VolumeManager.Instance.SetAxisControlVolume(true, 0.7f);
+            VolumeManager.Instance.SetAxisControlVolume(true, 0.2f);
             ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(true);
         }
     }
@@ -124,7 +124,7 @@ public class AxisControlModule : BaseModule<PlayerController>
     {
         if (CameraManager.Instance.CurrentCamController is SectionCamController)
         {
-            VolumeManager.Instance.SetAxisControlVolume(false, 0.7f);
+            VolumeManager.Instance.SetAxisControlVolume(false, 0.2f);
             LightManager.Instance.SetAxisLight(EAxisType.NONE);
             ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(false);
         }

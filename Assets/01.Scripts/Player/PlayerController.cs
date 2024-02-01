@@ -7,6 +7,8 @@ using UnityEngine;
 public class PlayerController : BaseModuleController
 {
     [SerializeField] private InputReader _inputReader;
+    public InputReader InputReader => _inputReader;
+    
     [SerializeField] private PlayerDataSO _dataSO;
     public PlayerDataSO DataSO => _dataSO;
 

@@ -36,6 +36,15 @@ namespace InputControl
                 _inputControls.Player.Disable();
         }
 
+        public void ClearInputEvent()
+        {
+            OnMovementEvent = null;
+            OnJumpEvent = null;
+            OnInteractionEvent = null;
+            OnAxisControlToggleEvent = null;
+            OnClickEvent = null;
+        }
+
         public void OnMovement(InputAction.CallbackContext context)
         {
             var value = context.ReadValue<Vector2>();
