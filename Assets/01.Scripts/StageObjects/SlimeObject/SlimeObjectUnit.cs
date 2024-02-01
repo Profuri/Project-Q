@@ -63,13 +63,13 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         {
             _canImpact = (_applyAxisType & _prevAxisType) != 0;
             _canFindModule = true;
-            _collider.isTrigger = false;
+            _collider.enabled = true;
         }
         else
         {
             if (axisType != EAxisType.Y)
             {
-                _collider.isTrigger = true;
+                _collider.enabled = false;
             }
             _canFindModule = false;
         }
