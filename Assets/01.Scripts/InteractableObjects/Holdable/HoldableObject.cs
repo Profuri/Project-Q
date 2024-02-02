@@ -14,7 +14,7 @@ public class HoldableObject : InteractableObject
         IsInteract = false;
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         IsInteract = !IsInteract;
         _rigid.useGravity = !IsInteract;

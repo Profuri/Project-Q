@@ -12,14 +12,14 @@ public class MovingObject : InteractableObject
 
     [SerializeField] [Range(0.5f, 1f)] private float _checkDistance;
 
-    private StructureObjectUnitBase _objectUnit;
+    private ObjectUnit _objectUnit;
 
     private float _minLimitPos;
     private float _maxLimitPos;
     
     private void OnEnable()
     {
-        _objectUnit = GetComponent<StructureObjectUnitBase>();
+        _objectUnit = GetComponent<ObjectUnit>();
 
         var scale = 0f;
         var trackScale = 0f;
@@ -44,25 +44,25 @@ public class MovingObject : InteractableObject
 
     private void Update()
     {
-        if (_objectUnit.ObjectInfo.axis != AxisType.None)
-        {
-            return;
-        }
+        // if (_objectUnit.ObjectInfo.CompressType != AxisType.None)
+        // {
+            // return;
+        // }
         
-        if (!CheckPlayer(out var cols))
-        {
-            return;
-        }
+        // if (!CheckPlayer(out var cols))
+        // {
+            // return;
+        // }
         
-        if (!cols[0].TryGetComponent<PlayableObjectUnit>(out var playerUnit))
-        {
-            return;
-        }   
+        // if (!cols[0].TryGetComponent<PlayableObjectUnit>(out var playerUnit))
+        // {
+            // return;
+        // }   
             
-        OnInteraction(playerUnit, true);
+        // OnInteraction(playerUnit, true);
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         var player = ((PlayableObjectUnit)communicator).PlayerController;
         var playerMovementModule = player.GetModule<PlayerMovementModule>();

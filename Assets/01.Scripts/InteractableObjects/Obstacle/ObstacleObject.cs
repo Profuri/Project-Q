@@ -19,7 +19,7 @@ public class ObstacleObject : InteractableObject
         OnInteraction(null, false);
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         var pos = transform.position + _boxCollider.center;
         var checkSize = transform.localScale.Multiply(_boxCollider.size);
@@ -30,12 +30,12 @@ public class ObstacleObject : InteractableObject
 
         for (var i = 0; i < size; i++)
         {
-            if (cols[i].TryGetComponent<StructureObjectUnitBase>(out var unit))
+            if (cols[i].TryGetComponent<ObjectUnit>(out var unit))
             {
-                if (unit.ReloadOnCollisionToObstacle)
-                {
-                    unit.ReloadObject();
-                }
+                // if (unit.ReloadOnCollisionToObstacle)
+                // {
+                    // unit.ReloadObject();
+                // }
             }
             else if (cols[i].TryGetComponent<InteractableObject>(out var interactable))
             {

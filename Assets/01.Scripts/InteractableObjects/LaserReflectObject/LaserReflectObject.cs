@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LaserReflectObject : InteractableObject
 {
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         var laserObject = (LaserLauncherObject)communicator;
         

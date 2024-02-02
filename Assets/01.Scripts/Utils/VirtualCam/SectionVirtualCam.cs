@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace VirtualCam
 {
-    public class StageVirtualCam : VirtualCamComponent
+    public class SectionVirtualCam : VirtualCamComponent
     {
         [SerializeField] private bool _isControlCam;
         public bool IsControlCam => _isControlCam;

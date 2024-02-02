@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace AxisConvertSystem
 {
     public class AxisConverter : MonoBehaviour
     {
-        private List<StructureObjectUnitBase> _convertableUnits;
+        private List<ObjectUnit> _convertableUnits;
 
         private AxisType _axisType;
         public AxisType AxisType => _axisType;
@@ -21,7 +20,7 @@ namespace AxisConvertSystem
 
             if (section is Stage)
             {
-                _convertableUnits ??= new List<StructureObjectUnitBase>();
+                _convertableUnits ??= new List<ObjectUnit>();
                 _convertableUnits.Clear();
                 section.GetComponentsInChildren(_convertableUnits);
                 _convertableUnits.ForEach(unit => unit.Init(this));
@@ -75,19 +74,9 @@ namespace AxisConvertSystem
             {
                 unit.ConvertDimension(axisType);
             });
-
-            _convertableUnits.ForEach(unit =>
-            {
-                unit.TransformSynchronization(axisType);
-            });
-
-            _convertableUnits.ForEach(unit =>
-            {
-                unit.ObjectSetting();
-            });
         }
 
-        public void RemoveObject(StructureObjectUnitBase unit)
+        public void RemoveObject(ObjectUnit unit)
         {
             Destroy(unit.gameObject);
             _convertableUnits.Remove(unit);

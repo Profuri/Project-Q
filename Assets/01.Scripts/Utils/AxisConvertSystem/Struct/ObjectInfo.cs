@@ -4,9 +4,9 @@ namespace AxisConvertSystem
 {
     public struct ObjectInfo
     {
-        public AxisType axis;
-        public Vector3 position;
-        public Quaternion rotation;
-        public Vector3 scale;
+        public AxisType CompressType;
+        public Vector3 LocalPos;
+        public Quaternion LocalRot;
+        public Vector3 LocalScale;
     }
 }

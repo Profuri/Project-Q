@@ -10,14 +10,14 @@ public class PortalObject : InteractableObject
 
     [SerializeField] private float _portalOutDistance = 1f;
     
-    private StructureObjectUnitBase _parentUnit;
+    private ObjectUnit _parentUnit;
 
     private void Awake()
     {
-        _parentUnit = transform.parent.GetComponent<StructureObjectUnitBase>();
+        _parentUnit = transform.parent.GetComponent<ObjectUnit>();
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         if (communicator is PlayableObjectUnit playerUnit)
         {
@@ -37,11 +37,11 @@ public class PortalObject : InteractableObject
                     break;
             }
 
-            playerUnit.SetObjectInfo(
-                destPos + dir,
-                playerUnit.transform.rotation,
-                playerUnit.transform.localScale
-            );
+            // playerUnit.SetObjectInfo(
+                // destPos + dir,
+                // playerUnit.transform.rotation,
+                // playerUnit.transform.localScale
+            // );
         }
     }
     

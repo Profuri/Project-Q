@@ -21,16 +21,16 @@ public class FractureObject : InteractableObject
     private MeshRenderer _meshRenderer;
     public MeshRenderer MeshRenderer => _meshRenderer;
 
-    private StructureObjectUnitBase _objectUnit;
+    private ObjectUnit _objectUnit;
 
     private void Awake()
     {
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
-        _objectUnit = GetComponent<StructureObjectUnitBase>();
+        _objectUnit = GetComponent<ObjectUnit>();
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         var originalMesh = _meshFilter.mesh;
         originalMesh.RecalculateBounds();
@@ -81,7 +81,7 @@ public class FractureObject : InteractableObject
             part.AddForce(part.Bounds.center * _explodeForce, transform.position);
         }
 
-        _objectUnit.RemoveUnit();
+        // SceneControlManager.Instance.DeleteObject(_objectUnit);
     }
 
     private FracturePart GenerateMesh(FracturePart original, Plane plane, bool left)

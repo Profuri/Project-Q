@@ -5,6 +5,6 @@ namespace InteractableSystem
 {
     public interface IInteractable
     {
-        public void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param);
+        public void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param);
     }
 }

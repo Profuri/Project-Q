@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using AxisConvertSystem;
 
-public class GlassObjectUnit : StructureObjectUnitBase
+public class GlassObjectUnit : ObjectUnit
 {
     [SerializeField] private AxisType _activeAxisType;
 
@@ -14,26 +14,26 @@ public class GlassObjectUnit : StructureObjectUnitBase
         base.Init(converter);
     }
 
-    public override void ObjectSetting()
+    public void ObjectSetting()
     {
-        gameObject.SetActive(_objectInfo.axis == _activeAxisType | _objectInfo.axis == AxisType.None);
+        // gameObject.SetActive(_objectInfo.CompressType == _activeAxisType | _objectInfo.CompressType == AxisType.None);
 
-        if (_objectInfo.axis == _activeAxisType)
-        {
-            switch (_activeAxisType)
-            {
-                case AxisType.X:
-                    _visualTrm.localPosition = Vector3.right * 0.5f;
-                    break;
-                case AxisType.Y:
-                    _visualTrm.localPosition = Vector3.up * 0.5f;
-                    break;
-                case AxisType.Z:
-                    _visualTrm.localPosition = Vector3.back * 0.5f;
-                    break;
-            }
-        }
+        // if (_objectInfo.CompressType == _activeAxisType)
+        // {
+            // switch (_activeAxisType)
+            // {
+                // case AxisType.X:
+                    // _visualTrm.localPosition = Vector3.right * 0.5f;
+                    // break;
+                // case AxisType.Y:
+                    // _visualTrm.localPosition = Vector3.up * 0.5f;
+                    // break;
+                // case AxisType.Z:
+                    // _visualTrm.localPosition = Vector3.back * 0.5f;
+                    // break;
+            // }
+        // }
         
-        base.ObjectSetting();
+        // base.ObjectSetting();
     }
 }

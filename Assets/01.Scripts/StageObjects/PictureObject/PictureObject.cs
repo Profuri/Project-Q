@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using AxisConvertSystem;
 
-public class PictureObject : StructureObjectUnitBase
+public class PictureObject : ObjectUnit
 {
     private List<PictureUnit> _units;
 
@@ -16,10 +16,10 @@ public class PictureObject : StructureObjectUnitBase
         base.Init(converter);
     }
 
-    public override void ObjectSetting()
+    public void ObjectSetting()
     {
-        UnitSetting(_objectInfo.axis);
-        base.ObjectSetting();
+        // UnitSetting(_objectInfo.CompressType);
+        // base.ObjectSetting();
     }
 
     private void UnitSetting(AxisType axis)
@@ -30,13 +30,13 @@ public class PictureObject : StructureObjectUnitBase
         }
     }
 
-    protected override void ColliderSetting()
+    protected void ColliderSetting()
     {
-        base.ColliderSetting();
+        // base.ColliderSetting();
 
-        if (_objectInfo.axis != AxisType.Y && _objectInfo.axis != AxisType.None)
-        {
-            _collider.isTrigger = true;
-        }
+        // if (_objectInfo.CompressType != AxisType.Y && _objectInfo.CompressType != AxisType.None)
+        // {
+            // _collider.isTrigger = true;
+        // }
     }
 }

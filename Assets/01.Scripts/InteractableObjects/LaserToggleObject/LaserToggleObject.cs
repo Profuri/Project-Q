@@ -74,7 +74,7 @@ public class LaserToggleObject : InteractableObject
         }
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         _lastToggleTime = Time.time;
         if (!_isToggle)

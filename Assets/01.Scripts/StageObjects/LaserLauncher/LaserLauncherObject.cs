@@ -5,7 +5,7 @@ using UnityEngine;
 using AxisConvertSystem;
 
 [RequireComponent(typeof(LineRenderer))]
-public class LaserLauncherObject : StructureObjectUnitBase
+public class LaserLauncherObject : ObjectUnit
 {
     [SerializeField] private Transform _shotPointTrm;
     [SerializeField] private LayerMask _obstacleMask;
@@ -68,8 +68,8 @@ public class LaserLauncherObject : StructureObjectUnitBase
             //     InteractOther(hit, false);
             // }
             //
-            // var position = _shotPointTrm.position;
-            // _laserRenderer.SetPositions(new[] { position, position } );
+            // var LocalPos = _shotPointTrm.LocalPos;
+            // _laserRenderer.SetPositions(new[] { LocalPos, LocalPos } );
         }
     }
 
@@ -92,11 +92,11 @@ public class LaserLauncherObject : StructureObjectUnitBase
     //     _isActiveLaser = false;
     //     _laserRenderer.enabled = true;
     //     _laserInfos.Clear();
-    //     _laserInfos.Add(new LaserInfo{ origin = _shotPointTrm.position, dir = transform.forward });
+    //     _laserInfos.Add(new LaserInfo{ origin = _shotPointTrm.LocalPos, dir = transform.forward });
     //     
     //     var percent = 0f;
     //     var currentTime = 0f;
-    //     var dest = ObstacleCheck(out var hit) ? hit.point : _shotPointTrm.position + transform.forward * _laserDistance;
+    //     var dest = ObstacleCheck(out var hit) ? hit.point : _shotPointTrm.LocalPos + transform.forward * _laserDistance;
     //     var index = 1;
     //
     //     while (percent <= 1f)

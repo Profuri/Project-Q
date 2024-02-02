@@ -11,7 +11,7 @@ public class GoalObject : InteractableObject
         _isToggle = false;
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         if(!_isToggle)
         {

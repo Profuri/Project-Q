@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using AxisConvertSystem;
-using UnityEngine;
 using VirtualCam;
 
 public class SectionCamController : VirtualCamController
@@ -17,7 +16,7 @@ public class SectionCamController : VirtualCamController
         _virtualCamDiction.Clear();
         foreach (var vCam in _virtualCams)
         {
-            var cam = (StageVirtualCam)vCam;
+            var cam = (SectionVirtualCam)vCam;
 
             if (cam.IsControlCam)
             {

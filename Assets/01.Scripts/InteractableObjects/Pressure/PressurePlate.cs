@@ -38,7 +38,7 @@ public class PressurePlate : InteractableObject
         OnInteraction(null, _lastToggleState);
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         foreach (var obj in _affectedObjects)
         {
