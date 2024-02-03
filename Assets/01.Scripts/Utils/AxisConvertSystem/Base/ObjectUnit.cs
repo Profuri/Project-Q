@@ -8,7 +8,6 @@ namespace AxisConvertSystem
     {
         [SerializeField] private CompressLayer _compressLayer;
         [SerializeField] private bool _reloadOnCollisionToObstacle = false;
-        [SerializeField] private bool _staticObject = false;
 
         protected AxisConverter Converter { get; private set; }
         protected Collider Collider { get; private set; }
@@ -24,18 +23,21 @@ namespace AxisConvertSystem
         {
             Converter = converter;
             Collider = GetComponent<Collider>();
-            CalcDepthCheckPoint();
         }
 
         public virtual void ConvertDimension(AxisType axis)
         {
             if (axis == AxisType.None)
             {
+                Activate(true);
                 return;
             }
             
             CalcDepth(axis);
-            Debug.Log(_depth);
+            
+            Activate(Math.Abs(_depth - float.MaxValue) < 0.01f);
+            LayerDepthSetting(axis);
+            ColliderSetting(axis);
         }
 
         private void CalcDepthCheckPoint()
@@ -50,10 +52,7 @@ namespace AxisConvertSystem
 
         private void CalcDepth(AxisType axis)
         {
-            if (!_staticObject)
-            {
-                CalcDepthCheckPoint();
-            }
+            CalcDepthCheckPoint();
             _depth = 0;
             
             for (var i = 0; i < 4; i++)
@@ -65,31 +64,20 @@ namespace AxisConvertSystem
                 _depth = Mathf.Max(_depth, depth);
             }
         }
-
-        private void OnDrawGizmos()
+        
+        private void LayerDepthSetting(AxisType axis)
         {
-            if (_depthCheckPoint == null)
-            {
-                return;
-            }
             
-            Gizmos.color = Color.green;
-            for (var i = 0; i < 4; i++)
-            {
-                Gizmos.DrawRay(_depthCheckPoint[AxisType.X][i], Vector3ExtensionMethod.GetAxisDir(AxisType.X) * 3);
-            }
+        }
+        
+        private void ColliderSetting(AxisType axis)
+        {
             
-            Gizmos.color = Color.red;
-            for (var i = 0; i < 4; i++)
-            {
-                Gizmos.DrawRay(_depthCheckPoint[AxisType.Y][i], Vector3ExtensionMethod.GetAxisDir(AxisType.Y) * 3);
-            }
-            
-            Gizmos.color = Color.blue;
-            for (var i = 0; i < 4; i++)
-            {
-                Gizmos.DrawRay(_depthCheckPoint[AxisType.Z][i], Vector3ExtensionMethod.GetAxisDir(AxisType.Z) * 3);
-            }
+        }
+
+        private void Activate(bool active)
+        {
+            Collider.enabled = active;
         }
     }
 }
