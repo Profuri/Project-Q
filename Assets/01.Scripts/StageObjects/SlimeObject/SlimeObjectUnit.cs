@@ -71,15 +71,15 @@ public class SlimeObjectUnit : StructureObjectUnitBase
             {
                 _collider.enabled = false;
             }
+            _prevAxisType = axisType;
             _canFindModule = false;
         }
 
-        _prevAxisType = axisType;
 
         if (_canImpact)
         {
             //�̰� �÷��̾��� ��ġ�� �Ű����� ����Ǿ���ϴ� �κ�
-            ShowBounceEffect(SlimeImpact);
+            ShowBounceEffect(axisType,SlimeImpact);
         }
 
         base.TransformSynchronization(axisType);
@@ -149,9 +149,15 @@ public class SlimeObjectUnit : StructureObjectUnitBase
         _canImpact = false;
     }
 
-    private void ShowBounceEffect(Action Callback)
+    private void ShowBounceEffect(EAxisType axisType, Action Callback)
     {
         Vector3 originScale = transform.localScale;
+        Vector3 targetScale = transform.localScale;
+        if (axisType == EAxisType.NONE) return;
+        else if (axisType == EAxisType.Y) targetScale = new Vector3(1, 0, 1);
+
+        transform.localScale = targetScale;
+
 
         Sequence seq = DOTween.Sequence();
         seq.Append(transform.DOScale(originScale * 0.8f,_bounceTime * 0.5f)).SetEase(Ease.InBounce);
