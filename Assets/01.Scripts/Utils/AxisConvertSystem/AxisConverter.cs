@@ -6,6 +6,9 @@ namespace AxisConvertSystem
 {
     public class AxisConverter : MonoBehaviour
     {
+        [SerializeField] private LayerMask _objectMask;
+        public LayerMask ObjectMask => _objectMask;
+        
         private List<ObjectUnit> _convertableUnits;
 
         private AxisType _axisType;

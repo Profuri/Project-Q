@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -7,7 +8,7 @@ namespace AxisConvertSystem
     {
         [SerializeField] private CompressLayer _compressLayer;
         [SerializeField] private bool _reloadOnCollisionToObstacle = false;
-        [SerializeField] private bool _staticObject;
+        [SerializeField] private bool _staticObject = false;
 
         protected AxisConverter Converter { get; private set; }
         protected Collider Collider { get; private set; }
@@ -16,44 +17,79 @@ namespace AxisConvertSystem
         private ObjectInfo _prevInfo;
         private ObjectInfo _currentInfo;
 
+        private Dictionary<AxisType, List<Vector3>> _depthCheckPoint;
         private float _depth;
 
         public virtual void Init(AxisConverter converter)
         {
             Converter = converter;
             Collider = GetComponent<Collider>();
+            CalcDepthCheckPoint();
         }
 
-        public virtual void Update()
+        public virtual void ConvertDimension(AxisType axis)
+        {
+            if (axis == AxisType.None)
+            {
+                return;
+            }
+            
+            CalcDepth(axis);
+            Debug.Log(_depth);
+        }
+
+        private void CalcDepthCheckPoint()
+        {
+            _depthCheckPoint ??= new Dictionary<AxisType, List<Vector3>>();
+            _depthCheckPoint.Clear();
+            
+            _depthCheckPoint.Add(AxisType.X, Vector3ExtensionMethod.CalcAxisBounds(AxisType.X, Collider.bounds));
+            _depthCheckPoint.Add(AxisType.Y, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Y, Collider.bounds));
+            _depthCheckPoint.Add(AxisType.Z, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Z, Collider.bounds));
+        }
+
+        private void CalcDepth(AxisType axis)
         {
             if (!_staticObject)
             {
-                DynamicSynchronized();
+                CalcDepthCheckPoint();
             }
-        }
-
-        public virtual void LateUpdate()
-        {
-            if (!_staticObject)
+            _depth = 0;
+            
+            for (var i = 0; i < 4; i++)
             {
-                Synchronized();
+                var isHit = Physics.Raycast(_depthCheckPoint[axis][i], Vector3ExtensionMethod.GetAxisDir(axis),
+                    out var hit, Mathf.Infinity, Converter.ObjectMask);
+                var depth = isHit ? Mathf.Abs(hit.point.GetAxisElement(axis)) : float.MaxValue;
+                
+                _depth = Mathf.Max(_depth, depth);
             }
         }
 
-        public virtual void ConvertDimension(AxisType axisType)
+        private void OnDrawGizmos()
         {
+            if (_depthCheckPoint == null)
+            {
+                return;
+            }
             
-        }
-
-        private void DynamicSynchronized()
-        {
-            var axisDir = Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
+            Gizmos.color = Color.green;
+            for (var i = 0; i < 4; i++)
+            {
+                Gizmos.DrawRay(_depthCheckPoint[AxisType.X][i], Vector3ExtensionMethod.GetAxisDir(AxisType.X) * 3);
+            }
             
-        }
-
-        private void Synchronized()
-        {
+            Gizmos.color = Color.red;
+            for (var i = 0; i < 4; i++)
+            {
+                Gizmos.DrawRay(_depthCheckPoint[AxisType.Y][i], Vector3ExtensionMethod.GetAxisDir(AxisType.Y) * 3);
+            }
             
+            Gizmos.color = Color.blue;
+            for (var i = 0; i < 4; i++)
+            {
+                Gizmos.DrawRay(_depthCheckPoint[AxisType.Z][i], Vector3ExtensionMethod.GetAxisDir(AxisType.Z) * 3);
+            }
         }
     }
 }
