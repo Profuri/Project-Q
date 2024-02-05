@@ -75,7 +75,12 @@ namespace AxisConvertSystem
 
             _convertableUnits.ForEach(unit =>
             {
-                unit.ConvertDimension(axisType);
+                unit.CalcDepth(axisType);
+            });
+            
+            _convertableUnits.ForEach(unit =>
+            {
+                unit.Convert(axisType);
             });
         }
 

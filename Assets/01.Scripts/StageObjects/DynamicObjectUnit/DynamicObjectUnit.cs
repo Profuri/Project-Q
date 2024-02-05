@@ -4,8 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class DynamicObjectUnit : ObjectUnit
 {
-    [SerializeField] private LayerMask _standableObjectMask;
-    [SerializeField] private float _rayDistance;
+    
 
     private Rigidbody _rigidbody;
 
@@ -56,27 +55,27 @@ public class DynamicObjectUnit : ObjectUnit
         // switch (axisType)
         // {
             // case AxisType.X:
-                // if (_objectInfo.LocalPos.x >= unit.ObjectInfo.LocalPos.x - unit.ObjectInfo.LocalScale.x / 2f  &&
-                    // _objectInfo.LocalPos.x <= unit.ObjectInfo.LocalPos.x + unit.ObjectInfo.LocalScale.x / 2f)
+                // if (_objectInfo.LocalPos.x >= unit.UnitInfo.LocalPos.x - unit.UnitInfo.LocalScale.x / 2f  &&
+                    // _objectInfo.LocalPos.x <= unit.UnitInfo.LocalPos.x + unit.UnitInfo.LocalScale.x / 2f)
                 // {
                     // return;
                 // }
-                // _objectInfo.LocalPos.x = unit.ObjectInfo.LocalPos.x;
+                // _objectInfo.LocalPos.x = unit.UnitInfo.LocalPos.x;
                 // break;
             // case AxisType.Y:
-                // if (_objectInfo.LocalPos.y >= unit.ObjectInfo.LocalPos.y + unit.ObjectInfo.LocalScale.y / 2f + _objectInfo.LocalScale.y / 2f)
+                // if (_objectInfo.LocalPos.y >= unit.UnitInfo.LocalPos.y + unit.UnitInfo.LocalScale.y / 2f + _objectInfo.LocalScale.y / 2f)
                 // {
                     // return;
                 // }
-                // _objectInfo.LocalPos.y = unit.ObjectInfo.LocalPos.y + unit.ObjectInfo.LocalScale.y / 2f + _objectInfo.LocalScale.y / 2f;
+                // _objectInfo.LocalPos.y = unit.UnitInfo.LocalPos.y + unit.UnitInfo.LocalScale.y / 2f + _objectInfo.LocalScale.y / 2f;
                 // break;
             // case AxisType.Z:
-                // if (_objectInfo.LocalPos.z >= unit.ObjectInfo.LocalPos.z - unit.ObjectInfo.LocalScale.z / 2f  &&
-                    // _objectInfo.LocalPos.z <= unit.ObjectInfo.LocalPos.z + unit.ObjectInfo.LocalScale.z / 2f)
+                // if (_objectInfo.LocalPos.z >= unit.UnitInfo.LocalPos.z - unit.UnitInfo.LocalScale.z / 2f  &&
+                    // _objectInfo.LocalPos.z <= unit.UnitInfo.LocalPos.z + unit.UnitInfo.LocalScale.z / 2f)
                 // {
                     // return;
                 // }
-                // _objectInfo.LocalPos.z = unit.ObjectInfo.LocalPos.z;
+                // _objectInfo.LocalPos.z = unit.UnitInfo.LocalPos.z;
                 // break;
         // }
     // }

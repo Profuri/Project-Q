@@ -5,9 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerController))]
 public class PlayableObjectUnit : ObjectUnit
 {
-    [SerializeField] private LayerMask _standableObjectMask;
-    [SerializeField] private float _rayDistance;
-
     private PlayerController _playerController;
     public PlayerController PlayerController => _playerController;
     
@@ -59,52 +56,6 @@ public class PlayableObjectUnit : ObjectUnit
         _characterController.enabled = false;
         // base.ObjectSetting();
         _characterController.enabled = true;
-    }
-
-    private void CheckObject(AxisType axisType)
-    {
-        // Vector3 basePos = StageManager.Instance.CurrentStage.transform.position;
-        // var origin = basePos + _prevObjectInfo.LocalPos + _characterController.center + Vector3.up * (_prevObjectInfo.LocalScale.y / 2f);
-        // var dir = Vector3.down;
-
-        // var isHit = Physics.Raycast(origin, dir, out var hit, _rayDistance, _standableObjectMask);
-
-        // if (!isHit)
-        // {
-            // return;
-        // }
-
-        // if (!hit.collider.TryGetComponent<ObjectUnit>(out var unit))
-        // {
-            // return;
-        // }
-
-        // switch (axisType)
-        // {
-            // case AxisType.X:
-                // if (_objectInfo.LocalPos.x >= unit.ObjectInfo.LocalPos.x - unit.ObjectInfo.LocalScale.x / 2f  &&
-                    // _objectInfo.LocalPos.x <= unit.ObjectInfo.LocalPos.x + unit.ObjectInfo.LocalScale.x / 2f)
-                // {
-                    // return;
-                // }
-                // _objectInfo.LocalPos.x = unit.ObjectInfo.LocalPos.x;
-                // break;
-            // case AxisType.Y:
-                // if (_objectInfo.LocalPos.y >= unit.ObjectInfo.LocalPos.y + unit.ObjectInfo.LocalScale.y / 2f + _objectInfo.LocalScale.y / 2f)
-                // {
-                    // return;
-                // }
-                // _objectInfo.LocalPos.y = unit.ObjectInfo.LocalPos.y + unit.ObjectInfo.LocalScale.y / 2f + _objectInfo.LocalScale.y / 2f;
-                // break;
-            // case AxisType.Z:
-                // if (_objectInfo.LocalPos.z >= unit.ObjectInfo.LocalPos.z - unit.ObjectInfo.LocalScale.z / 2f  &&
-                    // _objectInfo.LocalPos.z <= unit.ObjectInfo.LocalPos.z + unit.ObjectInfo.LocalScale.z / 2f)
-                // {
-                    // return;
-                // }
-                // _objectInfo.LocalPos.z = unit.ObjectInfo.LocalPos.z;
-                // break;
-        // }
     }
 
     public void ReloadObject()

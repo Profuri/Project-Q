@@ -2,9 +2,9 @@ namespace AxisConvertSystem
 {
     public enum CompressLayer
     {
-        Default = 0,
+        Default = 1,
         InteractableObject,
+        Goal,
         Player,
-        Count,
     }
 }

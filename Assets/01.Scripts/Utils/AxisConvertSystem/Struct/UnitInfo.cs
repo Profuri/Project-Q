@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace AxisConvertSystem
 {
-    public struct ObjectInfo
+    public struct UnitInfo
     {
-        public AxisType CompressType;
         public Vector3 LocalPos;
         public Quaternion LocalRot;
         public Vector3 LocalScale;
+        public Vector3 ColliderCenter;
     }
 }

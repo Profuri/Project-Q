@@ -24,7 +24,7 @@ public class StageManager : BaseManager<StageManager>
         _currentPlayChapterData = chapterData;
         CurrentStage = SceneControlManager.Instance.AddObject(
             $"{chapterData.chapter.ToString().ToUpperFirstChar()}_Stage_0") as Stage;
-        CurrentStage.Generate(Vector3.zero);
+        CurrentStage.Generate(Vector3.zero, false);
     }
 
     public void GenerateNextStage(ChapterType chapter, int stage)

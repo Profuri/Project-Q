@@ -9,6 +9,22 @@ public static class Vector3ExtensionMethod
         return new Vector3(vector.x * other.x, vector.y * other.y, vector.z * other.z);
     }
 
+    public static void SetAxisElement(this ref Vector3 vector, AxisType axis, float value)
+    {
+        if (axis == AxisType.X)
+        {
+            vector.x = value;
+        }
+        else if (axis == AxisType.Y)
+        {
+            vector.y = value;
+        }
+        else if (axis == AxisType.Z)
+        {
+            vector.z = value;
+        }
+    }
+
     public static float GetAxisElement(this Vector3 vector, AxisType axis)
     {
         if (axis == AxisType.X)

@@ -27,11 +27,15 @@ public class Section : PoolableMono
         _bridgeObjects = new List<BridgeObject>();
     }
 
-    public void Generate(Vector3 position)
+    public void Generate(Vector3 position, bool moveRoutine = true)
     {
-        transform.position = position - Vector3.up * 5;
         CenterPosition = position;
-        StartCoroutine(SectionMoveRoutine(CenterPosition));
+        transform.position = CenterPosition;
+        if (moveRoutine)
+        {
+            transform.position = position - Vector3.up * 5;
+            StartCoroutine(SectionMoveRoutine(CenterPosition));
+        }
     }
 
     public void Disappear()

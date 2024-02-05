@@ -44,7 +44,7 @@ public class MovingObject : InteractableObject
 
     private void Update()
     {
-        // if (_objectUnit.ObjectInfo.CompressType != AxisType.None)
+        // if (_objectUnit.UnitInfo.CompressType != AxisType.None)
         // {
             // return;
         // }
