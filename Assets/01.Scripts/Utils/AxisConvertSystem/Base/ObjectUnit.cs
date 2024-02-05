@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace AxisConvertSystem
 {
@@ -10,14 +8,15 @@ namespace AxisConvertSystem
     {
         [SerializeField] private CompressLayer _compressLayer;
         [SerializeField] private bool _staticObject = true;
+        public bool StaticObject => _staticObject;
         
         [Header("For Dynamic Object")]
         [SerializeField] private LayerMask _standableObjectMask;
         [SerializeField] private float _rayDistance;
 
-        protected AxisConverter Converter { get; private set; }
-        protected Collider ColliderCompo { get; private set; }
-        protected Rigidbody RigidbodyCompo { get; private set; }
+        private AxisConverter _converter;
+        private Collider _collider;
+        private Rigidbody _rigid;
 
         private UnitInfo _originUnitInfo;
         private UnitInfo _basicUnitInfo;
@@ -28,19 +27,26 @@ namespace AxisConvertSystem
 
         public virtual void Init(AxisConverter converter)
         {
-            Converter = converter;
-            ColliderCompo = GetComponent<Collider>();
-            if (!_staticObject)
-            {
-                RigidbodyCompo = GetComponent<Rigidbody>();
-            }
+            _converter = converter;
+
+            // if (!transform.Find("Collider"))
+            // {
+            //     
+            // }
+            //
+            // _collider = transform.Find("Collider").GetComponent<Collider>();
+            //
+            // if (!_staticObject)
+            // {
+            //     _rigid = TryGetComponent<Rigidbody>(out var rigid) ? rigid : transform.AddComponent<Rigidbody>();
+            // }
             
             _originUnitInfo = new UnitInfo
             {
                 LocalPos = transform.localPosition,
                 LocalRot = transform.localRotation,
                 LocalScale = transform.localScale,
-                ColliderCenter = ColliderCompo.bounds.center
+                ColliderCenter = _collider.bounds.center
             };
             _basicUnitInfo = _originUnitInfo;
             
@@ -66,7 +72,7 @@ namespace AxisConvertSystem
             for (var i = 0; i < 4; i++)
             {
                 var isHit = Physics.Raycast(_depthCheckPoint[axis][i], Vector3ExtensionMethod.GetAxisDir(axis),
-                    out var hit, Mathf.Infinity, Converter.ObjectMask);
+                    out var hit, Mathf.Infinity, _converter.ObjectMask);
                 var temp = isHit ? Mathf.Abs(hit.point.GetAxisElement(axis)) : float.MaxValue;
                 
                 _depth = Mathf.Max(_depth, temp);
@@ -80,7 +86,7 @@ namespace AxisConvertSystem
             transform.localPosition = unitInfo.LocalPos;
             transform.localRotation = unitInfo.LocalRot;
             transform.localScale = unitInfo.LocalScale;
-            var bounds = ColliderCompo.bounds;
+            var bounds = _collider.bounds;
             bounds.center = unitInfo.ColliderCenter;
 
             Activate(Math.Abs(_depth - float.MaxValue) < 0.01f);
@@ -111,14 +117,14 @@ namespace AxisConvertSystem
         private void CalcDepthCheckPoint()
         {
             _depthCheckPoint.Clear();
-            _depthCheckPoint.Add(AxisType.X, Vector3ExtensionMethod.CalcAxisBounds(AxisType.X, ColliderCompo.bounds));
-            _depthCheckPoint.Add(AxisType.Y, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Y, ColliderCompo.bounds));
-            _depthCheckPoint.Add(AxisType.Z, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Z, ColliderCompo.bounds));
+            _depthCheckPoint.Add(AxisType.X, Vector3ExtensionMethod.CalcAxisBounds(AxisType.X, _collider.bounds));
+            _depthCheckPoint.Add(AxisType.Y, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Y, _collider.bounds));
+            _depthCheckPoint.Add(AxisType.Z, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Z, _collider.bounds));
         }
 
         private void Activate(bool active)
         {
-            ColliderCompo.enabled = active;
+            _collider.enabled = active;
         }
         
         // private void CheckStandObject(AxisType axisType)
@@ -165,28 +171,5 @@ namespace AxisConvertSystem
         //             break;
         //     }
         // }
-        
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            if (!_staticObject)
-            {
-                if (!TryGetComponent<Rigidbody>(out var rigid))
-                {
-                    transform.AddComponent<Rigidbody>();
-                }
-            }
-            else
-            {
-                if (TryGetComponent<Rigidbody>(out var rigid))
-                {
-                    UnityEditor.EditorApplication.delayCall+=()=>
-                    {
-                        DestroyImmediate(rigid);
-                    };
-                }
-            }
-        }
-#endif
     }
 }
