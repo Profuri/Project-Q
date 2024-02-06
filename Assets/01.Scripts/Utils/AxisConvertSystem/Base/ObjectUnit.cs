@@ -12,36 +12,37 @@ namespace AxisConvertSystem
         [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public float rayDistance;
 
-        private AxisConverter _converter;
-        private Collider _collider;
-        private Rigidbody _rigid;
+        protected AxisConverter converter;
+        protected Collider collider;
+        protected Rigidbody rigid;
 
-        private UnitInfo _originUnitInfo;
-        private UnitInfo _basicUnitInfo;
+        protected UnitInfo originUnitInfo;
+        protected UnitInfo basicUnitInfo;
         
-        private Dictionary<AxisType, List<Vector3>> _depthCheckPoint;
+        protected Dictionary<AxisType, List<Vector3>> depthCheckPoint;
 
-        private float _depth;
+        protected float depth;
 
         public virtual void Init(AxisConverter converter)
         {
-            _converter = converter;
-            _collider = transform.Find("Collider").GetComponent<Collider>();
+            this.converter = converter;
+            collider = compressLayer == CompressLayer.Player ?
+                GetComponent<Collider>() : transform.Find("Collider").GetComponent<Collider>();
             if (!staticUnit)
             {
-                _rigid = GetComponent<Rigidbody>();
+                rigid = GetComponent<Rigidbody>();
             }
             
-            _originUnitInfo = new UnitInfo
+            originUnitInfo = new UnitInfo
             {
                 LocalPos = transform.localPosition,
                 LocalRot = transform.localRotation,
                 LocalScale = transform.localScale,
                 ColliderCenter = Vector3.zero
             };
-            _basicUnitInfo = _originUnitInfo;
+            basicUnitInfo = originUnitInfo;
             
-            _depthCheckPoint ??= new Dictionary<AxisType, List<Vector3>>();
+            depthCheckPoint ??= new Dictionary<AxisType, List<Vector3>>();
 
             CalcDepthCheckPoint();
         }
@@ -50,7 +51,7 @@ namespace AxisConvertSystem
         {
             if (axis == AxisType.None)
             {
-                _depth = float.MaxValue;
+                depth = float.MaxValue;
                 return;
             }
             
@@ -58,33 +59,33 @@ namespace AxisConvertSystem
             {
                 CalcDepthCheckPoint();
             }
-            _depth = 0f;
+            depth = 0f;
             
             for (var i = 0; i < 4; i++)
             {
-                var isHit = Physics.Raycast(_depthCheckPoint[axis][i], Vector3ExtensionMethod.GetAxisDir(axis),
-                    out var hit, Mathf.Infinity, _converter.ObjectMask);
+                var isHit = Physics.Raycast(depthCheckPoint[axis][i], Vector3ExtensionMethod.GetAxisDir(axis),
+                    out var hit, Mathf.Infinity, converter.ObjectMask);
                 var temp = isHit ? Mathf.Abs(hit.point.GetAxisElement(axis)) : float.MaxValue;
                 
-                _depth = Mathf.Max(_depth, temp);
+                depth = Mathf.Max(depth, temp);
             }
         }
 
-        public void Convert(AxisType axis, UnitInfo? info = default)
+        public virtual void Convert(AxisType axis, UnitInfo? info = default)
         {
-            var unitInfo = ConvertInfo(info ?? _basicUnitInfo, axis);
+            var unitInfo = ConvertInfo(info ?? basicUnitInfo, axis);
             
             transform.localPosition = unitInfo.LocalPos;
             transform.localRotation = unitInfo.LocalRot;
             transform.localScale = unitInfo.LocalScale;
-            _collider.transform.localPosition = unitInfo.ColliderCenter;
+            collider.transform.localPosition = unitInfo.ColliderCenter;
 
-            Activate(Math.Abs(_depth - float.MaxValue) < 0.01f);
+            Activate(Math.Abs(depth - float.MaxValue) < 0.01f);
         }
 
-        private UnitInfo ConvertInfo(UnitInfo basic, AxisType type)
+        protected UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
         {
-            if (type == AxisType.None)
+            if (axis == AxisType.None)
             {
                 return basic;
             }
@@ -97,24 +98,24 @@ namespace AxisConvertSystem
                 ColliderCenter = basic.ColliderCenter
             };
 
-            info.LocalScale.SetAxisElement(type, 1);
-            info.LocalPos.SetAxisElement(type, (int)compressLayer);
-            info.ColliderCenter.SetAxisElement(type, -(int)compressLayer);
+            info.LocalScale.SetAxisElement(axis, 1);
+            info.LocalPos.SetAxisElement(axis, (int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis));
+            info.ColliderCenter.SetAxisElement(axis, -(int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis));
 
             return info;
         }
 
-        private void CalcDepthCheckPoint()
+        protected void CalcDepthCheckPoint()
         {
-            _depthCheckPoint.Clear();
-            _depthCheckPoint.Add(AxisType.X, Vector3ExtensionMethod.CalcAxisBounds(AxisType.X, _collider.bounds));
-            _depthCheckPoint.Add(AxisType.Y, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Y, _collider.bounds));
-            _depthCheckPoint.Add(AxisType.Z, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Z, _collider.bounds));
+            depthCheckPoint.Clear();
+            depthCheckPoint.Add(AxisType.X, Vector3ExtensionMethod.CalcAxisBounds(AxisType.X, collider.bounds));
+            depthCheckPoint.Add(AxisType.Y, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Y, collider.bounds));
+            depthCheckPoint.Add(AxisType.Z, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Z, collider.bounds));
         }
 
-        private void Activate(bool active)
+        protected void Activate(bool active)
         {
-            _collider.enabled = active;
+            collider.enabled = active;
         }
         
         // private void CheckStandObject(AxisType axisType)

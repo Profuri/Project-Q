@@ -54,7 +54,7 @@ namespace AxisConvertSystem.Editor
 
         private void ReloadObject()
         {
-            if (_target == null)
+            if (_target == null || _target.compressLayer == CompressLayer.Player)
             {
                 return;
             }
@@ -67,27 +67,12 @@ namespace AxisConvertSystem.Editor
         
                 if (_target.TryGetComponent<Collider>(out var col))
                 {
-                    if (col is CharacterController characterController)
-                    {
-                        var characterCon = colObj.AddComponent<CharacterController>();
-                        characterCon.center = characterController.center;
-                        characterCon.radius = characterController.radius;
-                        characterCon.height = characterController.height;
-                    }
-                    else
-                    {
-                        var boxCol = colObj.AddComponent<BoxCollider>();
-                        boxCol.center = Vector3.zero;
-                        boxCol.size = Vector3.one;
-                    }
                     DestroyImmediate(col);
                 }
-                else
-                {
-                    var boxCol = colObj.AddComponent<BoxCollider>();
-                    boxCol.center = Vector3.zero;
-                    boxCol.size = Vector3.one;
-                }
+
+                var boxCol = colObj.AddComponent<BoxCollider>();
+                boxCol.center = Vector3.zero;
+                boxCol.size = Vector3.one;
             }
             
             if (_target.staticUnit)
@@ -99,8 +84,7 @@ namespace AxisConvertSystem.Editor
             }
             else
             {
-                if (!_target.TryGetComponent<Rigidbody>(out var rigid) &&
-                    _target.compressLayer != CompressLayer.Player)
+                if (!_target.TryGetComponent<Rigidbody>(out var rigid))
                 {
                     _target.gameObject.AddComponent<Rigidbody>();
                 }

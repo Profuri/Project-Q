@@ -36,7 +36,7 @@ public class PictureObject : ObjectUnit
 
         // if (_objectInfo.CompressType != AxisType.Y && _objectInfo.CompressType != AxisType.None)
         // {
-            // _collider.isTrigger = true;
+            // collider.isTrigger = true;
         // }
     }
 }
