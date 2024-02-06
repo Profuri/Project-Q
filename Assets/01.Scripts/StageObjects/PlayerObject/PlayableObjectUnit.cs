@@ -110,6 +110,7 @@ public class PlayableObjectUnit : StructureObjectUnitBase
     {
         _playerController.GetModule<PlayerMovementModule>().StopImmediately();
         _playerController.PlayerAnimatorController.UnActive();
+        _playerController.ConvertDimension(EAxisType.NONE);
         base.ReloadObject();
     }
 }

@@ -12,11 +12,6 @@ public class LightManager : BaseManager<LightManager>
         SetAxisLight(EAxisType.NONE);
     }
 
-    public override void UpdateManager()
-    {
-        // Do Nothing
-    }
-
     public void SetAxisLight(EAxisType axis)
     {
         var lightEulerAngle = new Vector3(50, -30, 0);

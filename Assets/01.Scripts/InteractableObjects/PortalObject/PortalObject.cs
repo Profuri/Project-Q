@@ -7,6 +7,8 @@ public class PortalObject : InteractableObject
 {
     [SerializeField] private PortalObject _linkedPortal;
     [SerializeField] private EAxisType _portalAxis;
+
+    [SerializeField] private float _portalOutDistance = 1f;
     
     private StructureObjectUnitBase _parentUnit;
 
@@ -25,13 +27,13 @@ public class PortalObject : InteractableObject
             switch (_linkedPortal._portalAxis)
             {
                 case EAxisType.X:
-                    dir = Vector3.right;
+                    dir = Vector3.right * _portalOutDistance;
                     break;
                 case EAxisType.Y:
-                    dir = Vector3.up;
+                    dir = Vector3.up * _portalOutDistance;
                     break;
                 case EAxisType.Z:
-                    dir = Vector3.back;
+                    dir = Vector3.back * _portalOutDistance;
                     break;
             }
 
@@ -59,7 +61,7 @@ public class PortalObject : InteractableObject
                 break;
             case EAxisType.Z:
                 transform.localScale = new Vector3(1, 1, 0);
-                transform.localPosition = new Vector3(0f, 0f, 0.51f);
+                transform.localPosition = new Vector3(0f, 0f, -0.51f);
                 break;
         }
     }

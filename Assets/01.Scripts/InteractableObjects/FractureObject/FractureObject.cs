@@ -37,7 +37,7 @@ public class FractureObject : InteractableObject
         var parts = new List<FracturePart>();
         var subParts = new List<FracturePart>();
 
-        var mainPart = PoolManager.Instance.Pop("FracturePart") as FracturePart;
+        var mainPart = SceneControlManager.Instance.AddObject("FracturePart") as FracturePart;
         mainPart.UV = originalMesh.uv;
         mainPart.Vertices = originalMesh.vertices;
         mainPart.Normal = originalMesh.normals;
@@ -68,7 +68,7 @@ public class FractureObject : InteractableObject
                 subParts.Add(GenerateMesh(part, plane, true));
                 subParts.Add(GenerateMesh(part, plane, false));
                 
-                PoolManager.Instance.Push(part);
+                SceneControlManager.Instance.DeleteObject(part);
             }
             
             parts = new List<FracturePart>(subParts);
@@ -86,7 +86,7 @@ public class FractureObject : InteractableObject
 
     private FracturePart GenerateMesh(FracturePart original, Plane plane, bool left)
     {
-        var partMesh = PoolManager.Instance.Pop("FracturePart") as FracturePart;
+        var partMesh = SceneControlManager.Instance.AddObject("FracturePart") as FracturePart;
         var ray1 = new Ray();
         var ray2 = new Ray();
         

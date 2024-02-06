@@ -9,10 +9,8 @@ namespace ManagingSystem
         public virtual void Init()
         {
             GameManager.Instance.OnStartEvent += StartManager;
-            GameManager.Instance.OnUpdateEvent += UpdateManager;
         }
 
         public abstract void StartManager();
-        public abstract void UpdateManager();
     }
 }

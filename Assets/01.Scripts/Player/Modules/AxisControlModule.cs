@@ -42,33 +42,24 @@ public class AxisControlModule : BaseModule<PlayerController>
     private EAxisType GetCurrentControlAxis()
     {
         var vCam = CameraManager.Instance.ActiveVCam;
-        var camYValue = vCam.GetYValue();
+        var camYValue = vCam.GetAxisYValue();
+        var camXValue = vCam.GetAxisXValue();
 
         if (camYValue >= 45f)
         {
             return EAxisType.Y;
         }
-
-        var lookDir = -CameraManager.Instance.MainCam.transform.forward;
-        lookDir.y = 0;
-        var angle = Mathf.Atan2(-lookDir.z, -lookDir.x) * Mathf.Rad2Deg;
-
-        return GetLookAxis(angle);
-    }
-
-    private EAxisType GetLookAxis(float angle)
-    {
-        var isLookXAxis = angle is >= -180f and < -135f or > 135f and <= 180f;
-        var isLookZAxis = angle is >= 45f and <= 135f;
-
-        if (isLookXAxis)
-            return EAxisType.X;
-        if (isLookZAxis)
+        if (camXValue >= -45f)
+        {
             return EAxisType.Z;
+        } 
+        if (camXValue >= -90f)
+        {
+            return EAxisType.X;
+        }
 
         return EAxisType.NONE;
     }
-
 
     private void AxisControlToggleHandle(bool enter)
     {
@@ -76,6 +67,8 @@ public class AxisControlModule : BaseModule<PlayerController>
         {
             return;
         }
+        
+        Controller.GetModule<PlayerMovementModule>().SetEnableMove(!enter);
         
         if (Controller.Converter.AxisType == EAxisType.NONE)
         {
@@ -120,20 +113,20 @@ public class AxisControlModule : BaseModule<PlayerController>
 
     private void ChangeAxisControlState()
     {
-        if (CameraManager.Instance.CurrentCamController is StageCamController)
+        if (CameraManager.Instance.CurrentCamController is SectionCamController)
         {
-            VolumeManager.Instance.SetAxisControlVolume(true, 0.7f);
-            ((StageCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(true);
+            VolumeManager.Instance.SetAxisControlVolume(true, 0.2f);
+            ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(true);
         }
     }
     
     private void ChangeNormalState()
     {
-        if (CameraManager.Instance.CurrentCamController is StageCamController)
+        if (CameraManager.Instance.CurrentCamController is SectionCamController)
         {
-            VolumeManager.Instance.SetAxisControlVolume(false, 0.7f);
+            VolumeManager.Instance.SetAxisControlVolume(false, 0.2f);
             LightManager.Instance.SetAxisLight(EAxisType.NONE);
-            ((StageCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(false);
+            ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(false);
         }
     }
 }

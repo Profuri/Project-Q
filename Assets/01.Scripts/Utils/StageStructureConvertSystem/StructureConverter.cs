@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 namespace StageStructureConvertSystem
 {
-    [RequireComponent(typeof(Stage))]
     public class StructureConverter : MonoBehaviour
     {
         private List<StructureObjectUnitBase> _convertableUnits;
@@ -13,14 +13,18 @@ namespace StageStructureConvertSystem
 
         public bool Convertable { get; private set; }
 
-        public void Init()
+        public void Init(Section section)
         {
             _axisType = EAxisType.NONE;
-            Convertable = true;
-            _convertableUnits ??= new List<StructureObjectUnitBase>();
-            _convertableUnits.Clear();
-            GetComponentsInChildren(_convertableUnits);
-            _convertableUnits.ForEach(unit => unit.Init(this));
+            SetConvertable(section is Stage);
+
+            if (section is Stage)
+            {
+                _convertableUnits ??= new List<StructureObjectUnitBase>();
+                _convertableUnits.Clear();
+                section.GetComponentsInChildren(_convertableUnits);
+                _convertableUnits.ForEach(unit => unit.Init(this));
+            }
         }
 
         public void SetConvertable(bool convertable)
@@ -43,9 +47,9 @@ namespace StageStructureConvertSystem
                 ChangeAxis(axisType);
             }
 
-            if (CameraManager.Instance.CurrentCamController is StageCamController)
+            if (CameraManager.Instance.CurrentCamController is SectionCamController)
             {
-                ((StageCamController)CameraManager.Instance.CurrentCamController).ChangeStageCamera(axisType, () =>
+                ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(axisType, () =>
                 {
                     if(axisType != EAxisType.NONE)
                     {

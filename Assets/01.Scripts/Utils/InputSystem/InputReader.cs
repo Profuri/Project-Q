@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace InputControl
 {
-    [CreateAssetMenu(menuName = "SO/New Input System/InputReader")]
+    [CreateAssetMenu(menuName = "SO/InputReader")]
     public class InputReader : ScriptableObject, InputControls.IPlayerActions
     {
         public delegate void InputEventListener();
@@ -34,6 +34,15 @@ namespace InputControl
                 _inputControls.Player.Enable();
             else
                 _inputControls.Player.Disable();
+        }
+
+        public void ClearInputEvent()
+        {
+            OnMovementEvent = null;
+            OnJumpEvent = null;
+            OnInteractionEvent = null;
+            OnAxisControlToggleEvent = null;
+            OnClickEvent = null;
         }
 
         public void OnMovement(InputAction.CallbackContext context)

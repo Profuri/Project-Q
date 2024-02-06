@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Cinemachine;
 using UnityEngine;
@@ -10,10 +9,6 @@ namespace VirtualCam
     {
         private CinemachineVirtualCameraBase _virtualCam;
 
-        public event Action OnEnter = null;
-        public event Action OnUpdate = null;
-        public event Action OnExit = null;
-
         private Coroutine _runningRoutine = null;
 
         private void Awake()
@@ -24,18 +19,11 @@ namespace VirtualCam
         public void EnterCam()
         {
             _virtualCam.m_Priority = 10;
-            OnEnter?.Invoke();
-        }
-
-        public void UpdateCam()
-        {
-            OnUpdate?.Invoke();
         }
 
         public void ExitCam()
         {
             _virtualCam.m_Priority = 0;
-            OnExit?.Invoke();
         }
 
         public void SetFollowTarget(Transform followTarget)
@@ -58,13 +46,68 @@ namespace VirtualCam
             _runningRoutine = StartCoroutine(ShakeSequence(intensity, time));
         }
 
-        public float GetYValue()
+        public void SetAxisXValue(float value)
         {
-            if (_virtualCam is not CinemachineVirtualCamera vCam) 
-                return 0f;
+            if (_virtualCam is not CinemachineVirtualCamera vCam)
+            {
+                Debug.LogError("[VirtualCamCompo] This cam is cant have y value. return 0");
+                return;
+            }
             
             var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
-            return pov.m_VerticalAxis.Value;
+
+            if (pov is null)
+            {
+                transform.Rotate(0, value, 0);   
+            }
+            else
+            {
+                pov.m_HorizontalAxis.Value = value;
+            }
+        }
+
+        public float GetAxisXValue()
+        {
+            if (_virtualCam is not CinemachineVirtualCamera vCam)
+            {
+                Debug.LogError("[VirtualCamCompo] This cam is cant have y value. return 0");
+                return 0f;
+            }
+            
+            var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
+            return pov is null ? -(360 - transform.localEulerAngles.y) : pov.m_HorizontalAxis.Value;
+        }
+        
+        public void SetAxisYValue(float value)
+        {
+            if (_virtualCam is not CinemachineVirtualCamera vCam)
+            {
+                Debug.LogError("[VirtualCamCompo] This cam is cant have y value. return 0");
+                return;
+            }
+            
+            var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
+            
+            if (pov is null)
+            {
+                transform.Rotate(value, 0, 0);   
+            }
+            else
+            {
+                pov.m_VerticalAxis.Value = value;
+            }
+        }
+
+        public float GetAxisYValue()
+        {
+            if (_virtualCam is not CinemachineVirtualCamera vCam)
+            {
+                Debug.LogError("[VirtualCamCompo] This cam is cant have y value. return 0");
+                return 0f;
+            }
+            
+            var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
+            return pov is null ? transform.localEulerAngles.x : pov.m_VerticalAxis.Value;
         }
 
         private IEnumerator ShakeSequence(float intensity, float time)

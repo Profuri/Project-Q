@@ -7,6 +7,8 @@ using UnityEngine;
 public class PlayerController : BaseModuleController
 {
     [SerializeField] private InputReader _inputReader;
+    public InputReader InputReader => _inputReader;
+    
     [SerializeField] private PlayerDataSO _dataSO;
     public PlayerDataSO DataSO => _dataSO;
 
@@ -21,7 +23,7 @@ public class PlayerController : BaseModuleController
 
     public ushort EnableAxis { get; private set; }
 
-    public override void Init()
+    public override void OnPop()
     {
         EnableAxis = (ushort)(EAxisType.X | EAxisType.Y | EAxisType.Z);
         ModelTrm = transform.Find("Model");
@@ -30,13 +32,14 @@ public class PlayerController : BaseModuleController
         PlayerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         PlayerUnit = GetComponent<PlayableObjectUnit>();
         CharController = GetComponent<CharacterController>();
-        base.Init();
+        Converter = GetComponent<StructureConverter>();
+        base.OnPop();
     }
 
-    public void SetStage(Stage stage)
+    public void SetSection(Section section)
     {
-        transform.SetParent(stage.transform);
-        Converter = stage.Converter;
+        transform.SetParent(section.transform);
+        Converter.Init(section);
     }
 
     private bool GetAxisEnabled(EAxisType axis)
@@ -63,29 +66,6 @@ public class PlayerController : BaseModuleController
     public void SetEnableInput(bool enabled)
     {
         _inputReader.SetEnableInput(enabled);
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        
-        // test key
-        // if (Input.GetKeyDown(KeyCode.V))
-        // {
-        //     ConvertDimension(EAxisType.NONE);
-        // }
-        // if (Input.GetKeyDown(KeyCode.B) && GetAxisEnabled(EAxisType.X)) 
-        // {
-        //     ConvertDimension(EAxisType.X);
-        // }
-        // if (Input.GetKeyDown(KeyCode.N) && GetAxisEnabled(EAxisType.Y))
-        // {
-        //     ConvertDimension(EAxisType.Y);
-        // }
-        // if (Input.GetKeyDown(KeyCode.M) && GetAxisEnabled(EAxisType.Z))
-        // {
-        //     ConvertDimension(EAxisType.Z);
-        // }
     }
 
     public void ConvertDimension(EAxisType axis)

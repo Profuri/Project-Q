@@ -315,6 +315,7 @@ GameObject:
   - component: {fileID: 7023724106154867271}
   - component: {fileID: 8456581276595569573}
   - component: {fileID: 2917235811965471049}
+  - component: {fileID: 6302769443137329925}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -394,6 +395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d69f99934245d68dfffbd571c48f90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _reloadOnCollisionToObstacle: 1
   _materialRenderSetting: 1
   _colliderSetting: 0
   _outlineSetting: 0
@@ -421,6 +423,18 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &6302769443137329925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3521114569831783098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f975e98f4bcf47c38f04f8533d511d42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8175619640045585034
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,6 +518,7 @@ MonoBehaviour:
     m_Bits: 256
   _interactableRadius: 1.5
   _InteractableCheckLimit: 10
+  _selectedInteractable: {fileID: 0}
 --- !u!114 &4257644174388375752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -517,7 +532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _holdPoint: {fileID: 8370178027285597868}
-  _holdRadius: 1.5
+  _holdRadius: 1.25
 --- !u!114 &3657287291806526360
 MonoBehaviour:
   m_ObjectHideFlags: 0
