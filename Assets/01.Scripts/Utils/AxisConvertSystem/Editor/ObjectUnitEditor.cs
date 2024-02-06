@@ -64,6 +64,7 @@ namespace AxisConvertSystem.Editor
                 var colObj = new GameObject("Collider");
                 colObj.transform.SetParent(_target.transform);
                 colObj.transform.Reset();
+                colObj.layer = _target.gameObject.layer;
         
                 if (_target.TryGetComponent<Collider>(out var col))
                 {
