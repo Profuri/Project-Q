@@ -31,7 +31,7 @@ public class PlayerController : BaseModuleController
         CenterPoint = transform.Find("CenterPoint");
         PlayerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         PlayerUnit = GetComponent<PlayableObjectUnit>();
-        CharController = GetComponent<CharacterController>();
+        CharController = transform.Find("Collider").GetComponent<CharacterController>();
         Converter = GetComponent<AxisConverter>();
         base.OnPop();
     }

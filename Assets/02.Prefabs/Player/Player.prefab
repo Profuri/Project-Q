@@ -311,7 +311,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3619135722963365827}
-  - component: {fileID: 5413009278714807062}
   - component: {fileID: 7023724106154867271}
   - component: {fileID: 8456581276595569573}
   - component: {fileID: 2917235811965471049}
@@ -341,34 +340,9 @@ Transform:
   - {fileID: 9059557247946953767}
   - {fileID: 8370178027285597868}
   - {fileID: 7748649744659026123}
+  - {fileID: 8230764817802294912}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!143 &5413009278714807062
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3521114569831783098}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 1.9
-  m_Radius: 0.45
-  m_SlopeLimit: 45
-  m_StepOffset: 0.35
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.95, z: 0}
 --- !u!114 &7023724106154867271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,12 +369,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d69f99934245d68dfffbd571c48f90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _compressLayer: 2
-  _reloadOnCollisionToObstacle: 1
-  _standableObjectMask:
+  compressLayer: 4
+  staticUnit: 0
+  canStandMask:
     serializedVersion: 2
-    m_Bits: 320
-  _rayDistance: 5
+    m_Bits: 160
+  rayDistance: 5
 --- !u!114 &2917235811965471049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -545,6 +519,64 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 11400000, guid: 473f6f525bea746abbbf51e2024d1c23, type: 2}
+--- !u!1 &8262938342904728039
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8230764817802294912}
+  - component: {fileID: 7399972202465575682}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8230764817802294912
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8262938342904728039}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3619135722963365827}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!143 &7399972202465575682
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8262938342904728039}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.9
+  m_Radius: 0.45
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.95, z: 0}
 --- !u!1 &8614342715500279266
 GameObject:
   m_ObjectHideFlags: 0

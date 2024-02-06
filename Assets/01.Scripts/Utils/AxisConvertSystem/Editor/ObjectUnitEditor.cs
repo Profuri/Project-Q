@@ -1,21 +1,21 @@
 using System;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 namespace AxisConvertSystem.Editor
 {
-    [CustomEditor(typeof(ObjectUnit))]
+    [CustomEditor(typeof(ObjectUnit), true)]
     public class ObjectUnitEditor : UnityEditor.Editor
     {
         private ObjectUnit _target;
-
+        
         public void OnEnable()
         {
             _target = (ObjectUnit)target;
             ReloadObject();
         }
-
+        
         public void OnDisable()
         {
             ReloadObject();
@@ -23,20 +23,27 @@ namespace AxisConvertSystem.Editor
 
         public override void OnInspectorGUI()
         {
-            var inspectorObj = _target.customInspector;
+            base.OnInspectorGUI();
 
-            inspectorObj.compressLayer =
-                (CompressLayer)EditorGUILayout.EnumPopup("Compress Layer", inspectorObj.compressLayer);
-            inspectorObj.staticUnit = EditorGUILayout.Toggle("Static Unit", inspectorObj.staticUnit);
-            
-            if (!inspectorObj.staticUnit)
+            if (!_target.staticUnit)
             {
                 GUILayout.Space(10);
                 GUILayout.Label("For Dynamic Object");
-                inspectorObj.canStandMask = EditorGUILayout.LayerField("Can Stand Mask", inspectorObj.canStandMask);
-                inspectorObj.rayDistance = EditorGUILayout.FloatField("Ray Distance", inspectorObj.rayDistance);
+
+                var layers = new List<string>();
+                for (var i = 0; i < 32; ++i)
+                {
+                    var layer = LayerMask.LayerToName(i);
+                    if (string.IsNullOrEmpty(layer))
+                    {
+                        continue;
+                    }
+                    layers.Add(layer);
+                }
+                _target.canStandMask = EditorGUILayout.MaskField("Can Stand Mask",_target.canStandMask, layers.ToArray());
+                _target.rayDistance = EditorGUILayout.FloatField("Ray Distance", _target.rayDistance);
             }
-            
+
             GUILayout.Space(20);
 
             if (GUILayout.Button("Reload Object"))
@@ -47,20 +54,25 @@ namespace AxisConvertSystem.Editor
 
         private void ReloadObject()
         {
+            if (_target == null)
+            {
+                return;
+            }
+        
             if (!_target.transform.Find("Collider"))
             {
                 var colObj = new GameObject("Collider");
                 colObj.transform.SetParent(_target.transform);
                 colObj.transform.Reset();
-
+        
                 if (_target.TryGetComponent<Collider>(out var col))
                 {
                     if (col is CharacterController characterController)
                     {
-                        var capsuleCol = colObj.AddComponent<CapsuleCollider>();
-                        capsuleCol.center = characterController.center;
-                        capsuleCol.radius = characterController.radius;
-                        capsuleCol.height = characterController.height;
+                        var characterCon = colObj.AddComponent<CharacterController>();
+                        characterCon.center = characterController.center;
+                        characterCon.radius = characterController.radius;
+                        characterCon.height = characterController.height;
                     }
                     else
                     {
@@ -68,7 +80,6 @@ namespace AxisConvertSystem.Editor
                         boxCol.center = Vector3.zero;
                         boxCol.size = Vector3.one;
                     }
-                    
                     DestroyImmediate(col);
                 }
                 else
@@ -79,7 +90,7 @@ namespace AxisConvertSystem.Editor
                 }
             }
             
-            if (_target.customInspector.staticUnit)
+            if (_target.staticUnit)
             {
                 if (_target.TryGetComponent<Rigidbody>(out var rigid))
                 {
@@ -88,9 +99,10 @@ namespace AxisConvertSystem.Editor
             }
             else
             {
-                if (!_target.TryGetComponent<Rigidbody>(out var rigid))
+                if (!_target.TryGetComponent<Rigidbody>(out var rigid) &&
+                    _target.compressLayer != CompressLayer.Player)
                 {
-                    _target.transform.AddComponent<Rigidbody>();
+                    _target.gameObject.AddComponent<Rigidbody>();
                 }
             }
         }

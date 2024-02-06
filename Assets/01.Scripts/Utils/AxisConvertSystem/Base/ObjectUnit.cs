@@ -4,19 +4,13 @@ using UnityEngine;
 
 namespace AxisConvertSystem
 {
-    [Serializable]
-    public class UnitCustomInspector
+    public class ObjectUnit : MonoBehaviour
     {
-        [HideInInspector] public CompressLayer compressLayer;
-        [HideInInspector] public bool staticUnit = true;
+        public CompressLayer compressLayer = CompressLayer.Default;
+        public bool staticUnit = true;
         
         [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public float rayDistance;
-    }
-    
-    public class ObjectUnit : MonoBehaviour
-    {
-        public UnitCustomInspector customInspector;
 
         private AxisConverter _converter;
         private Collider _collider;
@@ -32,25 +26,18 @@ namespace AxisConvertSystem
         public virtual void Init(AxisConverter converter)
         {
             _converter = converter;
-
-            // if (!transform.Find("Collider"))
-            // {
-            //     
-            // }
-            //
-            // _collider = transform.Find("Collider").GetComponent<Collider>();
-            //
-            // if (!_staticObject)
-            // {
-            //     _rigid = TryGetComponent<Rigidbody>(out var rigid) ? rigid : transform.AddComponent<Rigidbody>();
-            // }
+            _collider = transform.Find("Collider").GetComponent<Collider>();
+            if (!staticUnit)
+            {
+                _rigid = GetComponent<Rigidbody>();
+            }
             
             _originUnitInfo = new UnitInfo
             {
                 LocalPos = transform.localPosition,
                 LocalRot = transform.localRotation,
                 LocalScale = transform.localScale,
-                ColliderCenter = _collider.bounds.center
+                ColliderCenter = Vector3.zero
             };
             _basicUnitInfo = _originUnitInfo;
             
@@ -67,7 +54,7 @@ namespace AxisConvertSystem
                 return;
             }
             
-            if (!customInspector.staticUnit)
+            if (!staticUnit)
             {
                 CalcDepthCheckPoint();
             }
@@ -90,8 +77,7 @@ namespace AxisConvertSystem
             transform.localPosition = unitInfo.LocalPos;
             transform.localRotation = unitInfo.LocalRot;
             transform.localScale = unitInfo.LocalScale;
-            var bounds = _collider.bounds;
-            bounds.center = unitInfo.ColliderCenter;
+            _collider.transform.localPosition = unitInfo.ColliderCenter;
 
             Activate(Math.Abs(_depth - float.MaxValue) < 0.01f);
         }
@@ -112,8 +98,8 @@ namespace AxisConvertSystem
             };
 
             info.LocalScale.SetAxisElement(type, 1);
-            info.LocalPos.SetAxisElement(type, (int)customInspector.compressLayer);
-            info.ColliderCenter.SetAxisElement(type, -(int)customInspector.compressLayer);
+            info.LocalPos.SetAxisElement(type, (int)compressLayer);
+            info.ColliderCenter.SetAxisElement(type, -(int)compressLayer);
 
             return info;
         }
