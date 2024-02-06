@@ -4,15 +4,19 @@ using UnityEngine;
 
 namespace AxisConvertSystem
 {
+    [Serializable]
+    public class UnitCustomInspector
+    {
+        [HideInInspector] public CompressLayer compressLayer;
+        [HideInInspector] public bool staticUnit = true;
+        
+        [HideInInspector] public LayerMask canStandMask;
+        [HideInInspector] public float rayDistance;
+    }
+    
     public class ObjectUnit : MonoBehaviour
     {
-        [SerializeField] private CompressLayer _compressLayer;
-        [SerializeField] private bool _staticObject = true;
-        public bool StaticObject => _staticObject;
-        
-        [Header("For Dynamic Object")]
-        [SerializeField] private LayerMask _standableObjectMask;
-        [SerializeField] private float _rayDistance;
+        public UnitCustomInspector customInspector;
 
         private AxisConverter _converter;
         private Collider _collider;
@@ -63,7 +67,7 @@ namespace AxisConvertSystem
                 return;
             }
             
-            if (!_staticObject)
+            if (!customInspector.staticUnit)
             {
                 CalcDepthCheckPoint();
             }
@@ -108,8 +112,8 @@ namespace AxisConvertSystem
             };
 
             info.LocalScale.SetAxisElement(type, 1);
-            info.LocalPos.SetAxisElement(type, (int)_compressLayer);
-            info.ColliderCenter.SetAxisElement(type, -(int)_compressLayer);
+            info.LocalPos.SetAxisElement(type, (int)customInspector.compressLayer);
+            info.ColliderCenter.SetAxisElement(type, -(int)customInspector.compressLayer);
 
             return info;
         }
