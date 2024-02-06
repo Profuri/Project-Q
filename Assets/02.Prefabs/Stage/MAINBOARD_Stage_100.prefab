@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 9002655812242110765}
   - component: {fileID: 1987918850559106037}
   m_Layer: 0
-  m_Name: MAINBOARD_Stage_100
+  m_Name: Mainboard_Stage_100
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,11 +96,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a20ae8a59cd4e1b4eaebd92ae706779d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enterPoint: {x: 0, y: 0, z: 0}
+  _exitPoint: {x: 0, y: 0, z: 0}
+  _playerResetPoint: {x: -3, y: 2, z: -3}
+  _sectionData: {fileID: 0}
   _chapter: 0
   _stageOrder: 100
-  _stageEnterPoint: {x: -3, y: 0, z: -5.5}
-  _stageExitPoint: {x: 0, y: 0, z: 5.5}
-  _playerResetPoint: {x: -3, y: 2, z: -3}
 --- !u!65 &9002655812242110765
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -120,7 +121,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 13, y: 10, z: 13}
+  m_Size: {x: 0, y: 0, z: 0}
   m_Center: {x: 0, y: 2, z: 0}
 --- !u!114 &1987918850559106037
 MonoBehaviour:
@@ -134,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f00dd1a8a81c9c438f0aff022a89935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stageBoundSize: {x: 13, y: 10, z: 13}
+  _boundSize: {x: 0, y: 0, z: 0}
 --- !u!1 &3881619489341639082
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,7 +443,6 @@ MonoBehaviour:
   _reciprocationDir: {x: 0, y: 1, z: 0}
   _reciprocationDistance: 11
   _reciprocationSpeed: 3
-  _converter: {fileID: 4734575989382043341}
 --- !u!65 &8759711770926412828
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -696,6 +696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 157c7308a01341240b78a3fa23095a90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _reloadOnCollisionToObstacle: 0
   _materialRenderSetting: 1
   _colliderSetting: 1
   _outlineSetting: 1

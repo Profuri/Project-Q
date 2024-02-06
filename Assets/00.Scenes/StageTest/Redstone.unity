@@ -875,14 +875,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727ba34533b60cb4480af39f7b3ba756, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chapterData: {fileID: 11400000, guid: 71a43e675c6de40c69654eee00436bf8, type: 2}
-  _stageIntervalDistance: 7.5
-  _bridgeGenerateDelay: 0.1
-  _bridgeWidth: 1
-  _bridgeIntervalDistance: 0.5
-  _generateStageOnStart: 1
-  _startChapter: 0
-  _startStage: 7
 --- !u!1 &1019907062
 GameObject:
   m_ObjectHideFlags: 0
@@ -2275,6 +2267,7 @@ GameObject:
   - component: {fileID: 2015048950}
   - component: {fileID: 2015048949}
   - component: {fileID: 2015048948}
+  - component: {fileID: 2015048951}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -2368,6 +2361,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2015048946}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2015048951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015048946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b22c17c5b99aa6342988ed8e1532baec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2034589066
 GameObject:
   m_ObjectHideFlags: 0
@@ -2621,7 +2626,7 @@ GameObject:
   - component: {fileID: 4169594788414754825}
   - component: {fileID: 8798457705626028178}
   m_Layer: 0
-  m_Name: POWER_Stage_1
+  m_Name: Power_Stage_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2681,11 +2686,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a20ae8a59cd4e1b4eaebd92ae706779d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enterPoint: {x: 0, y: 0, z: 0}
+  _exitPoint: {x: 0, y: 0, z: 0}
+  _playerResetPoint: {x: -3, y: 2, z: -3}
+  _sectionData: {fileID: 0}
   _chapter: 4
   _stageOrder: 1
-  _stageEnterPoint: {x: -3, y: 0, z: -5.5}
-  _stageExitPoint: {x: 0, y: 0, z: 5.5}
-  _playerResetPoint: {x: -3, y: 2, z: -3}
 --- !u!4 &3035744299515368927
 Transform:
   m_ObjectHideFlags: 0
@@ -2767,7 +2773,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 13, y: 10, z: 13}
+  m_Size: {x: 0, y: 0, z: 0}
   m_Center: {x: 0, y: 2, z: 0}
 --- !u!4 &4449793546579379793
 Transform:
@@ -2951,7 +2957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f00dd1a8a81c9c438f0aff022a89935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stageBoundSize: {x: 13, y: 10, z: 13}
+  _boundSize: {x: 0, y: 0, z: 0}
 --- !u!65 &9043961678352662478
 BoxCollider:
   m_ObjectHideFlags: 0
