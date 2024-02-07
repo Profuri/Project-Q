@@ -71,14 +71,14 @@ namespace AxisConvertSystem
             }
         }
 
-        public virtual void Convert(AxisType axis, UnitInfo? info = default)
+        public void Convert(AxisType axis)
         {
             if (!staticUnit)
             {
                 RenewalBasicUnitInfo(axis);
             }
             
-            var unitInfo = ConvertInfo(info ?? basicUnitInfo, axis);
+            var unitInfo = ConvertInfo(basicUnitInfo, axis);
             UnitSetting(axis, unitInfo);   
 
             Activate(Math.Abs(depth - float.MaxValue) < 0.01f);
@@ -89,7 +89,7 @@ namespace AxisConvertSystem
             transform.localPosition = unitInfo.LocalPos;
             transform.localRotation = unitInfo.LocalRot;
             transform.localScale = unitInfo.LocalScale;
-            // collider.transform.localPosition = unitInfo.ColliderCenter;
+            collider.transform.localPosition = unitInfo.ColliderCenter;
         }
 
         protected UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
@@ -147,8 +147,11 @@ namespace AxisConvertSystem
         {
             var origin = collider.transform.position;
             var dir = Vector3.down;
-        
+
+            Debug.Log(rayDistance);
+            Debug.Log(canStandMask);
             var isHit = Physics.Raycast(origin, dir, out var hit, rayDistance, canStandMask);
+            Debug.Log(isHit);
         
             if (!isHit)
             {

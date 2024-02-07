@@ -15,16 +15,16 @@ public class PlayableObjectUnit : ObjectUnit
         SetOriginPos();
     }
 
-    // protected override void UnitSetting(AxisType axis, UnitInfo unitInfo)
-    // {
-    //     transform.localPosition = unitInfo.LocalPos + unitInfo.ColliderCenter;
-    //     transform.localRotation = unitInfo.LocalRot;
-    //     transform.localScale = unitInfo.LocalScale;
-    //
-    //     var modelPos = Vector3.zero;
-    //     modelPos.SetAxisElement(axis, unitInfo.LocalPos.GetAxisElement(axis));
-    //     _playerController.ModelTrm.localPosition = modelPos;
-    // }
+    protected override void UnitSetting(AxisType axis, UnitInfo unitInfo)
+    {
+        transform.localPosition = unitInfo.LocalPos + unitInfo.ColliderCenter;
+        transform.localRotation = unitInfo.LocalRot;
+        transform.localScale = unitInfo.LocalScale;
+
+        var modelPos = Vector3.zero;
+        modelPos.SetAxisElement(axis, unitInfo.LocalPos.GetAxisElement(axis));
+        _playerController.ModelTrm.localPosition = modelPos;
+    }
 
     private void SetOriginPos()
     {
