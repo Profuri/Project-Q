@@ -9,10 +9,25 @@ namespace AxisConvertSystem.Editor
     public class ObjectUnitEditor : UnityEditor.Editor
     {
         private ObjectUnit _target;
+
+        private string[] _layers;
         
         public void OnEnable()
         {
             _target = (ObjectUnit)target;
+            
+            var layers = new List<string>();
+            for (var i = 0; i < 32; ++i)
+            {
+                var layer = LayerMask.LayerToName(i);
+                if (string.IsNullOrEmpty(layer))
+                {
+                    continue;
+                }
+                layers.Add(layer);
+            }
+            _layers = layers.ToArray();
+            
             ReloadObject();
         }
         
@@ -29,18 +44,8 @@ namespace AxisConvertSystem.Editor
             {
                 GUILayout.Space(10);
                 GUILayout.Label("For Dynamic Object");
-
-                var layers = new List<string>();
-                for (var i = 0; i < 32; ++i)
-                {
-                    var layer = LayerMask.LayerToName(i);
-                    if (string.IsNullOrEmpty(layer))
-                    {
-                        continue;
-                    }
-                    layers.Add(layer);
-                }
-                _target.canStandMask = EditorGUILayout.MaskField("Can Stand Mask",_target.canStandMask, layers.ToArray());
+                
+                _target.canStandMask = EditorGUILayout.MaskField("Can Stand Mask",_target.canStandMask, _layers);
                 _target.rayDistance = EditorGUILayout.FloatField("Ray Distance", _target.rayDistance);
             }
 

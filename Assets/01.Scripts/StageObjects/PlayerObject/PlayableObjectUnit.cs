@@ -15,20 +15,16 @@ public class PlayableObjectUnit : ObjectUnit
         SetOriginPos();
     }
 
-    public override void Convert(AxisType axis, UnitInfo? info = default)
-    {
-        var unitInfo = ConvertInfo(info ?? basicUnitInfo, axis);
-            
-        transform.localPosition = unitInfo.LocalPos + unitInfo.ColliderCenter;
-        transform.localRotation = unitInfo.LocalRot;
-        transform.localScale = unitInfo.LocalScale;
-
-        var modelPos = Vector3.zero;
-        modelPos.SetAxisElement(axis, unitInfo.LocalPos.GetAxisElement(axis));
-        _playerController.ModelTrm.localPosition = modelPos;
-
-        Activate(Math.Abs(depth - float.MaxValue) < 0.01f);
-    }
+    // protected override void UnitSetting(AxisType axis, UnitInfo unitInfo)
+    // {
+    //     transform.localPosition = unitInfo.LocalPos + unitInfo.ColliderCenter;
+    //     transform.localRotation = unitInfo.LocalRot;
+    //     transform.localScale = unitInfo.LocalScale;
+    //
+    //     var modelPos = Vector3.zero;
+    //     modelPos.SetAxisElement(axis, unitInfo.LocalPos.GetAxisElement(axis));
+    //     _playerController.ModelTrm.localPosition = modelPos;
+    // }
 
     private void SetOriginPos()
     {

@@ -73,14 +73,23 @@ namespace AxisConvertSystem
 
         public virtual void Convert(AxisType axis, UnitInfo? info = default)
         {
-            var unitInfo = ConvertInfo(info ?? basicUnitInfo, axis);
+            if (!staticUnit)
+            {
+                RenewalBasicUnitInfo(axis);
+            }
             
+            var unitInfo = ConvertInfo(info ?? basicUnitInfo, axis);
+            UnitSetting(axis, unitInfo);   
+
+            Activate(Math.Abs(depth - float.MaxValue) < 0.01f);
+        }
+
+        protected virtual void UnitSetting(AxisType axis, UnitInfo unitInfo)
+        {
             transform.localPosition = unitInfo.LocalPos;
             transform.localRotation = unitInfo.LocalRot;
             transform.localScale = unitInfo.LocalScale;
-            collider.transform.localPosition = unitInfo.ColliderCenter;
-
-            Activate(Math.Abs(depth - float.MaxValue) < 0.01f);
+            // collider.transform.localPosition = unitInfo.ColliderCenter;
         }
 
         protected UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
@@ -117,50 +126,37 @@ namespace AxisConvertSystem
         {
             collider.enabled = active;
         }
+
+        private void RenewalBasicUnitInfo(AxisType axis)
+        {
+            Debug.Log(2);
+            if (axis == AxisType.None)
+            {
+                CheckStandObject(axis);
+            }
+            else
+            {
+                basicUnitInfo.LocalPos = transform.localPosition;
+                basicUnitInfo.LocalRot = transform.localRotation;
+                basicUnitInfo.LocalScale = transform.localScale;
+                basicUnitInfo.ColliderCenter = Vector3.zero;
+            }
+        }
         
-        // private void CheckStandObject(AxisType axisType)
-        // {
-        //     var origin = _prevObjectInfo.LocalPos + Vector3.up * (_prevObjectInfo.LocalScale.y / 2f);
-        //     var dir = Vector3.down;
-        //
-        //     var isHit = Physics.Raycast(origin, dir, out var hit, _rayDistance, _standableObjectMask);
-        //
-        //     if (!isHit)
-        //     {
-        //         return;
-        //     }
-        //
-        //     if (!hit.collider.TryGetComponent<ObjectUnit>(out var unit))
-        //     {
-        //         return;
-        //     }
-        //
-        //     switch (axisType)
-        //     {
-        //         case AxisType.X:
-        //             if (_objectInfo.LocalPos.x >= unit.ObjectInfo.LocalPos.x - unit.ObjectInfo.LocalScale.x / 2f  &&
-        //                 _objectInfo.LocalPos.x <= unit.ObjectInfo.LocalPos.x + unit.ObjectInfo.LocalScale.x / 2f)
-        //             {
-        //                 return;
-        //             }
-        //             _objectInfo.LocalPos.x = unit.ObjectInfo.LocalPos.x;
-        //             break;
-        //         case AxisType.Y:
-        //             if (_objectInfo.LocalPos.y >= unit.ObjectInfo.LocalPos.y + unit.ObjectInfo.LocalScale.y / 2f + _objectInfo.LocalScale.y / 2f)
-        //             {
-        //                 return;
-        //             }
-        //             _objectInfo.LocalPos.y = unit.ObjectInfo.LocalPos.y + unit.ObjectInfo.LocalScale.y / 2f + _objectInfo.LocalScale.y / 2f;
-        //             break;
-        //         case AxisType.Z:
-        //             if (_objectInfo.LocalPos.z >= unit.ObjectInfo.LocalPos.z - unit.ObjectInfo.LocalScale.z / 2f  &&
-        //                 _objectInfo.LocalPos.z <= unit.ObjectInfo.LocalPos.z + unit.ObjectInfo.LocalScale.z / 2f)
-        //             {
-        //                 return;
-        //             }
-        //             _objectInfo.LocalPos.z = unit.ObjectInfo.LocalPos.z;
-        //             break;
-        //     }
-        // }
+        private void CheckStandObject(AxisType axisType)
+        {
+            var origin = collider.transform.position;
+            var dir = Vector3.down;
+        
+            var isHit = Physics.Raycast(origin, dir, out var hit, rayDistance, canStandMask);
+        
+            if (!isHit)
+            {
+                return;
+            }
+
+            Debug.Log(hit.point);
+            basicUnitInfo.LocalPos = hit.point;
+        }
     }
 }
