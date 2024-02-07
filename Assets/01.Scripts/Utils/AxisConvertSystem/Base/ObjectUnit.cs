@@ -107,8 +107,8 @@ namespace AxisConvertSystem
                 ColliderCenter = basic.ColliderCenter
             };
 
-            info.LocalScale.SetAxisElement(axis, 1);
             info.LocalPos.SetAxisElement(axis, (int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis));
+            info.LocalScale.SetAxisElement(axis, 1);
             info.ColliderCenter.SetAxisElement(axis, -(int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis));
 
             return info;
@@ -129,7 +129,6 @@ namespace AxisConvertSystem
 
         private void RenewalBasicUnitInfo(AxisType axis)
         {
-            Debug.Log(2);
             if (axis == AxisType.None)
             {
                 CheckStandObject(axis);
@@ -148,17 +147,13 @@ namespace AxisConvertSystem
             var origin = collider.transform.position;
             var dir = Vector3.down;
 
-            Debug.Log(rayDistance);
-            Debug.Log(canStandMask);
             var isHit = Physics.Raycast(origin, dir, out var hit, rayDistance, canStandMask);
-            Debug.Log(isHit);
         
             if (!isHit)
             {
                 return;
             }
 
-            Debug.Log(hit.point);
             basicUnitInfo.LocalPos = hit.point;
         }
     }
