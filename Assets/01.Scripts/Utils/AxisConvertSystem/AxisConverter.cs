@@ -78,9 +78,14 @@ namespace AxisConvertSystem
             
             _convertableUnits.ForEach(unit =>
             {
-                unit.Convert(axisType);
+                unit.SynchronizationUnitPos(axisType);
             });
             
+            _convertableUnits.ForEach(unit =>
+            {
+                unit.Convert(axisType);
+            });
+
             _axisType = axisType;
         }
 

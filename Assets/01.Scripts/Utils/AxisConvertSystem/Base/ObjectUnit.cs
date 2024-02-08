@@ -9,7 +9,7 @@ namespace AxisConvertSystem
         [HideInInspector] public CompressLayer compressLayer = CompressLayer.Default;
         [HideInInspector] public bool staticUnit = true;
         
-        [HideInInspector] public LayerMask canStandMask;
+        public LayerMask canStandMask;
         [HideInInspector] public float rayDistance;
 
         protected AxisConverter converter;
@@ -69,21 +69,33 @@ namespace AxisConvertSystem
                 depth = Mathf.Max(depth, temp);
             }
         }
+        
+        public void SynchronizationUnitPos(AxisType axis)
+        {
+            if (staticUnit)
+            {
+                return;
+            }
+            
+            if (axis == AxisType.None)
+            {
+                CheckStandObject();
+            }
+            else
+            {
+                basicUnitInfo.LocalPos = transform.localPosition;
+            }
+        }
 
         public void Convert(AxisType axis)
         {
-            if (!staticUnit)
-            {
-                SynchronizationUnitPos(axis);
-            }
-
             var unitInfo = ConvertInfo(basicUnitInfo, axis);
-            UnitSetting(axis, unitInfo);   
+            UnitSetting(unitInfo);
 
             Activate(Math.Abs(depth - float.MaxValue) < 0.01f);
         }
 
-        protected void UnitSetting(AxisType axis, UnitInfo unitInfo)
+        protected void UnitSetting(UnitInfo unitInfo)
         {
             transform.localPosition = unitInfo.LocalPos;
             transform.localRotation = unitInfo.LocalRot;
@@ -119,21 +131,9 @@ namespace AxisConvertSystem
             collider.enabled = active;
         }
 
-        private void SynchronizationUnitPos(AxisType axis)
-        {
-            if (axis == AxisType.None)
-            {
-                CheckStandObject();
-            }
-            else
-            {
-                basicUnitInfo.LocalPos = transform.localPosition;
-            }
-        }
-        
         private void CheckStandObject()
         {
-            var origin = collider.transform.position;
+            var origin = collider.bounds.center;
             var dir = Vector3.down;
 
             var isHit = Physics.Raycast(origin, dir, out var hit, rayDistance, canStandMask);
@@ -143,9 +143,10 @@ namespace AxisConvertSystem
                 return;
             }
 
-            var diff = hit.point - hit.transform.position;
+            var diff = hit.point - hit.collider.bounds.center;
             var standPos = hit.transform.localPosition + diff;
-            standPos.SetAxisElement(converter.AxisType, basicUnitInfo.LocalPos.GetAxisElement(converter.AxisType));
+            var info = hit.transform.TryGetComponent<ObjectUnit>(out var unit) ? unit.basicUnitInfo : basicUnitInfo;
+            standPos.SetAxisElement(converter.AxisType, info.LocalPos.GetAxisElement(converter.AxisType));
             basicUnitInfo.LocalPos = standPos;
         }
     }
