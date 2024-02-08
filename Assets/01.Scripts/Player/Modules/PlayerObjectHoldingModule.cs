@@ -52,8 +52,8 @@ public class PlayerObjectHoldingModule : BaseModule<PlayerController>
     private void HoldingPointMovement()
     {
         var holdPoint = _holdPoint.position;
-        
-        var origin = Controller.CenterPoint.position;
+
+        var origin = Controller.CharController.bounds.center;
         origin.y = holdPoint.y;
 
         var originDir = (holdPoint - origin).normalized;  

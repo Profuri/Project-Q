@@ -13,7 +13,6 @@ public class PlayerController : BaseModuleController
     public PlayerDataSO DataSO => _dataSO;
 
     public Transform ModelTrm { get; private set; }
-    public Transform CenterPoint { get; private set; }
     
     public PlayerUIController PlayerUIController { get; private set; }
     public PlayerAnimatorController PlayerAnimatorController { get; private set; }
@@ -28,7 +27,6 @@ public class PlayerController : BaseModuleController
         EnableAxis = (ushort)(AxisType.X | AxisType.Y | AxisType.Z);
         ModelTrm = transform.Find("Model");
         PlayerAnimatorController = ModelTrm.GetComponent<PlayerAnimatorController>();
-        CenterPoint = transform.Find("CenterPoint");
         PlayerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         PlayerUnit = GetComponent<PlayableObjectUnit>();
         CharController = GetComponent<CharacterController>();

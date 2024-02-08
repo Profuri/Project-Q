@@ -123,9 +123,10 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     private bool CheckGround()
     {
         var size = Controller.CharController.bounds.size * 0.8f;
+        var center = Controller.CharController.bounds.center;
         size.y = 0.1f;
         var isHit = Physics.BoxCast(
-            Controller.CenterPoint.position,
+            center,
             size,
             -transform.up,
             out var hit,
@@ -167,9 +168,10 @@ public class PlayerMovementModule : BaseModule<PlayerController>
         }
 
         var size = Controller.CharController.bounds.size * 0.8f;
+        var center = Controller.CharController.bounds.center;
         size.y = 0.1f;
         var trm = transform;
-        Gizmos.DrawCube(Controller.CenterPoint.position - trm.up * _maxGroundCheckDistance, size);
+        Gizmos.DrawCube(center - trm.up * _maxGroundCheckDistance, size);
     }
 #endif
 }
