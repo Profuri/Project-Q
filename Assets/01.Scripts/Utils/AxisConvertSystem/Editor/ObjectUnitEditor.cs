@@ -41,21 +41,26 @@ namespace AxisConvertSystem.Editor
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
+            
+            GUILayout.Space(20);
+            
+            GUILayout.Label("Default Unit Setting");
+            _target.compressLayer = (CompressLayer)EditorGUILayout.EnumPopup("Compress Layer", _target.compressLayer);
+            var staticUnit = _target.staticUnit;
+            staticUnit = EditorGUILayout.Toggle("Static Unit", staticUnit);
+            if (staticUnit != _target.staticUnit)
+            {
+                _target.staticUnit = staticUnit;
+                ReloadObject();
+            }
 
             if (!_target.staticUnit)
             {
                 GUILayout.Space(10);
-                GUILayout.Label("For Dynamic Object");
+                GUILayout.Label("For Dynamic Unit");
                 
                 _target.canStandMask.value = GetLayerMaskField();
                 _target.rayDistance = EditorGUILayout.FloatField("Ray Distance", _target.rayDistance);
-            }
-
-            GUILayout.Space(20);
-
-            if (GUILayout.Button("Reload Object"))
-            {
-                ReloadObject();
             }
         }
 
@@ -83,7 +88,7 @@ namespace AxisConvertSystem.Editor
 
         private void ReloadObject()
         {
-            if (_target == null || _target.compressLayer == CompressLayer.Player)
+            if (_target is null || _target.compressLayer == CompressLayer.Player)
             {
                 return;
             }

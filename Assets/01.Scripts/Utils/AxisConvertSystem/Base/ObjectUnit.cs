@@ -6,8 +6,8 @@ namespace AxisConvertSystem
 {
     public class ObjectUnit : MonoBehaviour
     {
-        public CompressLayer compressLayer = CompressLayer.Default;
-        public bool staticUnit = true;
+        [HideInInspector] public CompressLayer compressLayer = CompressLayer.Default;
+        [HideInInspector] public bool staticUnit = true;
         
         [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public float rayDistance;
