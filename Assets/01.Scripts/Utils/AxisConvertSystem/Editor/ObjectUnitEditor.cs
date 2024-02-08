@@ -87,24 +87,7 @@ namespace AxisConvertSystem.Editor
             {
                 return;
             }
-        
-            if (!_target.transform.Find("Collider"))
-            {
-                var colObj = new GameObject("Collider");
-                colObj.transform.SetParent(_target.transform);
-                colObj.transform.Reset();
-                colObj.layer = _target.gameObject.layer;
-        
-                if (_target.TryGetComponent<Collider>(out var col))
-                {
-                    DestroyImmediate(col);
-                }
 
-                var boxCol = colObj.AddComponent<BoxCollider>();
-                boxCol.center = Vector3.zero;
-                boxCol.size = Vector3.one;
-            }
-            
             if (_target.staticUnit)
             {
                 if (_target.TryGetComponent<Rigidbody>(out var rigid))

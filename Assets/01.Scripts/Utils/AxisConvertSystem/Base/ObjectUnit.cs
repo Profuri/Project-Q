@@ -26,19 +26,18 @@ namespace AxisConvertSystem
         public virtual void Init(AxisConverter converter)
         {
             this.converter = converter;
-            collider = compressLayer == CompressLayer.Player ?
-                GetComponent<Collider>() : transform.Find("Collider").GetComponent<Collider>();
+            collider = GetComponent<Collider>();
             if (!staticUnit)
             {
                 rigid = GetComponent<Rigidbody>();
             }
-            
+
             originUnitInfo = new UnitInfo
             {
                 LocalPos = transform.localPosition,
                 LocalRot = transform.localRotation,
                 LocalScale = transform.localScale,
-                ColliderCenter = Vector3.zero
+                ColliderCenter = collider.bounds.center - transform.position
             };
             basicUnitInfo = originUnitInfo;
             
@@ -75,21 +74,21 @@ namespace AxisConvertSystem
         {
             if (!staticUnit)
             {
-                RenewalBasicUnitInfo(axis);
+                SynchronizationUnitPos(axis);
             }
-            
+
             var unitInfo = ConvertInfo(basicUnitInfo, axis);
             UnitSetting(axis, unitInfo);   
 
             Activate(Math.Abs(depth - float.MaxValue) < 0.01f);
         }
 
-        protected virtual void UnitSetting(AxisType axis, UnitInfo unitInfo)
+        protected void UnitSetting(AxisType axis, UnitInfo unitInfo)
         {
             transform.localPosition = unitInfo.LocalPos;
             transform.localRotation = unitInfo.LocalRot;
             transform.localScale = unitInfo.LocalScale;
-            collider.transform.localPosition = unitInfo.ColliderCenter;
+            collider.SetCenter(unitInfo.ColliderCenter);
         }
 
         protected UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
@@ -99,19 +98,11 @@ namespace AxisConvertSystem
                 return basic;
             }
 
-            var info = new UnitInfo
-            {
-                LocalPos = basic.LocalPos,
-                LocalRot = basic.LocalRot,
-                LocalScale = basic.LocalScale,
-                ColliderCenter = basic.ColliderCenter
-            };
+            basic.LocalPos.SetAxisElement(axis, (int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis));
+            basic.LocalScale.SetAxisElement(axis, 1);
+            basic.ColliderCenter.SetAxisElement(axis, -(int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis));
 
-            info.LocalPos.SetAxisElement(axis, (int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis));
-            info.LocalScale.SetAxisElement(axis, 1);
-            info.ColliderCenter.SetAxisElement(axis, -(int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis));
-
-            return info;
+            return basic;
         }
 
         protected void CalcDepthCheckPoint()
@@ -124,25 +115,23 @@ namespace AxisConvertSystem
 
         protected void Activate(bool active)
         {
+            gameObject.SetActive(active);
             collider.enabled = active;
         }
 
-        private void RenewalBasicUnitInfo(AxisType axis)
+        private void SynchronizationUnitPos(AxisType axis)
         {
             if (axis == AxisType.None)
             {
-                CheckStandObject(axis);
+                CheckStandObject();
             }
             else
             {
                 basicUnitInfo.LocalPos = transform.localPosition;
-                basicUnitInfo.LocalRot = transform.localRotation;
-                basicUnitInfo.LocalScale = transform.localScale;
-                basicUnitInfo.ColliderCenter = Vector3.zero;
             }
         }
         
-        private void CheckStandObject(AxisType axisType)
+        private void CheckStandObject()
         {
             var origin = collider.transform.position;
             var dir = Vector3.down;
@@ -154,7 +143,10 @@ namespace AxisConvertSystem
                 return;
             }
 
-            basicUnitInfo.LocalPos = hit.point;
+            var diff = hit.point - hit.transform.position;
+            var standPos = hit.transform.localPosition + diff;
+            standPos.SetAxisElement(converter.AxisType, basicUnitInfo.LocalPos.GetAxisElement(converter.AxisType));
+            basicUnitInfo.LocalPos = standPos;
         }
     }
 }

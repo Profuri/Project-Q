@@ -70,9 +70,7 @@ namespace AxisConvertSystem
             CameraManager.Instance.ShakeCam(1f, 0.1f);
             VolumeManager.Instance.Highlight(0.2f);
             LightManager.Instance.SetShadow(axisType == AxisType.None ? LightShadows.Soft : LightShadows.None);
-
-            _axisType = axisType;
-
+            
             _convertableUnits.ForEach(unit =>
             {
                 unit.CalcDepth(axisType);
@@ -82,6 +80,8 @@ namespace AxisConvertSystem
             {
                 unit.Convert(axisType);
             });
+            
+            _axisType = axisType;
         }
 
         public void RemoveObject(ObjectUnit unit)
