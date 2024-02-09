@@ -19,7 +19,7 @@ public class PortalObject : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        if (communicator is PlayableObjectUnit playerUnit)
+        if (communicator is PlayerUnit playerUnit)
         {
             var destPos = _linkedPortal._parentUnit.transform.localPosition;
             var dir = Vector3.zero;

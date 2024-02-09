@@ -88,11 +88,5 @@ namespace AxisConvertSystem
 
             _axisType = axisType;
         }
-
-        public void RemoveObject(ObjectUnit unit)
-        {
-            Destroy(unit.gameObject);
-            _convertableUnits.Remove(unit);
-        }
     }
 }

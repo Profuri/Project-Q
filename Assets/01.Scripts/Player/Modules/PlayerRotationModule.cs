@@ -27,7 +27,7 @@ public class PlayerRotationModule : BaseModule<PlayerController>
         
         if (Controller.Converter.AxisType == AxisType.None)
         {
-            rotateQuaternion = Quaternion.Slerp(Controller.ModelTrm.rotation, rotateQuaternion, Controller.DataSO.rotationSpeed * Time.deltaTime);
+            rotateQuaternion = Quaternion.Slerp(Controller.ModelTrm.rotation, rotateQuaternion, Controller.Data.rotationSpeed * Time.deltaTime);
         }
         
         Controller.ModelTrm.rotation = rotateQuaternion;

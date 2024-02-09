@@ -54,7 +54,7 @@ public class MovingObject : InteractableObject
             // return;
         // }
         
-        // if (!cols[0].TryGetComponent<PlayableObjectUnit>(out var playerUnit))
+        // if (!cols[0].TryGetComponent<PlayerUnit>(out var playerUnit))
         // {
             // return;
         // }   
@@ -64,20 +64,20 @@ public class MovingObject : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        var player = ((PlayableObjectUnit)communicator).PlayerController;
-        var playerMovementModule = player.GetModule<PlayerMovementModule>();
+        var player = (PlayerUnit)communicator;
+        // var playerMovementModule = player.GetModule<PlayerMovementModule>();
 
-        if (!playerMovementModule.IsMovement)
-        {
-            return;
-        }
+        // if (!playerMovementModule.IsMovement)
+        // {
+            // return;
+        // }
 
-        if (IsPulling(communicator.transform.position, playerMovementModule.MoveVelocity, out var dir))
-        {
-            var speed = player.DataSO.walkSpeed / 2f;
-            transform.localPosition += dir * (speed * Time.deltaTime);
-            ClampingPosition();
-        }
+        // if (IsPulling(communicator.transform.position, playerMovementModule.MoveVelocity, out var dir))
+        // {
+            // var speed = player.Data.walkSpeed / 2f;
+            // transform.localPosition += dir * (speed * Time.deltaTime);
+            // ClampingPosition();
+        // }
     }
 
     private void ClampingPosition()

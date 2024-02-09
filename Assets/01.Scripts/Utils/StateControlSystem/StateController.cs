@@ -6,10 +6,10 @@ public class StateController
 {
     private readonly Dictionary<Type, State> _states;
     
-    public ObjectUnit Owner { get; private set; }
+    public PlayerUnit Owner { get; private set; }
     public State CurrentState { get; private set; }
 
-    public StateController(ObjectUnit owner)
+    public StateController(PlayerUnit owner)
     {
         Owner = owner;
         _states = new Dictionary<Type, State>();

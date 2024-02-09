@@ -3,21 +3,22 @@ using ModuleSystem;
 using AxisConvertSystem;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : BaseModuleController
 {
     [SerializeField] private InputReader _inputReader;
     public InputReader InputReader => _inputReader;
     
-    [SerializeField] private PlayerDataSO _dataSO;
-    public PlayerDataSO DataSO => _dataSO;
+    [FormerlySerializedAs("_dataSO")] [SerializeField] private PlayerData data;
+    public PlayerData Data => data;
 
     public Transform ModelTrm { get; private set; }
     
     public PlayerUIController PlayerUIController { get; private set; }
     public PlayerAnimatorController PlayerAnimatorController { get; private set; }
     public AxisConverter Converter { get; private set; }
-    public PlayableObjectUnit PlayerUnit { get; private set; }
+    public PlayerUnit PlayerUnit { get; private set; }
     public CharacterController CharController { get; private set; }
 
     public ushort EnableAxis { get; private set; }
@@ -28,7 +29,7 @@ public class PlayerController : BaseModuleController
         ModelTrm = transform.Find("Model");
         PlayerAnimatorController = ModelTrm.GetComponent<PlayerAnimatorController>();
         PlayerUIController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
-        PlayerUnit = GetComponent<PlayableObjectUnit>();
+        PlayerUnit = GetComponent<PlayerUnit>();
         CharController = GetComponent<CharacterController>();
         Converter = GetComponent<AxisConverter>();
         base.OnPop();

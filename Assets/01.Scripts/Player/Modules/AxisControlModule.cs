@@ -13,7 +13,7 @@ public class AxisControlModule : BaseModule<PlayerController>
     public override void Init(Transform root)
     {
         base.Init(root);
-        _inputReader.OnAxisControlToggleEvent += AxisControlToggleHandle;
+        // _inputReader.OnAxisControlToggleEvent += AxisControlToggleHandle;
         _inputReader.OnClickEvent += SelectAxisHandle;
         _isControllingAxis = false;
     }
@@ -36,7 +36,7 @@ public class AxisControlModule : BaseModule<PlayerController>
     public override void DisableModule()
     {
         base.DisableModule();
-        _inputReader.OnAxisControlToggleEvent += AxisControlToggleHandle;
+        // _inputReader.OnAxisControlToggleEvent += AxisControlToggleHandle;
         _inputReader.OnClickEvent -= SelectAxisHandle;
     }
     

@@ -88,7 +88,7 @@ namespace AxisConvertSystem.Editor
 
         private void ReloadObject()
         {
-            if (_target is null || _target.compressLayer == CompressLayer.Player)
+            if (_target is null)
             {
                 return;
             }

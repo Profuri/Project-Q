@@ -9,11 +9,12 @@ namespace InputControl
         public delegate void InputEventListener();
         public delegate void InputEventListener<in T>(T value);
         
-        public event InputEventListener<Vector2> OnMovementEvent = null;
         public event InputEventListener OnJumpEvent = null;
         public event InputEventListener OnInteractionEvent = null;
-        public event InputEventListener<bool> OnAxisControlToggleEvent = null;
+        public event InputEventListener<bool> OnAxisControlEvent = null;
         public event InputEventListener OnClickEvent = null;
+
+        public Vector3 movementInput;
 
         private InputControls _inputControls;
 
@@ -38,7 +39,6 @@ namespace InputControl
 
         public void ClearInputEvent()
         {
-            OnMovementEvent = null;
             OnJumpEvent = null;
             OnInteractionEvent = null;
             OnAxisControlToggleEvent = null;
@@ -48,7 +48,7 @@ namespace InputControl
         public void OnMovement(InputAction.CallbackContext context)
         {
             var value = context.ReadValue<Vector2>();
-            OnMovementEvent?.Invoke(value);
+            movementInput = new Vector3(value.x, 0, value.y);
         }
 
         public void OnJump(InputAction.CallbackContext context)
@@ -67,7 +67,7 @@ namespace InputControl
             }
         }
 
-        public void OnAxisControlToggle(InputAction.CallbackContext context)
+        public void OnAxisControl(InputAction.CallbackContext context)
         {
             if (context.started)
             {

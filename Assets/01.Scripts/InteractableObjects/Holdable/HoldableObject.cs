@@ -20,16 +20,16 @@ public class HoldableObject : InteractableObject
         _rigid.useGravity = !IsInteract;
         _rigid.freezeRotation = IsInteract;
 
-        var player = ((PlayableObjectUnit)communicator).PlayerController;
-        var holdingModule = player.GetModule<PlayerObjectHoldingModule>();
+        var player = (PlayerUnit)communicator;
+        // var holdingModule = player.GetModule<PlayerObjectHoldingModule>();
 
         if (IsInteract)
         {
-            holdingModule.AttachObject(this);
+            // holdingModule.AttachObject(this);
         }
         else
         {
-            holdingModule.DetachObject();
+            // holdingModule.DetachObject();
         }
     }
 }

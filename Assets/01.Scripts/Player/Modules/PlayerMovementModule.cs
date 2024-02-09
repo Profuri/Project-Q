@@ -31,7 +31,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
 
         CanJump = true;
 
-        _inputReader.OnMovementEvent += SetInputDir;
+        // _inputReader.OnMㅌovementEvent += SetInputDir;
         _inputReader.OnJumpEvent += OnJump;
     }
 
@@ -58,7 +58,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     {
         base.DisableModule();
         
-        _inputReader.OnMovementEvent -= SetInputDir;
+        // _inputReader.OnMovementEvent -= SetInputDir;
         _inputReader.OnJumpEvent -= OnJump;
     }
 
@@ -73,16 +73,16 @@ public class PlayerMovementModule : BaseModule<PlayerController>
         switch (Controller.Converter.AxisType)
         {
             case AxisType.None:
-                _moveVelocity = (_inputDir.x * MainCam.RightView() + _inputDir.z * MainCam.ForwardView()) * Controller.DataSO.walkSpeed;
+                _moveVelocity = (_inputDir.x * MainCam.RightView() + _inputDir.z * MainCam.ForwardView()) * Controller.Data.walkSpeed;
                 break;
             case AxisType.Y:
-                _moveVelocity = (_inputDir.x * MainCam.RightView() + _inputDir.z * MainCam.UpView()) * Controller.DataSO.walkSpeed;
+                _moveVelocity = (_inputDir.x * MainCam.RightView() + _inputDir.z * MainCam.UpView()) * Controller.Data.walkSpeed;
                 break;
             case AxisType.X:
-                _moveVelocity = new Vector3(0, 0, _inputDir.x) * Controller.DataSO.walkSpeed;
+                _moveVelocity = new Vector3(0, 0, _inputDir.x) * Controller.Data.walkSpeed;
                 break;
             case AxisType.Z:
-                _moveVelocity = new Vector3(_inputDir.x, 0, 0) * Controller.DataSO.walkSpeed;
+                _moveVelocity = new Vector3(_inputDir.x, 0, 0) * Controller.Data.walkSpeed;
                 break;
         }
 
@@ -94,7 +94,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
         }
         else
         {
-            AddVerticalVelocity(Controller.DataSO.gravity * Time.deltaTime);
+            AddVerticalVelocity(Controller.Data.gravity * Time.deltaTime);
         }
 
         _force = new Vector3(0, _force.y, 0);
@@ -153,7 +153,7 @@ public class PlayerMovementModule : BaseModule<PlayerController>
     {
         if (IsGround && CanJump)
         {
-            SetVerticalVelocity(Controller.DataSO.jumpPower);
+            SetVerticalVelocity(Controller.Data.jumpPower);
         }
     }
     

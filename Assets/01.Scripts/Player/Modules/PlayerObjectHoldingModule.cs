@@ -59,7 +59,7 @@ public class PlayerObjectHoldingModule : BaseModule<PlayerController>
         var originDir = (holdPoint - origin).normalized;  
         var destDir = Controller.ModelTrm.forward;
 
-        var lerpDir = Vector3.Lerp(originDir, destDir, Controller.DataSO.rotationSpeed * Time.deltaTime);
+        var lerpDir = Vector3.Lerp(originDir, destDir, Controller.Data.rotationSpeed * Time.deltaTime);
 
         var destPos = origin + lerpDir * _holdRadius;
 

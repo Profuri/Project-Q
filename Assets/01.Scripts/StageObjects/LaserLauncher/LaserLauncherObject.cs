@@ -147,7 +147,7 @@ public class LaserLauncherObject : ObjectUnit
     {
         var col = hit.collider;
         
-        if (col.TryGetComponent<PlayableObjectUnit>(out var playerUnit))
+        if (col.TryGetComponent<PlayerUnit>(out var playerUnit))
         {
             playerUnit.ReloadObject();
         }

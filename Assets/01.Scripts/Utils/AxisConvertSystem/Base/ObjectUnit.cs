@@ -1,47 +1,48 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace AxisConvertSystem
 {
-    public class ObjectUnit : MonoBehaviour
+    public class ObjectUnit : PoolableMono
     {
         [HideInInspector] public CompressLayer compressLayer = CompressLayer.Default;
         [HideInInspector] public bool staticUnit = true;
         
-        public LayerMask canStandMask;
+        [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public float rayDistance;
 
-        protected AxisConverter converter;
-        protected Collider collider;
-        protected Rigidbody rigid;
+        public AxisConverter Converter { get; private set; }
+        public Collider Collider { get; private set; }
+        public Rigidbody Rigidbody { get; private set; }
 
-        protected UnitInfo originUnitInfo;
-        protected UnitInfo basicUnitInfo;
+        private UnitInfo _originUnitInfo;
+        private UnitInfo _basicUnitInfo;
         
-        protected Dictionary<AxisType, List<Vector3>> depthCheckPoint;
+        private Dictionary<AxisType, List<Vector3>> _depthCheckPoint;
 
-        protected float depth;
+        private float _depth;
 
         public virtual void Init(AxisConverter converter)
         {
-            this.converter = converter;
-            collider = GetComponent<Collider>();
+            Converter = converter;
+            Collider = GetComponent<Collider>();
             if (!staticUnit)
             {
-                rigid = GetComponent<Rigidbody>();
+                Rigidbody = GetComponent<Rigidbody>();
             }
 
-            originUnitInfo = new UnitInfo
+            _originUnitInfo = new UnitInfo
             {
                 LocalPos = transform.localPosition,
                 LocalRot = transform.localRotation,
                 LocalScale = transform.localScale,
-                ColliderCenter = collider.bounds.center - transform.position
+                ColliderCenter = Collider.bounds.center - transform.position
             };
-            basicUnitInfo = originUnitInfo;
+            _basicUnitInfo = _originUnitInfo;
             
-            depthCheckPoint ??= new Dictionary<AxisType, List<Vector3>>();
+            _depthCheckPoint ??= new Dictionary<AxisType, List<Vector3>>();
 
             CalcDepthCheckPoint();
         }
@@ -50,7 +51,7 @@ namespace AxisConvertSystem
         {
             if (axis == AxisType.None)
             {
-                depth = float.MaxValue;
+                _depth = float.MaxValue;
                 return;
             }
             
@@ -58,15 +59,15 @@ namespace AxisConvertSystem
             {
                 CalcDepthCheckPoint();
             }
-            depth = 0f;
+            _depth = 0f;
             
             for (var i = 0; i < 4; i++)
             {
-                var isHit = Physics.Raycast(depthCheckPoint[axis][i], Vector3ExtensionMethod.GetAxisDir(axis),
-                    out var hit, Mathf.Infinity, converter.ObjectMask);
+                var isHit = Physics.Raycast(_depthCheckPoint[axis][i], Vector3ExtensionMethod.GetAxisDir(axis),
+                    out var hit, Mathf.Infinity, Converter.ObjectMask);
                 var temp = isHit ? Mathf.Abs(hit.point.GetAxisElement(axis)) : float.MaxValue;
                 
-                depth = Mathf.Max(depth, temp);
+                _depth = Mathf.Max(_depth, temp);
             }
         }
         
@@ -83,16 +84,15 @@ namespace AxisConvertSystem
             }
             else
             {
-                basicUnitInfo.LocalPos = transform.localPosition;
+                _basicUnitInfo.LocalPos = transform.localPosition;
             }
         }
 
         public void Convert(AxisType axis)
         {
-            var unitInfo = ConvertInfo(basicUnitInfo, axis);
+            var unitInfo = ConvertInfo(_basicUnitInfo, axis);
             UnitSetting(unitInfo);
-
-            Activate(Math.Abs(depth - float.MaxValue) < 0.01f);
+            Activate(Math.Abs(_depth - float.MaxValue) < 0.01f);
         }
 
         protected void UnitSetting(UnitInfo unitInfo)
@@ -100,7 +100,7 @@ namespace AxisConvertSystem
             transform.localPosition = unitInfo.LocalPos;
             transform.localRotation = unitInfo.LocalRot;
             transform.localScale = unitInfo.LocalScale;
-            collider.SetCenter(unitInfo.ColliderCenter);
+            Collider.SetCenter(unitInfo.ColliderCenter);
         }
 
         protected UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
@@ -119,21 +119,21 @@ namespace AxisConvertSystem
 
         protected void CalcDepthCheckPoint()
         {
-            depthCheckPoint.Clear();
-            depthCheckPoint.Add(AxisType.X, Vector3ExtensionMethod.CalcAxisBounds(AxisType.X, collider.bounds));
-            depthCheckPoint.Add(AxisType.Y, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Y, collider.bounds));
-            depthCheckPoint.Add(AxisType.Z, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Z, collider.bounds));
+            _depthCheckPoint.Clear();
+            _depthCheckPoint.Add(AxisType.X, Vector3ExtensionMethod.CalcAxisBounds(AxisType.X, Collider.bounds));
+            _depthCheckPoint.Add(AxisType.Y, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Y, Collider.bounds));
+            _depthCheckPoint.Add(AxisType.Z, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Z, Collider.bounds));
         }
 
         protected void Activate(bool active)
         {
             gameObject.SetActive(active);
-            collider.enabled = active;
+            Collider.enabled = active;
         }
 
         private void CheckStandObject()
         {
-            var origin = collider.bounds.center;
+            var origin = Collider.bounds.center;
             var dir = Vector3.down;
 
             var isHit = Physics.Raycast(origin, dir, out var hit, rayDistance, canStandMask);
@@ -145,9 +145,17 @@ namespace AxisConvertSystem
 
             var diff = hit.point - hit.collider.bounds.center;
             var standPos = hit.transform.localPosition + diff;
-            var info = hit.transform.TryGetComponent<ObjectUnit>(out var unit) ? unit.basicUnitInfo : basicUnitInfo;
-            standPos.SetAxisElement(converter.AxisType, info.LocalPos.GetAxisElement(converter.AxisType));
-            basicUnitInfo.LocalPos = standPos;
+            var info = hit.transform.TryGetComponent<ObjectUnit>(out var unit) ? unit._basicUnitInfo : _basicUnitInfo;
+            standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
+            _basicUnitInfo.LocalPos = standPos;
+        }
+
+        public override void OnPop()
+        {
+        }
+
+        public override void OnPush()
+        {
         }
     }
 }

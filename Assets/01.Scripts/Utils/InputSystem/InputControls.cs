@@ -57,7 +57,7 @@ namespace InputControl
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""AxisControlToggle"",
+                    ""name"": ""AxisControl"",
                     ""type"": ""Button"",
                     ""id"": ""50db877a-ab43-496e-9f06-083c49564ae2"",
                     ""expectedControlType"": ""Button"",
@@ -160,7 +160,7 @@ namespace InputControl
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""AxisControlToggle"",
+                    ""action"": ""AxisControl"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -290,7 +290,7 @@ namespace InputControl
             m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
-            m_Player_AxisControlToggle = m_Player.FindAction("AxisControlToggle", throwIfNotFound: true);
+            m_Player_AxisControl = m_Player.FindAction("AxisControl", throwIfNotFound: true);
             m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
             // Editor
             m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
@@ -362,7 +362,7 @@ namespace InputControl
         private readonly InputAction m_Player_Movement;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Interaction;
-        private readonly InputAction m_Player_AxisControlToggle;
+        private readonly InputAction m_Player_AxisControl;
         private readonly InputAction m_Player_Click;
         public struct PlayerActions
         {
@@ -371,7 +371,7 @@ namespace InputControl
             public InputAction @Movement => m_Wrapper.m_Player_Movement;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
-            public InputAction @AxisControlToggle => m_Wrapper.m_Player_AxisControlToggle;
+            public InputAction @AxisControl => m_Wrapper.m_Player_AxisControl;
             public InputAction @Click => m_Wrapper.m_Player_Click;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
@@ -391,9 +391,9 @@ namespace InputControl
                 @Interaction.started += instance.OnInteraction;
                 @Interaction.performed += instance.OnInteraction;
                 @Interaction.canceled += instance.OnInteraction;
-                @AxisControlToggle.started += instance.OnAxisControlToggle;
-                @AxisControlToggle.performed += instance.OnAxisControlToggle;
-                @AxisControlToggle.canceled += instance.OnAxisControlToggle;
+                @AxisControl.started += instance.OnAxisControl;
+                @AxisControl.performed += instance.OnAxisControl;
+                @AxisControl.canceled += instance.OnAxisControl;
                 @Click.started += instance.OnClick;
                 @Click.performed += instance.OnClick;
                 @Click.canceled += instance.OnClick;
@@ -410,9 +410,9 @@ namespace InputControl
                 @Interaction.started -= instance.OnInteraction;
                 @Interaction.performed -= instance.OnInteraction;
                 @Interaction.canceled -= instance.OnInteraction;
-                @AxisControlToggle.started -= instance.OnAxisControlToggle;
-                @AxisControlToggle.performed -= instance.OnAxisControlToggle;
-                @AxisControlToggle.canceled -= instance.OnAxisControlToggle;
+                @AxisControl.started -= instance.OnAxisControl;
+                @AxisControl.performed -= instance.OnAxisControl;
+                @AxisControl.canceled -= instance.OnAxisControl;
                 @Click.started -= instance.OnClick;
                 @Click.performed -= instance.OnClick;
                 @Click.canceled -= instance.OnClick;
@@ -517,7 +517,7 @@ namespace InputControl
             void OnMovement(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnInteraction(InputAction.CallbackContext context);
-            void OnAxisControlToggle(InputAction.CallbackContext context);
+            void OnAxisControl(InputAction.CallbackContext context);
             void OnClick(InputAction.CallbackContext context);
         }
         public interface IEditorActions

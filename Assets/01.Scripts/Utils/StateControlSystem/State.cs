@@ -1,23 +1,48 @@
-using AxisConvertSystem;
 using UnityEngine;
 
 public abstract class State
 {
     protected StateController Controller { get; private set; }
-    protected ObjectUnit Owner { get; private set; }
+    protected PlayerUnit Player { get; private set; }
 
-    protected bool _animationTriggerCalled;
-
-    private readonly int _animationHash;
+    private readonly bool _useAnim;
     
-    public State(StateController controller, string animationParameter)
+    protected bool AnimationTriggerCalled;
+    private readonly int _animationHash;
+
+    public State(StateController controller, bool useAnim = false, string animationKey = "")
     {
         Controller = controller;
-        Owner = Controller.Owner;
-        _animationHash = Animator.StringToHash(animationParameter);
+        Player = Controller.Owner;
+        _useAnim = useAnim;
+
+        if (_useAnim)
+        {
+            _animationHash = Animator.StringToHash(animationKey);
+        }
+    }
+    
+    public virtual void EnterState()
+    {
+        if (_useAnim)
+        {
+            AnimationTriggerCalled = false;
+            Player.Animator.SetBool(_animationHash, true);
+        }
     }
 
-    public abstract void EnterState();
     public abstract void UpdateState();
-    public abstract void ExitState();
+    
+    public virtual void ExitState()
+    {
+        if (_useAnim)
+        {
+            Player.Animator.SetBool(_animationHash, false);
+        }
+    }
+
+    public virtual void AnimationTrigger(string triggerKey)
+    {
+        AnimationTriggerCalled = true;
+    }
 }
