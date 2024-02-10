@@ -10,9 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ce9ce29b8c52401d917abe31443bed01, type: 3}
-  m_Name: PlayerDataSO
+  m_Name: PlayerData
   m_EditorClassIdentifier: 
   gravity: -35
-  jumpPower: 10
-  rotationSpeed: 5
   walkSpeed: 5
+  jumpPower: 10
+  rotationSpeed: 0.1
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 576
+  groundCheckDistance: 1
+  interactableMask:
+    serializedVersion: 2
+    m_Bits: 256
+  interactableRadius: 2
+  maxInteractableCnt: 1

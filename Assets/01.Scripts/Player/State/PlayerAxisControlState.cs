@@ -73,7 +73,7 @@ public class PlayerAxisControlState : PlayerBaseState
 
     private void SelectAxisHandle()
     {
-        Player.Converter.ConvertDimension(_controllingAxis);
         Controller.ChangeState(typeof(PlayerIdleState));
+        Player.Converter.ConvertDimension(_controllingAxis);
     }
 }
