@@ -13,7 +13,7 @@ namespace AxisConvertSystem
         [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public float rayDistance;
 
-        public AxisConverter Converter { get; private set; }
+        public AxisConverter Converter { get; protected set; }
         public Collider Collider { get; private set; }
         public Rigidbody Rigidbody { get; private set; }
 
@@ -24,26 +24,27 @@ namespace AxisConvertSystem
 
         private float _depth;
 
-        public virtual void Init(AxisConverter converter)
+        public virtual void Awake()
         {
-            Converter = converter;
             Collider = GetComponent<Collider>();
             if (!staticUnit)
             {
                 Rigidbody = GetComponent<Rigidbody>();
             }
+            
+            _depthCheckPoint = new Dictionary<AxisType, List<Vector3>>();
+        }
 
-            _originUnitInfo = new UnitInfo
-            {
-                LocalPos = transform.localPosition,
-                LocalRot = transform.localRotation,
-                LocalScale = transform.localScale,
-                ColliderCenter = Collider.bounds.center - transform.position
-            };
+        public virtual void Init(AxisConverter converter)
+        {
+            Converter ??= converter;
+
+            _originUnitInfo.LocalPos = transform.localPosition;
+            _originUnitInfo.LocalRot = transform.localRotation;
+            _originUnitInfo.LocalScale = transform.localScale;
+            _originUnitInfo.ColliderCenter = Collider.bounds.center - transform.position;
             _basicUnitInfo = _originUnitInfo;
             
-            _depthCheckPoint ??= new Dictionary<AxisType, List<Vector3>>();
-
             CalcDepthCheckPoint();
         }
 

@@ -13,5 +13,17 @@ public class PlayerOnGroundState : PlayerBaseState
 
     public override void UpdateState()
     {
+        if (!Player.OnGround)
+        {
+            Controller.ChangeState(typeof(PlayerFallState));
+            return;
+        }
+    }
+
+    public override void ExitState()
+    {
+        base.ExitState();
+        Player.InputReader.OnJumpEvent -= JumpHandle;
+        Player.InputReader.OnAxisControlEvent -= AxisControlHandle;
     }
 }

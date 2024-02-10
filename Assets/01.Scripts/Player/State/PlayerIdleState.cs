@@ -1,4 +1,4 @@
-public class PlayerIdleState : State
+public class PlayerIdleState : PlayerOnGroundState
 {
     public PlayerIdleState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
@@ -12,8 +12,9 @@ public class PlayerIdleState : State
 
     public override void UpdateState()
     {
+        base.UpdateState();
         var movementInput = Player.InputReader.movementInput;
-        if (movementInput.sqrMagnitude > 0f)
+        if (movementInput.sqrMagnitude > 0.05f)
         {
             Controller.ChangeState(typeof(PlayerMovementState));
         }

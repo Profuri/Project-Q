@@ -18,7 +18,7 @@ public class SectionCollisionChecker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!_section.Active && other.TryGetComponent<PlayerController>(out var player))
+        if(!_section.Active && other.TryGetComponent<PlayerUnit>(out var player))
         {
             _section.OnEnter(player);
         }
@@ -26,7 +26,7 @@ public class SectionCollisionChecker : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (_section.Active && !_section.Lock && other.TryGetComponent<PlayerController>(out var player))
+        if (_section.Active && !_section.Lock && other.TryGetComponent<PlayerUnit>(out var player))
         {
             _section.OnExit(player);
         }

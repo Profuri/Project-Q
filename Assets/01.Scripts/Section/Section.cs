@@ -46,7 +46,7 @@ public class Section : PoolableMono
         }));
     }
 
-    public virtual void OnEnter(PlayerController player)
+    public virtual void OnEnter(PlayerUnit player)
     {
         Active = true;
         Lock = true;
@@ -56,7 +56,7 @@ public class Section : PoolableMono
         ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(AxisType.None);
     }
 
-    public virtual void OnExit(PlayerController player)
+    public virtual void OnExit(PlayerUnit player)
     {
         Active = false;
         CameraManager.Instance.ChangeVCamController(VirtualCamType.PLAYER);

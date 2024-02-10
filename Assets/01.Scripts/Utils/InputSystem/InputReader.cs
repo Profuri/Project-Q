@@ -41,7 +41,7 @@ namespace InputControl
         {
             OnJumpEvent = null;
             OnInteractionEvent = null;
-            OnAxisControlToggleEvent = null;
+            OnAxisControlEvent = null;
             OnClickEvent = null;
         }
 
@@ -71,11 +71,11 @@ namespace InputControl
         {
             if (context.started)
             {
-                OnAxisControlToggleEvent?.Invoke(true);   
+                OnAxisControlEvent?.Invoke(true);   
             }
             else if(context.canceled)
             {
-                OnAxisControlToggleEvent?.Invoke(false);
+                OnAxisControlEvent?.Invoke(false);
             }
         }
 

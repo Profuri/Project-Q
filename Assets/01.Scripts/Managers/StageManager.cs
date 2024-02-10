@@ -34,7 +34,7 @@ public class StageManager : BaseManager<StageManager>
         CurrentStage.ConnectOtherSection(NextStage);
     }
     
-    public void ChangeToNextStage(PlayerController player)
+    public void ChangeToNextStage()
     {
         if (CurrentStage is not null)
         {

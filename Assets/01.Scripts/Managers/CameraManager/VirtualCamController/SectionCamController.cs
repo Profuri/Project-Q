@@ -52,7 +52,7 @@ public class SectionCamController : VirtualCamController
         SetCurrentCam(callBack);
     }
 
-    public void SetPlayer(PlayerController player)
+    public void SetPlayer(PlayerUnit player)
     {
         var playerTrm = player.transform;
         
