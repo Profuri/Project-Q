@@ -18,6 +18,7 @@ public class PlayerMovementState : PlayerOnGroundState
         }
 
         var dir = Quaternion.Euler(0, -45, 0) * movementInput;
+        Player.Rotate(Quaternion.LookRotation(dir));
         Player.SetVelocity(dir * Player.Data.walkSpeed);
     }
 }
