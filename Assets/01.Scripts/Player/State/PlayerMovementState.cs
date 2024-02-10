@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class PlayerMovementState : PlayerOnGroundState
 {
     public PlayerMovementState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
@@ -14,7 +16,8 @@ public class PlayerMovementState : PlayerOnGroundState
             Controller.ChangeState(typeof(PlayerIdleState));
             return;
         }
-        
-        Player.SetVelocity(movementInput * Player.Data.walkSpeed);
+
+        var dir = Quaternion.Euler(0, -45, 0) * movementInput;
+        Player.SetVelocity(dir * Player.Data.walkSpeed);
     }
 }

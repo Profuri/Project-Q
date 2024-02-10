@@ -1,4 +1,3 @@
-using System;
 using AxisConvertSystem;
 using InputControl;
 using UnityEngine;
@@ -39,8 +38,12 @@ public class PlayerUnit : ObjectUnit
         _stateController.UpdateState();
     }
 
-    public void SetVelocity(Vector3 velocity)
+    public void SetVelocity(Vector3 velocity, bool useGravity = true)
     {
+        if (useGravity)
+        {
+            velocity.y = Rigidbody.velocity.y;
+        }
         Rigidbody.velocity = velocity;
     }
 
