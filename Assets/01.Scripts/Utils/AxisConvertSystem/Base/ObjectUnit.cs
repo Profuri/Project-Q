@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -128,9 +129,13 @@ namespace AxisConvertSystem
                 return basic;
             }
 
-            basic.LocalPos.SetAxisElement(axis, (int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis));
+            var colSize = Collider.bounds.size.GetAxisElement(axis) - basic.LocalScale.GetAxisElement(axis);
+            var layerDepth = ((float)compressLayer + ((int)colSize + (colSize - (int)colSize) / 2f))
+                * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
+
+            basic.LocalPos.SetAxisElement(axis, layerDepth);
             basic.LocalScale.SetAxisElement(axis, 1);
-            basic.ColliderCenter.SetAxisElement(axis, -(int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis));
+            basic.ColliderCenter.SetAxisElement(axis, -layerDepth);
 
             return basic;
         }
