@@ -1,3 +1,4 @@
+using AxisConvertSystem;
 using UnityEngine;
 
 public class PlayerMovementState : PlayerOnGroundState
@@ -11,13 +12,18 @@ public class PlayerMovementState : PlayerOnGroundState
         base.UpdateState();
 
         var movementInput = Player.InputReader.movementInput;
-        if (movementInput.sqrMagnitude < 0.05f)
+        var dir = Quaternion.Euler(0, CameraManager.Instance.ActiveVCam.transform.eulerAngles.y, 0) * movementInput;
+        if (Player.Converter.AxisType != AxisType.None)
+        {
+            dir.SetAxisElement(Player.Converter.AxisType, 0);
+        }
+        
+        if (dir.sqrMagnitude < 0.05f)
         {
             Controller.ChangeState(typeof(PlayerIdleState));
             return;
         }
-
-        var dir = Quaternion.Euler(0, -45, 0) * movementInput;
+        
         Player.Rotate(Quaternion.LookRotation(dir));
         Player.SetVelocity(dir * Player.Data.walkSpeed);
     }

@@ -1,3 +1,4 @@
+using AxisConvertSystem;
 using UnityEngine;
 
 public class PlayerOnAirState : PlayerBaseState
@@ -21,7 +22,13 @@ public class PlayerOnAirState : PlayerBaseState
         }
         
         var movementInput = Player.InputReader.movementInput;
-        var dir = Quaternion.Euler(0, -45, 0) * movementInput;
+        
+        var dir = Quaternion.Euler(0, CameraManager.Instance.ActiveVCam.transform.eulerAngles.y, 0) * movementInput;
+        if (Player.Converter.AxisType != AxisType.None)
+        {
+            dir.SetAxisElement(Player.Converter.AxisType, 0);
+        }
+        
         if (dir.sqrMagnitude > 0.05f)
         {
             Player.Rotate(Quaternion.LookRotation(dir));
