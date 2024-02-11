@@ -22,7 +22,10 @@ public class PlayerOnAirState : PlayerBaseState
         
         var movementInput = Player.InputReader.movementInput;
         var dir = Quaternion.Euler(0, -45, 0) * movementInput;
-        Player.Rotate(Quaternion.LookRotation(dir));
+        if (dir.sqrMagnitude > 0.05f)
+        {
+            Player.Rotate(Quaternion.LookRotation(dir));
+        }
         Player.SetVelocity(dir * Player.Data.walkSpeed);
     }
 

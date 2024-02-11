@@ -92,16 +92,33 @@ namespace AxisConvertSystem
         public void Convert(AxisType axis)
         {
             var unitInfo = ConvertInfo(_basicUnitInfo, axis);
-            UnitSetting(unitInfo);
+            UnitSetting(axis, unitInfo);
             Activate(Math.Abs(_depth - float.MaxValue) < 0.01f);
         }
 
-        protected void UnitSetting(UnitInfo unitInfo)
+        protected void UnitSetting(AxisType axis, UnitInfo unitInfo)
         {
             transform.localPosition = unitInfo.LocalPos;
             transform.localRotation = unitInfo.LocalRot;
             transform.localScale = unitInfo.LocalScale;
             Collider.SetCenter(unitInfo.ColliderCenter);
+
+            if (!staticUnit)
+            {
+                Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+                if (axis == AxisType.X)
+                {
+                    Rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;
+                }
+                else if (axis == AxisType.Y)
+                {
+                    Rigidbody.constraints |= RigidbodyConstraints.FreezePositionY;
+                }
+                else if (axis == AxisType.Z)
+                {
+                    Rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
+                }
+            }
         }
 
         protected UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
