@@ -95,7 +95,7 @@ namespace AxisConvertSystem
             Activate(Math.Abs(_depth - float.MaxValue) < 0.01f);
         }
 
-        protected void UnitSetting(AxisType axis, UnitInfo unitInfo)
+        private void UnitSetting(AxisType axis, UnitInfo unitInfo)
         {
             transform.localPosition = unitInfo.LocalPos;
             transform.localRotation = unitInfo.LocalRot;
@@ -109,7 +109,7 @@ namespace AxisConvertSystem
             }
         }
 
-        protected UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
+        private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
         {
             if (axis == AxisType.None)
             {
@@ -119,7 +119,7 @@ namespace AxisConvertSystem
             var colSize = Collider.bounds.size.GetAxisElement(axis) - basic.LocalScale.GetAxisElement(axis);
             var layerDepth = ((float)compressLayer + ((int)colSize + (colSize - (int)colSize) / 2f))
                 * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
-            var colliderCenter = -Mathf.Abs(layerDepth - (Collider.bounds.center - transform.position).GetAxisElement(axis));
+            var colliderCenter = -layerDepth + (Collider.bounds.center - transform.position).GetAxisElement(axis);
 
             basic.LocalPos.SetAxisElement(axis, layerDepth);
             basic.LocalScale.SetAxisElement(axis, 1);
@@ -128,7 +128,7 @@ namespace AxisConvertSystem
             return basic;
         }
 
-        protected void CalcDepthCheckPoint()
+        private void CalcDepthCheckPoint()
         {
             _depthCheckPoint.Clear();
             _depthCheckPoint.Add(AxisType.X, Vector3ExtensionMethod.CalcAxisBounds(AxisType.X, Collider.bounds));
@@ -136,7 +136,7 @@ namespace AxisConvertSystem
             _depthCheckPoint.Add(AxisType.Z, Vector3ExtensionMethod.CalcAxisBounds(AxisType.Z, Collider.bounds));
         }
 
-        protected void Activate(bool active)
+        private void Activate(bool active)
         {
             gameObject.SetActive(active);
             Collider.enabled = active;
