@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace AxisConvertSystem
 {
@@ -107,18 +105,7 @@ namespace AxisConvertSystem
             if (!staticUnit)
             {
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-                if (axis == AxisType.X)
-                {
-                    Rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;
-                }
-                else if (axis == AxisType.Y)
-                {
-                    Rigidbody.constraints |= RigidbodyConstraints.FreezePositionY;
-                }
-                else if (axis == AxisType.Z)
-                {
-                    Rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
-                }
+                Rigidbody.FreezeAxisPosition(axis);
             }
         }
 
@@ -132,10 +119,11 @@ namespace AxisConvertSystem
             var colSize = Collider.bounds.size.GetAxisElement(axis) - basic.LocalScale.GetAxisElement(axis);
             var layerDepth = ((float)compressLayer + ((int)colSize + (colSize - (int)colSize) / 2f))
                 * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
+            var colliderCenter = -Mathf.Abs(layerDepth - (Collider.bounds.center - transform.position).GetAxisElement(axis));
 
             basic.LocalPos.SetAxisElement(axis, layerDepth);
             basic.LocalScale.SetAxisElement(axis, 1);
-            basic.ColliderCenter.SetAxisElement(axis, -layerDepth);
+            basic.ColliderCenter.SetAxisElement(axis, colliderCenter);
 
             return basic;
         }
