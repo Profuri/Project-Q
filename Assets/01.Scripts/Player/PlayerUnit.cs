@@ -134,6 +134,11 @@ public class PlayerUnit : ObjectUnit
         // base.ReloadObject();
     }
 
+    public void AnimationTrigger(string key)
+    {
+        _stateController.CurrentState.AnimationTrigger(key);
+    }
+
     private void OnInteraction()
     {
         _selectedInteractableObject.OnInteraction(this, true);
@@ -143,13 +148,14 @@ public class PlayerUnit : ObjectUnit
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;
-        
-        Gizmos.DrawWireSphere(Collider.bounds.center, _data.interactableRadius);
+
+        var col = GetComponent<Collider>();
+        Gizmos.DrawWireSphere(col.bounds.center, _data.interactableRadius);
         
         if (_selectedInteractableObject != null)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(Collider.bounds.center, _selectedInteractableObject.transform.position);
+            Gizmos.DrawLine(col.bounds.center, _selectedInteractableObject.transform.position);
         }
     }
 #endif

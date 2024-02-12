@@ -43,6 +43,9 @@ public abstract class State
 
     public virtual void AnimationTrigger(string triggerKey)
     {
-        AnimationTriggerCalled = true;
+        if (_useAnim)
+        {
+            AnimationTriggerCalled = true;
+        }
     }
 }
