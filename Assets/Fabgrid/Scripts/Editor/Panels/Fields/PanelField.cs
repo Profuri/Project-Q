@@ -9,6 +9,7 @@ public abstract class PanelField
 {
     private VisualElement _root;
     protected VisualElement _fieldRoot;
+    protected Label _label;
     
 
     protected PanelField(VisualElement root,VisualTreeAsset field, FieldInfo info)
@@ -20,6 +21,11 @@ public abstract class PanelField
         _root?.Add(container);
 
         _fieldRoot = container;
+        _label = container.Q<Label>("Label");
+        if (_label == null)
+        {
+            Debug.LogError("Can't Find label!");
+        }
     }
     
     public abstract void Init(FieldInfo info);

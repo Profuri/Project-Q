@@ -16,6 +16,7 @@ namespace PanelEditor
         {
             
             //이거 t 말고 string으로 가져와야 될 것 같기도함.
+            _inputField.name = info.Name;
         }
         
         public InputField(VisualElement root,VisualTreeAsset field, FieldInfo info) : base(root,field, info)

@@ -5,6 +5,7 @@ using StageStructureConvertSystem;
 public class GlassObjectUnit : StructureObjectUnitBase
 {
     [SerializeField] private EAxisType _activeAxisType;
+    [SerializeField] private int _testInt;
 
     private Transform _visualTrm;
 
