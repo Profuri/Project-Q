@@ -149,7 +149,7 @@ public class LaserLauncherObject : ObjectUnit
         
         if (col.TryGetComponent<PlayerUnit>(out var playerUnit))
         {
-            playerUnit.ReloadObject();
+            // playerUnit.ReloadObject();
         }
 
         if (col.TryGetComponent<InteractableObject>(out var interactable))

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace InteractableSystem
 {
-    public abstract class InteractableObject : MonoBehaviour, IInteractable
+    public abstract class InteractableObject : ObjectUnit, IInteractable
     {
         public bool InterEnd { get; set; }
         public bool IsInteract { get; set; }

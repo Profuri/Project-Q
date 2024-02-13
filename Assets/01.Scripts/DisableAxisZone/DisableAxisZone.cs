@@ -10,17 +10,17 @@ public class DisableAxisZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent(out PlayerController player))
+        if(other.TryGetComponent(out PlayerUnit player))
         {
-            player.SetEnableAxis(_targetAxis, false);
+            // player.SetEnableAxis(_targetAxis, false);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out PlayerController player))
+        if (other.TryGetComponent(out PlayerUnit player))
         {
-            player.SetEnableAxis(_targetAxis, true);
+            // player.SetEnableAxis(_targetAxis, true);
         }
     }
 }

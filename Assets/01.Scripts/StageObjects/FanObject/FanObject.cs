@@ -77,12 +77,12 @@ public class FanObject : InteractableObject
         {
             var hit = hits[i];
 
-            if (hit.collider.TryGetComponent(out PlayerController playerController))
-            {
-                var movementModule = playerController.GetModule<PlayerMovementModule>();
-                movementModule.SetForce(_poweredDir * _airPower);
+            // if (hit.collider.TryGetComponent(out PlayerController playerController))
+            // {
+                // var movementModule = playerController.GetModule<PlayerMovementModule>();
+                // movementModule.SetForce(_poweredDir * _airPower);
                 // movementModule.SetVerticalVelocity(_airPower);
-            }
+            // }
 
             if (hit.collider.TryGetComponent(out InteractableObject interactableObject))
             {

@@ -13,6 +13,7 @@ public class PlayerUnit : ObjectUnit
 
     public Transform ModelTrm { get; private set; }
     public Animator Animator { get; private set; }
+    public ObjectHoldingHandler HoldingHandler { get; private set; }
     private StateController _stateController;
     private PlayerUIController _playerUiController;
 
@@ -20,12 +21,15 @@ public class PlayerUnit : ObjectUnit
 
     private InteractableObject _selectedInteractableObject;
 
+    private readonly int _activeHash = Animator.StringToHash("Active");
+
     public override void Awake()
     {
         base.Awake();
         Converter = GetComponent<AxisConverter>();
         ModelTrm = transform.Find("Model");
         Animator = ModelTrm.GetComponent<Animator>();
+        HoldingHandler = GetComponent<ObjectHoldingHandler>();
         _playerUiController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         
         _stateController = new StateController(this);
@@ -34,7 +38,6 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerJumpState(_stateController, true, "Jump"));
         _stateController.RegisterState(new PlayerFallState(_stateController, true, "Fall"));
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
-        _stateController.ChangeState(typeof(PlayerIdleState));
     }
 
     private void Update()
@@ -48,11 +51,14 @@ public class PlayerUnit : ObjectUnit
     public override void OnPop()
     {
         _inputReader.OnInteractionEvent += OnInteraction;
+        _stateController.ChangeState(typeof(PlayerIdleState));
+        Animator.SetBool(_activeHash, true);
     }
 
     public override void OnPush()
     {
         _inputReader.OnInteractionEvent -= OnInteraction;
+        Animator.SetBool(_activeHash, false);
     }
 
     public void SetVelocity(Vector3 velocity, bool useGravity = true)
@@ -119,19 +125,7 @@ public class PlayerUnit : ObjectUnit
     {
         transform.SetParent(section.transform);
         Converter.Init(section);
-    }
-
-    private void SetOriginPos()
-    {
-        // _originPos = StageManager.Instance.CurrentStage.PlayerResetPoint;
-    }
-
-    public void ReloadObject()
-    {
-        // _playerController.GetModule<PlayerMovementModule>().StopImmediately();
-        // _playerController.PlayerAnimatorController.UnActive();
-        // _playerController.ConvertDimension(AxisType.None);
-        // base.ReloadObject();
+        _originUnitInfo.LocalPos = section.PlayerResetPoint;
     }
 
     public void AnimationTrigger(string key)

@@ -3,13 +3,13 @@ using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class HoldableObject : InteractableObject
 {
     private Rigidbody _rigid;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         _rigid = GetComponent<Rigidbody>();
         IsInteract = false;
     }
@@ -21,15 +21,14 @@ public class HoldableObject : InteractableObject
         _rigid.freezeRotation = IsInteract;
 
         var player = (PlayerUnit)communicator;
-        // var holdingModule = player.GetModule<PlayerObjectHoldingModule>();
 
         if (IsInteract)
         {
-            // holdingModule.AttachObject(this);
+            player.HoldingHandler.Attach(this);
         }
         else
         {
-            // holdingModule.DetachObject();
+            player.HoldingHandler.Detach();
         }
     }
 }

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class PlayerIdleState : PlayerOnGroundState
 {
     public PlayerIdleState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)

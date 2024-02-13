@@ -4,7 +4,6 @@ using UnityEngine;
 public class PlayerData : ScriptableObject
 {
     [Header("Movement Data")]
-    public float gravity;
     public float walkSpeed;
     public float jumpPower;
     [Range(0.1f, 1f)] public float rotationSpeed;
@@ -17,4 +16,8 @@ public class PlayerData : ScriptableObject
     public LayerMask interactableMask;
     public float interactableRadius;
     public int maxInteractableCnt;
+
+    [Header("Holding Data")] 
+    public float holdingRadius;
+    [Range(0.1f, 1f)] public float holdingPointMoveSpeed;
 }

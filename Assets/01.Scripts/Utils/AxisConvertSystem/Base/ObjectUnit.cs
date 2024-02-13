@@ -16,8 +16,8 @@ namespace AxisConvertSystem
         public Collider Collider { get; private set; }
         public Rigidbody Rigidbody { get; private set; }
 
-        private UnitInfo _originUnitInfo;
-        private UnitInfo _basicUnitInfo;
+        protected UnitInfo _originUnitInfo;
+        protected UnitInfo _basicUnitInfo;
         
         private Dictionary<AxisType, List<Vector3>> _depthCheckPoint;
 
@@ -93,6 +93,12 @@ namespace AxisConvertSystem
             var unitInfo = ConvertInfo(_basicUnitInfo, axis);
             UnitSetting(axis, unitInfo);
             Activate(Math.Abs(_depth - float.MaxValue) < 0.01f);
+        }
+
+        public void SetPosition(Vector3 pos)
+        {
+            pos.SetAxisElement(Converter.AxisType, transform.position.GetAxisElement(Converter.AxisType));
+            transform.position = pos;
         }
 
         private void UnitSetting(AxisType axis, UnitInfo unitInfo)
