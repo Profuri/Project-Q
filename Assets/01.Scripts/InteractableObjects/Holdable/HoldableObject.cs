@@ -18,7 +18,6 @@ public class HoldableObject : InteractableObject
     {
         IsInteract = !IsInteract;
         _rigid.useGravity = !IsInteract;
-        _rigid.freezeRotation = IsInteract;
 
         var player = (PlayerUnit)communicator;
 

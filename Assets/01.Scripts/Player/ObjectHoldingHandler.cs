@@ -40,14 +40,13 @@ public class ObjectHoldingHandler : MonoBehaviour
     private void HoldingPointMovement()
     {
         var holdPoint = _holdingPoint.position;
-
-        var origin = _player.Collider.bounds.center;
+        var origin = _player.transform.position;
         origin.y = holdPoint.y;
 
         var originDir = (holdPoint - origin).normalized;  
         var destDir = _player.ModelTrm.forward;
 
-        var lerpDir = Vector3.Lerp(originDir, destDir, _player.Data.holdingPointMoveSpeed * Time.deltaTime);
+        var lerpDir = Vector3.Lerp(originDir, destDir, _player.Data.holdingPointMoveSpeed);
 
         var destPos = origin + lerpDir * _player.Data.holdingRadius;
 

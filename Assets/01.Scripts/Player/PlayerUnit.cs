@@ -135,12 +135,22 @@ public class PlayerUnit : ObjectUnit
 
     private void OnInteraction()
     {
+        if (_selectedInteractableObject is null)
+        {
+            return;
+        }
+        
         _selectedInteractableObject.OnInteraction(this, true);
     }
     
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+        if (Application.isPlaying)
+        {
+            return;
+        }
+        
         Gizmos.color = Color.cyan;
 
         var col = GetComponent<Collider>();
