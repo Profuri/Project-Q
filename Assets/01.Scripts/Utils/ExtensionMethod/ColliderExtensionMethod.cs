@@ -13,10 +13,21 @@ public static class ColliderExtensionMethod
         {
             capsuleCol.center = center;
         }
-        else if (col is CharacterController characterController)
+    }
+
+    public static Vector3 GetLocalCenter(this Collider col)
+    {
+        if (col is BoxCollider boxCol)
         {
-            characterController.center = center;
+            return boxCol.center;
         }
+        
+        if (col is CapsuleCollider capsuleCol)
+        {
+            return capsuleCol.center;
+        }
+        
+        return Vector3.zero;
     }
 
     public static DepthPoint GetDepthPoint(this Collider col, AxisType axis)

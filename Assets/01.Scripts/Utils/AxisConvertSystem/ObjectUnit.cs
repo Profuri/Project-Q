@@ -38,7 +38,7 @@ namespace AxisConvertSystem
             OriginUnitInfo.LocalPos = transform.localPosition;
             OriginUnitInfo.LocalRot = transform.localRotation;
             OriginUnitInfo.LocalScale = transform.localScale;
-            OriginUnitInfo.ColliderCenter = Collider.bounds.center - transform.position;
+            OriginUnitInfo.ColliderCenter = Collider.GetLocalCenter();
             UnitInfo = OriginUnitInfo;
             
             DepthHandler.DepthCheckPointSetting();
@@ -74,8 +74,15 @@ namespace AxisConvertSystem
 
         public void ReloadUnit()
         {
-            UnitInfo = OriginUnitInfo;
+            if (staticUnit)
+            {
+                Rigidbody.velocity = Vector3.zero;
+            }
             
+            UnitInfo = OriginUnitInfo;
+            DepthHandler.CalcDepth(Converter.AxisType);
+            ConvertedInfo = ConvertInfo(UnitInfo, Converter.AxisType);
+            UnitSetting(Converter.AxisType);
         }
         
         private void SynchronizationUnitPos(AxisType axis)
@@ -105,7 +112,7 @@ namespace AxisConvertSystem
             var colSize = Collider.bounds.size.GetAxisElement(axis) - basic.LocalScale.GetAxisElement(axis);
             var layerDepth = ((float)compressLayer + ((int)colSize + (colSize - (int)colSize) / 2f))
                 * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
-            var colliderCenter = -layerDepth + (Collider.bounds.center - transform.position).GetAxisElement(axis);
+            var colliderCenter = -layerDepth + UnitInfo.ColliderCenter.GetAxisElement(axis);
 
             basic.LocalPos.SetAxisElement(axis, layerDepth);
             basic.LocalScale.SetAxisElement(axis, 1);

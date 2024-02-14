@@ -7,13 +7,7 @@ public class DestroyZone : MonoBehaviour
     {
         if (other.TryGetComponent<ObjectUnit>(out var unit))
         {
-            var rigid = other.GetComponent<Rigidbody>();
-            if (rigid != null)
-            {
-                rigid.velocity = Vector3.zero;
-            }
-            
-            // unit.ReloadObject();
+            unit.ReloadUnit();
         }
     }
 
