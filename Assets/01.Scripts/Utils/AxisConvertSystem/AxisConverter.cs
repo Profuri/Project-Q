@@ -8,25 +8,23 @@ namespace AxisConvertSystem
     {
         [SerializeField] private LayerMask _objectMask;
         public LayerMask ObjectMask => _objectMask;
-        
-        private List<ObjectUnit> _convertableUnits;
 
-        private AxisType _axisType;
-        public AxisType AxisType => _axisType;
+        public List<ObjectUnit> Units { get; private set; }
+        public AxisType AxisType { get; private set; }
 
         public bool Convertable { get; private set; }
 
         public void Init(Section section)
         {
-            _axisType = AxisType.None;
+            AxisType = AxisType.None;
             SetConvertable(section is Stage);
 
             if (section is Stage)
             {
-                _convertableUnits ??= new List<ObjectUnit>();
-                _convertableUnits.Clear();
-                section.GetComponentsInChildren(_convertableUnits);
-                _convertableUnits.ForEach(unit => unit.Init(this));
+                Units ??= new List<ObjectUnit>();
+                Units.Clear();
+                section.GetComponentsInChildren(Units);
+                Units.ForEach(unit => unit.Init(this));
             }
         }
 
@@ -37,7 +35,7 @@ namespace AxisConvertSystem
 
         public void ConvertDimension(AxisType axisType, Action callback = null)
         {
-            if (!Convertable || _axisType == axisType || (_axisType != AxisType.None && axisType != AxisType.None))
+            if (!Convertable || AxisType == axisType || (AxisType != AxisType.None && axisType != AxisType.None))
             {
                 callback?.Invoke();
                 return;
@@ -70,23 +68,18 @@ namespace AxisConvertSystem
             CameraManager.Instance.ShakeCam(1f, 0.1f);
             VolumeManager.Instance.Highlight(0.2f);
             LightManager.Instance.SetShadow(axisType == AxisType.None ? LightShadows.Soft : LightShadows.None);
-            
-            _convertableUnits.ForEach(unit =>
-            {
-                unit.CalcDepth(axisType);
-            });
-            
-            _convertableUnits.ForEach(unit =>
-            {
-                unit.SynchronizationUnitPos(axisType);
-            });
-            
-            _convertableUnits.ForEach(unit =>
+
+            Units.ForEach(unit =>
             {
                 unit.Convert(axisType);
             });
+            
+            Units.ForEach(unit =>
+            {
+                unit.UnitSetting(axisType);
+            });
 
-            _axisType = axisType;
+            AxisType = axisType;
         }
     }
 }

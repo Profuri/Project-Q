@@ -126,7 +126,7 @@ public class PlayerUnit : ObjectUnit
     {
         transform.SetParent(section.transform);
         Converter.Init(section);
-        _originUnitInfo.LocalPos = section.PlayerResetPoint;
+        OriginUnitInfo.LocalPos = section.PlayerResetPoint;
     }
 
     public void AnimationTrigger(string key)
