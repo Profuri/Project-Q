@@ -24,7 +24,7 @@ public class PlayerMovementState : PlayerOnGroundState
             return;
         }
         
-        Player.Rotate(Quaternion.LookRotation(dir));
+        Player.Rotate(Quaternion.LookRotation(dir), Player.Converter.AxisType is AxisType.None or AxisType.Y ? Player.Data.rotationSpeed : 1f);
         Player.SetVelocity(dir * Player.Data.walkSpeed);
     }
 }

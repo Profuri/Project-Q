@@ -6,6 +6,7 @@ public class PlayerData : ScriptableObject
     [Header("Movement Data")]
     public float walkSpeed;
     public float jumpPower;
+    public float gravity;
     [Range(0.1f, 1f)] public float rotationSpeed;
     
     [Header("Ground Check Data")]

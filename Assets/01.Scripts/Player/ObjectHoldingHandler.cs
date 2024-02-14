@@ -1,3 +1,4 @@
+using AxisConvertSystem;
 using UnityEngine;
 
 public class ObjectHoldingHandler : MonoBehaviour
@@ -46,9 +47,11 @@ public class ObjectHoldingHandler : MonoBehaviour
         var originDir = (holdPoint - origin).normalized;  
         var destDir = _player.ModelTrm.forward;
 
-        var lerpDir = Vector3.Lerp(originDir, destDir, _player.Data.holdingPointMoveSpeed);
+        var finalDir = _player.Converter.AxisType is AxisType.None or AxisType.Y ?
+            Vector3.Lerp(originDir, destDir, _player.Data.holdingPointMoveSpeed) :
+            destDir;
 
-        var destPos = origin + lerpDir * _player.Data.holdingRadius;
+        var destPos = origin + finalDir * _player.Data.holdingRadius;
 
         _holdingPoint.position = destPos;
     }

@@ -65,6 +65,7 @@ public class PlayerUnit : ObjectUnit
     {
         if (useGravity)
         {
+            Rigidbody.AddForce(Vector3.up * _data.gravity);
             velocity.y = Rigidbody.velocity.y;
         }
         Rigidbody.velocity = velocity;

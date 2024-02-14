@@ -32,11 +32,6 @@ namespace AxisConvertSystem.Editor
             
             ReloadObject();
         }
-        
-        public void OnDisable()
-        {
-            ReloadObject();
-        }
 
         public override void OnInspectorGUI()
         {
