@@ -109,14 +109,17 @@ namespace AxisConvertSystem
                 return basic;
             }
 
-            var colSize = Collider.bounds.size.GetAxisElement(axis) - basic.LocalScale.GetAxisElement(axis);
-            var layerDepth = ((float)compressLayer + ((int)colSize + (colSize - (int)colSize) / 2f))
-                * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
-            var colliderCenter = -layerDepth + UnitInfo.ColliderCenter.GetAxisElement(axis);
-
+            var layerDepth = (float)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
+            
             basic.LocalPos.SetAxisElement(axis, layerDepth);
+
+            basic.LocalScale = Quaternion.Inverse(basic.LocalRot) * basic.LocalScale;
             basic.LocalScale.SetAxisElement(axis, 1);
-            basic.ColliderCenter.SetAxisElement(axis, colliderCenter);
+            basic.LocalScale = basic.LocalRot * basic.LocalScale;
+            
+            basic.ColliderCenter = basic.LocalRot * basic.ColliderCenter;
+            basic.ColliderCenter.SetAxisElement(axis, -layerDepth);
+            basic.ColliderCenter = Quaternion.Inverse(basic.LocalRot) * basic.ColliderCenter;
 
             return basic;
         }
