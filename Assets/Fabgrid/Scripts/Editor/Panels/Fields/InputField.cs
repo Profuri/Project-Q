@@ -14,14 +14,18 @@ namespace PanelEditor
                 
         public override void Init(FieldInfo info)
         {
-            
             //이거 t 말고 string으로 가져와야 될 것 같기도함.
-            //_inputField.name = info.Name;
+            if(_inputField == null)
+            {
+                Debug.LogError($"InputField is null!");
+                return;
+            }
+            _inputField.name = info.Name;
         }
         
         public InputField(VisualElement root,VisualTreeAsset field, FieldInfo info) : base(root,field, info)
         {
-            _inputField = _fieldRoot as TextInputBaseField<T>;
+            _inputField = _fieldRoot.Q<TextInputBaseField<T>>();
             Init(info);
         }
     }
