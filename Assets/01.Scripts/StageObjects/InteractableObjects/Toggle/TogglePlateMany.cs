@@ -19,7 +19,6 @@ public class TogglePlateMany : InteractableObject
     [SerializeField] private bool _rollbackReverse = false;
     [SerializeField] private float _delayTime = 0.5f;
 
-
     private List<InteractableObject> _activeObjects;
     private Transform _pressureMainTrm;
     private Transform _pressureObjTrm;

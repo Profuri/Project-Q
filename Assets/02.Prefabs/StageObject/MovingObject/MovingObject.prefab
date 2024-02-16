@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1230086543873183590}
   - component: {fileID: 1652665423283863136}
   - component: {fileID: 4601604665460486194}
-  - component: {fileID: 3762694262409697862}
   - component: {fileID: -3034854502493985992}
   m_Layer: 6
   m_Name: MovingObject
@@ -30,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6420393136103148233}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
@@ -120,31 +119,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77342a829014747869cab7cb151ae664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  compressLayer: 2
+  staticUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  rayDistance: 0
   _interactType: 1
   _attribute: 0
   _movingTrackTrm: {fileID: 0}
-  _movingAxis: 0
+  _movingAxis: 1
   _playerMask:
     serializedVersion: 2
     m_Bits: 1024
   _checkDistance: 0.7
---- !u!114 &3762694262409697862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6420393136103148233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _materialRenderSetting: 1
-  _colliderSetting: 1
-  _outlineSetting: 1
-  _interatableYAxis: 0
-  _rigidobySetting: 0
 --- !u!114 &-3034854502493985992
 MonoBehaviour:
   m_ObjectHideFlags: 0

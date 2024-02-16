@@ -21,15 +21,17 @@ public class PressurePlate : InteractableObject
 
     private bool _lastToggleState;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         _lastToggleState = false;
         _pressureMainTrm = transform.Find("PressureMain");
         _pressureObjTrm = _pressureMainTrm.Find("PressureObject");
     }
 
-    private void Update()
+    public override void Update()
     {
+        base.Update();
         if (_lastToggleState != CheckPressed())
         {
             _lastToggleState = !_lastToggleState;

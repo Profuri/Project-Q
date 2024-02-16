@@ -21,15 +21,19 @@ public class LaserToggleObject : InteractableObject
 
     private Coroutine _runningRoutine;
 
-    public void Awake()
+    public override void Awake()
     {
+        base.Awake();
+        
         _pointLight = transform.Find("Point Light").GetComponent<Light>();
         _runningRoutine = null;
         Toggled(false);
     }
 
-    private void Update()
+    public override void Update()
     {
+        base.Update();
+        
         if(_isToggle)
         {
             for (var i = 0; i < _affectedObjects.Count && i <= _interactableIndex; i++)

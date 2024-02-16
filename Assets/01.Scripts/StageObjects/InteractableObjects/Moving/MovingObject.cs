@@ -6,106 +6,67 @@ using UnityEngine;
 public class MovingObject : InteractableObject
 {
     [SerializeField] private Transform _movingTrackTrm;
-    [SerializeField] private EMovingAxis _movingAxis;
+    [SerializeField] private AxisType _movingAxis;
     
     [SerializeField] private LayerMask _playerMask;
 
     [SerializeField] [Range(0.5f, 1f)] private float _checkDistance;
 
-    private ObjectUnit _objectUnit;
-
     private float _minLimitPos;
     private float _maxLimitPos;
     
-    private void OnEnable()
+    public override void Awake()
     {
-        _objectUnit = GetComponent<ObjectUnit>();
+        base.Awake();
 
-        var scale = 0f;
-        var trackScale = 0f;
-        var origin = 0f;
-
-        if (_movingAxis == EMovingAxis.X)
-        {
-            scale = transform.localScale.x;
-            trackScale = _movingTrackTrm.localScale.x;
-            origin = _movingTrackTrm.localPosition.x;
-        }
-        else
-        {
-            scale = transform.localScale.z;
-            trackScale = _movingTrackTrm.localScale.z;
-            origin = _movingTrackTrm.localPosition.z;
-        }
+        var scale = transform.localScale.GetAxisElement(_movingAxis);
+        var trackScale = _movingTrackTrm.localScale.GetAxisElement(_movingAxis);
+        var origin = _movingTrackTrm.localPosition.GetAxisElement(_movingAxis);
 
         _minLimitPos = origin + -trackScale / 2f + scale / 2f;
         _maxLimitPos = origin + trackScale / 2f - scale / 2f;
     }
 
-    private void Update()
+    public override void Update()
     {
-        // if (_objectUnit.UnitInfo.CompressType != AxisType.None)
-        // {
-            // return;
-        // }
+        base.Update();
+
+        if (!CheckPlayer(out var cols))
+        {
+            return;
+        }
         
-        // if (!CheckPlayer(out var cols))
-        // {
-            // return;
-        // }
-        
-        // if (!cols[0].TryGetComponent<PlayerUnit>(out var playerUnit))
-        // {
-            // return;
-        // }   
+        if (!cols[0].TryGetComponent<PlayerUnit>(out var playerUnit))
+        {
+            return;
+        }   
             
-        // OnInteraction(playerUnit, true);
+        OnInteraction(playerUnit, true);
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         var player = (PlayerUnit)communicator;
-        // var playerMovementModule = player.GetModule<PlayerMovementModule>();
 
-        // if (!playerMovementModule.IsMovement)
-        // {
-            // return;
-        // }
-
-        // if (IsPulling(communicator.transform.position, playerMovementModule.MoveVelocity, out var dir))
-        // {
-            // var speed = player.Data.walkSpeed / 2f;
-            // transform.localPosition += dir * (speed * Time.deltaTime);
-            // ClampingPosition();
-        // }
+        if (IsPulling(player.transform.position, player.Rigidbody.velocity, out var dir))
+        {
+            var speed = player.Data.walkSpeed / 2f;
+            SetPosition(transform.position + dir * (speed * Time.deltaTime));
+            ClampingPosition();
+        }
     }
 
     private void ClampingPosition()
     {
         var pos = transform.localPosition;
-        if (_movingAxis == EMovingAxis.X)
-        {
-            pos.x = Mathf.Clamp(pos.x, _minLimitPos, _maxLimitPos);
-        }
-        else
-        {
-            pos.z = Math.Clamp(pos.z, _minLimitPos, _maxLimitPos);
-        }
+        pos.SetAxisElement(_movingAxis, Mathf.Clamp(pos.GetAxisElement(_movingAxis), _minLimitPos, _maxLimitPos));
         transform.localPosition = pos;
     }
 
     private bool IsPulling(Vector3 playerOrigin, Vector3 movementVelocity, out Vector3 dir)
     {
-        dir = movementVelocity;
-        if (_movingAxis == EMovingAxis.X)
-        {
-            dir.z = 0;
-        }
-        else
-        {
-            dir.x = 0;
-        }
-        dir.y = 0;
+        dir = Vector3.zero;
+        dir.SetAxisElement(_movingAxis, movementVelocity.GetAxisElement(_movingAxis));
         dir.Normalize();
         
         if (dir.sqrMagnitude <= 0f)
@@ -125,12 +86,12 @@ public class MovingObject : InteractableObject
     private bool CheckPlayer(out Collider[] cols)
     {
         var size = transform.localScale;
-        if (_movingAxis == EMovingAxis.X)
+        if (_movingAxis == AxisType.X)
         {
             size.x *= _checkDistance;
             size.z /= 2.25f;
         }
-        else
+        else if(_movingAxis == AxisType.Z)
         {
             size.z *= _checkDistance;
             size.x /= 2.25f;
@@ -147,12 +108,12 @@ public class MovingObject : InteractableObject
     private void OnDrawGizmos()
     {
         var size = transform.localScale;
-        if (_movingAxis == EMovingAxis.X)
+        if (_movingAxis == AxisType.X)
         {
             size.x *= _checkDistance;
             size.z /= 2.25f;
         }
-        else
+        else if(_movingAxis == AxisType.Z)
         {
             size.z *= _checkDistance;
             size.x /= 2.25f;

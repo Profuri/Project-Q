@@ -5,10 +5,8 @@ using UnityEngine;
 public class Scene : PoolableMono
 {
     [SerializeField] private SceneType _type;
-    public SceneType Type => _type;
     
     public PlayerUnit Player { get; private set; }
-
     private List<PoolableMono> _objects;
 
     private void Awake()

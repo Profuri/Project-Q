@@ -13,8 +13,9 @@ public class ReciprocationObject : InteractableObject
     private Vector3 _originPos;
     private Vector3 _destPos;
 
-    private void OnEnable()
+    public override void Awake()
     {
+        base.Awake();
         _originPos = transform.localPosition;
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
     }
@@ -23,19 +24,7 @@ public class ReciprocationObject : InteractableObject
     {
         var curPos = transform.localPosition;  
         var destPos = interactValue ? _destPos : _originPos;
-
-        switch (StageManager.Instance.CurrentStageAxis)
-        {
-            case AxisType.X:
-                destPos.x = 0f;
-                break;
-            case AxisType.Y:
-                // destPos.y = 0f;
-                break;
-            case AxisType.Z:
-                destPos.z = 0f;
-                break;
-        }
+        destPos.SetAxisElement(Converter.AxisType, 0);
 
         if (Vector3.Distance(curPos, destPos) <= 0.01f)
         {

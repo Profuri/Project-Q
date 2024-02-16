@@ -27,6 +27,7 @@ namespace AxisConvertSystem
             {
                 Rigidbody = GetComponent<Rigidbody>();
                 Rigidbody.useGravity = false;
+                Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
             DepthHandler = new UnitDepthHandler(this);
         }
@@ -101,7 +102,6 @@ namespace AxisConvertSystem
 
             if (!staticUnit)
             {
-                Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
                 Rigidbody.FreezeAxisPosition(axis);
             }
         }

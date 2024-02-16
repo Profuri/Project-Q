@@ -12,8 +12,9 @@ public class PortalObject : InteractableObject
     
     private ObjectUnit _parentUnit;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         _parentUnit = transform.parent.GetComponent<ObjectUnit>();
     }
 
@@ -22,26 +23,9 @@ public class PortalObject : InteractableObject
         if (communicator is PlayerUnit playerUnit)
         {
             var destPos = _linkedPortal._parentUnit.transform.localPosition;
-            var dir = Vector3.zero;
+            destPos.SetAxisElement(_linkedPortal._portalAxis, destPos.GetAxisElement(_linkedPortal._portalAxis) * _portalOutDistance);
             
-            switch (_linkedPortal._portalAxis)
-            {
-                case AxisType.X:
-                    dir = Vector3.right * _portalOutDistance;
-                    break;
-                case AxisType.Y:
-                    dir = Vector3.up * _portalOutDistance;
-                    break;
-                case AxisType.Z:
-                    dir = Vector3.back * _portalOutDistance;
-                    break;
-            }
-
-            // playerUnit.SetObjectInfo(
-                // destPos + dir,
-                // playerUnit.transform.rotation,
-                // playerUnit.transform.localScale
-            // );
+            playerUnit.SetPosition(destPos);
         }
     }
     
@@ -49,21 +33,13 @@ public class PortalObject : InteractableObject
 
     private void OnValidate()
     {
-        switch (_portalAxis)
-        {
-            case AxisType.X:
-                transform.localScale = new Vector3(0, 1, 1);
-                transform.localPosition = new Vector3(0.51f, 0f, 0f);
-                break;
-            case AxisType.Y:
-                transform.localScale = new Vector3(1, 0, 1);
-                transform.localPosition = new Vector3(0f, 0.51f, 0f);
-                break;
-            case AxisType.Z:
-                transform.localScale = new Vector3(1, 1, 0);
-                transform.localPosition = new Vector3(0f, 0f, -0.51f);
-                break;
-        }
+        var scale = Vector3.one;
+        scale.SetAxisElement(_portalAxis, 0);
+        var pos = Vector3.zero;
+        pos.SetAxisElement(_portalAxis, 0.51f);
+        
+        transform.localScale = scale;
+        transform.localPosition = pos;
     }
 
 #endif

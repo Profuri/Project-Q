@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class FractureObject : InteractableObject
 {
@@ -21,13 +19,11 @@ public class FractureObject : InteractableObject
     private MeshRenderer _meshRenderer;
     public MeshRenderer MeshRenderer => _meshRenderer;
 
-    private ObjectUnit _objectUnit;
-
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
-        _objectUnit = GetComponent<ObjectUnit>();
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
@@ -80,8 +76,8 @@ public class FractureObject : InteractableObject
             part.Setting(this);
             part.AddForce(part.Bounds.center * _explodeForce, transform.position);
         }
-
-        // SceneControlManager.Instance.DeleteObject(_objectUnit);
+        
+        SceneControlManager.Instance.DeleteObject(this);
     }
 
     private FracturePart GenerateMesh(FracturePart original, Plane plane, bool left)

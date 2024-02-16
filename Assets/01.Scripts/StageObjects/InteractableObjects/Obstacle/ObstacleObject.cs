@@ -7,23 +7,16 @@ public class ObstacleObject : InteractableObject
 {
     [SerializeField] private LayerMask _damageableMask;
 
-    private BoxCollider _boxCollider;
-
-    public override void Awake()
+    public override void Update()
     {
-        base.Awake();
-        _boxCollider = GetComponent<BoxCollider>();
-    }
-    
-    private void Update()
-    {
+        base.Update();
         OnInteraction(null, false);
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        var pos = transform.position + _boxCollider.center;
-        var checkSize = transform.localScale.Multiply(_boxCollider.size);
+        var pos = Collider.bounds.center;
+        var checkSize = Collider.bounds.size;
         var rotation = transform.rotation;
 
         var cols = new Collider[10];

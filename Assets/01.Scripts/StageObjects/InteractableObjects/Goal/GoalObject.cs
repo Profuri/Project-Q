@@ -6,8 +6,9 @@ public class GoalObject : InteractableObject
 {
     private bool _isToggle;
 
-    private void OnEnable()
+    public override void Awake()
     {
+        base.Awake();
         _isToggle = false;
     }
 
