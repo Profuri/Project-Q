@@ -24,8 +24,10 @@ public class FanObject : InteractableObject
     private bool _enabled;
     public bool Enabled => _enabled;
 
-    private void Update()
+    public override void Update()
     {
+        base.Update();
+        
         _poweredDir = transform.up;
         RotateFan();
         FloatingOther();
@@ -77,12 +79,15 @@ public class FanObject : InteractableObject
         {
             var hit = hits[i];
 
-            // if (hit.collider.TryGetComponent(out PlayerController playerController))
-            // {
-                // var movementModule = playerController.GetModule<PlayerMovementModule>();
+            if (hit.collider.TryGetComponent(out ObjectUnit unit))
+            {
+                if (!unit.staticUnit)
+                {
+                    
+                }
                 // movementModule.SetForce(_poweredDir * _airPower);
                 // movementModule.SetVerticalVelocity(_airPower);
-            // }
+            }
 
             if (hit.collider.TryGetComponent(out InteractableObject interactableObject))
             {

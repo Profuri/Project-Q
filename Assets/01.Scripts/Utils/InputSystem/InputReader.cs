@@ -14,7 +14,7 @@ namespace InputControl
         public event InputEventListener<bool> OnAxisControlEvent = null;
         public event InputEventListener OnClickEvent = null;
 
-        public Vector3 movementInput;
+        [HideInInspector] public Vector3 movementInput;
 
         private InputControls _inputControls;
 

@@ -27,8 +27,17 @@ namespace AxisConvertSystem
             if (!staticUnit)
             {
                 Rigidbody = GetComponent<Rigidbody>();
+                Rigidbody.useGravity = false;
             }
             DepthHandler = new UnitDepthHandler(this);
+        }
+
+        public virtual void Update()
+        {
+            if (!staticUnit)
+            {
+                Rigidbody.AddForce(Vector3.up * GameManager.Instance.CoreData.gravity);
+            }
         }
 
         public virtual void Init(AxisConverter converter)
@@ -55,6 +64,32 @@ namespace AxisConvertSystem
         {
             pos.SetAxisElement(Converter.AxisType, transform.position.GetAxisElement(Converter.AxisType));
             transform.position = pos;
+        }
+
+        public void SetVelocity(Vector3 velocity, bool useGravity = true)
+        {
+            if (staticUnit)
+            {
+                Debug.LogWarning("[ObjectUnit] this unit is not dynamic object.");
+                return;
+            }
+            
+            if (useGravity)
+            {
+                velocity.y = Rigidbody.velocity.y;
+            }
+            Rigidbody.velocity = velocity;
+        }
+
+        public void StopImmediately(bool withYAxis)
+        {
+            if (staticUnit)
+            {
+                Debug.LogWarning("[ObjectUnit] this unit is not dynamic object.");
+                return;
+            }
+            
+            Rigidbody.velocity = withYAxis ? Vector3.zero : new Vector3(0, Rigidbody.velocity.y, 0);
         }
 
         public void UnitSetting(AxisType axis)

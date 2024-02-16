@@ -9,8 +9,9 @@ public class ObstacleObject : InteractableObject
 
     private BoxCollider _boxCollider;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         _boxCollider = GetComponent<BoxCollider>();
     }
     
@@ -32,17 +33,19 @@ public class ObstacleObject : InteractableObject
         {
             if (cols[i].TryGetComponent<ObjectUnit>(out var unit))
             {
-                // if (unit.ReloadOnCollisionToObstacle)
-                // {
-                    // unit.ReloadObject();
-                // }
-            }
-            else if (cols[i].TryGetComponent<InteractableObject>(out var interactable))
-            {
-                if (interactable.InteractType == EInteractType.AFFECTED_OTHER &&
-                    interactable.Attribute.HasFlag(EInteractableAttribute.DAMAGED_BY_THORN))
+                if (unit is InteractableObject interactable)
                 {
-                    interactable.OnInteraction(communicator, interactValue);
+                    if (interactable.InteractType == EInteractType.AFFECTED_OTHER &&
+                        interactable.Attribute.HasFlag(EInteractableAttribute.DAMAGED_BY_THORN))
+                    {
+                        interactable.OnInteraction(communicator, interactValue);
+                        return;
+                    }
+                }
+                
+                if (!unit.staticUnit)
+                {
+                    unit.ReloadUnit();
                 }
             }
         }

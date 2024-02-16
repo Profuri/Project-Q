@@ -40,8 +40,10 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
     }
 
-    private void Update()
+    public override void Update()
     {
+        base.Update();
+        
         _stateController.UpdateState();
 
         _selectedInteractableObject = FindInteractable();
@@ -59,21 +61,6 @@ public class PlayerUnit : ObjectUnit
     {
         _inputReader.OnInteractionEvent -= OnInteraction;
         Animator.SetBool(_activeHash, false);
-    }
-
-    public void SetVelocity(Vector3 velocity, bool useGravity = true)
-    {
-        if (useGravity)
-        {
-            Rigidbody.AddForce(Vector3.up * _data.gravity);
-            velocity.y = Rigidbody.velocity.y;
-        }
-        Rigidbody.velocity = velocity;
-    }
-
-    public void StopImmediately(bool withYAxis)
-    {
-        Rigidbody.velocity = withYAxis ? Vector3.zero : new Vector3(0, Rigidbody.velocity.y, 0);
     }
 
     public void Rotate(Quaternion rot, float speed = -1)
