@@ -35,8 +35,8 @@ public class PortalObject : InteractableObject
     {
         var scale = Vector3.one;
         scale.SetAxisElement(_portalAxis, 0);
-        var pos = Vector3.zero;
-        pos.SetAxisElement(_portalAxis, 0.51f);
+        var pos = Vector3ExtensionMethod.GetAxisDir(_portalAxis);
+        pos.SetAxisElement(_portalAxis, pos.GetAxisElement(_portalAxis) * 0.51f);
         
         transform.localScale = scale;
         transform.localPosition = pos;
