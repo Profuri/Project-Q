@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Fabgrid;
+using UnityEditor.ShaderKeywordFilter;
 
 public class DropdownField : PanelField
 {
@@ -26,12 +27,15 @@ public class DropdownField : PanelField
             Enum enumField = enumValue as Enum;
             _enumField.Init(enumField);
         }
-        foreach (Enum value in Enum.GetValues(type))
-        {
-            UnityEngine.UIElements.TextElement textElement = new TextElement();
-            textElement.text = value.ToString();
-            _enumField.Add(textElement);
-            //_enumField.
-        }
+
+        _enumField.label = $"{info.Name}";
+        //이거 필드 옆에 글자 추가하는 함수임
+        // foreach (Enum value in Enum.GetValues(type))
+        // {
+        //     UnityEngine.UIElements.TextElement textElement = new TextElement();
+        //     textElement.text = value.ToString();
+        //     _enumField.Add(textElement);
+        //     //_enumField.
+        // }
     }
 }
