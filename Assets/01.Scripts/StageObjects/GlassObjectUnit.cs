@@ -8,32 +8,21 @@ public class GlassObjectUnit : ObjectUnit
 
     private Transform _visualTrm;
 
-    public override void Init(AxisConverter converter)
+    public override void Awake()
     {
+        base.Awake();
         _visualTrm = transform.Find("InnerObject");
-        base.Init(converter);
     }
 
-    public void ObjectSetting()
+    public override void UnitSetting(AxisType axis)
     {
-        // gameObject.SetActive(_objectInfo.CompressType == _activeAxisType | _objectInfo.CompressType == AxisType.None);
-
-        // if (_objectInfo.CompressType == _activeAxisType)
-        // {
-            // switch (_activeAxisType)
-            // {
-                // case AxisType.X:
-                    // _visualTrm.localPosition = Vector3.right * 0.5f;
-                    // break;
-                // case AxisType.Y:
-                    // _visualTrm.localPosition = Vector3.up * 0.5f;
-                    // break;
-                // case AxisType.Z:
-                    // _visualTrm.localPosition = Vector3.back * 0.5f;
-                    // break;
-            // }
-        // }
+        base.UnitSetting(axis);
         
-        // base.ObjectSetting();
+        gameObject.SetActive(axis == _activeAxisType | axis == AxisType.None);
+
+        if (axis == _activeAxisType)
+        {
+            _visualTrm.localPosition = Vector3ExtensionMethod.GetAxisDir(axis) * 0.5f;
+        }
     }
 }

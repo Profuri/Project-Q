@@ -5,7 +5,7 @@ using InteractableSystem;
 using System;
 using AxisConvertSystem;
 
-public class TogglePlateMany : InteractableObject
+public class TogglePlate : InteractableObject
 {
     [SerializeField] private LayerMask _pressionorMask;
 
@@ -26,17 +26,11 @@ public class TogglePlateMany : InteractableObject
     private bool _isToggle = false;
     private bool _isPlaying = false;
 
-    private Coroutine _coroutine;
-
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         _pressureMainTrm = transform.Find("PressureMain");
         _pressureObjTrm = _pressureMainTrm.Find("PressureObject");
-        _coroutine = null;
-    }
-
-    private void Start()
-    {
         _isToggle = false;
         _isPlaying = false;
         if (!_useDelay)
@@ -59,8 +53,9 @@ public class TogglePlateMany : InteractableObject
         }
     }
 
-    private void Update()
+    public override void Update()
     {
+        base.Update();
         ToggleUpdate();
     }
 

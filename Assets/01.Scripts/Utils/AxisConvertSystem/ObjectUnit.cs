@@ -53,7 +53,7 @@ namespace AxisConvertSystem
             DepthHandler.DepthCheckPointSetting();
         }
 
-        public void Convert(AxisType axis)
+        public virtual void Convert(AxisType axis)
         {
             DepthHandler.CalcDepth(axis);
             SynchronizationUnitPos(axis);
@@ -92,7 +92,7 @@ namespace AxisConvertSystem
             Rigidbody.velocity = withYAxis ? Vector3.zero : new Vector3(0, Rigidbody.velocity.y, 0);
         }
 
-        public void UnitSetting(AxisType axis)
+        public virtual void UnitSetting(AxisType axis)
         {
             transform.localPosition = ConvertedInfo.LocalPos;
             transform.localRotation = ConvertedInfo.LocalRot;

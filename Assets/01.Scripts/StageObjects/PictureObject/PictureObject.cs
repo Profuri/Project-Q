@@ -5,38 +5,27 @@ public class PictureObject : ObjectUnit
 {
     private List<PictureUnit> _units;
 
-    public override void Init(AxisConverter converter)
+    public override void Awake()
     {
+        base.Awake();
         _units = new List<PictureUnit>();
         transform.GetComponentsInChildren(_units);
         foreach (var unit in _units)
         {
             unit.Init();
         }
-        base.Init(converter);
     }
 
-    public void ObjectSetting()
+    public override void UnitSetting(AxisType axis)
     {
-        // UnitSetting(_objectInfo.CompressType);
-        // base.ObjectSetting();
-    }
-
-    private void UnitSetting(AxisType axis)
-    {
+        base.UnitSetting(axis);
         foreach (var unit in _units)
         {
             unit.ChangeAxis(axis);
         }
-    }
-
-    protected void ColliderSetting()
-    {
-        // base.ColliderSetting();
-
-        // if (_objectInfo.CompressType != AxisType.Y && _objectInfo.CompressType != AxisType.None)
-        // {
-            // collider.isTrigger = true;
-        // }
+        if (axis != AxisType.Y && axis != AxisType.None)
+        {
+            Collider.isTrigger = true;
+        }
     }
 }

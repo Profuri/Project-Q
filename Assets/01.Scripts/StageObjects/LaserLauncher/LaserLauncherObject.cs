@@ -24,13 +24,16 @@ public class LaserLauncherObject : ObjectUnit
 
     private bool _isActiveLaser;
 
-    public override void Init(AxisConverter converter)
+    public override void Awake()
     {
+        base.Awake();
         _laserRenderer = GetComponent<LineRenderer>();
         _laserInfos = new Queue<LaserInfo>();
-        
         DisableLaser();
-        
+    }
+
+    public override void Init(AxisConverter converter)
+    {
         base.Init(converter);
 
         if (_isBreath)
@@ -43,8 +46,9 @@ public class LaserLauncherObject : ObjectUnit
         }
     }
 
-    public void Update()
+    public override void Update()
     {
+        base.Update();
         if (_isActiveLaser)
         {
             Launch();
@@ -62,14 +66,6 @@ public class LaserLauncherObject : ObjectUnit
             EnableLaser();
             yield return waitForLaunch;
             DisableLaser();
-
-            // if (ObstacleCheck(, out var hit))
-            // {
-            //     InteractOther(hit, false);
-            // }
-            //
-            // var LocalPos = _shotPointTrm.LocalPos;
-            // _laserRenderer.SetPositions(new[] { LocalPos, LocalPos } );
         }
     }
 
@@ -147,16 +143,20 @@ public class LaserLauncherObject : ObjectUnit
     {
         var col = hit.collider;
         
-        if (col.TryGetComponent<PlayerUnit>(out var playerUnit))
-        {
-            // playerUnit.ReloadObject();
-        }
-
         if (col.TryGetComponent<InteractableObject>(out var interactable))
         {
             if (interactable.Attribute.HasFlag(EInteractableAttribute.AFFECTED_FROM_LASER))
             {
                 interactable.OnInteraction(this, interactValue, hit.point, hit.normal, lastLaser.dir);
+                return;
+            }
+        }
+        
+        if (col.TryGetComponent<ObjectUnit>(out var unit))
+        {
+            if (!unit.staticUnit)
+            {
+                unit.ReloadUnit();
             }
         }
     }
