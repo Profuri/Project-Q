@@ -1,9 +1,9 @@
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 
 namespace InteractableSystem
 {
-    public abstract class InteractableObject : MonoBehaviour, IInteractable
+    public abstract class InteractableObject : ObjectUnit, IInteractable
     {
         public bool InterEnd { get; set; }
         public bool IsInteract { get; set; }
@@ -14,6 +14,6 @@ namespace InteractableSystem
         [SerializeField] private EInteractableAttribute _attribute;
         public EInteractableAttribute Attribute => _attribute;
 
-        public abstract void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param);
+        public abstract void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param);
     }
 }

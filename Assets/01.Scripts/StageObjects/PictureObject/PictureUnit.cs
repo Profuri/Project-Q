@@ -1,8 +1,9 @@
+using AxisConvertSystem;
 using UnityEngine;
 
 public class PictureUnit : MonoBehaviour
 {
-    [SerializeField] private EAxisType _enableAxis;
+    [SerializeField] private AxisType _enableAxis;
     private Collider _collider;
 
     public void Init()
@@ -11,9 +12,9 @@ public class PictureUnit : MonoBehaviour
         _collider.enabled = false;
     }
 
-    public void ChangeAxis(EAxisType axis)
+    public void ChangeAxis(AxisType axis)
     {
-        if (axis == EAxisType.NONE)
+        if (axis == AxisType.None)
         {
             gameObject.SetActive(true);
             _collider.enabled = false;

@@ -8,7 +8,7 @@ public class PlayerCamController : VirtualCamController
         CurrentSelectedCam = _virtualCams[0];
     }
 
-    public void SetPlayer(PlayerController player)
+    public void SetPlayer(PlayerUnit player)
     {
         CurrentSelectedCam.SetFollowTarget(player.transform);
     }

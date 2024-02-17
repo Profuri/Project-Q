@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AxisConvertSystem;
 using ManagingSystem;
 using UnityEngine;
 
@@ -9,22 +10,22 @@ public class LightManager : BaseManager<LightManager>
     
     public override void StartManager()
     {
-        SetAxisLight(EAxisType.NONE);
+        SetAxisLight(AxisType.None);
     }
 
-    public void SetAxisLight(EAxisType axis)
+    public void SetAxisLight(AxisType axis)
     {
         var lightEulerAngle = new Vector3(50, -30, 0);
         
         switch (axis)
         {
-            case EAxisType.X:
+            case AxisType.X:
                 lightEulerAngle = new Vector3(0, -90, 0);
                 break;
-            case EAxisType.Y:
+            case AxisType.Y:
                 lightEulerAngle = new Vector3(90, 0, 0);
                 break;
-            case EAxisType.Z:
+            case AxisType.Z:
                 lightEulerAngle = new Vector3(0, 0, 0);
                 break;
         }

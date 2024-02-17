@@ -51,6 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f975e98f4bcf47c38f04f8533d511d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _objectMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &4271148137733315251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,12 +154,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _reloadOnCollisionToObstacle: 0
-  _materialRenderSetting: 1
-  _colliderSetting: 1
-  _outlineSetting: 1
-  _interatableYAxis: 0
-  _rigidobySetting: 0
+  compressLayer: 1
+  staticUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  rayDistance: 0
 --- !u!114 &6237973017317520286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,6 +172,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bec666616bd446e2a6062825895a042e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  compressLayer: 1
+  staticUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  rayDistance: 0
   _interactType: 0
   _attribute: 0
 --- !u!65 &6082388972373805270
@@ -358,6 +367,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89e35a08f9824ae597535ad2710c2aa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  compressLayer: 1
+  staticUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  rayDistance: 0
   _interactType: 0
   _attribute: 5
 --- !u!114 &8430920620771609771
@@ -390,12 +405,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _reloadOnCollisionToObstacle: 0
-  _materialRenderSetting: 1
-  _colliderSetting: 1
-  _outlineSetting: 1
-  _interatableYAxis: 1
-  _rigidobySetting: 1
+  compressLayer: 1
+  staticUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  rayDistance: 0
 --- !u!1 &6216715729312098718
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,12 +548,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _reloadOnCollisionToObstacle: 0
-  _materialRenderSetting: 1
-  _colliderSetting: 1
-  _outlineSetting: 1
-  _interatableYAxis: 0
-  _rigidobySetting: 0
+  compressLayer: 1
+  staticUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  rayDistance: 0
 --- !u!1 &6408092755477568931
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,7 +916,7 @@ PrefabInstance:
     - target: {fileID: 7947748489793959584, guid: ed6cef6b912ec473886235670af3176f,
         type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 1.95
+      value: 1.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

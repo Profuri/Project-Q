@@ -1,25 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using AxisConvertSystem;
 using UnityEngine;
 using UnityEngine.Animations;
 
 public class DisableAxisZone : MonoBehaviour
 {
-    [SerializeField] private EAxisType _targetAxis;
+    [SerializeField] private AxisType _targetAxis;
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent(out PlayerController player))
+        if(other.TryGetComponent(out PlayerUnit player))
         {
-            player.SetEnableAxis(_targetAxis, false);
+            // player.SetEnableAxis(_targetAxis, false);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out PlayerController player))
+        if (other.TryGetComponent(out PlayerUnit player))
         {
-            player.SetEnableAxis(_targetAxis, true);
+            // player.SetEnableAxis(_targetAxis, true);
         }
     }
 }

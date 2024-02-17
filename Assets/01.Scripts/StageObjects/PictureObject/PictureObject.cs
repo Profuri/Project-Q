@@ -1,42 +1,31 @@
 using System.Collections.Generic;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 
-public class PictureObject : StructureObjectUnitBase
+public class PictureObject : ObjectUnit
 {
     private List<PictureUnit> _units;
 
-    public override void Init(StructureConverter converter)
+    public override void Awake()
     {
+        base.Awake();
         _units = new List<PictureUnit>();
         transform.GetComponentsInChildren(_units);
         foreach (var unit in _units)
         {
             unit.Init();
         }
-        base.Init(converter);
     }
 
-    public override void ObjectSetting()
+    public override void UnitSetting(AxisType axis)
     {
-        UnitSetting(_objectInfo.axis);
-        base.ObjectSetting();
-    }
-
-    private void UnitSetting(EAxisType axis)
-    {
+        base.UnitSetting(axis);
         foreach (var unit in _units)
         {
             unit.ChangeAxis(axis);
         }
-    }
-
-    protected override void ColliderSetting()
-    {
-        base.ColliderSetting();
-
-        if (_objectInfo.axis != EAxisType.Y && _objectInfo.axis != EAxisType.NONE)
+        if (axis != AxisType.Y && axis != AxisType.None)
         {
-            _collider.isTrigger = true;
+            Collider.isTrigger = true;
         }
     }
 }

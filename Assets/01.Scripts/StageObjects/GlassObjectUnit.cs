@@ -1,39 +1,28 @@
 using System;
 using UnityEngine;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 
-public class GlassObjectUnit : StructureObjectUnitBase
+public class GlassObjectUnit : ObjectUnit
 {
-    [SerializeField] private EAxisType _activeAxisType;
+    [SerializeField] private AxisType _activeAxisType;
 
     private Transform _visualTrm;
 
-    public override void Init(StructureConverter converter)
+    public override void Awake()
     {
+        base.Awake();
         _visualTrm = transform.Find("InnerObject");
-        base.Init(converter);
     }
 
-    public override void ObjectSetting()
+    public override void UnitSetting(AxisType axis)
     {
-        gameObject.SetActive(_objectInfo.axis == _activeAxisType | _objectInfo.axis == EAxisType.NONE);
-
-        if (_objectInfo.axis == _activeAxisType)
-        {
-            switch (_activeAxisType)
-            {
-                case EAxisType.X:
-                    _visualTrm.localPosition = Vector3.right * 0.5f;
-                    break;
-                case EAxisType.Y:
-                    _visualTrm.localPosition = Vector3.up * 0.5f;
-                    break;
-                case EAxisType.Z:
-                    _visualTrm.localPosition = Vector3.back * 0.5f;
-                    break;
-            }
-        }
+        base.UnitSetting(axis);
         
-        base.ObjectSetting();
+        gameObject.SetActive(axis == _activeAxisType | axis == AxisType.None);
+
+        if (axis == _activeAxisType)
+        {
+            _visualTrm.localPosition = Vector3ExtensionMethod.GetAxisDir(axis) * 0.5f;
+        }
     }
 }
