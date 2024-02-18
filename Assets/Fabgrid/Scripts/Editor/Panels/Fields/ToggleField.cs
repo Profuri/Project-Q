@@ -18,6 +18,7 @@ public class ToggleField : PanelField
 
     public override void Init(FieldInfo info)
     {
-        _toggle.text = info.Name;
+        string labelName = info.Name;
+        _toggle.label = labelName;
     }
 }

@@ -20,7 +20,9 @@ namespace PanelEditor
                 Debug.LogError($"InputField is null!");
                 return;
             }
-            _inputField.name = info.Name;
+            
+            string labelName = info.Name;
+            _inputField.label = labelName;
         }
         
         public InputField(VisualElement root,VisualTreeAsset field, FieldInfo info) : base(root,field, info)

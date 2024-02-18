@@ -28,7 +28,8 @@ public class DropdownField : PanelField
             _enumField.Init(enumField);
         }
 
-        _enumField.label = $"{info.Name}";
+        string labelName = info.Name;
+        _enumField.label = labelName;
         //이거 필드 옆에 글자 추가하는 함수임
         // foreach (Enum value in Enum.GetValues(type))
         // {

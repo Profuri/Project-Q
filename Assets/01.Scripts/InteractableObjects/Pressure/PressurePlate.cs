@@ -100,6 +100,10 @@ public class PressurePlate : InteractableObject
             Gizmos.color = Color.black;
             foreach (var obj in _affectedObjects)
             {
+                if (obj == null)
+                {
+                    return;
+                }
                 Gizmos.DrawLine(transform.position, obj.transform.position);
             }
         }

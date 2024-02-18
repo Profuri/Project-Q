@@ -116,7 +116,6 @@ namespace Fabgrid
         private void CreateVisualTree(FieldInfo info)
         {
             Type type = info.FieldType;
-            Debug.Log($"FieldInfoType: {type}");
 
             if (_fieldDictionary.ContainsKey(info)) return;                                                                      
 
@@ -124,7 +123,6 @@ namespace Fabgrid
 
             if (_root == null)
             {
-                Debug.LogError($"FieldRoot is null: {_root}!!!!!!");
                 return;
             }
             
