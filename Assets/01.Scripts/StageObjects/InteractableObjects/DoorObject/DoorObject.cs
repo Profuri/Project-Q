@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using AxisConvertSystem;
 using InteractableSystem;
-using StageStructureConvertSystem;
 using UnityEngine;
 
 public class DoorObject : InteractableObject
 {
-    [Tooltip("IsOnÀÌ ÄÑÁ®ÀÖ´Â °æ¿ì ¹®ÀÌ ¿­·ÁÀÖ´Â »óÅÂ")]
+    [Tooltip("IsOnì´ ì¼œì ¸ìˆëŠ” ê²½ìš° ë¬¸ì´ ì—´ë ¤ìˆëŠ” ìƒíƒœ")]
     [SerializeField] private bool _isOn;
     [SerializeField] private Vector3 _targetPos;
     [SerializeField] private float _moveTime = 5f;
-    [Tooltip("ToggleÀÌ ÄÑÁ®ÀÖÀ¸¸é ÇÑ¹ø ºÒÀÌ µé¾î¿À¸é ´Ù½Ã ²¨ÁöÁö ¾ÊÀ½")]
+    [Tooltip("Toggleì´ ì¼œì ¸ìˆìœ¼ë©´ í•œë²ˆ ë¶ˆì´ ë“¤ì–´ì˜¤ë©´ ë‹¤ì‹œ êº¼ì§€ì§€ ì•ŠìŒ")]
     [SerializeField] private bool _redstoneToggle = false;
 
 
@@ -30,26 +30,16 @@ public class DoorObject : InteractableObject
 
         if (_isOn)
         {
-            // isOnÀÌ ÂüÀÌ¸é _targetPos·Î ÀÌµ¿
+            // isOnì´ ì°¸ì´ë©´ _targetPosë¡œ ì´ë™
             transform.position = Vector3.Lerp(transform.position, _targetPos, Time.deltaTime * _moveTime);
         }
         else
         {
-            // isOnÀÌ °ÅÁşÀÌ¸é _originPos·Î ÀÌµ¿
+            // isOnì´ ê±°ì§“ì´ë©´ _originPosë¡œ ì´ë™
             transform.position = Vector3.Lerp(transform.position, _originPos, Time.deltaTime * _moveTime);
         }
     }
-
-
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
-    {
-        if (_redstoneToggle && _isOn)
-        {
-            return;
-        }
-        _isOn = interactValue;
-    }
-
+    
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
@@ -60,4 +50,12 @@ public class DoorObject : InteractableObject
         Gizmos.DrawWireCube(_targetPos,transform.localScale);
     }
 #endif
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
+    {
+        if (_redstoneToggle && _isOn)
+        {
+            return;
+        }
+        _isOn = interactValue;
+    }
 }
