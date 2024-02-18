@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    public delegate void UnityEventListener();
+    [SerializeField] private CoreData _coreData;
+    public CoreData CoreData => _coreData;
     
+    public delegate void UnityEventListener();
     public event UnityEventListener OnStartEvent = null;
 
     public PlayerController PlayerController

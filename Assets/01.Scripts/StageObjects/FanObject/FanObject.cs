@@ -1,14 +1,12 @@
 using InteractableSystem;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 
 public class FanObject : InteractableObject
 {
-    [SerializeField] private Transform _fanTrm;
-    [SerializeField] private AirMaxHeightController _maxHeightController;
-    [SerializeField] private ParticleSystem _airParticle;
-    
-    [Header("Air Settings")]
+    [Header("Air Settings")] 
+    [SerializeField] private AxisType _airDir;
+    [SerializeField] private float _collisionSize;
     [SerializeField] private float _airMaxHeight;
     [SerializeField] private float _airPower;
     [SerializeField] private LayerMask _effectedMask;
@@ -18,17 +16,34 @@ public class FanObject : InteractableObject
     [SerializeField] private float _fanAccelerator;
     [SerializeField] private float _fanDecelerator;
 
+    private Transform _fanTrm;
+    private ParticleSystem _airParticle;
+    
     private float _currentFanSpeed;
-    private Vector3 _poweredDir;
 
     private bool _enabled;
-    public bool Enabled => _enabled;
 
-    private void Update()
+    public override void Awake()
     {
-        _poweredDir = transform.up;
+        base.Awake();
+
+        var vent = transform.Find("Vent");
+        _fanTrm = vent.Find("Fan");
+        _airParticle = vent.Find("AirParticle").GetComponent<ParticleSystem>();
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        
         RotateFan();
         FloatingOther();
+    }
+
+    public override void Init(AxisConverter converter)
+    {
+        base.Init(converter);
+        EnableFan();
     }
 
     private void EnableFan()
@@ -41,10 +56,9 @@ public class FanObject : InteractableObject
     {
         _enabled = false;
         _airParticle.Stop();
-        _maxHeightController.StopParticle();
     }
     
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         if (interactValue)
         {
@@ -77,31 +91,14 @@ public class FanObject : InteractableObject
         {
             var hit = hits[i];
 
-            if (hit.collider.TryGetComponent(out PlayerController playerController))
+            if (hit.collider.TryGetComponent(out ObjectUnit unit))
             {
-                var movementModule = playerController.GetModule<PlayerMovementModule>();
-                movementModule.SetForce(_poweredDir * _airPower);
-                // movementModule.SetVerticalVelocity(_airPower);
-            }
-
-            if (hit.collider.TryGetComponent(out InteractableObject interactableObject))
-            {
-                if (interactableObject.IsInteract)
+                if (!unit.staticUnit)
                 {
-                    continue;
+                    var airVelocity = unit.Rigidbody.velocity;
+                    airVelocity.SetAxisElement(_airDir, _airPower);
+                    unit.SetVelocity(airVelocity, false);       
                 }
-                
-                if (!interactableObject.Attribute.HasFlag(EInteractableAttribute.AFFECTED_FROM_AIR))
-                {
-                    continue;
-                }
-
-                if (!interactableObject.TryGetComponent<Rigidbody>(out var rigid))
-                {
-                    continue;
-                }
-                
-                rigid.velocity = _poweredDir * _airPower;
             }
         }
     }
@@ -109,13 +106,15 @@ public class FanObject : InteractableObject
     private bool CheckCollision(out RaycastHit[] hits, out int size)
     {
         hits = new RaycastHit[10];
+        var colSize = Vector3.one * _collisionSize;
+        colSize.SetAxisElement(_airDir, 0.1f);
         size = Physics.BoxCastNonAlloc(
             transform.position,
-            _maxHeightController.GetWorldColSize() / 2f,
-            _poweredDir,
+            colSize / 2f,
+            Vector3ExtensionMethod.GetAxisDir(_airDir),
             hits, 
             transform.rotation,
-            _airMaxHeight / 2f,
+            _airMaxHeight,
             _effectedMask
         );
         return size > 0;
@@ -132,27 +131,18 @@ public class FanObject : InteractableObject
 
     private void OnDrawGizmos()
     {
-        if (_maxHeightController == null)
-        {
-            return;
-        }
-        
         Gizmos.color = Color.red;
-        Gizmos.matrix = _maxHeightController.transform.localToWorldMatrix;
-        Gizmos.DrawWireCube(Vector3.zero, _maxHeightController.GetLocalColSize());
+        var center = transform.position + Vector3ExtensionMethod.GetAxisDir(_airDir) * _airMaxHeight;
+        var colSize = Vector3.one * _collisionSize;
+        colSize.SetAxisElement(_airDir, 0.1f);
+        Gizmos.DrawWireCube(center, colSize);
     }
     
     private void OnValidate()
     {
-        if (_maxHeightController == null || _airParticle == null)
-        {
-            return;
-        }
-        
-        _maxHeightController.SetHeight(_airMaxHeight);
-
+        _airParticle = transform.Find("Vent/AirParticle").GetComponent<ParticleSystem>();
         var particleMainSetting = _airParticle.main;
-        particleMainSetting.startLifetime = _airMaxHeight / 10f * 1.5f;
+        particleMainSetting.startLifetime = _airMaxHeight / 10f;
     }
 
 #endif

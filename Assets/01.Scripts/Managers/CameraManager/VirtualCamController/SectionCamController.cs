@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using AxisConvertSystem;
 using VirtualCam;
 
 public class SectionCamController : VirtualCamController
 {
-    private readonly Dictionary<EAxisType, VirtualCamComponent> _virtualCamDiction =
-        new Dictionary<EAxisType, VirtualCamComponent>();
+    private readonly Dictionary<AxisType, VirtualCamComponent> _virtualCamDiction =
+        new Dictionary<AxisType, VirtualCamComponent>();
 
     private VirtualCamComponent _axisControlCam;
 
@@ -16,7 +16,7 @@ public class SectionCamController : VirtualCamController
         _virtualCamDiction.Clear();
         foreach (var vCam in _virtualCams)
         {
-            var cam = (StageVirtualCam)vCam;
+            var cam = (SectionVirtualCam)vCam;
 
             if (cam.IsControlCam)
             {
@@ -41,25 +41,25 @@ public class SectionCamController : VirtualCamController
         }
         else
         {
-            ChangeCameraAxis(EAxisType.NONE);
+            ChangeCameraAxis(AxisType.None);
         }
         
     }
 
-    public void ChangeCameraAxis(EAxisType type, Action callBack = null)
+    public void ChangeCameraAxis(AxisType type, Action callBack = null)
     {
         CurrentSelectedCam = _virtualCamDiction[type];
         SetCurrentCam(callBack);
     }
 
-    public void SetPlayer(PlayerController player)
+    public void SetPlayer(PlayerUnit player)
     {
         var playerTrm = player.transform;
         
         _axisControlCam.SetFollowTarget(playerTrm);
         _axisControlCam.SetLookAtTarget(playerTrm);
 
-        foreach (EAxisType axis in Enum.GetValues(typeof(EAxisType)))
+        foreach (AxisType axis in Enum.GetValues(typeof(AxisType)))
         {
             _virtualCamDiction[axis].SetFollowTarget(playerTrm);
         }

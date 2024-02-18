@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using InteractableSystem;
 using UnityEngine;
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 
 [RequireComponent(typeof(LineRenderer))]
-public class LaserLauncherObject : StructureObjectUnitBase
+public class LaserLauncherObject : ObjectUnit
 {
     [SerializeField] private Transform _shotPointTrm;
     [SerializeField] private LayerMask _obstacleMask;
@@ -24,13 +24,16 @@ public class LaserLauncherObject : StructureObjectUnitBase
 
     private bool _isActiveLaser;
 
-    public override void Init(StructureConverter converter)
+    public override void Awake()
     {
+        base.Awake();
         _laserRenderer = GetComponent<LineRenderer>();
         _laserInfos = new Queue<LaserInfo>();
-        
         DisableLaser();
-        
+    }
+
+    public override void Init(AxisConverter converter)
+    {
         base.Init(converter);
 
         if (_isBreath)
@@ -43,8 +46,9 @@ public class LaserLauncherObject : StructureObjectUnitBase
         }
     }
 
-    public void Update()
+    public override void Update()
     {
+        base.Update();
         if (_isActiveLaser)
         {
             Launch();
@@ -62,14 +66,6 @@ public class LaserLauncherObject : StructureObjectUnitBase
             EnableLaser();
             yield return waitForLaunch;
             DisableLaser();
-
-            // if (ObstacleCheck(, out var hit))
-            // {
-            //     InteractOther(hit, false);
-            // }
-            //
-            // var position = _shotPointTrm.position;
-            // _laserRenderer.SetPositions(new[] { position, position } );
         }
     }
 
@@ -92,11 +88,11 @@ public class LaserLauncherObject : StructureObjectUnitBase
     //     _isActiveLaser = false;
     //     _laserRenderer.enabled = true;
     //     _laserInfos.Clear();
-    //     _laserInfos.Add(new LaserInfo{ origin = _shotPointTrm.position, dir = transform.forward });
+    //     _laserInfos.Add(new LaserInfo{ origin = _shotPointTrm.LocalPos, dir = transform.forward });
     //     
     //     var percent = 0f;
     //     var currentTime = 0f;
-    //     var dest = ObstacleCheck(out var hit) ? hit.point : _shotPointTrm.position + transform.forward * _laserDistance;
+    //     var dest = ObstacleCheck(out var hit) ? hit.point : _shotPointTrm.LocalPos + transform.forward * _laserDistance;
     //     var index = 1;
     //
     //     while (percent <= 1f)
@@ -147,16 +143,20 @@ public class LaserLauncherObject : StructureObjectUnitBase
     {
         var col = hit.collider;
         
-        if (col.TryGetComponent<PlayableObjectUnit>(out var playerUnit))
-        {
-            playerUnit.ReloadObject();
-        }
-
         if (col.TryGetComponent<InteractableObject>(out var interactable))
         {
             if (interactable.Attribute.HasFlag(EInteractableAttribute.AFFECTED_FROM_LASER))
             {
                 interactable.OnInteraction(this, interactValue, hit.point, hit.normal, lastLaser.dir);
+                return;
+            }
+        }
+        
+        if (col.TryGetComponent<ObjectUnit>(out var unit))
+        {
+            if (!unit.staticUnit)
+            {
+                unit.ReloadUnit();
             }
         }
     }

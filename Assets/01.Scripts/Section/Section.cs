@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AxisConvertSystem;
 using UnityEngine;
 
 [RequireComponent(typeof(SectionCollisionChecker))]
@@ -26,11 +27,15 @@ public class Section : PoolableMono
         _bridgeObjects = new List<BridgeObject>();
     }
 
-    public void Generate(Vector3 position)
+    public void Generate(Vector3 position, bool moveRoutine = true)
     {
-        transform.position = position - Vector3.up * 5;
         CenterPosition = position;
-        StartCoroutine(SectionMoveRoutine(CenterPosition));
+        transform.position = CenterPosition;
+        if (moveRoutine)
+        {
+            transform.position = position - Vector3.up * 5;
+            StartCoroutine(SectionMoveRoutine(CenterPosition));
+        }
     }
 
     public void Disappear()
@@ -41,17 +46,17 @@ public class Section : PoolableMono
         }));
     }
 
-    public virtual void OnEnter(PlayerController player)
+    public virtual void OnEnter(PlayerUnit player)
     {
         Active = true;
         Lock = true;
         player.SetSection(this);
         CameraManager.Instance.ChangeVCamController(VirtualCamType.SECTION);
         ((SectionCamController)CameraManager.Instance.CurrentCamController).SetPlayer(player);
-        ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(EAxisType.NONE);
+        ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(AxisType.None);
     }
 
-    public virtual void OnExit(PlayerController player)
+    public virtual void OnExit(PlayerUnit player)
     {
         Active = false;
         CameraManager.Instance.ChangeVCamController(VirtualCamType.PLAYER);

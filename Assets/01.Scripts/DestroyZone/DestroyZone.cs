@@ -1,19 +1,13 @@
-using StageStructureConvertSystem;
+using AxisConvertSystem;
 using UnityEngine;
 
 public class DestroyZone : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<StructureObjectUnitBase>(out var unit))
+        if (other.TryGetComponent<ObjectUnit>(out var unit))
         {
-            var rigid = other.GetComponent<Rigidbody>();
-            if (rigid != null)
-            {
-                rigid.velocity = Vector3.zero;
-            }
-            
-            unit.ReloadObject();
+            unit.ReloadUnit();
         }
     }
 
