@@ -123,6 +123,7 @@ namespace Fabgrid
 
             if (_root == null)
             {
+                Debug.Log("Root is null");
                 return;
             }
             

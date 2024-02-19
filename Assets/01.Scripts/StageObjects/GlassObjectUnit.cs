@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using AxisConvertSystem;
-
-public class GlassObjectUnit : ObjectUnit
+using System.Linq;
+public class GlassObjectUnit : ObjectUnit,IProvidableFieldInfo
 {
     [SerializeField] private AxisType _activeAxisType;
 
@@ -24,5 +26,17 @@ public class GlassObjectUnit : ObjectUnit
         {
             _visualTrm.localPosition = Vector3ExtensionMethod.GetAxisDir(axis) * 0.5f;
         }
+    }
+
+    public List<FieldInfo> GetFieldInfos()
+    {
+        Type type = this.GetType();
+        FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+        return fields.ToList();
+    }
+
+    public void SetFieldInfos(List<FieldInfo> infos)
+    {
+        
     }
 }

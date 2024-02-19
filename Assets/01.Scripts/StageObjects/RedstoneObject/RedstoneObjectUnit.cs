@@ -65,18 +65,14 @@ public class RedstoneObjectUnit : InteractableObject
             {
                 var applyAxisType = interactable.applyAxisType;
 
-                if (applyAxisType == AxisType.None)
-                {
-                    interactable.interactableUnit.OnInteraction(communicator, _isOn, param);
-                }
-                else if ((currentAxisType & applyAxisType) != 0)
-                {
-                    interactable.interactableUnit.OnInteraction(communicator, _isOn, param);
-                }
-                else
+                if((currentAxisType & applyAxisType) != 0 || applyAxisType == AxisType.None)
                 {
                     //만약에 레드스톤을 사용하는 발판이 여러개면 수정되어야 할 수도 있음.
                     interactable.interactableUnit.OnInteraction(communicator, false, param);
+                }
+                else
+                {
+                    interactable.interactableUnit.OnInteraction(communicator, _isOn, param);
                 }
             }
         }
