@@ -10,20 +10,20 @@ public class GameManager : MonoSingleton<GameManager>
     public delegate void UnityEventListener();
     public event UnityEventListener OnStartEvent = null;
 
-    public PlayerController PlayerController
+    public PlayerUnit PlayerUnit
     {
         get
         {
-            if (_playerController == null)
+            if (_playerUnit == null)
             {
-                _playerController = FindObjectOfType<PlayerController>();
+                _playerUnit = FindObjectOfType<PlayerUnit>();
             }
 
-            return _playerController;
+            return _playerUnit;
         }
     }
 
-    private PlayerController _playerController;
+    private PlayerUnit _playerUnit;
 
     private void Awake()
     {

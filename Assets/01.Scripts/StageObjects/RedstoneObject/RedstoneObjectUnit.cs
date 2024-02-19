@@ -1,20 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using AxisConvertSystem;
 using InteractableSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 [System.Serializable]
-public class RedstoneInteractable : IInteractable
+public class RedstoneInteractable
 {
-    public InteractableObject _interactableUnit;
+    public InteractableObject interactableUnit;
 
-    public EAxisType applyAxisType;
-    
-    public void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
-    {
-        _interactableUnit?.OnInteraction(communicator,interactValue,param);
-    }
+    public AxisType applyAxisType;
 }
 public class RedstoneObjectUnit : InteractableObject
 {
@@ -23,7 +19,7 @@ public class RedstoneObjectUnit : InteractableObject
 
     //3d 상태일떄도 전이되게 만들어 놓을건지 정해야됨.
     [SerializeField] private bool _isOn = false;
-    private StructureConverter _converter;
+    private AxisConverter _converter;
 
     [SerializeField] private MeshRenderer _renderer;
     [SerializeField] private Color _targetColor = Color.red;
@@ -42,7 +38,7 @@ public class RedstoneObjectUnit : InteractableObject
         }
     }
 
-    public override void OnInteraction(StructureObjectUnitBase communicator, bool interactValue, params object[] param)
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         if (!_isToggle)
         {
@@ -61,7 +57,7 @@ public class RedstoneObjectUnit : InteractableObject
             //EAxisType currentAxisType = (EAxisType)param[paramIndex];
 
             // This code can be fixed. because of get axisType method.
-            EAxisType currentAxisType = GameManager.Instance.PlayerController.Converter.AxisType;
+            AxisType currentAxisType = GameManager.Instance.PlayerUnit.Converter.AxisType;
 
             Debug.Log($"CurrentAxisType: {currentAxisType}");
 
@@ -69,25 +65,24 @@ public class RedstoneObjectUnit : InteractableObject
             {
                 var applyAxisType = interactable.applyAxisType;
 
-                if (applyAxisType == EAxisType.NONE)
+                if (applyAxisType == AxisType.None)
                 {
-                    interactable.OnInteraction(communicator, _isOn, param);
+                    interactable.interactableUnit.OnInteraction(communicator, _isOn, param);
                 }
                 else if ((currentAxisType & applyAxisType) != 0)
                 {
-                    interactable.OnInteraction(communicator, _isOn, param);
+                    interactable.interactableUnit.OnInteraction(communicator, _isOn, param);
                 }
                 else
                 {
                     //만약에 레드스톤을 사용하는 발판이 여러개면 수정되어야 할 수도 있음.
-                    //This can be fixed. 
-                    interactable.OnInteraction(communicator, false, param);
+                    interactable.interactableUnit.OnInteraction(communicator, false, param);
                 }
             }
         }
         catch
         {
-            Debug.LogError($"Can't Load from CurrentAxisType: {GameManager.Instance.PlayerController.Converter}");
+            Debug.LogError($"Can't Load from CurrentAxisType: {GameManager.Instance.PlayerUnit.Converter}");
             //Debug.LogError($"Can't convert params index: {paramIndex} to EAxisType");
         }
 
