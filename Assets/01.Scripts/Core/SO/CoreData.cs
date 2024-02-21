@@ -4,4 +4,5 @@ using UnityEngine;
 public class CoreData : ScriptableObject
 {
     public float gravity;
+    public float destroyedDepth;
 }

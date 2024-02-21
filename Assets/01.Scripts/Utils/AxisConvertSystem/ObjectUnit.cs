@@ -37,6 +37,12 @@ namespace AxisConvertSystem
             if (!staticUnit)
             {
                 Rigidbody.AddForce(Vector3.up * GameManager.Instance.CoreData.gravity);
+
+                if (transform.position.y <= GameManager.Instance.CoreData.destroyedDepth)
+                {
+                    ReloadUnit();
+                    return;
+                }
             }
         }
 
