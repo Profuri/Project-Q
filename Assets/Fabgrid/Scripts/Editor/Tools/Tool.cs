@@ -56,6 +56,7 @@ namespace Fabgrid
                 return;
 
             GameObject tile = (GameObject)PrefabUtility.InstantiatePrefab(tilemap.selectedTile.prefab);
+            Debug.Log($"CreatePrefab: {tile}");
 
             if (tile.TryGetComponent(out IProvidableFieldInfo providableInfo))
             {
@@ -95,6 +96,14 @@ namespace Fabgrid
                     tilemap.instantiatedTiles.RemoveAt(i);
                     tilemap.instantiatedTilePositions.RemoveAt(i);
                 }
+            }
+        }
+
+        private void SettingFieldInfo(GameObject obj)
+        {
+            if (obj.TryGetComponent(out IProvidableFieldInfo providable))
+            {
+//                providable.SetFieldInfos();
             }
         }
 
