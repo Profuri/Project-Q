@@ -27,9 +27,9 @@ public class FanObject : InteractableObject
     {
         base.Awake();
 
-        var vent = transform.Find("Vent");
-        _fanTrm = vent.Find("Fan");
-        _airParticle = vent.Find("AirParticle").GetComponent<ParticleSystem>();
+        var model = transform.Find("Model");
+        _fanTrm = model.Find("Fan");
+        _airParticle = _fanTrm.Find("AirParticle").GetComponent<ParticleSystem>();
     }
 
     public override void Update()
@@ -140,7 +140,7 @@ public class FanObject : InteractableObject
     
     private void OnValidate()
     {
-        _airParticle = transform.Find("Vent/AirParticle").GetComponent<ParticleSystem>();
+        _airParticle = transform.Find("Model/Fan/AirParticle").GetComponent<ParticleSystem>();
         var particleMainSetting = _airParticle.main;
         particleMainSetting.startLifetime = _airMaxHeight / 10f;
     }
