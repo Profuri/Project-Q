@@ -60,7 +60,12 @@ namespace Fabgrid
 
             if (tile.TryGetComponent(out IProvidableFieldInfo providableInfo))
             {
+                Debug.Log($"FindProvidableInfo: {providableInfo}");
                 providableInfo.SetFieldInfos(tilemap.FormatPanel.GetFieldInfoList);
+            }
+            else
+            {
+                Debug.Log($"Not found ProvidableInfo");
             }
 
             if (tilemap.selectedLayer != null) tile.transform.SetParent(tilemap.selectedLayer.transform);
