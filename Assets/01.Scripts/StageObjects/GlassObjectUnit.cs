@@ -39,10 +39,17 @@ public class GlassObjectUnit : ObjectUnit,IProvidableFieldInfo
     {
         //이거 나중에 안되면 수정 해야됨.
         Debug.Log("SetFieldInfos");
-        if (infos == null) return;
-        
-        var fieldInfoList = this.GetType().GetFields( BindingFlags.Instance | BindingFlags.NonPublic).ToList();
-        
-        
+        if (infos == null)
+        {
+            Debug.Log("Info is null");
+            return;
+        }
+                
+        //var fieldInfoList = this.GetType().GetFields( BindingFlags.Instance | BindingFlags.NonPublic).ToList();
+        foreach (var info in infos)
+        {
+            Debug.Log($"InfoValue: {info.GetValue(this)}");
+            //info?.SetValue();
+        }
     }
 }

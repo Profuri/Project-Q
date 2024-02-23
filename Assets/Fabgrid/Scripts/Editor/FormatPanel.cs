@@ -27,12 +27,27 @@ namespace Fabgrid
         private VisualTreeAsset _dropDownField;
         private VisualTreeAsset _inputField;
 
-        private static readonly string removeString = "FormatPanel.uxml";
-        private static readonly string[] uxmlNames = 
+        private static readonly string s_removeString = "FormatPanel.uxml";
+        private static readonly string[] s_uxmlNames = 
             { "Fields/ToggleField.uxml", "Fields/DropdownField.uxml", "Fields/InputField.uxml" };
 
         private Dictionary<FieldInfo, PanelField> _fieldDictionary;
-        public List<FieldInfo> GetFieldInfoList => _fieldDictionary.Keys.ToList();
+
+        public List<FieldInfo> GetFieldInfoList
+        {
+            get
+            {
+                Debug.Log("GetFieldInfoList");
+                foreach (var kvp in _fieldDictionary)
+                {
+                    Debug.Log($"FieldInfo: {kvp.Key} PanelField: {kvp.Value}");
+                }
+
+                return _fieldDictionary.Keys.ToList();
+            }
+        }
+        
+
 
         //This is test Code. Will be changed.
         public void SetRoot(VisualElement root)
@@ -56,21 +71,21 @@ namespace Fabgrid
 
             _fieldDictionary = new Dictionary<FieldInfo, PanelField>();
 
-            string[] fieldPathArray = new string[uxmlNames.Length];
+            string[] fieldPathArray = new string[s_uxmlNames.Length];
 
 
 
             StringBuilder sBuilder = new StringBuilder();
 
-            int panelNameStartIdx = VisualTreeAssetPath.Length - removeString.Length;
+            int panelNameStartIdx = VisualTreeAssetPath.Length - s_removeString.Length;
             sBuilder.Append(VisualTreeAssetPath);
-            sBuilder.Remove(panelNameStartIdx, removeString.Length);
+            sBuilder.Remove(panelNameStartIdx, s_removeString.Length);
 
-            for (int i = 0; i < uxmlNames.Length; i++)
+            for (int i = 0; i < s_uxmlNames.Length; i++)
             {
-                sBuilder.Append(uxmlNames[i]);
+                sBuilder.Append(s_uxmlNames[i]);
                 fieldPathArray[i] = sBuilder.ToString();
-                sBuilder.Remove(panelNameStartIdx,uxmlNames[i].Length);
+                sBuilder.Remove(panelNameStartIdx,s_uxmlNames[i].Length);
             }
 
             _toggleField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[0]);
@@ -78,11 +93,14 @@ namespace Fabgrid
             _inputField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[2]);    
 
             _tilemap.OnSelectedPanelChanged += LoadFieldInfo;
+            
+            Debug.LogError("CreateFormatPanel");
         }
 
 
         //selectedGameObject가 바뀌었을 때 이벤트 형식으로 구독하여 실행해주거나 다른 방식으로라도 구독형식으로 만들면 될 것 같음.
         [ContextMenu("LoadFieldInfo")]
+
         public void LoadFieldInfo()
         {
             if (_tilemap.lastSelectedGameObject == null)
@@ -90,28 +108,49 @@ namespace Fabgrid
                 Debug.Log($"TileMapLastSelectedGameObject is null!");
                 return;
             }
-
-
-            Debug.Log("LoadFieldInfo");
+            
             _fieldDictionary.Clear();
-
             _root?.Clear();
-
-
-            if (_tilemap.lastSelectedGameObject.TryGetComponent(out IProvidableFieldInfo provideInfo))
+            
+            if (_tilemap.selectedTile.prefab.TryGetComponent(out IProvidableFieldInfo provideInfo))
             {
                 var fieldInfoList = new List<FieldInfo>();
-
+            
                 fieldInfoList = provideInfo.GetFieldInfos();
-
+            
                 foreach (var fieldInfo in fieldInfoList)
                 {
                     if (_fieldDictionary.ContainsKey(fieldInfo)) continue;
-
+            
                     CreateVisualTree(fieldInfo);
                 }
             }
         }
+        // public void LoadFieldInfo()
+        // {
+        //     if (_tilemap.lastSelectedGameObject == null)
+        //     {
+        //         Debug.Log($"TileMapLastSelectedGameObject is null!");
+        //         return;
+        //     }
+        //     
+        //     _fieldDictionary.Clear();
+        //     _root?.Clear();
+        //
+        //     if (_tilemap.lastSelectedGameObject.TryGetComponent(out IProvidableFieldInfo provideInfo))
+        //     {
+        //         var fieldInfoList = new List<FieldInfo>();
+        //
+        //         fieldInfoList = provideInfo.GetFieldInfos();
+        //
+        //         foreach (var fieldInfo in fieldInfoList)
+        //         {
+        //             if (_fieldDictionary.ContainsKey(fieldInfo)) continue;
+        //
+        //             CreateVisualTree(fieldInfo);
+        //         }
+        //     }
+        // }
 
         private void CreateVisualTree(FieldInfo info)
         {
@@ -141,5 +180,7 @@ namespace Fabgrid
             }
             _fieldDictionary.Add(info,panelField);
         }
+        
+
     }
 }

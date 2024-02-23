@@ -7,7 +7,7 @@ using System.Reflection;
 public class ToggleField : PanelField
 {
     private UnityEngine.UIElements.Toggle _toggle;
-
+    
     public ToggleField(VisualElement root,VisualTreeAsset field,FieldInfo info) : base(root,field,info)
     {
         _toggle = _fieldRoot.Q<Toggle>();
