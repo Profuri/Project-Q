@@ -43,6 +43,8 @@ public class PlayerAxisControlState : PlayerBaseState
     public override void ExitState()
     {
         base.ExitState();
+        Player.InputReader.OnAxisControlEvent -= AxisControlHandle;
+        Player.InputReader.OnClickEvent -= SelectAxisHandle;
         VolumeManager.Instance.SetAxisControlVolume(false, 0.2f);
         LightManager.Instance.SetAxisLight(AxisType.None);
         ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(false);
