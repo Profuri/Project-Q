@@ -79,8 +79,7 @@ public class Section : PoolableMono
         
         var exitPoint = CenterPosition + _exitPoint;
         var enterPoint = exitPoint + (dir * _sectionData.sectionIntervalDistance);
-        var nextStageCenter = enterPoint - 
-                              (new Vector3(other._enterPoint.x, 0, other._enterPoint.z).normalized * other._enterPoint.magnitude);
+        var nextStageCenter = enterPoint - other._enterPoint.normalized * other._enterPoint.magnitude;
         
         GenerateBridge(exitPoint, enterPoint);
         other.Generate(nextStageCenter);
