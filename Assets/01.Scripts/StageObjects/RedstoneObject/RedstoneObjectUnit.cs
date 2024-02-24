@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using AxisConvertSystem;
 using InteractableSystem;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [System.Serializable]
 public class RedstoneInteractable
@@ -12,6 +10,7 @@ public class RedstoneInteractable
 
     public AxisType applyAxisType;
 }
+
 public class RedstoneObjectUnit : InteractableObject
 {
     [SerializeField] private List<RedstoneInteractable> _redstoneInteractableList;
@@ -27,8 +26,10 @@ public class RedstoneObjectUnit : InteractableObject
 
     [SerializeField] private bool _isToggle;
 
-    private void Update()
+    public override void Update()
     {
+        base.Update();
+        
         _renderer.material.color = _isOn ? _targetColor : _originColor;
 
 
