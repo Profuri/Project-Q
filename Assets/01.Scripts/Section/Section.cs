@@ -164,13 +164,13 @@ public class Section : PoolableMono
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(0, 0, 1, 0.5f);
+        Gizmos.color = new Color(0, 0, 1, 0.75f);
         Gizmos.DrawSphere(_enterPoint, 0.3f);
         
-        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.color = new Color(1, 0, 0, 0.75f);
         Gizmos.DrawSphere(_exitPoint, 0.3f);
         
-        Gizmos.color = new Color(0, 1, 0, 0.5f);
+        Gizmos.color = new Color(0, 1, 0, 0.75f);
         Gizmos.DrawSphere(_playerResetPoint, 0.3f);
     }
 #endif
