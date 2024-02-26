@@ -4,12 +4,12 @@ using UnityEngine;
 public class ObjectHoldingHandler : MonoBehaviour
 {
     private PlayerUnit _player;
-    
     private Transform _holdingPoint;
-    
     private HoldableObject _heldObject;
 
     private readonly int _animationHoldHash = Animator.StringToHash("IsHold");
+
+    public bool IsHold => _heldObject is not null;
 
     private void Awake()
     {
@@ -29,12 +29,16 @@ public class ObjectHoldingHandler : MonoBehaviour
     public void Attach(HoldableObject obj)
     {
         _player.Animator.SetBool(_animationHoldHash, true);
+        
         _heldObject = obj;
+        _heldObject.StopImmediately(true);
     }
 
     public void Detach()
     {
         _player.Animator.SetBool(_animationHoldHash, false);
+        
+        _heldObject.StopImmediately(true);
         _heldObject = null;
     }
 

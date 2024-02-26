@@ -50,7 +50,7 @@ public class PlayerUnit : ObjectUnit
         _selectedInteractableObject = FindInteractable();
         CheckBackgroundUnit();
         
-        _playerUiController.SetKeyGuide(_selectedInteractableObject is not null);
+        _playerUiController.SetKeyGuide(HoldingHandler.IsHold || _selectedInteractableObject is not null);
     }
 
     public override void OnPop()
@@ -91,6 +91,11 @@ public class PlayerUnit : ObjectUnit
     
     private InteractableObject FindInteractable()
     {
+        if (HoldingHandler.IsHold)
+        {
+            return null;
+        }
+        
         var cols = new Collider[_data.maxInteractableCnt];
         var size = Physics.OverlapSphereNonAlloc(Collider.bounds.center, _data.interactableRadius, cols, _data.interactableMask);
 
@@ -149,6 +154,12 @@ public class PlayerUnit : ObjectUnit
 
     private void OnInteraction()
     {
+        if (HoldingHandler.IsHold)
+        {
+            HoldingHandler.Detach();
+            return;
+        }
+        
         if (_selectedInteractableObject is null)
         {
             return;
