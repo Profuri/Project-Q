@@ -68,21 +68,21 @@ public class PressurePlate : InteractableObject
             * (_pressureObjTrm.localScale.y * _pressureMainTrm.localScale.y / 2 + _pressureObjTrm.localScale.y / 2);
         var checkSize = _pressureObjTrm.localScale;
 
-        var cols = new Collider[1];
+        var cols = new Collider[2];
         var size = Physics.OverlapBoxNonAlloc(checkPos, checkSize / 2, cols, Quaternion.identity, _pressionorMask);
 
-        if (size <= 0)
+        if (size <= 1)
         {
             return false;
         }
-        
-        if (cols[0].TryGetComponent<InteractableObject>(out var interactable))
+
+        if (cols[1].TryGetComponent<InteractableObject>(out var interactable))
         {
             return interactable.Attribute.HasFlag(EInteractableAttribute.CAN_PRESS_THE_PRESSURE_PLATE);
         }
 
         return true;
-    }
+}
     
 #if UNITY_EDITOR
     private void OnDrawGizmos()

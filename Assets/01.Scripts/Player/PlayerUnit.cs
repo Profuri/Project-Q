@@ -96,16 +96,12 @@ public class PlayerUnit : ObjectUnit
 
         for(var i = 0; i < size; ++i)
         {
-            var interactable = cols[i].GetComponent<InteractableObject>();
-            
-            if (interactable is null)
+            if (cols[i].TryGetComponent<InteractableObject>(out var interactable))
             {
-                continue;
-            }
-                
-            if(interactable.InteractType == EInteractType.INPUT_RECEIVE)
-            {
-                return interactable;
+                if(interactable.InteractType == EInteractType.INPUT_RECEIVE)
+                {
+                    return interactable;
+                }
             }
         }
 
@@ -164,11 +160,6 @@ public class PlayerUnit : ObjectUnit
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (Application.isPlaying)
-        {
-            return;
-        }
-        
         Gizmos.color = Color.cyan;
 
         var col = GetComponent<Collider>();
