@@ -6,6 +6,7 @@ namespace AxisConvertSystem
     public class ObjectUnit : PoolableMono
     {
         [HideInInspector] public CompressLayer compressLayer = CompressLayer.Default;
+        [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
         
         [HideInInspector] public LayerMask canStandMask;
@@ -19,6 +20,8 @@ namespace AxisConvertSystem
         public UnitInfo OriginUnitInfo;
         public UnitInfo UnitInfo;
         public UnitInfo ConvertedInfo;
+
+        private bool _activeUnit;
 
         public virtual void Awake()
         {
@@ -65,6 +68,59 @@ namespace AxisConvertSystem
             SynchronizationUnitPos(axis);
             ConvertedInfo = ConvertInfo(UnitInfo, axis);
         }
+        
+        public virtual void UnitSetting(AxisType axis)
+        {
+            transform.localPosition = ConvertedInfo.LocalPos;
+            transform.localRotation = ConvertedInfo.LocalRot;
+            transform.localScale = ConvertedInfo.LocalScale;
+            Collider.SetCenter(ConvertedInfo.ColliderCenter);
+            Activate(Math.Abs(DepthHandler.Depth - float.MaxValue) < 0.01f);
+
+            if (!_activeUnit)
+            {
+                return;
+            }
+
+            if (climbableUnit)
+            {
+                Collider.isTrigger = axis == AxisType.Y;
+            }
+            
+            if (!staticUnit)
+            {
+                Rigidbody.FreezeAxisPosition(axis);
+            }
+        }
+        
+        private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
+        {
+            if (axis == AxisType.None)
+            {
+                return basic;
+            }
+
+            var layerDepth = (float)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
+            
+            basic.LocalPos.SetAxisElement(axis, layerDepth);
+
+            basic.LocalScale = Quaternion.Inverse(basic.LocalRot) * basic.LocalScale;
+            basic.LocalScale.SetAxisElement(axis, 1);
+            basic.LocalScale = basic.LocalRot * basic.LocalScale;
+            
+            basic.ColliderCenter = basic.LocalRot * basic.ColliderCenter;
+            basic.ColliderCenter.SetAxisElement(axis, -layerDepth);
+            basic.ColliderCenter = Quaternion.Inverse(basic.LocalRot) * basic.ColliderCenter;
+
+            return basic;
+        }
+
+        private void Activate(bool active)
+        {
+            _activeUnit = active;
+            gameObject.SetActive(active);
+            Collider.enabled = active;
+        }
 
         public void SetPosition(Vector3 pos)
         {
@@ -98,20 +154,6 @@ namespace AxisConvertSystem
             Rigidbody.velocity = withYAxis ? Vector3.zero : new Vector3(0, Rigidbody.velocity.y, 0);
         }
 
-        public virtual void UnitSetting(AxisType axis)
-        {
-            transform.localPosition = ConvertedInfo.LocalPos;
-            transform.localRotation = ConvertedInfo.LocalRot;
-            transform.localScale = ConvertedInfo.LocalScale;
-            Collider.SetCenter(ConvertedInfo.ColliderCenter);
-            Activate(Math.Abs(DepthHandler.Depth - float.MaxValue) < 0.01f);
-
-            if (!staticUnit)
-            {
-                Rigidbody.FreezeAxisPosition(axis);
-            }
-        }
-
         public void ReloadUnit()
         {
             if (staticUnit)
@@ -140,34 +182,6 @@ namespace AxisConvertSystem
             {
                 UnitInfo.LocalPos = transform.localPosition;
             }
-        }
-
-        private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
-        {
-            if (axis == AxisType.None)
-            {
-                return basic;
-            }
-
-            var layerDepth = (float)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
-            
-            basic.LocalPos.SetAxisElement(axis, layerDepth);
-
-            basic.LocalScale = Quaternion.Inverse(basic.LocalRot) * basic.LocalScale;
-            basic.LocalScale.SetAxisElement(axis, 1);
-            basic.LocalScale = basic.LocalRot * basic.LocalScale;
-            
-            basic.ColliderCenter = basic.LocalRot * basic.ColliderCenter;
-            basic.ColliderCenter.SetAxisElement(axis, -layerDepth);
-            basic.ColliderCenter = Quaternion.Inverse(basic.LocalRot) * basic.ColliderCenter;
-
-            return basic;
-        }
-
-        private void Activate(bool active)
-        {
-            gameObject.SetActive(active);
-            Collider.enabled = active;
         }
 
         private void CheckStandObject()
