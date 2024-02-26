@@ -10,7 +10,6 @@ namespace AxisConvertSystem
         [HideInInspector] public bool staticUnit = true;
         
         [HideInInspector] public LayerMask canStandMask;
-        [HideInInspector] public float rayDistance;
 
         public AxisConverter Converter { get; protected set; }
         public Collider Collider { get; private set; }
@@ -186,10 +185,15 @@ namespace AxisConvertSystem
 
         private void CheckStandObject()
         {
-            var origin = Collider.bounds.center + Vector3.up;
+            var origin = Collider.bounds.center;
+            if (Converter.AxisType == AxisType.Y)
+            {
+                ++origin.y;
+            }
+            
             var dir = Vector3.down;
 
-            var isHit = Physics.Raycast(origin, dir, out var hit, rayDistance, canStandMask);
+            var isHit = Physics.Raycast(origin, dir, out var hit, Mathf.Infinity, canStandMask);
         
             if (!isHit)
             {

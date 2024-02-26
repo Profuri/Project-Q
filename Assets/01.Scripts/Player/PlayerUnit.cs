@@ -17,11 +17,12 @@ public class PlayerUnit : ObjectUnit
     private StateController _stateController;
     private PlayerUIController _playerUiController;
 
-    public bool OnGround => CheckGround();
-
     private InteractableObject _selectedInteractableObject;
-
+    private ObjectUnit _backgroundUnit;
+        
+    public bool OnGround => CheckGround();
     private readonly int _activeHash = Animator.StringToHash("Active");
+
 
     public override void Awake()
     {
@@ -47,6 +48,8 @@ public class PlayerUnit : ObjectUnit
         _stateController.UpdateState();
 
         _selectedInteractableObject = FindInteractable();
+        CheckBackgroundUnit();
+        
         _playerUiController.SetKeyGuide(_selectedInteractableObject is not null);
     }
 
@@ -107,6 +110,33 @@ public class PlayerUnit : ObjectUnit
         }
 
         return null;
+    }
+
+    private void CheckBackgroundUnit()
+    {
+        var origin = Collider.bounds.center;
+        var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
+        origin.SetAxisElement(Converter.AxisType,
+            origin.GetAxisElement(Converter.AxisType) - dir.GetAxisElement(Converter.AxisType));
+
+        var isHit = Physics.Raycast(origin, dir, out var hit, Mathf.Infinity, _data.backgroundMask);
+
+        if (isHit)
+        {
+            if (hit.transform.TryGetComponent<ObjectUnit>(out var unit))
+            {
+                _backgroundUnit = unit;
+                _backgroundUnit.Collider.isTrigger = true;
+            }
+        }
+        else
+        {
+            if (_backgroundUnit)
+            {
+                _backgroundUnit.Collider.isTrigger = false;
+                _backgroundUnit = null;
+            }
+        }
     }
 
     public void SetSection(Section section)

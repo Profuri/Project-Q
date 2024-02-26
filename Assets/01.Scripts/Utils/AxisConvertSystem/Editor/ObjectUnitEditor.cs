@@ -50,7 +50,6 @@ namespace AxisConvertSystem.Editor
                 GUILayout.Label("For Dynamic Unit");
                 
                 VariableLoad(ref _target.canStandMask, GetLayerMaskField());
-                VariableLoad(ref _target.rayDistance, EditorGUILayout.FloatField("Ray Distance", _target.rayDistance));
             }
         }
 
