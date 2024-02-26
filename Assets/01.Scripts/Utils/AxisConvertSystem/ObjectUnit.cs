@@ -186,7 +186,7 @@ namespace AxisConvertSystem
 
         private void CheckStandObject()
         {
-            var origin = Collider.bounds.center;
+            var origin = Collider.bounds.center + Vector3.up;
             var dir = Vector3.down;
 
             var isHit = Physics.Raycast(origin, dir, out var hit, rayDistance, canStandMask);
