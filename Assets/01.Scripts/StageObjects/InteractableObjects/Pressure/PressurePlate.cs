@@ -32,11 +32,12 @@ public class PressurePlate : InteractableObject
     public override void Update()
     {
         base.Update();
-        if (_lastToggleState != CheckPressed())
+        var curToggleState = CheckPressed();
+        if (_lastToggleState != curToggleState)
         {
-            _lastToggleState = !_lastToggleState;
-            _onToggleChangeEvent?.Invoke(_lastToggleState);
+            _onToggleChangeEvent?.Invoke(curToggleState);
         }
+        _lastToggleState = curToggleState;
         OnInteraction(null, _lastToggleState);
     }
 
@@ -58,7 +59,6 @@ public class PressurePlate : InteractableObject
         var scale = _pressureMainTrm.localScale;
         scale.y = Mathf.Lerp(current, dest, Time.deltaTime * _pressSpeed);
         _pressureMainTrm.localScale = scale;
-
     }
 
     private bool CheckPressed()

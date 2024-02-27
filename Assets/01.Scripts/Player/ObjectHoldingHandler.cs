@@ -31,6 +31,7 @@ public class ObjectHoldingHandler : MonoBehaviour
         _player.Animator.SetBool(_animationHoldHash, true);
         
         _heldObject = obj;
+        _heldObject.Rigidbody.FreezeAxisPosition(AxisType.Y);
         _heldObject.StopImmediately(true);
     }
 
@@ -39,6 +40,7 @@ public class ObjectHoldingHandler : MonoBehaviour
         _player.Animator.SetBool(_animationHoldHash, false);
         
         _heldObject.StopImmediately(true);
+        _heldObject.Rigidbody.FreezeAxisPosition(AxisType.None);
         _heldObject = null;
     }
 

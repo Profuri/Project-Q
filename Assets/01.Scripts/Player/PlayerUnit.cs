@@ -22,8 +22,7 @@ public class PlayerUnit : ObjectUnit
         
     public bool OnGround => CheckGround();
     private readonly int _activeHash = Animator.StringToHash("Active");
-
-
+    
     public override void Awake()
     {
         base.Awake();
@@ -58,7 +57,7 @@ public class PlayerUnit : ObjectUnit
         _inputReader.OnInteractionEvent += OnInteraction;
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
-    }
+    }   
 
     public override void OnPush()
     {
