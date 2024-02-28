@@ -10,6 +10,7 @@ namespace AxisConvertSystem
         [HideInInspector] public bool staticUnit = true;
         
         [HideInInspector] public LayerMask canStandMask;
+        [HideInInspector] public bool useGravity = true;
 
         public AxisConverter Converter { get; protected set; }
         public Collider Collider { get; private set; }
@@ -41,7 +42,10 @@ namespace AxisConvertSystem
         {
             if (!staticUnit)
             {
-                Rigidbody.AddForce(Vector3.up * GameManager.Instance.CoreData.gravity);
+                if (useGravity)
+                {
+                    Rigidbody.AddForce(Vector3.up * GameManager.Instance.CoreData.gravity);
+                }
 
                 if (transform.position.y <= GameManager.Instance.CoreData.destroyedDepth)
                 {

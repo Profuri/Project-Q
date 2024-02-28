@@ -123,6 +123,11 @@ public class PlayerUnit : ObjectUnit
 
         if (isHit)
         {
+            if (hit.collider.isTrigger)
+            {
+                return;
+            }
+            
             if (hit.transform.TryGetComponent<ObjectUnit>(out var unit))
             {
                 _backgroundUnit = unit;

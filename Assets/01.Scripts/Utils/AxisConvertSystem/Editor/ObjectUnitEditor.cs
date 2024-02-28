@@ -50,6 +50,7 @@ namespace AxisConvertSystem.Editor
                 GUILayout.Label("For Dynamic Unit");
                 
                 VariableLoad(ref _target.canStandMask, GetLayerMaskField());
+                VariableLoad(ref _target.useGravity, EditorGUILayout.Toggle("Use Gravity", _target.useGravity));
             }
         }
 

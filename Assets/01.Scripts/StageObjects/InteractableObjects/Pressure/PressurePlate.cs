@@ -63,9 +63,7 @@ public class PressurePlate : InteractableObject
 
     private bool CheckPressed()
     {
-        var checkPos = _pressureObjTrm.position
-            + Vector3.up 
-            * (_pressureObjTrm.localScale.y * _pressureMainTrm.localScale.y / 2 + _pressureObjTrm.localScale.y / 2);
+        var checkPos = Collider.bounds.center;
         var checkSize = _pressureObjTrm.localScale;
 
         var cols = new Collider[2];
@@ -90,9 +88,7 @@ public class PressurePlate : InteractableObject
         if (_pressureObjTrm)
         {
             Gizmos.color = Color.yellow;
-            var checkPos = _pressureObjTrm.position
-                + Vector3.up 
-                * (_pressureObjTrm.localScale.y * _pressureMainTrm.localScale.y / 2 + _pressureObjTrm.localScale.y / 2);
+            var checkPos = Collider.bounds.center;
             var checkSize = _pressureObjTrm.localScale;
             Gizmos.DrawWireCube(checkPos, checkSize);
         }

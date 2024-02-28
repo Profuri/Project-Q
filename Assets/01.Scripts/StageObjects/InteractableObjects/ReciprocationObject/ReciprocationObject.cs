@@ -9,8 +9,8 @@ public class ReciprocationObject : InteractableObject
     [SerializeField] private float _reciprocationDistance;
     [SerializeField] private float _reciprocationSpeed;
 
-    private Vector3 _originPos;
-    private Vector3 _destPos;
+    public Vector3 _originPos;
+    public Vector3 _destPos;
 
     public override void Awake()
     {
@@ -23,7 +23,9 @@ public class ReciprocationObject : InteractableObject
     {
         var curPos = transform.localPosition;  
         var destPos = interactValue ? _destPos : _originPos;
-        destPos.SetAxisElement(Converter.AxisType, 0);
+
+        var layerDepth = (float)compressLayer * Vector3ExtensionMethod.GetAxisDir(Converter.AxisType).GetAxisElement(Converter.AxisType);
+        destPos.SetAxisElement(Converter.AxisType, layerDepth);
 
         if (Vector3.Distance(curPos, destPos) <= 0.01f)
         {
