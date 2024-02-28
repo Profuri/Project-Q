@@ -173,7 +173,6 @@ public class Section : PoolableMono
 
     public override void OnPush()
     {
-        Debug.Log(1);
         Active = false;
     }
 
