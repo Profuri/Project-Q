@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -16,6 +15,7 @@ namespace AxisConvertSystem
         public Collider Collider { get; private set; }
         public Rigidbody Rigidbody { get; private set; }
         public UnitDepthHandler DepthHandler { get; private set; }
+        public Section Section { get; protected set; }
 
         public UnitInfo OriginUnitInfo;
         public UnitInfo UnitInfo;
@@ -25,6 +25,8 @@ namespace AxisConvertSystem
 
         public virtual void Awake()
         {
+            _activeUnit = false;
+            Section = GetComponentInParent<Section>();
             Collider = GetComponent<Collider>();
             if (!staticUnit)
             {
@@ -35,7 +37,7 @@ namespace AxisConvertSystem
             DepthHandler = new UnitDepthHandler(this);
         }
 
-        public virtual void Update()
+        public virtual void UpdateUnit()
         {
             if (!staticUnit)
             {
@@ -44,7 +46,6 @@ namespace AxisConvertSystem
                 if (transform.position.y <= GameManager.Instance.CoreData.destroyedDepth)
                 {
                     ReloadUnit();
-                    return;
                 }
             }
         }
@@ -60,6 +61,8 @@ namespace AxisConvertSystem
             UnitInfo = OriginUnitInfo;
             
             DepthHandler.DepthCheckPointSetting();
+
+            _activeUnit = true;
         }
 
         public virtual void Convert(AxisType axis)
@@ -214,6 +217,7 @@ namespace AxisConvertSystem
 
         public override void OnPush()
         {
+            _activeUnit = false;
         }
     }
 }

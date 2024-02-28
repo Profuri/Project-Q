@@ -27,9 +27,9 @@ public class MovingObject : InteractableObject
         _maxLimitPos = origin + trackScale / 2f - scale / 2f;
     }
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
+        base.UpdateUnit();
 
         if (!CheckPlayer(out var cols))
         {

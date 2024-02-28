@@ -53,9 +53,9 @@ public class TogglePlate : InteractableObject
         }
     }
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
+        base.UpdateUnit();
         ToggleUpdate();
     }
 

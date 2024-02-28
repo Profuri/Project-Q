@@ -40,9 +40,9 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
     }
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
+        base.UpdateUnit();
         
         _stateController.UpdateState();
 
@@ -142,6 +142,9 @@ public class PlayerUnit : ObjectUnit
     public void SetSection(Section section)
     {
         transform.SetParent(section.transform);
+        Section = section;
+        section.SectionUnits.Add(this);
+        
         Converter.Init(section);
         OriginUnitInfo.LocalPos = section.PlayerResetPoint;
     }

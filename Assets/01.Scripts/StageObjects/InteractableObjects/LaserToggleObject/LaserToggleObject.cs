@@ -30,9 +30,9 @@ public class LaserToggleObject : InteractableObject
         Toggled(false);
     }
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
+        base.UpdateUnit();
         
         if(_isToggle)
         {

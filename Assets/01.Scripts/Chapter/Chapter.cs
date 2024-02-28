@@ -15,9 +15,9 @@ public class Chapter : InteractableObject
         _symbolTrm = transform.Find("Symbol");
     }
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
+        base.UpdateUnit();
         if (_symbolTrm is not null)
         {
             _symbolTrm.Rotate(0, _symbolRotateSpeed, 0, Space.World);

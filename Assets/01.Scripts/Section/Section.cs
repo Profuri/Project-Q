@@ -15,6 +15,7 @@ public class Section : PoolableMono
     [SerializeField] private SectionData _sectionData;
 
     private List<BridgeObject> _bridgeObjects;
+    public List<ObjectUnit> SectionUnits { get; private set; }
 
     public bool Active { get; private set; }
     public bool Lock { get; set; }
@@ -25,6 +26,19 @@ public class Section : PoolableMono
         Active = false;
         Lock = false;
         _bridgeObjects = new List<BridgeObject>();
+        SectionUnits = new List<ObjectUnit>();
+        transform.GetComponentsInChildren(SectionUnits);
+    }
+
+    public void Update()
+    {
+        if (Active)
+        {
+            foreach (var unit in SectionUnits)
+            {
+                unit.UpdateUnit();
+            }
+        }
     }
 
     public void Generate(Vector3 position, bool moveRoutine = true)
@@ -43,6 +57,7 @@ public class Section : PoolableMono
         StartCoroutine(SectionMoveRoutine(CenterPosition - Vector3.up * 5, () =>
         {
             PoolManager.Instance.Push(this);
+            Active = false;
         }));
     }
 
@@ -58,7 +73,6 @@ public class Section : PoolableMono
 
     public virtual void OnExit(PlayerUnit player)
     {
-        Active = false;
         CameraManager.Instance.ChangeVCamController(VirtualCamType.PLAYER);
         ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetPlayer(player);
         ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetCurrentCam();
@@ -159,6 +173,8 @@ public class Section : PoolableMono
 
     public override void OnPush()
     {
+        Debug.Log(1);
+        Active = false;
     }
 
 #if UNITY_EDITOR

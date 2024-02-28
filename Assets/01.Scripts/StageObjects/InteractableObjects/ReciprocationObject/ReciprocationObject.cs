@@ -1,7 +1,6 @@
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
-using Vector3 = UnityEngine.Vector3;
 
 public class ReciprocationObject : InteractableObject
 {

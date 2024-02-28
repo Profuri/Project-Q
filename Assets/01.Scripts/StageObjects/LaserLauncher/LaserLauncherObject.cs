@@ -46,9 +46,9 @@ public class LaserLauncherObject : ObjectUnit
         }
     }
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
+        base.UpdateUnit();
         if (_isActiveLaser)
         {
             Launch();

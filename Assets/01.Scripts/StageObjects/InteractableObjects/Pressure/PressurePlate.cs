@@ -29,9 +29,9 @@ public class PressurePlate : InteractableObject
         _pressureObjTrm = _pressureMainTrm.Find("PressureObject");
     }
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
+        base.UpdateUnit();
         var curToggleState = CheckPressed();
         if (_lastToggleState != curToggleState)
         {
@@ -102,6 +102,10 @@ public class PressurePlate : InteractableObject
             Gizmos.color = Color.black;
             foreach (var obj in _affectedObjects)
             {
+                if (obj is null)
+                {
+                    continue;
+                }
                 Gizmos.DrawLine(transform.position, obj.transform.position);
             }
         }
