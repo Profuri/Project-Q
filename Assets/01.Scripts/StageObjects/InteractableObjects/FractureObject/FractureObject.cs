@@ -77,7 +77,7 @@ public class FractureObject : InteractableObject
             part.AddForce(part.Bounds.center * _explodeForce, transform.position);
         }
         
-        SceneControlManager.Instance.DeleteObject(this);
+        Activate(false);
     }
 
     private FracturePart GenerateMesh(FracturePart original, Plane plane, bool left)
