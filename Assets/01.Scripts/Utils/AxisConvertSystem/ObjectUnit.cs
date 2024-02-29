@@ -8,6 +8,7 @@ namespace AxisConvertSystem
         [HideInInspector] public CompressLayer compressLayer = CompressLayer.Default;
         [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
+        [HideInInspector] public bool activeUnit = true;
         
         [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public bool useGravity = true;
@@ -22,11 +23,12 @@ namespace AxisConvertSystem
         public UnitInfo UnitInfo;
         public UnitInfo ConvertedInfo;
 
-        private bool _activeUnit;
+        private bool _isHide;
 
         public virtual void Awake()
         {
-            _activeUnit = false;
+            _isHide = false;
+            
             Section = GetComponentInParent<Section>();
             Collider = GetComponent<Collider>();
             if (!staticUnit)
@@ -36,6 +38,8 @@ namespace AxisConvertSystem
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
             DepthHandler = new UnitDepthHandler(this);
+            
+            Activate(activeUnit);
         }
 
         public virtual void UpdateUnit()
@@ -65,12 +69,15 @@ namespace AxisConvertSystem
             UnitInfo = OriginUnitInfo;
             
             DepthHandler.DepthCheckPointSetting();
-
-            _activeUnit = true;
         }
 
         public virtual void Convert(AxisType axis)
         {
+            if (!activeUnit)
+            {
+                return;
+            }
+            
             DepthHandler.CalcDepth(axis);
             SynchronizationUnitPos(axis);
             ConvertedInfo = ConvertInfo(UnitInfo, axis);
@@ -78,13 +85,18 @@ namespace AxisConvertSystem
         
         public virtual void UnitSetting(AxisType axis)
         {
+            if (!activeUnit)
+            {
+                return;
+            }
+            
             transform.localPosition = ConvertedInfo.LocalPos;
             transform.localRotation = ConvertedInfo.LocalRot;
             transform.localScale = ConvertedInfo.LocalScale;
             Collider.SetCenter(ConvertedInfo.ColliderCenter);
-            Activate(Math.Abs(DepthHandler.Depth - float.MaxValue) < 0.01f);
+            Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
 
-            if (!_activeUnit)
+            if (_isHide)
             {
                 return;
             }
@@ -122,11 +134,18 @@ namespace AxisConvertSystem
             return basic;
         }
 
-        private void Activate(bool active)
+        public void Activate(bool active)
         {
-            _activeUnit = active;
+            activeUnit = active;
             gameObject.SetActive(active);
             Collider.enabled = active;
+        }
+
+        private void Hide(bool hide)
+        {
+            _isHide = hide;
+            gameObject.SetActive(!hide);
+            Collider.enabled = !hide;
         }
 
         public void SetPosition(Vector3 pos)
@@ -221,7 +240,6 @@ namespace AxisConvertSystem
 
         public override void OnPush()
         {
-            _activeUnit = false;
         }
     }
 }
