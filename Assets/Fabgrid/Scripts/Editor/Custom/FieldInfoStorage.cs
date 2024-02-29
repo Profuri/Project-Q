@@ -8,18 +8,22 @@ namespace Fabgrid
 {
     public static class FieldInfoStorage
     {
-        private static Dictionary<int,FieldInfo> s_fieldInfoDictionary;
-        private static int _fieldIID;
-
+        private static Dictionary<int,FieldInfo> s_fieldInfoDictionary = new();
         public static void SetFieldInfo(IProvidableFieldInfo providable)
         {
             s_fieldInfoDictionary.Clear();
-            _fieldIID = 0;
+            
+            if (providable == null)
+            {
+                return;
+            }
+            
             List<FieldInfo> fieldInfoList = providable.GetFieldInfos();
 
             foreach (FieldInfo fieldInfo in fieldInfoList)
             {
-                s_fieldInfoDictionary.Add(_fieldIID,fieldInfo);
+                int hashCode = fieldInfo.GetHashCode();
+                s_fieldInfoDictionary.Add(hashCode,fieldInfo);
             }
         }
          
