@@ -1,56 +1,40 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using InteractableSystem;
-using System;
 using AxisConvertSystem;
+using UnityEngine.Events;
 
 public class TogglePlate : InteractableObject
 {
-    [SerializeField] private LayerMask _pressionorMask;
-
-    [SerializeField] private float _pressSpeed;
     [SerializeField] private float _maxHeight;
     [SerializeField] private float _minHeight;
     [SerializeField] private List<InteractableObject> _affectedObjects;
 
-    [Header("Delay")]
-    [SerializeField] private bool _useDelay = false;
-    [SerializeField] private bool _rollbackReverse = false;
-    [SerializeField] private float _delayTime = 0.5f;
-
-    private List<InteractableObject> _activeObjects;
+    [SerializeField] private UnityEvent<bool> _onToggleChangeEvent;
+    
     private Transform _pressureMainTrm;
     private Transform _pressureObjTrm;
 
-    private bool _isToggle = false;
-    private bool _isPlaying = false;
+    private bool _isToggle;
 
     public override void Awake()
     {
         base.Awake();
         _pressureMainTrm = transform.Find("PressureMain");
         _pressureObjTrm = _pressureMainTrm.Find("PressureObject");
+    }
+
+    public override void Init(AxisConverter converter)
+    {
+        base.Init(converter);
         _isToggle = false;
-        _isPlaying = false;
-        if (!_useDelay)
-            _activeObjects = _affectedObjects;
-        else
-            _activeObjects = new();
+        _onToggleChangeEvent?.Invoke(_isToggle);
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        if(_isPlaying == true)
-        {
-            Debug.Log("Toggle�� �� �����ϴ�.");
-        }
-        else
-        {
-            _isToggle = !_isToggle;
-            if(_useDelay)
-                StartCoroutine(ToggleObjects(_isToggle));
-        }
+        _isToggle = !_isToggle;
+        _onToggleChangeEvent?.Invoke(_isToggle);
     }
 
     public override void UpdateUnit()
@@ -61,36 +45,13 @@ public class TogglePlate : InteractableObject
 
     private void ToggleUpdate()
     {
-        if (_activeObjects == null) return;
-
-        for (int i = 0; i < _activeObjects.Count; i++)
+        for (int i = 0; i < _affectedObjects.Count; i++)
         {
-            _activeObjects[i]?.OnInteraction(null, _isToggle);
+            _affectedObjects[i]?.OnInteraction(null, _isToggle);
         }
         var scale = _pressureMainTrm.localScale;
         scale.y = _isToggle ? _minHeight : _maxHeight;
         _pressureMainTrm.localScale = scale;
-    }
-
-
-    private IEnumerator ToggleObjects(bool _isToggle)
-    {
-        _isPlaying = true;
-        for (int i = 0; i < _affectedObjects.Count; i++)
-        {
-            _activeObjects.Add(_affectedObjects[i]);
-            _activeObjects[i]?.OnInteraction(null, _isToggle);
-            yield return new WaitForSeconds(_delayTime);
-        }
-            
-        for(int i = 0; i < _activeObjects.Count; i++)
-            yield return new WaitUntil(() => _activeObjects[i].InterEnd);
-        
-
-        if(_rollbackReverse) _affectedObjects.Reverse();
-        _activeObjects.ForEach((obj) => obj.InterEnd = false);
-        _activeObjects.Clear();
-        _isPlaying = false;
     }
 
 #if UNITY_EDITOR
@@ -111,6 +72,10 @@ public class TogglePlate : InteractableObject
             Gizmos.color = Color.black;
             foreach (var obj in _affectedObjects)
             {
+                if (obj is null)
+                {
+                    continue;
+                }
                 Gizmos.DrawLine(transform.position, obj.transform.position);
             }
         }
