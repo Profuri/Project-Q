@@ -9,8 +9,8 @@ public class ReciprocationObject : InteractableObject
     [SerializeField] private float _reciprocationDistance;
     [SerializeField] private float _reciprocationSpeed;
 
-    public Vector3 _originPos;
-    public Vector3 _destPos;
+    private Vector3 _originPos;
+    private Vector3 _destPos;
 
     public override void Awake()
     {
