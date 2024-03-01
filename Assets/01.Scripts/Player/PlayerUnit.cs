@@ -52,6 +52,12 @@ public class PlayerUnit : ObjectUnit
         _playerUiController.SetKeyGuide(HoldingHandler.IsHold || _selectedInteractableObject is not null);
     }
 
+    public override void ReloadUnit()
+    {
+        base.ReloadUnit();
+        Converter.ConvertDimension(AxisType.None);
+    }
+
     public override void OnPop()
     {
         _inputReader.OnInteractionEvent += OnInteraction;

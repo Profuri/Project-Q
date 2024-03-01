@@ -180,7 +180,7 @@ namespace AxisConvertSystem
             Rigidbody.velocity = withYAxis ? Vector3.zero : new Vector3(0, Rigidbody.velocity.y, 0);
         }
 
-        public void ReloadUnit()
+        public virtual void ReloadUnit()
         {
             if (staticUnit)
             {
