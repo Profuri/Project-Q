@@ -15,6 +15,7 @@ public class PressurePlate : InteractableObject
     [SerializeField] private List<InteractableObject> _affectedObjects;
 
     [SerializeField] private UnityEvent<bool> _onToggleChangeEvent;
+    [SerializeField] private bool _eventInverse;
 
     private Transform _pressureMainTrm;
     private Transform _pressureObjTrm;
@@ -35,7 +36,7 @@ public class PressurePlate : InteractableObject
         var curToggleState = CheckPressed();
         if (_lastToggleState != curToggleState)
         {
-            _onToggleChangeEvent?.Invoke(curToggleState);
+            _onToggleChangeEvent?.Invoke(_eventInverse ? !curToggleState : curToggleState);
         }
         _lastToggleState = curToggleState;
         OnInteraction(null, _lastToggleState);
