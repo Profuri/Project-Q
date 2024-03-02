@@ -16,8 +16,33 @@ public class DropdownField : PanelField
         _enumField = _fieldRoot.Q<EnumField>();
         //두 번째에 있는 Element를 찾아옴.
         Init(info);
+
+
+        var value = FieldInfoStorage.GetFieldValue(info.FieldType);
+        Debug.Log($"Value: {value}"); 
+
+        if (value != null && value.GetType().IsValueType)
+        {
+            _enumField.value = value as Enum;
+        }
+
+        _enumField.RegisterCallback<ChangeEvent<Enum>>(OnEnumFieldValueChanged);
     }
-    
+
+    ~DropdownField()
+    {
+        _enumField.UnregisterCallback<ChangeEvent<Enum>>(OnEnumFieldValueChanged);
+    }
+
+    private void OnEnumFieldValueChanged(ChangeEvent<Enum> evt)
+    {
+        Enum newValue = evt.newValue;
+
+        Type type = newValue.GetType();
+        Debug.Log($"Type: {type}");
+        FieldInfoStorage.SetValueInfo(type,newValue);
+    }
+
     public override void Init(FieldInfo info)
     {
         Type type = info.FieldType;

@@ -104,6 +104,10 @@ namespace Fabgrid
             Debug.LogError("CreateFormatPanel");
         }
 
+        ~FormatPanel()
+        {
+            GC.Collect();
+        }
 
         //selectedGameObject가 바뀌었을 때 이벤트 형식으로 구독하여 실행해주거나 다른 방식으로라도 구독형식으로 만들면 될 것 같음.
         // [ContextMenu("LoadFieldInfo")]
