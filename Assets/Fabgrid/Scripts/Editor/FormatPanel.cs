@@ -33,22 +33,6 @@ namespace Fabgrid
 
         private Dictionary<FieldInfo, PanelField> _fieldDictionary;
 
-        public List<FieldInfo> GetFieldInfoList
-        {
-            get
-            {
-                Debug.Log("GetFieldInfoList");
-                foreach (var kvp in _fieldDictionary)
-                {
-                    Debug.Log($"FieldInfo: {kvp.Key} PanelField: {kvp.Value}");
-                }
-
-                return _fieldDictionary.Keys.ToList();
-            }
-        }
-        
-
-
         //This is test Code. Will be changed.
         public void SetRoot(VisualElement root)
         {

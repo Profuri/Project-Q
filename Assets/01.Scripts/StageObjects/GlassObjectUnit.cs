@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEngine;
 using AxisConvertSystem;
 using System.Linq;
+using Fabgrid;
 public class GlassObjectUnit : ObjectUnit,IProvidableFieldInfo
 {
     [SerializeField] private AxisType _activeAxisType;
@@ -44,12 +45,11 @@ public class GlassObjectUnit : ObjectUnit,IProvidableFieldInfo
             Debug.Log("Info is null");
             return;
         }
-                
-        //var fieldInfoList = this.GetType().GetFields( BindingFlags.Instance | BindingFlags.NonPublic).ToList();
-        foreach (var info in infos)
+
+        foreach(FieldInfo info in infos)
         {
-            Debug.Log($"InfoValue: {info.GetValue(this)}");
-            //info?.SetValue();
+            object value = FieldInfoStorage.GetFieldValue(info.FieldType);
+            info.SetValue(this, value);
         }
     }
 }
