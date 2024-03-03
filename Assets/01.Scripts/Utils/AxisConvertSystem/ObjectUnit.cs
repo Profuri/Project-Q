@@ -18,16 +18,16 @@ namespace AxisConvertSystem
         public Rigidbody Rigidbody { get; private set; }
         public UnitDepthHandler DepthHandler { get; private set; }
         public Section Section { get; protected set; }
+        public bool IsHide { get; private set; }
 
-        public UnitInfo OriginUnitInfo;
-        public UnitInfo UnitInfo;
-        public UnitInfo ConvertedInfo;
+        protected UnitInfo OriginUnitInfo;
+        private UnitInfo _unitInfo;
+        private UnitInfo _convertedInfo;
 
-        private bool _isHide;
 
         public virtual void Awake()
         {
-            _isHide = false;
+            IsHide = false;
             
             Section = GetComponentInParent<Section>();
             Collider = GetComponent<Collider>();
@@ -66,7 +66,7 @@ namespace AxisConvertSystem
             OriginUnitInfo.LocalRot = transform.localRotation;
             OriginUnitInfo.LocalScale = transform.localScale;
             OriginUnitInfo.ColliderCenter = Collider.GetLocalCenter();
-            UnitInfo = OriginUnitInfo;
+            _unitInfo = OriginUnitInfo;
             
             DepthHandler.DepthCheckPointSetting();
         }
@@ -77,10 +77,10 @@ namespace AxisConvertSystem
             {
                 return;
             }
-            
+
             DepthHandler.CalcDepth(axis);
             SynchronizationUnitPos(axis);
-            ConvertedInfo = ConvertInfo(UnitInfo, axis);
+            _convertedInfo = ConvertInfo(_unitInfo, axis);
         }
         
         public virtual void UnitSetting(AxisType axis)
@@ -90,13 +90,13 @@ namespace AxisConvertSystem
                 return;
             }
             
-            transform.localPosition = ConvertedInfo.LocalPos;
-            transform.localRotation = ConvertedInfo.LocalRot;
-            transform.localScale = ConvertedInfo.LocalScale;
-            Collider.SetCenter(ConvertedInfo.ColliderCenter);
+            transform.localPosition = _convertedInfo.LocalPos;
+            transform.localRotation = _convertedInfo.LocalRot;
+            transform.localScale = _convertedInfo.LocalScale;
+            Collider.SetCenter(_convertedInfo.ColliderCenter);
             Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
 
-            if (_isHide)
+            if (IsHide)
             {
                 return;
             }
@@ -143,7 +143,7 @@ namespace AxisConvertSystem
 
         private void Hide(bool hide)
         {
-            _isHide = hide;
+            IsHide = hide;
             gameObject.SetActive(!hide);
             Collider.enabled = !hide;
         }
@@ -187,15 +187,15 @@ namespace AxisConvertSystem
                 Rigidbody.velocity = Vector3.zero;
             }
             
-            UnitInfo = OriginUnitInfo;
+            _unitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
-            ConvertedInfo = ConvertInfo(UnitInfo, Converter.AxisType);
+            _convertedInfo = ConvertInfo(_unitInfo, Converter.AxisType);
             UnitSetting(Converter.AxisType);
         }
         
         private void SynchronizationUnitPos(AxisType axis)
         {
-            if (staticUnit)
+            if (staticUnit || IsHide)
             {
                 return;
             }
@@ -206,7 +206,7 @@ namespace AxisConvertSystem
             }
             else
             {
-                UnitInfo.LocalPos = transform.localPosition;
+                _unitInfo.LocalPos = transform.localPosition;
             }
         }
 
@@ -229,9 +229,9 @@ namespace AxisConvertSystem
 
             var diff = hit.point - hit.collider.bounds.center;
             var standPos = hit.transform.localPosition + diff;
-            var info = hit.transform.TryGetComponent<ObjectUnit>(out var unit) ? unit.UnitInfo : UnitInfo;
+            var info = hit.transform.TryGetComponent<ObjectUnit>(out var unit) ? unit._unitInfo : _unitInfo;
             standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
-            UnitInfo.LocalPos = standPos;
+            _unitInfo.LocalPos = standPos;
         }
 
         public override void OnPop()

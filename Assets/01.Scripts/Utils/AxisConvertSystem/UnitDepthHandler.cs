@@ -22,7 +22,7 @@ namespace AxisConvertSystem
         {
             Depth = float.MaxValue;
             
-            if (axis == AxisType.None)
+            if (axis == AxisType.None || _owner.IsHide)
             {
                 return;
             }
