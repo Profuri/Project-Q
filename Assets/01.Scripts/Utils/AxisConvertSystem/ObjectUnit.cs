@@ -35,6 +35,7 @@ namespace AxisConvertSystem
             {
                 Rigidbody = GetComponent<Rigidbody>();
                 Rigidbody.useGravity = false;
+                Rigidbody.isKinematic = true;
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
             DepthHandler = new UnitDepthHandler(this);
