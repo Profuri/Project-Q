@@ -56,6 +56,7 @@ namespace Fabgrid
         public KeyCode resetTileRotationKey = KeyCode.R;
         public const KeyCode focusOnObjectKey = KeyCode.LeftControl;
 
+
         public string searchValue = "";
 
         public const float MIN_GRID_SPACING = 0.0001f;

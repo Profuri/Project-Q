@@ -31,9 +31,6 @@ namespace Fabgrid
         private static readonly string[] s_uxmlNames = 
             { "Fields/ToggleField.uxml", "Fields/DropdownField.uxml", "Fields/InputField.uxml" };
 
-        private Dictionary<FieldInfo, PanelField> _fieldDictionary;
-
-        //This is test Code. Will be changed.
         public void SetRoot(VisualElement root)
         {
             _root = root;
@@ -52,8 +49,6 @@ namespace Fabgrid
             _tilemap = tilemap;
             _root = root;
 
-
-            _fieldDictionary = new Dictionary<FieldInfo, PanelField>();
 
             string[] fieldPathArray = new string[s_uxmlNames.Length];
 
@@ -84,8 +79,6 @@ namespace Fabgrid
             {
                 CreateVisualTree(fieldInfo);
             }
-            
-            Debug.LogError("CreateFormatPanel");
         }
 
         ~FormatPanel()
@@ -93,34 +86,6 @@ namespace Fabgrid
             GC.Collect();
         }
 
-        //selectedGameObject가 바뀌었을 때 이벤트 형식으로 구독하여 실행해주거나 다른 방식으로라도 구독형식으로 만들면 될 것 같음.
-        // [ContextMenu("LoadFieldInfo")]
-        //
-        // public void LoadFieldInfo()
-        // {
-        //     if (_tilemap.lastSelectedGameObject == null)
-        //     {
-        //         Debug.Log($"TileMapLastSelectedGameObject is null!");
-        //         return;
-        //     }
-        //     
-        //     _fieldDictionary.Clear();
-        //     _root?.Clear();
-        //     
-        //     if (_tilemap.selectedTile.prefab.TryGetComponent(out IProvidableFieldInfo provideInfo))
-        //     {
-        //         var fieldInfoList = new List<FieldInfo>();
-        //     
-        //         fieldInfoList = provideInfo.GetFieldInfos();
-        //     
-        //         foreach (var fieldInfo in fieldInfoList)
-        //         {
-        //             if (_fieldDictionary.ContainsKey(fieldInfo)) continue;
-        //     
-        //             CreateVisualTree(fieldInfo);
-        //         }
-        //     }
-        // }
         public void LoadFieldInfo()
         {
             if (_tilemap.lastSelectedGameObject == null)
@@ -129,27 +94,17 @@ namespace Fabgrid
                 return;
             }
             
-            _fieldDictionary.Clear();
             _root?.Clear();
         
             if (_tilemap.lastSelectedGameObject.TryGetComponent(out IProvidableFieldInfo provideInfo))
             {
+                List<FieldInfo> fieldInfos = provideInfo.GetFieldInfos();
                 FieldInfoStorage.SetFieldInfo(provideInfo);
                 
-                
-                List<FieldInfo> fieldInfos = FieldInfoStorage.GetFieldInfo();
                 foreach (FieldInfo fieldInfo in fieldInfos)
                 {
                     CreateVisualTree(fieldInfo);
                 }
-                
-                Debug.Log("SaveFieldInfo");
-               // foreach (var fieldInfo in fieldInfoList)
-               // {
-               //     if (_fieldDictionary.ContainsKey(fieldInfo)) continue;
-        
-               //     CreateVisualTree(fieldInfo);
-               // }
             }
         }
 
@@ -157,7 +112,6 @@ namespace Fabgrid
         {
             Type type = info.FieldType;
 
-            if (_fieldDictionary.ContainsKey(info)) return;                                                                      
 
             PanelField panelField = null;
 
@@ -167,7 +121,6 @@ namespace Fabgrid
                 return;
             }
             
-
             if (type.IsEnum)
                 panelField = new DropdownField(_root, _dropDownField, info);
             else if (type.IsValueType)
@@ -179,9 +132,6 @@ namespace Fabgrid
                 else if (type == typeof(int))
                     panelField = new InputField<int>(_root, _inputField, info);
             }
-            _fieldDictionary.Add(info,panelField);
         }
-        
-
     }
 }
