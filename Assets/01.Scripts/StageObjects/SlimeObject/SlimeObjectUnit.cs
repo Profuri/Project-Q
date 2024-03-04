@@ -67,9 +67,9 @@ public class SlimeObjectUnit : ObjectUnit
         base.Convert(axisType);
     }
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
+        base.UpdateUnit();
         if (_canFindModule)
         {
             FindModule();

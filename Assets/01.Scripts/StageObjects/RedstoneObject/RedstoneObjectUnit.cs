@@ -26,12 +26,11 @@ public class RedstoneObjectUnit : InteractableObject
 
     [SerializeField] private bool _isToggle;
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
+        base.UpdateUnit();
         
         _renderer.material.color = _isOn ? _targetColor : _originColor;
-
 
         if (_isToggle)
         {
