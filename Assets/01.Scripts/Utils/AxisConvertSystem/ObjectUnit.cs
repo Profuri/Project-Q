@@ -35,7 +35,6 @@ namespace AxisConvertSystem
             {
                 Rigidbody = GetComponent<Rigidbody>();
                 Rigidbody.useGravity = false;
-                Rigidbody.isKinematic = true;
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
             DepthHandler = new UnitDepthHandler(this);
@@ -79,7 +78,10 @@ namespace AxisConvertSystem
                 return;
             }
 
-            DepthHandler.CalcDepth(axis);
+            if (!staticUnit)
+            {
+                DepthHandler.DepthCheckPointSetting();
+            }
             SynchronizationUnitPos(axis);
             _convertedInfo = ConvertInfo(_unitInfo, axis);
         }

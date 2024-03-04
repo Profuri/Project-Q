@@ -71,6 +71,11 @@ namespace AxisConvertSystem
             
             _section.SectionUnits.ForEach(unit =>
             {
+                unit.DepthHandler.CalcDepth(axisType);
+            });
+            
+            _section.SectionUnits.ForEach(unit =>
+            {
                 unit.UnitSetting(axisType);
             });
 

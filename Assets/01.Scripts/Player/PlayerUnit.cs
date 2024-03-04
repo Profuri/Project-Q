@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AxisConvertSystem;
 using InputControl;
 using InteractableSystem;
@@ -18,7 +19,7 @@ public class PlayerUnit : ObjectUnit
     private PlayerUIController _playerUiController;
 
     private InteractableObject _selectedInteractableObject;
-    private ObjectUnit _backgroundUnit;
+    private List<ObjectUnit> _backgroundUnits;
         
     public bool OnGround => CheckGround();
     private readonly int _activeHash = Animator.StringToHash("Active");
@@ -38,6 +39,8 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerJumpState(_stateController, true, "Jump"));
         _stateController.RegisterState(new PlayerFallState(_stateController, true, "Fall"));
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
+
+        _backgroundUnits = new List<ObjectUnit>();
     }
 
     public override void UpdateUnit()
@@ -120,33 +123,54 @@ public class PlayerUnit : ObjectUnit
 
     private void CheckBackgroundUnit()
     {
-        var origin = Collider.bounds.center;
+        var center = Collider.bounds.center;
+        var radius = ((CapsuleCollider)Collider).radius * 0.8f;
+        var height = ((CapsuleCollider)Collider).height * 0.8f;
         var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
-        origin.SetAxisElement(Converter.AxisType,
-            origin.GetAxisElement(Converter.AxisType) - dir.GetAxisElement(Converter.AxisType));
 
-        var isHit = Physics.Raycast(origin, dir, out var hit, Mathf.Infinity, _data.backgroundMask);
+        var p1 = center + Vector3.up * (height / 2f);
+        var p2 = center - Vector3.up * (height / 2f);
+        
+        p1.SetAxisElement(Converter.AxisType,
+            p1.GetAxisElement(Converter.AxisType) - dir.GetAxisElement(Converter.AxisType));
+        p2.SetAxisElement(Converter.AxisType,
+            p2.GetAxisElement(Converter.AxisType) - dir.GetAxisElement(Converter.AxisType));
 
-        if (isHit)
+        var hits = new RaycastHit[10];
+        var size = Physics.CapsuleCastNonAlloc(p1, p2, radius, dir, hits, Mathf.Infinity, _data.backgroundMask);
+        
+        if (size > 0)
         {
-            if (hit.collider.isTrigger)
+            for (var i = 0; i < size; i++)
             {
-                return;
-            }
-            
-            if (hit.transform.TryGetComponent<ObjectUnit>(out var unit))
-            {
-                _backgroundUnit = unit;
-                _backgroundUnit.Collider.isTrigger = true;
+                if (hits[i].transform.TryGetComponent<ObjectUnit>(out var unit))
+                {
+                    if (unit.Collider.isTrigger)
+                    {
+                        return;
+                    }
+
+                    unit.Collider.isTrigger = true;
+                    // if (!unit.staticUnit)
+                    // {
+                    //     unit.Rigidbody.isKinematic = true;
+                    // }
+                    _backgroundUnits.Add(unit);
+                }
             }
         }
         else
         {
-            if (_backgroundUnit)
+            for (var i = 0; i < _backgroundUnits.Count; i++)
             {
-                _backgroundUnit.Collider.isTrigger = false;
-                _backgroundUnit = null;
+                _backgroundUnits[i].Collider.isTrigger = false;
+                // if (!_backgroundUnits[i].staticUnit)
+                // {
+                //     _backgroundUnits[i].Rigidbody.isKinematic = false;
+                // }
+                _backgroundUnits[i] = null;
             }
+            _backgroundUnits.Clear();
         }
     }
 
@@ -184,6 +208,27 @@ public class PlayerUnit : ObjectUnit
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+        if (Collider)
+        {
+            Gizmos.color = Color.red;
+            var center = Collider.bounds.center;
+            var radius = ((CapsuleCollider)Collider).radius;
+            var height = ((CapsuleCollider)Collider).height;
+            var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
+
+            var p1 = center + Vector3.up * (height / 2f);
+            var p2 = center - Vector3.up * (height / 2f);
+            
+            p1.SetAxisElement(Converter.AxisType,
+                p1.GetAxisElement(Converter.AxisType) - dir.GetAxisElement(Converter.AxisType));
+            p2.SetAxisElement(Converter.AxisType,
+                p2.GetAxisElement(Converter.AxisType) - dir.GetAxisElement(Converter.AxisType));
+            
+            Gizmos.DrawWireCube(center, Vector3.one + Vector3.up * height);
+            Gizmos.DrawWireSphere(p1, radius);
+            Gizmos.DrawWireSphere(p2, radius);
+        }
+        
         Gizmos.color = Color.cyan;
 
         var col = GetComponent<Collider>();
