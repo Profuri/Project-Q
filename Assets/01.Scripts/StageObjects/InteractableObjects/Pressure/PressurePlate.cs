@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using InteractableSystem;
 using AxisConvertSystem;
+using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class PressurePlate : InteractableObject
 {
@@ -13,9 +13,7 @@ public class PressurePlate : InteractableObject
     [SerializeField] private float _minHeight;
 
     [SerializeField] private List<InteractableObject> _affectedObjects;
-
-    [SerializeField] private UnityEvent<bool> _onToggleChangeEvent;
-    [SerializeField] private bool _eventInverse;
+    [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
 
     private Transform _pressureMainTrm;
     private Transform _pressureObjTrm;
@@ -36,7 +34,10 @@ public class PressurePlate : InteractableObject
         var curToggleState = CheckPressed();
         if (_lastToggleState != curToggleState)
         {
-            _onToggleChangeEvent?.Invoke(_eventInverse ? !curToggleState : curToggleState);
+            foreach (var toggleChangeEvent in _onToggleChangeEvents)
+            {
+                toggleChangeEvent.Invoke(curToggleState);
+            }
         }
         _lastToggleState = curToggleState;
         OnInteraction(null, _lastToggleState);

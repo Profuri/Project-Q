@@ -212,8 +212,8 @@ public class PlayerUnit : ObjectUnit
         {
             Gizmos.color = Color.red;
             var center = Collider.bounds.center;
-            var radius = ((CapsuleCollider)Collider).radius;
-            var height = ((CapsuleCollider)Collider).height;
+            var radius = ((CapsuleCollider)Collider).radius * 0.8f;
+            var height = ((CapsuleCollider)Collider).height * 0.8f;
             var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
 
             var p1 = center + Vector3.up * (height / 2f);
@@ -224,7 +224,6 @@ public class PlayerUnit : ObjectUnit
             p2.SetAxisElement(Converter.AxisType,
                 p2.GetAxisElement(Converter.AxisType) - dir.GetAxisElement(Converter.AxisType));
             
-            Gizmos.DrawWireCube(center, Vector3.one + Vector3.up * height);
             Gizmos.DrawWireSphere(p1, radius);
             Gizmos.DrawWireSphere(p2, radius);
         }

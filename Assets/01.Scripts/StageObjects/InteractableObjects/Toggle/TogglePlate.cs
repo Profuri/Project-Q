@@ -8,9 +8,9 @@ public class TogglePlate : InteractableObject
 {
     [SerializeField] private float _maxHeight;
     [SerializeField] private float _minHeight;
+    
     [SerializeField] private List<InteractableObject> _affectedObjects;
-
-    [SerializeField] private UnityEvent<bool> _onToggleChangeEvent;
+    [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
     
     private Transform _pressureMainTrm;
     private Transform _pressureObjTrm;
@@ -28,13 +28,19 @@ public class TogglePlate : InteractableObject
     {
         base.Init(converter);
         _isToggle = false;
-        _onToggleChangeEvent?.Invoke(_isToggle);
+        foreach (var toggleChangeEvent in _onToggleChangeEvents)
+        {
+            toggleChangeEvent.Invoke(_isToggle);
+        }
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         _isToggle = !_isToggle;
-        _onToggleChangeEvent?.Invoke(_isToggle);
+        foreach (var toggleChangeEvent in _onToggleChangeEvents)
+        {
+            toggleChangeEvent.Invoke(_isToggle);
+        }
     }
 
     public override void UpdateUnit()
