@@ -15,6 +15,7 @@ public class PressurePlate : InteractableObject
     [SerializeField] private List<InteractableObject> _affectedObjects;
 
     [SerializeField] private UnityEvent<bool> _onToggleChangeEvent;
+    [SerializeField] private bool _eventInverse;
 
     private Transform _pressureMainTrm;
     private Transform _pressureObjTrm;
@@ -29,14 +30,15 @@ public class PressurePlate : InteractableObject
         _pressureObjTrm = _pressureMainTrm.Find("PressureObject");
     }
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
-        if (_lastToggleState != CheckPressed())
+        base.UpdateUnit();
+        var curToggleState = CheckPressed();
+        if (_lastToggleState != curToggleState)
         {
-            _lastToggleState = !_lastToggleState;
-            _onToggleChangeEvent?.Invoke(_lastToggleState);
+            _onToggleChangeEvent?.Invoke(_eventInverse ? !curToggleState : curToggleState);
         }
+        _lastToggleState = curToggleState;
         OnInteraction(null, _lastToggleState);
     }
 
@@ -58,31 +60,28 @@ public class PressurePlate : InteractableObject
         var scale = _pressureMainTrm.localScale;
         scale.y = Mathf.Lerp(current, dest, Time.deltaTime * _pressSpeed);
         _pressureMainTrm.localScale = scale;
-
     }
 
     private bool CheckPressed()
     {
-        var checkPos = _pressureObjTrm.position
-            + Vector3.up 
-            * (_pressureObjTrm.localScale.y * _pressureMainTrm.localScale.y / 2 + _pressureObjTrm.localScale.y / 2);
+        var checkPos = Collider.bounds.center;
         var checkSize = _pressureObjTrm.localScale;
 
-        var cols = new Collider[1];
+        var cols = new Collider[2];
         var size = Physics.OverlapBoxNonAlloc(checkPos, checkSize / 2, cols, Quaternion.identity, _pressionorMask);
 
-        if (size <= 0)
+        if (size <= 1)
         {
             return false;
         }
-        
-        if (cols[0].TryGetComponent<InteractableObject>(out var interactable))
+
+        if (cols[1].TryGetComponent<InteractableObject>(out var interactable))
         {
             return interactable.Attribute.HasFlag(EInteractableAttribute.CAN_PRESS_THE_PRESSURE_PLATE);
         }
 
         return true;
-    }
+}
     
 #if UNITY_EDITOR
     private void OnDrawGizmos()
@@ -90,9 +89,7 @@ public class PressurePlate : InteractableObject
         if (_pressureObjTrm)
         {
             Gizmos.color = Color.yellow;
-            var checkPos = _pressureObjTrm.position
-                + Vector3.up 
-                * (_pressureObjTrm.localScale.y * _pressureMainTrm.localScale.y / 2 + _pressureObjTrm.localScale.y / 2);
+            var checkPos = Collider.bounds.center;
             var checkSize = _pressureObjTrm.localScale;
             Gizmos.DrawWireCube(checkPos, checkSize);
         }
@@ -102,9 +99,9 @@ public class PressurePlate : InteractableObject
             Gizmos.color = Color.black;
             foreach (var obj in _affectedObjects)
             {
-                if (obj == null)
+                if (obj is null)
                 {
-                    return;
+                    continue;
                 }
                 Gizmos.DrawLine(transform.position, obj.transform.position);
             }

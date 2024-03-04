@@ -4,6 +4,7 @@ namespace AxisConvertSystem
     {
         Default = 1,
         InteractableObject,
+        Obstacle,
         Goal,
         Player,
     }

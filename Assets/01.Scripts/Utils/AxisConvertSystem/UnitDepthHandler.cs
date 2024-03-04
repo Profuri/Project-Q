@@ -22,7 +22,7 @@ namespace AxisConvertSystem
         {
             Depth = float.MaxValue;
             
-            if (axis == AxisType.None)
+            if (axis == AxisType.None || _owner.IsHide)
             {
                 return;
             }
@@ -32,7 +32,7 @@ namespace AxisConvertSystem
                 DepthCheckPointSetting();
             }
 
-            if (_owner.Converter.Units.Where(unit => unit != _owner).Any(
+            if (_owner.Section.SectionUnits.Where(unit => unit != _owner).Any(
                     unit => _depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis])))
             {
                 Depth = 0f;

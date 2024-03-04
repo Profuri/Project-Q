@@ -8,24 +8,19 @@ namespace AxisConvertSystem
     {
         [SerializeField] private LayerMask _objectMask;
         public LayerMask ObjectMask => _objectMask;
-
-        public List<ObjectUnit> Units { get; private set; }
+        
         public AxisType AxisType { get; private set; }
 
         public bool Convertable { get; private set; }
 
+        private Section _section;
+
         public void Init(Section section)
         {
             AxisType = AxisType.None;
+            _section = section;
             SetConvertable(section is Stage);
-
-            if (section is Stage)
-            {
-                Units ??= new List<ObjectUnit>();
-                Units.Clear();
-                section.GetComponentsInChildren(Units);
-                Units.ForEach(unit => unit.Init(this));
-            }
+            section.SectionUnits.ForEach(unit => unit.Init(this));
         }
 
         public void SetConvertable(bool convertable)
@@ -69,12 +64,12 @@ namespace AxisConvertSystem
             VolumeManager.Instance.Highlight(0.2f);
             LightManager.Instance.SetShadow(axisType == AxisType.None ? LightShadows.Soft : LightShadows.None);
 
-            Units.ForEach(unit =>
+            _section.SectionUnits.ForEach(unit =>
             {
                 unit.Convert(axisType);
             });
             
-            Units.ForEach(unit =>
+            _section.SectionUnits.ForEach(unit =>
             {
                 unit.UnitSetting(axisType);
             });

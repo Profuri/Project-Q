@@ -7,9 +7,9 @@ public class ObstacleObject : InteractableObject
 {
     [SerializeField] private LayerMask _damageableMask;
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
+        base.UpdateUnit();
         OnInteraction(null, false);
     }
 
