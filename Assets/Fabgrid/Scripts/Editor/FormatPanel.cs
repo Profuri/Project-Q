@@ -33,22 +33,6 @@ namespace Fabgrid
 
         private Dictionary<FieldInfo, PanelField> _fieldDictionary;
 
-        public List<FieldInfo> GetFieldInfoList
-        {
-            get
-            {
-                Debug.Log("GetFieldInfoList");
-                foreach (var kvp in _fieldDictionary)
-                {
-                    Debug.Log($"FieldInfo: {kvp.Key} PanelField: {kvp.Value}");
-                }
-
-                return _fieldDictionary.Keys.ToList();
-            }
-        }
-        
-
-
         //This is test Code. Will be changed.
         public void SetRoot(VisualElement root)
         {
@@ -93,39 +77,25 @@ namespace Fabgrid
             _inputField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[2]);    
 
             _tilemap.OnSelectedPanelChanged += LoadFieldInfo;
+
+
+            List<FieldInfo> fieldInfos = FieldInfoStorage.GetFieldInfo();
+            foreach (FieldInfo fieldInfo in fieldInfos)
+            {
+                CreateVisualTree(fieldInfo);
+            }
             
             Debug.LogError("CreateFormatPanel");
         }
 
+        ~FormatPanel()
+        {
+            GC.Collect();
+        }
 
         //selectedGameObject가 바뀌었을 때 이벤트 형식으로 구독하여 실행해주거나 다른 방식으로라도 구독형식으로 만들면 될 것 같음.
-        [ContextMenu("LoadFieldInfo")]
-
-        public void LoadFieldInfo()
-        {
-            if (_tilemap.lastSelectedGameObject == null)
-            {
-                Debug.Log($"TileMapLastSelectedGameObject is null!");
-                return;
-            }
-            
-            _fieldDictionary.Clear();
-            _root?.Clear();
-            
-            if (_tilemap.selectedTile.prefab.TryGetComponent(out IProvidableFieldInfo provideInfo))
-            {
-                var fieldInfoList = new List<FieldInfo>();
-            
-                fieldInfoList = provideInfo.GetFieldInfos();
-            
-                foreach (var fieldInfo in fieldInfoList)
-                {
-                    if (_fieldDictionary.ContainsKey(fieldInfo)) continue;
-            
-                    CreateVisualTree(fieldInfo);
-                }
-            }
-        }
+        // [ContextMenu("LoadFieldInfo")]
+        //
         // public void LoadFieldInfo()
         // {
         //     if (_tilemap.lastSelectedGameObject == null)
@@ -136,21 +106,52 @@ namespace Fabgrid
         //     
         //     _fieldDictionary.Clear();
         //     _root?.Clear();
-        //
-        //     if (_tilemap.lastSelectedGameObject.TryGetComponent(out IProvidableFieldInfo provideInfo))
+        //     
+        //     if (_tilemap.selectedTile.prefab.TryGetComponent(out IProvidableFieldInfo provideInfo))
         //     {
         //         var fieldInfoList = new List<FieldInfo>();
-        //
+        //     
         //         fieldInfoList = provideInfo.GetFieldInfos();
-        //
+        //     
         //         foreach (var fieldInfo in fieldInfoList)
         //         {
         //             if (_fieldDictionary.ContainsKey(fieldInfo)) continue;
-        //
+        //     
         //             CreateVisualTree(fieldInfo);
         //         }
         //     }
         // }
+        public void LoadFieldInfo()
+        {
+            if (_tilemap.lastSelectedGameObject == null)
+            {
+                Debug.Log($"TileMapLastSelectedGameObject is null!");
+                return;
+            }
+            
+            _fieldDictionary.Clear();
+            _root?.Clear();
+        
+            if (_tilemap.lastSelectedGameObject.TryGetComponent(out IProvidableFieldInfo provideInfo))
+            {
+                FieldInfoStorage.SetFieldInfo(provideInfo);
+                
+                
+                List<FieldInfo> fieldInfos = FieldInfoStorage.GetFieldInfo();
+                foreach (FieldInfo fieldInfo in fieldInfos)
+                {
+                    CreateVisualTree(fieldInfo);
+                }
+                
+                Debug.Log("SaveFieldInfo");
+               // foreach (var fieldInfo in fieldInfoList)
+               // {
+               //     if (_fieldDictionary.ContainsKey(fieldInfo)) continue;
+        
+               //     CreateVisualTree(fieldInfo);
+               // }
+            }
+        }
 
         private void CreateVisualTree(FieldInfo info)
         {
