@@ -46,10 +46,10 @@ namespace AxisConvertSystem.Editor
             VariableLoad(ref _target.activeUnit, EditorGUILayout.Toggle("Active Unit", _target.activeUnit));
 
             if (!_target.staticUnit)
-            {
+            {                                      
                 GUILayout.Space(10);
                 GUILayout.Label("For Dynamic Unit");
-                
+                    
                 VariableLoad(ref _target.canStandMask, GetLayerMaskField());
                 VariableLoad(ref _target.useGravity, EditorGUILayout.Toggle("Use Gravity", _target.useGravity));
             }
