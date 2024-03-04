@@ -10,6 +10,21 @@ public class GameManager : MonoSingleton<GameManager>
     public delegate void UnityEventListener();
     public event UnityEventListener OnStartEvent = null;
 
+    public PlayerUnit PlayerUnit
+    {
+        get
+        {
+            if (_playerUnit == null)
+            {
+                _playerUnit = FindObjectOfType<PlayerUnit>();
+            }
+
+            return _playerUnit;
+        }
+    }
+
+    private PlayerUnit _playerUnit;
+
     private void Awake()
     {
         var managers = GetComponentsInChildren<IManager>();
