@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using AxisConvertSystem;
 using UnityEngine;
-using UnityEngine.Animations;
 
 public class DisableAxisZone : MonoBehaviour
 {

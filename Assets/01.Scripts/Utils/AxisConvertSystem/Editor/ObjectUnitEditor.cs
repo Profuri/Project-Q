@@ -40,22 +40,28 @@ namespace AxisConvertSystem.Editor
             GUILayout.Space(20);
             
             GUILayout.Label("Default Unit Setting");
-            _target.compressLayer = (CompressLayer)EditorGUILayout.EnumPopup("Compress Layer", _target.compressLayer);
-            var staticUnit = _target.staticUnit;
-            staticUnit = EditorGUILayout.Toggle("Static Unit", staticUnit);
-            if (staticUnit != _target.staticUnit)
-            {
-                _target.staticUnit = staticUnit;
-                ReloadObject();
-            }
+            VariableLoad(ref _target.compressLayer, (CompressLayer)EditorGUILayout.EnumPopup("Compress Layer", _target.compressLayer));
+            VariableLoad(ref _target.staticUnit, EditorGUILayout.Toggle("Static Unit", _target.staticUnit));
+            VariableLoad(ref _target.climbableUnit, EditorGUILayout.Toggle("Climbable Unit", _target.climbableUnit));
+            VariableLoad(ref _target.activeUnit, EditorGUILayout.Toggle("Active Unit", _target.activeUnit));
 
             if (!_target.staticUnit)
             {
                 GUILayout.Space(10);
                 GUILayout.Label("For Dynamic Unit");
                 
-                _target.canStandMask.value = GetLayerMaskField();
-                _target.rayDistance = EditorGUILayout.FloatField("Ray Distance", _target.rayDistance);
+                VariableLoad(ref _target.canStandMask, GetLayerMaskField());
+                VariableLoad(ref _target.useGravity, EditorGUILayout.Toggle("Use Gravity", _target.useGravity));
+            }
+        }
+
+        private void VariableLoad<T>(ref T origin, T variable)
+        {
+            if (variable != null && !origin.Equals(variable))
+            {
+                origin = variable;
+                EditorUtility.SetDirty(_target);
+                ReloadObject();
             }
         }
 

@@ -362,8 +362,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8824785926155382499}
   - component: {fileID: 876833494473940348}
-  - component: {fileID: 29265477389722963}
-  - component: {fileID: 8355836498230990586}
+  - component: {fileID: 4416080438524765584}
   m_Layer: 8
   m_Name: PressurePlate
   m_TagString: Untagged
@@ -400,6 +399,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1466a513354844bcb5efe7096618169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
   _interactType: 1
   _attribute: 0
   _pressionorMask:
@@ -408,42 +413,31 @@ MonoBehaviour:
   _pressSpeed: 10
   _maxHeight: 1
   _minHeight: 0.35
-  _affectedObject: {fileID: 0}
---- !u!114 &29265477389722963
-MonoBehaviour:
+  _affectedObjects: []
+  _onToggleChangeEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!65 &4416080438524765584
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3381424117820884390}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _materialRenderSetting: 1
-  _colliderSetting: 1
-  _outlineSetting: 1
-  _interatableYAxis: 0
-  _rigidobySetting: 0
---- !u!114 &8355836498230990586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3381424117820884390}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 5
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3807855968137367363
 GameObject:
   m_ObjectHideFlags: 0

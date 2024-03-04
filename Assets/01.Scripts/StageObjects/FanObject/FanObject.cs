@@ -32,9 +32,9 @@ public class FanObject : InteractableObject
         _airParticle = _fanTrm.Find("AirParticle").GetComponent<ParticleSystem>();
     }
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
+        base.UpdateUnit();
         
         RotateFan();
         FloatingOther();

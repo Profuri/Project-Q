@@ -17,12 +17,12 @@ public class PlayerUnit : ObjectUnit
     private StateController _stateController;
     private PlayerUIController _playerUiController;
 
-    public bool OnGround => CheckGround();
-
     private InteractableObject _selectedInteractableObject;
-
+    private ObjectUnit _backgroundUnit;
+        
+    public bool OnGround => CheckGround();
     private readonly int _activeHash = Animator.StringToHash("Active");
-
+    
     public override void Awake()
     {
         base.Awake();
@@ -40,14 +40,22 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
     }
 
-    public override void Update()
+    public override void UpdateUnit()
     {
-        base.Update();
+        base.UpdateUnit();
         
         _stateController.UpdateState();
 
         _selectedInteractableObject = FindInteractable();
-        _playerUiController.SetKeyGuide(_selectedInteractableObject is not null);
+        CheckBackgroundUnit();
+        
+        _playerUiController.SetKeyGuide(HoldingHandler.IsHold || _selectedInteractableObject is not null);
+    }
+
+    public override void ReloadUnit()
+    {
+        base.ReloadUnit();
+        Converter.ConvertDimension(AxisType.None);
     }
 
     public override void OnPop()
@@ -55,7 +63,7 @@ public class PlayerUnit : ObjectUnit
         _inputReader.OnInteractionEvent += OnInteraction;
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
-    }
+    }   
 
     public override void OnPush()
     {
@@ -88,30 +96,66 @@ public class PlayerUnit : ObjectUnit
     
     private InteractableObject FindInteractable()
     {
+        if (HoldingHandler.IsHold)
+        {
+            return null;
+        }
+        
         var cols = new Collider[_data.maxInteractableCnt];
         var size = Physics.OverlapSphereNonAlloc(Collider.bounds.center, _data.interactableRadius, cols, _data.interactableMask);
 
         for(var i = 0; i < size; ++i)
         {
-            var interactable = cols[i].GetComponent<InteractableObject>();
-            
-            if (interactable is null)
+            if (cols[i].TryGetComponent<InteractableObject>(out var interactable))
             {
-                continue;
-            }
-                
-            if(interactable.InteractType == EInteractType.INPUT_RECEIVE)
-            {
-                return interactable;
+                if(interactable.InteractType == EInteractType.INPUT_RECEIVE)
+                {
+                    return interactable;
+                }
             }
         }
 
         return null;
     }
 
+    private void CheckBackgroundUnit()
+    {
+        var origin = Collider.bounds.center;
+        var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
+        origin.SetAxisElement(Converter.AxisType,
+            origin.GetAxisElement(Converter.AxisType) - dir.GetAxisElement(Converter.AxisType));
+
+        var isHit = Physics.Raycast(origin, dir, out var hit, Mathf.Infinity, _data.backgroundMask);
+
+        if (isHit)
+        {
+            if (hit.collider.isTrigger)
+            {
+                return;
+            }
+            
+            if (hit.transform.TryGetComponent<ObjectUnit>(out var unit))
+            {
+                _backgroundUnit = unit;
+                _backgroundUnit.Collider.isTrigger = true;
+            }
+        }
+        else
+        {
+            if (_backgroundUnit)
+            {
+                _backgroundUnit.Collider.isTrigger = false;
+                _backgroundUnit = null;
+            }
+        }
+    }
+
     public void SetSection(Section section)
     {
         transform.SetParent(section.transform);
+        Section = section;
+        section.SectionUnits.Add(this);
+        
         Converter.Init(section);
         OriginUnitInfo.LocalPos = section.PlayerResetPoint;
     }
@@ -123,6 +167,12 @@ public class PlayerUnit : ObjectUnit
 
     private void OnInteraction()
     {
+        if (HoldingHandler.IsHold)
+        {
+            HoldingHandler.Detach();
+            return;
+        }
+        
         if (_selectedInteractableObject is null)
         {
             return;
@@ -134,11 +184,6 @@ public class PlayerUnit : ObjectUnit
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (Application.isPlaying)
-        {
-            return;
-        }
-        
         Gizmos.color = Color.cyan;
 
         var col = GetComponent<Collider>();
