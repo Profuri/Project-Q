@@ -24,7 +24,6 @@ namespace AxisConvertSystem
         private UnitInfo _unitInfo;
         private UnitInfo _convertedInfo;
 
-
         public virtual void Awake()
         {
             IsHide = false;
@@ -230,11 +229,19 @@ namespace AxisConvertSystem
                 return;
             }
 
-            var diff = hit.point - hit.collider.bounds.center;
-            var standPos = hit.transform.localPosition + diff;
-            var info = hit.transform.TryGetComponent<ObjectUnit>(out var unit) ? unit._unitInfo : _unitInfo;
-            standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
-            _unitInfo.LocalPos = standPos;
+            if (hit.transform.TryGetComponent<ObjectUnit>(out var unit))
+            {
+                var info = unit._unitInfo;
+                
+                var diff = hit.point - hit.collider.bounds.center;
+                diff.y = 0;
+                
+                var standPos = hit.transform.localPosition + diff;
+                standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
+                standPos.y += info.LocalScale.y / 2f;
+                
+                _unitInfo.LocalPos = standPos;
+            }
         }
 
         public override void OnPop()
