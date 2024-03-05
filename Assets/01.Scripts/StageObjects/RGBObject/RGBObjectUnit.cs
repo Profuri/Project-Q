@@ -17,6 +17,8 @@ public enum RGBColor
 public class RGBObjectUnit : InteractableObject
 {
     private static readonly int s_allMatchColor = (int)(RGBColor.RED | RGBColor.BLUE |RGBColor.GREEN);
+
+    [SerializeField] private MeshRenderer _renderer;
     [Header("Color")]
     public RGBColor originColor;
     private RGBColor _affectedColor;
@@ -29,10 +31,23 @@ public class RGBObjectUnit : InteractableObject
     [SerializeField] private LayerMask _targetLayer;
     private float _rayLength = 50f;
 
+
+
     public override void Init(AxisConverter converter)
     {
         base.Init(converter);
+
+        if(_renderer == null)
+        {
+            _renderer = GetComponentInChildren<MeshRenderer>();
+        }
+        SettingColor(HasColor);
         SettingCollider();
+    }
+
+    private void SettingColor(RGBColor color)
+    {               
+        _renderer.material.color = GetColorFromRGBColor(color);
     }
 
     private void SettingCollider()
@@ -52,19 +67,19 @@ public class RGBObjectUnit : InteractableObject
         switch(color)
         {
             case RGBColor.RED:
-                return new Color(255, 0, 0, 0.3f);
+                return new Color(1, 0, 0, 0.3f);
             case RGBColor.GREEN:
-                return new Color(0,255,0,0.3f);
+                return new Color(0,1,0,0.3f);
             case RGBColor.BLUE:
-                return new Color(0,0,255,0.3f);
+                return new Color(0,0,1,0.3f);
             case RGBColor.RED | RGBColor.GREEN:
-                return new Color(255, 255, 0.6f);
+                return new Color(1, 1, 0.6f);
             case RGBColor.GREEN | RGBColor.BLUE:
-                return new Color(0, 255, 255, 0.6f);
+                return new Color(0, 1, 1, 0.6f);
             case RGBColor.RED | RGBColor.BLUE:
-                return new Color(255, 0, 255, 0.6f);
+                return new Color(1, 0, 1, 0.6f);
             case RGBColor.RED | RGBColor.GREEN | RGBColor.BLUE:
-                return new Color(255, 255, 255, 1f);
+                return new Color(1, 1, 1, 1f);
             default:
                 return Color.clear;
         }
@@ -142,5 +157,6 @@ public class RGBObjectUnit : InteractableObject
         }
 
         SettingCollider();
+        SettingColor(HasColor);
     }
 }

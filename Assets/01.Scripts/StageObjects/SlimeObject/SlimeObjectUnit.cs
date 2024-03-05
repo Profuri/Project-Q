@@ -44,20 +44,15 @@ public class SlimeObjectUnit : ObjectUnit
         if (axisType == AxisType.None)
         {
             _canImpact = (_applyAxisType & _prevAxisType) != 0;
-            _canFindModule = true;
-            Collider.enabled = true;
         }
         else
         {
-            if (axisType != AxisType.Y)
-            {
-                Collider.enabled = false;
-            }
             _prevAxisType = axisType;
-            _canFindModule = false;
+            FindModule();
         }
 
 
+        Debug.Log($"CanImpact: {_canImpact}");
         if (_canImpact)
         {
             //�̰� �÷��̾��� ��ġ�� �Ű����� ����Ǿ���ϴ� �κ�
@@ -70,10 +65,6 @@ public class SlimeObjectUnit : ObjectUnit
     public override void UpdateUnit()
     {
         base.UpdateUnit();
-        if (_canFindModule)
-        {
-            FindModule();
-        }
     }
 
     private void FindModule()
@@ -90,23 +81,6 @@ public class SlimeObjectUnit : ObjectUnit
                 var tuple = Tuple.Create(movementModule, bounceDirection);
                 _movementUnitList.Add(tuple);
             }
-        }
-    }
-
-
-    //이건 통통 튀기는거.
-    private void SlimeEffect(Tuple<ObjectUnit,Vector3> tuple)
-    {
-        Debug.Log($"SlimeEffect, Module: {tuple.Item1}");
-        var movementModule = tuple.Item1;
-        Vector3 bounceDirection = tuple.Item2;
-
-        Vector3 velocity = movementModule.Rigidbody.velocity;
-        float bouncePower = velocity.magnitude * _slimeMass;
-
-        if (bouncePower > 0.1f)
-        {
-            movementModule.SetVelocity(bounceDirection * bouncePower, false);
         }
     }
 
@@ -134,8 +108,6 @@ public class SlimeObjectUnit : ObjectUnit
     {
         Vector3 originScale = transform.localScale;
         Vector3 targetScale = transform.localScale;
-        if (axisType == AxisType.None) return;
-        else if (axisType == AxisType.Y) targetScale = new Vector3(1, 0, 1);
 
         transform.localScale = targetScale;
 
