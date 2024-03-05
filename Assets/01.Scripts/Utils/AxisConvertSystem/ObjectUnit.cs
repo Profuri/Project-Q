@@ -118,6 +118,8 @@ namespace AxisConvertSystem
             {
                 Rigidbody.FreezeAxisPosition(axis);
             }
+            
+            Debug.Break();
         }
         
         private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
@@ -246,6 +248,13 @@ namespace AxisConvertSystem
                 standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
                 standPos.y += info.LocalScale.y / 2f;
                 
+                _unitInfo.LocalPos = standPos;
+            }
+            else
+            {
+                var diff = hit.point - hit.collider.bounds.center;
+                var standPos = hit.transform.localPosition + diff;
+                standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
                 _unitInfo.LocalPos = standPos;
             }
         }
