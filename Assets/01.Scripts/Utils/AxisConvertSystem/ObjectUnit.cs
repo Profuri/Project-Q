@@ -41,15 +41,21 @@ namespace AxisConvertSystem
             Activate(activeUnit);
         }
 
-        public virtual void UpdateUnit()
+        public virtual void FixedUpdate()
         {
             if (!staticUnit)
             {
                 if (useGravity)
                 {
-                    Rigidbody.AddForce(Vector3.up * GameManager.Instance.CoreData.gravity);
+                    Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
                 }
+            }
+        }
 
+        public virtual void UpdateUnit()
+        {
+            if (!staticUnit)
+            {
                 if (transform.position.y <= GameManager.Instance.CoreData.destroyedDepth)
                 {
                     ReloadUnit();
