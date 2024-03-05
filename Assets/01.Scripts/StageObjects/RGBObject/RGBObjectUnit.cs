@@ -1,28 +1,74 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Linq;
 using AxisConvertSystem;
 using InteractableSystem;
 using UnityEngine;
 
-
-[Flags,Serializable]
+[Flags]
 public enum RGBColor
 {
-    RED,BLUE,GREEN
+    NONE = 0,
+    RED = 1,
+    GREEN = 2,
+    BLUE = 4,
 }
 
 public class RGBObjectUnit : InteractableObject
 {
-
+    private static readonly int s_allMatchColor = (int)(RGBColor.RED | RGBColor.BLUE |RGBColor.GREEN);
     [Header("Color")]
     public RGBColor originColor;
-    private RGBColor _hasColor;
+    private RGBColor _affectedColor;
+
+    public RGBColor HasColor => (originColor | _affectedColor);
+    public bool MatchRGBColor => (int)HasColor == s_allMatchColor;
+
 
     [Header("Layer")]
     [SerializeField] private LayerMask _targetLayer;
-    //이거 Ray 뒤에서 쏴야됨
-    [SerializeField] private float _rayLength = 10f;
+    private float _rayLength = 50f;
+
+    public override void Init(AxisConverter converter)
+    {
+        base.Init(converter);
+        SettingCollider();
+    }
+
+    private void SettingCollider()
+    {
+        if(MatchRGBColor)
+        {
+            Collider.isTrigger = false;
+        }
+        else
+        {
+            Collider.isTrigger = true;
+        }
+    }
+
+    private Color GetColorFromRGBColor(RGBColor color)
+    {
+        switch(color)
+        {
+            case RGBColor.RED:
+                return new Color(255, 0, 0, 0.3f);
+            case RGBColor.GREEN:
+                return new Color(0,255,0,0.3f);
+            case RGBColor.BLUE:
+                return new Color(0,0,255,0.3f);
+            case RGBColor.RED | RGBColor.GREEN:
+                return new Color(255, 255, 0.6f);
+            case RGBColor.GREEN | RGBColor.BLUE:
+                return new Color(0, 255, 255, 0.6f);
+            case RGBColor.RED | RGBColor.BLUE:
+                return new Color(255, 0, 255, 0.6f);
+            case RGBColor.RED | RGBColor.GREEN | RGBColor.BLUE:
+                return new Color(255, 255, 255, 1f);
+            default:
+                return Color.clear;
+        }
+    }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
@@ -34,65 +80,67 @@ public class RGBObjectUnit : InteractableObject
             {
                 TransitionRGB(rgbColor);
             }
-            else
-            {
-                UnTransitionRGB(rgbColor);
-            }
         }
         catch(Exception ex)
         {
-            Debug.LogError($"Can't change to rgb Color! Message: {ex.Message}");
+            Debug.LogError($"Can't convert to rgb Color! Message: {ex.Message}");
         }
     }
 
     private void FindRGBUnit(AxisType axis)
     {
+        if (MatchRGBColor) return;
         Vector3 direction = Vector3ExtensionMethod.GetAxisDir(axis);
         Vector3 center = transform.position;
         Vector3 halfExtents = Collider.bounds.extents * 0.5f;
         Quaternion rotation = transform.rotation;
 
-        RaycastHit[] hitInfos = Physics.BoxCastAll(center, halfExtents, direction, rotation, _rayLength,_targetLayer);
 
-        if (hitInfos.Length > 0)
+        List<RaycastHit> hitInfoList = new List<RaycastHit>();
+
+        var frontInfos = Physics.BoxCastAll(center, halfExtents, direction, rotation, _rayLength, _targetLayer);
+        var backInfos = Physics.BoxCastAll(center, halfExtents, -direction, rotation, _rayLength, _targetLayer);
+
+        for (int i = 0; i < frontInfos.Length; i++)
+            hitInfoList.Add(frontInfos[i]);
+        for(int i = 0; i < backInfos.Length; i++)
+            hitInfoList.Add(backInfos[i]);
+
+        
+
+
+        if (hitInfoList.Count > 0)
         {
-            List<RGBObjectUnit> rgbUnitList = new List<RGBObjectUnit>();
-            foreach (RaycastHit hitInfo in hitInfos)
+            foreach (RaycastHit hitInfo in hitInfoList)
             {
+                if (hitInfo.collider == Collider) continue;
                 if(hitInfo.collider.TryGetComponent(out RGBObjectUnit rgbUnit))
                 {
-                    rgbUnitList.Add(rgbUnit);
                     TransitionRGB(rgbUnit.originColor);
                 }
             }
-            rgbUnitList.ForEach(unit => unit.OnInteraction(this,true,_hasColor));
         }
-
-        Debug.Log($"Current Color: {_hasColor}");
+        Debug.Log($"HasColor: {HasColor}");
     }
 
     private void TransitionRGB(RGBColor color)
     {
-        _hasColor |= color;
+        _affectedColor = _affectedColor | color;
     }
-
-    private void UnTransitionRGB(RGBColor color)
-    {
-        _hasColor |= ~color;
-    }
-
 
     //이건 위치 값 변하기 전
     public override void Convert(AxisType axis)
     {
         base.Convert(axis);
-        FindRGBUnit(axis);
-    }
+        if(AxisType.None == axis)
+        {
+            _affectedColor = RGBColor.NONE;
+        }
+        else
+        {
+            FindRGBUnit(axis);
+        }
 
-
-    //이건 값 변경한 후
-    public override void UnitSetting(AxisType axis)
-    {
-        base.UnitSetting(axis);
+        SettingCollider();
     }
 }
