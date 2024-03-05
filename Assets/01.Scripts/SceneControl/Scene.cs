@@ -17,6 +17,7 @@ public class Scene : PoolableMono
     public override void OnPop()
     {
         Player = AddObject("Player") as PlayerUnit;
+        Player.transform.position = Vector3.zero;
     }
 
     public override void OnPush()
