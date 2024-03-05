@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using AxisConvertSystem;
 using InputControl;
 using InteractableSystem;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerUnit : ObjectUnit
@@ -50,9 +51,13 @@ public class PlayerUnit : ObjectUnit
         _stateController.UpdateState();
 
         _selectedInteractableObject = FindInteractable();
-        CheckBackgroundUnit();
         
         _playerUiController.SetKeyGuide(HoldingHandler.IsHold || _selectedInteractableObject is not null);
+    }
+
+    private void LateUpdate()
+    {
+        CheckBackgroundUnit();
     }
 
     public override void ReloadUnit()
@@ -145,31 +150,23 @@ public class PlayerUnit : ObjectUnit
             {
                 if (hits[i].transform.TryGetComponent<ObjectUnit>(out var unit))
                 {
-                    if (unit.Collider.isTrigger)
+                    if ((unit.Collider.excludeLayers & (1 << gameObject.layer)) > 0)
                     {
-                        return;
+                        continue;
                     }
-
-                    unit.Collider.isTrigger = true;
-                    // if (!unit.staticUnit)
-                    // {
-                    //     unit.Rigidbody.isKinematic = true;
-                    // }
+                    
+                    unit.Collider.excludeLayers |= 1 << gameObject.layer;
                     _backgroundUnits.Add(unit);
                 }
             }
         }
         else
         {
-            for (var i = 0; i < _backgroundUnits.Count; i++)
+            foreach (var unit in _backgroundUnits)
             {
-                _backgroundUnits[i].Collider.isTrigger = false;
-                // if (!_backgroundUnits[i].staticUnit)
-                // {
-                //     _backgroundUnits[i].Rigidbody.isKinematic = false;
-                // }
-                _backgroundUnits[i] = null;
+                unit.Collider.excludeLayers ^= 1 << gameObject.layer;
             }
+
             _backgroundUnits.Clear();
         }
     }

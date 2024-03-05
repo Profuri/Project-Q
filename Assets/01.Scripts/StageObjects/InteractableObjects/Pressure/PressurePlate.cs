@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using InteractableSystem;
 using AxisConvertSystem;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class PressurePlate : InteractableObject
@@ -29,7 +28,7 @@ public class PressurePlate : InteractableObject
     }
 
     public override void UpdateUnit()
-    {
+    { 
         base.UpdateUnit();
         var curToggleState = CheckPressed();
         if (_lastToggleState != curToggleState)
