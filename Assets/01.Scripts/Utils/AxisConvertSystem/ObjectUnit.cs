@@ -95,14 +95,11 @@ namespace AxisConvertSystem
         {
             if (!activeUnit)
             {
+                ApplyInfo(OriginUnitInfo, false);
                 return;
             }
             
-            transform.localPosition = _convertedInfo.LocalPos;
-            transform.localRotation = _convertedInfo.LocalRot;
-            transform.localScale = _convertedInfo.LocalScale;
-            Collider.SetCenter(_convertedInfo.ColliderCenter);
-            Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
+            ApplyInfo(_convertedInfo);
 
             if (IsHide)
             {
@@ -117,6 +114,18 @@ namespace AxisConvertSystem
             if (!staticUnit)
             {
                 Rigidbody.FreezeAxisPosition(axis);
+            }
+        }
+
+        private void ApplyInfo(UnitInfo info, bool hideSetting = true)
+        {
+            transform.localPosition = info.LocalPos;
+            transform.localRotation = info.LocalRot;
+            transform.localScale = info.LocalScale;
+            Collider.SetCenter(info.ColliderCenter);
+            if (hideSetting)
+            {
+                Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
             }
         }
         
