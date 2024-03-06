@@ -118,8 +118,6 @@ namespace AxisConvertSystem
             {
                 Rigidbody.FreezeAxisPosition(axis);
             }
-            
-            Debug.Break();
         }
         
         private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
