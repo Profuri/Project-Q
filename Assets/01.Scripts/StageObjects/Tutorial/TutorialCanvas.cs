@@ -60,6 +60,7 @@ public class TutorialCanvas : PoolableMono
         _indexBtnController.IndexCnt = tutorialSO.tutorialList.Count;
         _indexBtnController.OnIndexChanged += StartVideo;
         _tutorialSO = tutorialSO;
+
         ShowSequence(() =>
         {
             StartVideo(0);

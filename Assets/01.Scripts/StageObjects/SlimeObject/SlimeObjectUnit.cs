@@ -60,8 +60,8 @@ public class SlimeObjectUnit : ObjectUnit
     private List<ObjectUnit> GetMovementUnit()
     {
         List<ObjectUnit> unitList = new List<ObjectUnit>();
-
-        Vector3 checkCenterPos = transform.position + Vector3.up * Collider.bounds.size.y;
+        //+ Vector3.up * Collider.bounds.size.y
+        Vector3 checkCenterPos = Collider.bounds.center ;
         Vector3 halfExtents = Collider.bounds.extents * 0.5f + Vector3.up * 2f;
         Quaternion rotation = transform.rotation;
 
