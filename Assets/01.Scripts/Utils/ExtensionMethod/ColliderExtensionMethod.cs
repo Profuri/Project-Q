@@ -36,6 +36,7 @@ public static class ColliderExtensionMethod
 
         var max = col.bounds.max;
         var min = col.bounds.min;
+        var bounds = col.bounds;
 
         if (axis == AxisType.X)
         {
@@ -43,17 +44,20 @@ public static class ColliderExtensionMethod
             depthPoint.Min = new Vector2(min.z, min.y); // LB
             depthPoint.Z = max.x;
         }
+
         else if (axis == AxisType.Y)
         {
             depthPoint.Max = new Vector2(max.x, max.z); // RT
             depthPoint.Min = new Vector2(min.x, min.z); // LB
             depthPoint.Z = max.y;
         }
+
         else if (axis == AxisType.Z)
         {
             depthPoint.Max = new Vector2(max.x, max.y); // RT
             depthPoint.Min = new Vector2(min.x, min.y); // LB
             depthPoint.Z = -min.z;
+            //depthPoint.Z = max.
         }
 
         depthPoint.IsTrigger = col.isTrigger;

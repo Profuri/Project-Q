@@ -4,104 +4,42 @@ using AxisConvertSystem;
 using DG.Tweening;
 using UnityEngine;
 
-[System.Serializable]
-public class CheckCollision
-{
-    public Vector3 checkCenterPos = Vector3.zero;
-    public Vector3 checkScale = Vector3.zero;
-}
-
 public class SlimeObjectUnit : ObjectUnit
 {
     [Header("SlimeSettings")]
     [SerializeField] private float _bouncePower = 5f;
     [SerializeField] private LayerMask _targetLayer;
-    [SerializeField] private AxisType _applyAxisType;
     [SerializeField] private float _bounceTime = 0.5f;
-
     [SerializeField] private float _slimeMass = 0.1f;
 
-    [SerializeField] private List<CheckCollision> _collisionList = new List<CheckCollision>();
 
-
-    //x z 콜라이더 꺼
-    private bool _canImpact = false;
-    //�̰� ���߿� �������̽��� �ٲ�ߵɰ� ����.
-    private List<Tuple<ObjectUnit,Vector3>> _movementUnitList;
-    private bool _canFindModule;
     private AxisType _prevAxisType = AxisType.None;
     
-    public override void Awake()
+    public override void UnitSetting(AxisType axis)
     {
-        base.Awake();
-        _canFindModule = true;
-        _movementUnitList = new();
-    }
+        base.UnitSetting(axis);
 
-    public override void Convert(AxisType axisType)
-    {
-        Debug.Log($"AxisType: {axisType}");
-        if (axisType == AxisType.None)
+        if (axis == AxisType.None && _prevAxisType == AxisType.Y)
         {
-            _canImpact = (_applyAxisType & _prevAxisType) != 0;
-        }
-        else
-        {
-            _prevAxisType = axisType;
-            FindModule();
-        }
+            var unitList = GetMovementUnit();
 
-
-        Debug.Log($"CanImpact: {_canImpact}");
-        if (_canImpact)
-        {
-            //�̰� �÷��̾��� ��ġ�� �Ű����� ����Ǿ���ϴ� �κ�
-            ShowBounceEffect(axisType,SlimeImpact);
-        }
-
-        base.Convert(axisType);
-    }
-
-    public override void UpdateUnit()
-    {
-        base.UpdateUnit();
-    }
-
-    private void FindModule()
-    {
-        _movementUnitList.Clear();
-        var moduleList = GetMovementUnit();
-
-        foreach (var movementModule in moduleList)
-        {
-            if (movementModule != null)
+            ShowBounceEffect(axis, () =>
             {
-                Vector3 bounceDirection = GetBounceDirection(movementModule.transform.position);
-
-                var tuple = Tuple.Create(movementModule, bounceDirection);
-                _movementUnitList.Add(tuple);
-            }
+                foreach (var unit in unitList)
+                {
+                    Debug.Log($"Unit: {unit}");
+                    SlimeImpact(unit);
+                }
+            });
         }
+        _prevAxisType = axis;
     }
 
     //이건 압축 해제되었을 때 팍 튕겨나가는거.
-    private void SlimeImpact()
+    private void SlimeImpact(ObjectUnit unit)
     {
-        foreach(var movementModule in _movementUnitList)
-        {
-            if (movementModule != null)
-            {
-                //_movementModule.CanJump = true;
-                Vector3 bounceDirection = movementModule.Item2;
-                ObjectUnit unit = movementModule.Item1;
-
-                Debug.Log($"BounceDirection: {bounceDirection}");
-                unit.SetVelocity(bounceDirection * _bouncePower, false);
-                Debug.Log($"Velocity: {unit.Rigidbody.velocity}");
-            }
-        }
-
-        _canImpact = false;
+        Vector3 bounceDirection = Vector3.up;
+        unit.SetVelocity(bounceDirection * _bouncePower, false);
     }
 
     private void ShowBounceEffect(AxisType axisType, Action Callback)
@@ -119,61 +57,29 @@ public class SlimeObjectUnit : ObjectUnit
         seq.AppendCallback(() => Callback?.Invoke());
     }
 
-    private Vector3 GetBounceDirection(Vector3 modulePos)
-    {
-        Vector3 diffPos = modulePos - transform.position;
-        Vector3 returnDirection = Vector3.up;
-
-        if(diffPos.x > diffPos.y)
-        {
-            if(diffPos.z > diffPos.x)
-            {
-                returnDirection = Vector3.back;
-            }
-            else
-            {
-                returnDirection = Vector3.right;
-            }
-        }
-        return returnDirection;
-    }
-
     private List<ObjectUnit> GetMovementUnit()
     {
         List<ObjectUnit> unitList = new List<ObjectUnit>();
+        //+ Vector3.up * Collider.bounds.size.y
+        Vector3 checkCenterPos = Collider.bounds.center ;
+        Vector3 halfExtents = Collider.bounds.extents * 0.5f + Vector3.up * 2f;
+        Quaternion rotation = transform.rotation;
 
-        foreach (CheckCollision collision in _collisionList)
+        Collider[] cols = Physics.OverlapBox(checkCenterPos, halfExtents, rotation);
+
+        if (cols.Length > 0)
         {
-            Vector3 checkScale = collision.checkScale;
-            Vector3 checkCenterPos = collision.checkCenterPos;
-
-
-            Vector3 halfExtents = checkScale * 0.5f;
-            Quaternion rotation = transform.rotation;
-
-            Collider[] cols = Physics.OverlapBox(checkCenterPos, halfExtents, rotation, _targetLayer);
-
-            if (cols.Length > 0)
+            foreach (Collider col in cols)
             {
-                foreach (Collider col in cols)
+                if (col.TryGetComponent(out ObjectUnit unit))
                 {
-                    //if (col.TryGetComponent(out IBounceable bounceable))
-                    //{
-                    //    bounceable.BounceOff();
-                    //}
-
-                    if (col.TryGetComponent(out ObjectUnit unit))
+                    if (!unit.staticUnit)
                     {
-                        if (!unit.staticUnit)
-                        {
-                            Debug.Log($"FindModule: {unit}");
-                            unitList.Add(unit);
-                        }
+                        unitList.Add(unit);
                     }
                 }
             }
         }
-        
         return unitList;
     }
 
@@ -185,19 +91,11 @@ public class SlimeObjectUnit : ObjectUnit
         Gizmos.color = Color.green;
 
         var col = GetComponent<Collider>();
-        foreach(CheckCollision collision in _collisionList)
-        {
 
-            Vector3 checkCenterPos = collision.checkCenterPos;
-            Vector3 checkScale = collision.checkScale;
-            //center ��ġ�� �����ؾߵ�
-            if (checkCenterPos == Vector3.zero) checkCenterPos = transform.position;
-            if (checkScale == Vector3.zero) checkScale = col.bounds.size;
+        Vector3 checkCenterPos = transform.position + Vector3.up * Collider.bounds.size.y;
+        Vector3 checkScale = Collider.bounds.size;
 
-            Gizmos.DrawCube(checkCenterPos, checkScale);
-        }
-
-
+        Gizmos.DrawWireCube(checkCenterPos, checkScale);
     }
 #endif
 }

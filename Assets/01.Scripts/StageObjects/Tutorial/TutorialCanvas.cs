@@ -13,12 +13,13 @@ public class TutorialCanvas : PoolableMono
 {
     private VideoPlayer _videoPlayer;
     private RawImage _videoImage;
+    private Image _tutorialInfo;
+    private Image _fadeImage;
 
     private TextMeshProUGUI _infoText;
     private TutorialSO _tutorialSO;
 
     private Action OnVideoEnd;
-    private Action<int> OnLoadVideo;
 
     private IndexButtonController _indexBtnController;
 
@@ -26,6 +27,9 @@ public class TutorialCanvas : PoolableMono
     {
         Transform videoPlayerTrm = transform.Find("TutorialViewer/VideoPlayer");
         Transform tutorialInfoTrm = transform.Find("TutorialViewer/TutorialInfo");
+
+        _tutorialInfo = tutorialInfoTrm.GetComponent<Image>();
+        _fadeImage = transform.Find("TutorialViewer/FadeImage").GetComponent<Image>();
 
         _videoPlayer = videoPlayerTrm.GetComponent<VideoPlayer>();
         _videoImage = videoPlayerTrm.GetComponent<RawImage>();
@@ -56,6 +60,7 @@ public class TutorialCanvas : PoolableMono
         _indexBtnController.IndexCnt = tutorialSO.tutorialList.Count;
         _indexBtnController.OnIndexChanged += StartVideo;
         _tutorialSO = tutorialSO;
+
         ShowSequence(() =>
         {
             StartVideo(0);
@@ -65,8 +70,8 @@ public class TutorialCanvas : PoolableMono
     private void ShowSequence(Action Callback = null)
     {
         Sequence seq = DOTween.Sequence();
-        seq.Append(_videoImage.transform.DOScale(Vector3.zero, 0f));
-        seq.Append(_videoImage.transform.DOScale(Vector3.one, 0.3f));
+        seq.Append(_fadeImage.DOFade(0.5f, 1f));
+        seq.Join(_tutorialInfo.DOFade(1f, 1f));
         seq.AppendCallback(() =>
         {
             Callback?.Invoke();
