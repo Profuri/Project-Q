@@ -37,11 +37,6 @@ public class SlimeObjectUnit : ObjectUnit
         _prevAxisType = axis;
     }
 
-    public override void UpdateUnit()
-    {
-        base.UpdateUnit();
-    }
-
     //이건 압축 해제되었을 때 팍 튕겨나가는거.
     private void SlimeImpact(ObjectUnit unit)
     {
@@ -64,25 +59,6 @@ public class SlimeObjectUnit : ObjectUnit
         seq.AppendCallback(() => Callback?.Invoke());
     }
 
-    private Vector3 GetBounceDirection(Vector3 modulePos)
-    {
-        Vector3 diffPos = modulePos - transform.position;
-        Vector3 returnDirection = Vector3.up;
-
-        if(diffPos.x > diffPos.y)
-        {
-            if(diffPos.z > diffPos.x)
-            {
-                returnDirection = Vector3.back;
-            }
-            else
-            {
-                returnDirection = Vector3.right;
-            }
-        }
-        return returnDirection;
-    }
-
     private List<ObjectUnit> GetMovementUnit()
     {
         List<ObjectUnit> unitList = new List<ObjectUnit>();
@@ -91,15 +67,12 @@ public class SlimeObjectUnit : ObjectUnit
         Vector3 halfExtents = Collider.bounds.extents * 0.5f + Vector3.up * 2f;
         Quaternion rotation = transform.rotation;
 
-        Debug.Log($"CheckCenterPos: {checkCenterPos}, PlayerPos: {GameManager.Instance.PlayerUnit.transform.position}");
-
         Collider[] cols = Physics.OverlapBox(checkCenterPos, halfExtents, rotation);
 
         if (cols.Length > 0)
         {
             foreach (Collider col in cols)
             {
-                Debug.Log($"Col: {col.gameObject.name}");
                 if (col.TryGetComponent(out ObjectUnit unit))
                 {
                     if (!unit.staticUnit)
