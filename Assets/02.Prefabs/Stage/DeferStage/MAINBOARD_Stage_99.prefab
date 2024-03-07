@@ -35,7 +35,6 @@ Transform:
   m_Children:
   - {fileID: 7780122972822128261}
   - {fileID: 4169001175562677870}
-  - {fileID: 3331171170298772960}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7594163660643020892
@@ -50,6 +49,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f975e98f4bcf47c38f04f8533d511d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _objectMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &1906790396345683581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,10 +223,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab28cb4840553a54f82d77018cc3b2b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
   _interactType: 2
   _attribute: 0
   _redstoneInteractableList:
-  - _interactableUnit: {fileID: 1494267903485037361}
+  - interactableUnit: {fileID: 0}
     applyAxisType: 0
   _isOn: 0
   _renderer: {fileID: 4613175270134213737}
@@ -349,10 +359,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab28cb4840553a54f82d77018cc3b2b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
   _interactType: 2
   _attribute: 0
   _redstoneInteractableList:
-  - _interactableUnit: {fileID: 6233872940354473158}
+  - interactableUnit: {fileID: 0}
     applyAxisType: 1
   _isOn: 0
   _renderer: {fileID: 6317973331007540679}
@@ -477,6 +495,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fbc71ca629487348aade10ba3ee090c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
   _interactType: 2
   _attribute: 0
   _isOn: 0
@@ -688,12 +714,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _reloadOnCollisionToObstacle: 0
-  _materialRenderSetting: 1
-  _colliderSetting: 1
-  _outlineSetting: 1
-  _interatableYAxis: 0
-  _rigidobySetting: 0
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
 --- !u!1 &5835046062361940951
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,10 +945,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab28cb4840553a54f82d77018cc3b2b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
   _interactType: 2
   _attribute: 0
   _redstoneInteractableList:
-  - _interactableUnit: {fileID: 388852224805134297}
+  - interactableUnit: {fileID: 0}
     applyAxisType: 1
   _isOn: 0
   _renderer: {fileID: 4691341730886608529}
@@ -1169,106 +1205,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _reloadOnCollisionToObstacle: 0
-  _materialRenderSetting: 1
-  _colliderSetting: 1
-  _outlineSetting: 1
-  _interatableYAxis: 0
-  _rigidobySetting: 0
---- !u!1 &8444603724995036469
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3331171170298772960}
-  - component: {fileID: 5544646164580094537}
-  - component: {fileID: 3373896393513043427}
-  - component: {fileID: 3794646439109579538}
-  m_Layer: 0
-  m_Name: DestroyZone
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3331171170298772960
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8444603724995036469}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -20, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7312781529887421010}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &5544646164580094537
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8444603724995036469}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
     serializedVersion: 2
     m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 1, z: 50}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &3373896393513043427
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8444603724995036469}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &3794646439109579538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8444603724995036469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d88d55370113e402d95f16c93e8d8442, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  useGravity: 1
 --- !u!1 &8631988150959818645
 GameObject:
   m_ObjectHideFlags: 0
@@ -1387,10 +1331,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab28cb4840553a54f82d77018cc3b2b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
   _interactType: 2
   _attribute: 0
   _redstoneInteractableList:
-  - _interactableUnit: {fileID: 735649875189321629}
+  - interactableUnit: {fileID: 0}
     applyAxisType: 1
   _isOn: 0
   _renderer: {fileID: 5554586546819895576}

@@ -422,6 +422,8 @@ namespace Fabgrid
             selectedTileButton = button;
             selectedTileButton.AddToClassList("selected-tile-button");
 
+            tilemap.lastSelectedGameObject = tilemap.selectedTile.prefab;
+
             UpdateSelectedTileMeshPreview();
         }
 
