@@ -117,6 +117,15 @@ public class PlayerUnit : ObjectUnit
             {
                 if(interactable.InteractType == EInteractType.INPUT_RECEIVE)
                 {
+                    var dir = (cols[i].bounds.center - Collider.bounds.center).normalized;
+                    var isHit = Physics.Raycast(Collider.bounds.center - dir, dir, out var hit, Mathf.Infinity,
+                        _data.groundMask);
+
+                    if (isHit && cols[i] != hit.collider)
+                    {
+                        continue;
+                    }
+                    
                     return interactable;
                 }
             }
