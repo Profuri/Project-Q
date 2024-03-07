@@ -6,18 +6,18 @@ using UnityEngine.Video;
 
 public class TutorialManager : MonoSingleton<TutorialManager>
 {
-    [SerializeField] private TutorialSO _sampleSO;
-    private void Update()
+    public bool IsTutorialViewing { get; set; } = false;
+    private TutorialCanvas _currentCanvas;
+
+    public void StartTutorial(TutorialSO tutorialSO)
     {
-       if(Input.GetKeyDown(KeyCode.T))
-       {
-           StartVideoClip(_sampleSO);
-       }
+        _currentCanvas = SceneControlManager.Instance.AddObject("TutorialCanvas") as TutorialCanvas;
+        _currentCanvas.ShowTutorial(tutorialSO);
     }
 
-    public void StartVideoClip(TutorialSO tutorialSO)
+    public void StopTutorial()
     {
-        TutorialCanvas tutorialViewer = SceneControlManager.Instance.AddObject("TutorialCanvas") as TutorialCanvas;
-        tutorialViewer.ShowTutorial(tutorialSO);
+        SceneControlManager.Instance.DeleteObject(_currentCanvas);
     }
+
 }
