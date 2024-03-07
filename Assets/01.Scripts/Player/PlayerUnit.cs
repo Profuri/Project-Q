@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using AxisConvertSystem;
 using InputControl;
 using InteractableSystem;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerUnit : ObjectUnit
@@ -129,8 +128,8 @@ public class PlayerUnit : ObjectUnit
     private void CheckBackgroundUnit()
     {
         var center = Collider.bounds.center;
-        var radius = ((CapsuleCollider)Collider).radius * 0.8f;
-        var height = ((CapsuleCollider)Collider).height * 0.8f;
+        var radius = ((CapsuleCollider)Collider).radius * 0.7f;
+        var height = ((CapsuleCollider)Collider).height * 0.7f;
         var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
 
         var p1 = center + Vector3.up * (height / 2f);
@@ -209,8 +208,8 @@ public class PlayerUnit : ObjectUnit
         {
             Gizmos.color = Color.red;
             var center = Collider.bounds.center;
-            var radius = ((CapsuleCollider)Collider).radius * 0.8f;
-            var height = ((CapsuleCollider)Collider).height * 0.8f;
+            var radius = ((CapsuleCollider)Collider).radius;
+            var height = ((CapsuleCollider)Collider).height;
             var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
 
             var p1 = center + Vector3.up * (height / 2f);
