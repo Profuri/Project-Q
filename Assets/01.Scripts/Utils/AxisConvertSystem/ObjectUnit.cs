@@ -28,7 +28,6 @@ namespace AxisConvertSystem
         private UnitInfo _unitInfo;
         private UnitInfo _convertedInfo;
 
-
         public virtual void Awake()
         {
             IsHide = false;
@@ -46,15 +45,21 @@ namespace AxisConvertSystem
             Activate(activeUnit);
         }
 
-        public virtual void UpdateUnit()
+        public virtual void FixedUpdate()
         {
             if (!staticUnit)
             {
                 if (useGravity)
                 {
-                    Rigidbody.AddForce(Vector3.up * GameManager.Instance.CoreData.gravity);
+                    Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
                 }
+            }
+        }
 
+        public virtual void UpdateUnit()
+        {
+            if (!staticUnit)
+            {
                 if (transform.position.y <= GameManager.Instance.CoreData.destroyedDepth)
                 {
                     ReloadUnit();
@@ -94,14 +99,11 @@ namespace AxisConvertSystem
         {
             if (!activeUnit)
             {
+                ApplyInfo(OriginUnitInfo, false);
                 return;
             }
             
-            transform.localPosition = _convertedInfo.LocalPos;
-            transform.localRotation = _convertedInfo.LocalRot;
-            transform.localScale = _convertedInfo.LocalScale;
-            Collider.SetCenter(_convertedInfo.ColliderCenter);
-            Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
+            ApplyInfo(_convertedInfo);
 
             if (IsHide)
             {
@@ -116,6 +118,18 @@ namespace AxisConvertSystem
             if (!staticUnit)
             {
                 Rigidbody.FreezeAxisPosition(axis);
+            }
+        }
+
+        private void ApplyInfo(UnitInfo info, bool hideSetting = true)
+        {
+            transform.localPosition = info.LocalPos;
+            transform.localRotation = info.LocalRot;
+            transform.localScale = info.LocalScale;
+            Collider.SetCenter(info.ColliderCenter);
+            if (hideSetting)
+            {
+                Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
             }
         }
         
@@ -234,11 +248,26 @@ namespace AxisConvertSystem
                 return;
             }
 
-            var diff = hit.point - hit.collider.bounds.center;
-            var standPos = hit.transform.localPosition + diff;
-            var info = hit.transform.TryGetComponent<ObjectUnit>(out var unit) ? unit._unitInfo : _unitInfo;
-            standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
-            _unitInfo.LocalPos = standPos;
+            if (hit.transform.TryGetComponent<ObjectUnit>(out var unit))
+            {
+                var info = unit._unitInfo;
+                
+                var diff = hit.point - hit.collider.bounds.center;
+                diff.y = 0;
+                
+                var standPos = hit.transform.localPosition + diff;
+                standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
+                standPos.y += info.LocalScale.y / 2f;
+                
+                _unitInfo.LocalPos = standPos;
+            }
+            else
+            {
+                var diff = hit.point - hit.collider.bounds.center;
+                var standPos = hit.transform.localPosition + diff;
+                standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
+                _unitInfo.LocalPos = standPos;
+            }
         }
 
         public override void OnPop()

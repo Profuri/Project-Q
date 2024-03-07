@@ -15,6 +15,11 @@ namespace AxisConvertSystem.Editor
         
         public void OnEnable()
         {
+            if (target is not ObjectUnit)
+            {
+                return;
+            }
+            
             _target = (ObjectUnit)target;
 
             _layers = new List<string>();
