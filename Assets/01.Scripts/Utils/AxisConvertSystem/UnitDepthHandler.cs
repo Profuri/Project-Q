@@ -28,7 +28,7 @@ namespace AxisConvertSystem
             }
 
             if (_owner.Section.SectionUnits.Where(unit => unit != _owner).Any(
-                    unit => _depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis])))
+                    unit => _depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis],unit)))
             {
                 Depth = 0f;
             }

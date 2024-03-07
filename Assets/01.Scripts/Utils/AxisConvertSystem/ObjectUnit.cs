@@ -13,9 +13,13 @@ namespace AxisConvertSystem
         [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
         [HideInInspector] public bool activeUnit = true;
+
+
         
         [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public bool useGravity = true;
+
+
 
         public AxisConverter Converter { get; protected set; }
         public Collider Collider { get; private set; }
@@ -24,9 +28,12 @@ namespace AxisConvertSystem
         public Section Section { get; protected set; }
         public bool IsHide { get; private set; }
 
+
+
         protected UnitInfo OriginUnitInfo;
         private UnitInfo _unitInfo;
         private UnitInfo _convertedInfo;
+
 
         public virtual void Awake()
         {

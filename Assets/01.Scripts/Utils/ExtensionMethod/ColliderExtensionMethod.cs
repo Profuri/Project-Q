@@ -54,6 +54,7 @@ public static class ColliderExtensionMethod
             depthPoint.Max = new Vector2(max.x, max.y); // RT
             depthPoint.Min = new Vector2(min.x, min.y); // LB
             depthPoint.Z = -min.z;
+            //depthPoint.Z = max.
         }
 
         depthPoint.IsTrigger = col.isTrigger;
