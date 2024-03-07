@@ -3062,10 +3062,15 @@ PrefabInstance:
       propertyPath: _onToggleChangeEvents.Array.data[0].invokeEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9051760982490156419, guid: 304d04c8bbe3da1468dc7cf2e2680b0e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7317772573301592566, guid: 304d04c8bbe3da1468dc7cf2e2680b0e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 980779109287362836}
   m_SourcePrefab: {fileID: 100100000, guid: 304d04c8bbe3da1468dc7cf2e2680b0e, type: 3}
 --- !u!4 &4139366673705940013 stripped
 Transform:
@@ -3073,6 +3078,54 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3693941577070645227}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6255067951933382173 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7317772573301592566, guid: 304d04c8bbe3da1468dc7cf2e2680b0e,
+    type: 3}
+  m_PrefabInstance: {fileID: 3693941577070645227}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &980779109287362836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6255067951933382173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95f1261e23ba48d4280bedcd4a51feee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
+  _interactType: 0
+  _attribute: 0
+  _maxHeight: 1
+  _minHeight: 0.35
+  _affectedObjects: []
+  _onToggleChangeEvents:
+  - invokeEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4950122993727997872}
+          m_TargetAssemblyTypeName: AxisConvertSystem.ObjectUnit, Assembly-CSharp
+          m_MethodName: Activate
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    inverseValue: 1
 --- !u!1001 &4246557713068816547
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4016,11 +4069,50 @@ PrefabInstance:
       propertyPath: _affectedObjects.Array.data[0]
       value: 
       objectReference: {fileID: 8245901565940949707}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9051760982490156419, guid: 304d04c8bbe3da1468dc7cf2e2680b0e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7317772573301592566, guid: 304d04c8bbe3da1468dc7cf2e2680b0e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7591298769057376764}
   m_SourcePrefab: {fileID: 100100000, guid: 304d04c8bbe3da1468dc7cf2e2680b0e, type: 3}
+--- !u!1 &4185990397232166265 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7317772573301592566, guid: 304d04c8bbe3da1468dc7cf2e2680b0e,
+    type: 3}
+  m_PrefabInstance: {fileID: 6888910341431157903}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7591298769057376764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4185990397232166265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95f1261e23ba48d4280bedcd4a51feee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
+  _interactType: 0
+  _attribute: 0
+  _maxHeight: 1
+  _minHeight: 0.35
+  _affectedObjects:
+  - InteractableObject: {fileID: 8245901565940949707}
+    inverseValue: 0
+  _onToggleChangeEvents: []
 --- !u!4 &6172230779461328713 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 734781931107040198, guid: 304d04c8bbe3da1468dc7cf2e2680b0e,

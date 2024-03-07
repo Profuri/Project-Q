@@ -11,7 +11,7 @@ public class PressurePlate : InteractableObject
     [SerializeField] private float _maxHeight;
     [SerializeField] private float _minHeight;
 
-    [SerializeField] private List<InteractableObject> _affectedObjects;
+    [SerializeField] private List<AffectedObject> _affectedObjects;
     [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
 
     private Transform _pressureMainTrm;
@@ -46,7 +46,7 @@ public class PressurePlate : InteractableObject
     {
         foreach (var obj in _affectedObjects)
         {
-            obj?.OnInteraction(null, interactValue);
+            obj?.Invoke(null, interactValue);
         }
         
         var current = _pressureMainTrm.localScale.y;
@@ -99,11 +99,11 @@ public class PressurePlate : InteractableObject
             Gizmos.color = Color.black;
             foreach (var obj in _affectedObjects)
             {
-                if (obj is null)
+                if (obj?.InteractableObject is null)
                 {
                     continue;
                 }
-                Gizmos.DrawLine(transform.position, obj.transform.position);
+                Gizmos.DrawLine(transform.position, obj.InteractableObject.transform.position);
             }
         }
     }

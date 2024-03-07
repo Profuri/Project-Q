@@ -361,8 +361,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8824785926155382499}
-  - component: {fileID: 876833494473940348}
   - component: {fileID: 4416080438524765584}
+  - component: {fileID: 2565114840001306614}
   m_Layer: 8
   m_Name: PressurePlate
   m_TagString: Untagged
@@ -387,36 +387,6 @@ Transform:
   - {fileID: 7006290096226045640}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &876833494473940348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3381424117820884390}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1466a513354844bcb5efe7096618169, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  compressLayer: 1
-  climbableUnit: 0
-  staticUnit: 1
-  canStandMask:
-    serializedVersion: 2
-    m_Bits: 0
-  _interactType: 1
-  _attribute: 0
-  _pressionorMask:
-    serializedVersion: 2
-    m_Bits: 1280
-  _pressSpeed: 10
-  _maxHeight: 1
-  _minHeight: 0.35
-  _affectedObjects: []
-  _onToggleChangeEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!65 &4416080438524765584
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -438,6 +408,36 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2565114840001306614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3381424117820884390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1466a513354844bcb5efe7096618169, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
+  _interactType: 0
+  _attribute: 0
+  _pressionorMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _pressSpeed: 10
+  _maxHeight: 1
+  _minHeight: 0.35
+  _affectedObjects: []
+  _onToggleChangeEvents: []
 --- !u!1 &3807855968137367363
 GameObject:
   m_ObjectHideFlags: 0
