@@ -34,7 +34,6 @@ namespace AxisConvertSystem
         private UnitInfo _unitInfo;
         private UnitInfo _convertedInfo;
 
-
         public virtual void Awake()
         {
             IsHide = false;
@@ -48,9 +47,15 @@ namespace AxisConvertSystem
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
             DepthHandler = new UnitDepthHandler(this);
-            
+
+            if (gameObject.name == "FanObject (1)")
+            {
+                Debug.Log($"Min: {Collider.bounds.min},Max: {Collider.bounds.max}");
+            }
             Activate(activeUnit);
+
         }
+
 
         public virtual void FixedUpdate()
         {
@@ -82,6 +87,9 @@ namespace AxisConvertSystem
             OriginUnitInfo.LocalRot = transform.localRotation;
             OriginUnitInfo.LocalScale = transform.localScale;
             OriginUnitInfo.ColliderCenter = Collider.GetLocalCenter();
+
+
+
             _unitInfo = OriginUnitInfo;
             
             DepthHandler.DepthCheckPointSetting();
@@ -134,6 +142,8 @@ namespace AxisConvertSystem
             transform.localRotation = info.LocalRot;
             transform.localScale = info.LocalScale;
             Collider.SetCenter(info.ColliderCenter);
+
+
             if (hideSetting)
             {
                 Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);

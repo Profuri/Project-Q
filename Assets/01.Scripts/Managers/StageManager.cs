@@ -33,7 +33,7 @@ public class StageManager : BaseManager<StageManager>
             $"{chapter.ToString().ToUpperFirstChar()}_Stage_{stage.ToString()}") as Stage;
         CurrentStage.ConnectOtherSection(NextStage);
     }
-    
+
     public void ChangeToNextStage()
     {
         if (CurrentStage is not null)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -18,6 +19,7 @@ namespace AxisConvertSystem
             _depthCheckPoint = new Dictionary<AxisType, DepthPoint>();
         }
 
+
         public void CalcDepth(AxisType axis)
         {
             Depth = float.MaxValue;
@@ -27,15 +29,22 @@ namespace AxisConvertSystem
                 return;
             }
 
+            
             if (_owner.Section.SectionUnits.Where(unit => unit != _owner).Any(
-                    unit => _depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis],unit)))
+             unit => _depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis])))
             {
                 Depth = 0f;
             }
         }
 
+
         public void DepthCheckPointSetting()
         {
+            if (!_owner.activeUnit)
+            {
+                _owner.Activate(true);
+            }
+
             _depthCheckPoint.Clear();
 
             foreach (AxisType axis in Enum.GetValues(typeof(AxisType)))
@@ -43,6 +52,8 @@ namespace AxisConvertSystem
                 var depthPoint = _owner.Collider.GetDepthPoint(axis);
                 _depthCheckPoint.Add(axis, depthPoint);
             }
+
+            _owner.Activate(_owner.activeUnit);
         }
     }
 }

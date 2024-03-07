@@ -18,7 +18,6 @@ namespace AxisConvertSystem
                 return false;
             }
 
-            Debug.Log($"Min: {Min} Max: {Max}");
             //상대가 더 크냐
             //블락이 되면 상대가 더 크다는거지
             //근데 블락이 됐어 내가 더 큰데
@@ -33,8 +32,7 @@ namespace AxisConvertSystem
                 return false;
             }
 
-            Debug.Log($"Unit Name: {obj.gameObject.name}");
-            Debug.Log($"Min: {Min} Max: {Max}");
+            Debug.Log($"Unit Name: {obj.gameObject.name}Min: {other.Min} Max: {other.Max}");
             //상대가 더 크냐
             //블락이 되면 상대가 더 크다는거지
             //근데 블락이 됐어 내가 더 큰데
