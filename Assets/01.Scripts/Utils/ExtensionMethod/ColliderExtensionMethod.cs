@@ -38,8 +38,6 @@ public static class ColliderExtensionMethod
         var min = col.bounds.min;
         var bounds = col.bounds;
 
-        Debug.Log($"Name: {col.gameObject.name} MaxBounds: {max} MinBounds: {min} Bounds: {bounds}");
-
         if (axis == AxisType.X)
         {
             depthPoint.Max = new Vector2(max.z, max.y); // RT

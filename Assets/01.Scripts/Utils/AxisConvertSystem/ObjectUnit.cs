@@ -48,10 +48,6 @@ namespace AxisConvertSystem
             }
             DepthHandler = new UnitDepthHandler(this);
 
-            if (gameObject.name == "FanObject (1)")
-            {
-                Debug.Log($"Min: {Collider.bounds.min},Max: {Collider.bounds.max}");
-            }
             Activate(activeUnit);
 
         }
@@ -92,6 +88,7 @@ namespace AxisConvertSystem
 
             _unitInfo = OriginUnitInfo;
             
+
             DepthHandler.DepthCheckPointSetting();
         }
 
