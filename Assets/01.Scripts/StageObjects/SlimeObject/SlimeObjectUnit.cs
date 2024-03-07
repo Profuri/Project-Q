@@ -10,7 +10,6 @@ public class SlimeObjectUnit : ObjectUnit
     [SerializeField] private float _bouncePower = 5f;
     [SerializeField] private LayerMask _targetLayer;
     [SerializeField] private float _bounceTime = 0.5f;
-
     [SerializeField] private float _slimeMass = 0.1f;
 
 
@@ -19,7 +18,6 @@ public class SlimeObjectUnit : ObjectUnit
     public override void UnitSetting(AxisType axis)
     {
         base.UnitSetting(axis);
-
 
         if (axis == AxisType.None && _prevAxisType == AxisType.Y)
         {
