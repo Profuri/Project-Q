@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -31,6 +30,8 @@ namespace AxisConvertSystem
         private int _originObjectLayer;
         private int _excludeLayerMask;
 
+        private float _colliderCenterDiffDistance;
+
         public virtual void Awake()
         {
             IsHide = false;
@@ -48,6 +49,8 @@ namespace AxisConvertSystem
             _backgroundUnits = new List<ObjectUnit>();
             _originObjectLayer = gameObject.layer;
             _excludeLayerMask = LayerMask.NameToLayer("ExcludeLayerMask");
+
+            _colliderCenterDiffDistance = Mathf.Abs(transform.position.y - Collider.bounds.center.y);
             
             Activate(activeUnit);
         }
@@ -302,19 +305,15 @@ namespace AxisConvertSystem
             if (hit.transform.TryGetComponent<ObjectUnit>(out var unit))
             {
                 var info = unit._unitInfo;
-                
+                var distance = hit.distance - _colliderCenterDiffDistance;
                 var diff = hit.point - hit.collider.bounds.center;
-                var standPos = hit.transform.localPosition + diff;
-                
-                standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
-                standPos.y += hit.distance;
-                
-                _unitInfo.LocalPos = standPos;
+                _unitInfo.LocalPos = info.LocalPos + diff + Vector3.up * distance;
             }
             else
             {
                 var diff = hit.point - hit.collider.bounds.center;
-                var standPos = hit.transform.localPosition + diff;
+                var distance = hit.distance - _colliderCenterDiffDistance;
+                var standPos = hit.transform.localPosition + diff + Vector3.up * distance;
                 standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
                 _unitInfo.LocalPos = standPos;
             }
