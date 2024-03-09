@@ -1,3 +1,4 @@
+using System.Linq;
 using AxisConvertSystem;
 using UnityEngine;
 
@@ -59,5 +60,38 @@ public static class ColliderExtensionMethod
         depthPoint.IsTrigger = col.isTrigger;
         
         return depthPoint;
+    }
+
+    public static int NonAllocCast(this Collider col, out RaycastHit[] hits, AxisConverter converter)
+    {
+        hits = new RaycastHit[10];
+        
+        if (col is BoxCollider boxCol)
+        {
+            var boundsSize = boxCol.bounds.size * 0.8f;
+            
+            var center = boxCol.bounds.center;
+            var dir = -Vector3ExtensionMethod.GetAxisDir(converter.AxisType);
+            center -= dir;
+
+            return Physics.BoxCastNonAlloc(center, boundsSize / 2f, dir, hits, col.transform.rotation, Mathf.Infinity);
+        }
+        
+        if (col is CapsuleCollider capsuleCol)
+        {
+            var radius = capsuleCol.radius * 0.8f;
+            var height = capsuleCol.height * 0.8f;
+            
+            var center = capsuleCol.bounds.center;
+            var dir = -Vector3ExtensionMethod.GetAxisDir(converter.AxisType);
+            center -= dir;
+
+            var p1 = center + Vector3.up * (height / 2f);
+            var p2 = center - Vector3.up * (height / 2f);
+
+            return Physics.CapsuleCastNonAlloc(p1, p2, radius, dir, hits, Mathf.Infinity);
+        }
+
+        return 0;
     }
 }

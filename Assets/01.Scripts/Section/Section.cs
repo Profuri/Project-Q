@@ -30,6 +30,17 @@ public class Section : PoolableMono
         transform.GetComponentsInChildren(SectionUnits);
     }
 
+    private void FixedUpdate()
+    {
+        if (Active)
+        {
+            foreach (var unit in SectionUnits)
+            {
+                unit.FixedUpdateUnit();
+            }
+        }
+    }
+
     public void Update()
     {
         if (Active)
@@ -37,6 +48,17 @@ public class Section : PoolableMono
             foreach (var unit in SectionUnits)
             {
                 unit.UpdateUnit();
+            }
+        }
+    }
+
+    public void LateUpdate()
+    {
+        if (Active)
+        {
+            foreach (var unit in SectionUnits)
+            {
+                unit.LateUpdateUnit();
             }
         }
     }

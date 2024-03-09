@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -24,10 +27,14 @@ namespace AxisConvertSystem
         private UnitInfo _unitInfo;
         private UnitInfo _convertedInfo;
 
+        private List<ObjectUnit> _backgroundUnits;
+        private int _originObjectLayer;
+        private int _excludeLayerMask;
+
         public virtual void Awake()
         {
             IsHide = false;
-            
+
             Section = GetComponentInParent<Section>();
             Collider = GetComponent<Collider>();
             if (!staticUnit)
@@ -37,11 +44,15 @@ namespace AxisConvertSystem
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
             DepthHandler = new UnitDepthHandler(this);
+
+            _backgroundUnits = new List<ObjectUnit>();
+            _originObjectLayer = gameObject.layer;
+            _excludeLayerMask = LayerMask.NameToLayer("ExcludeLayerMask");
             
             Activate(activeUnit);
         }
 
-        public virtual void FixedUpdate()
+        public virtual void FixedUpdateUnit()
         {
             if (!staticUnit)
             {
@@ -60,6 +71,14 @@ namespace AxisConvertSystem
                 {
                     ReloadUnit();
                 }
+            }
+        }
+
+        public virtual void LateUpdateUnit()
+        {
+            if (!staticUnit)
+            {
+                // CheckBackgroundUnit();
             }
         }
 
@@ -226,6 +245,42 @@ namespace AxisConvertSystem
                 _unitInfo.LocalPos = transform.localPosition;
             }
         }
+        
+        public void CheckBackgroundUnit()
+        {
+            Collider.NonAllocCast(out var hits, Converter);
+            var units = hits.Where(hit => hit.collider is not null && hit.collider.TryGetComponent<ObjectUnit>(out var unit) && this != unit)
+                .Select(hit => hit.collider.GetComponent<ObjectUnit>()).ToArray();
+            var size = units.Length;
+            
+            if (size > 0)
+            {
+                for (var i = 0; i < size; i++)
+                {
+                    if (hits[i].transform.TryGetComponent<ObjectUnit>(out var unit))
+                    {
+                        if (this == unit || gameObject.layer == _excludeLayerMask)
+                        {
+                            continue;
+                        }
+                        
+                        gameObject.layer = _excludeLayerMask;
+                        unit.Collider.excludeLayers |= 1 << _excludeLayerMask;
+                        _backgroundUnits.Add(unit);
+                    }
+                }
+            }
+            else
+            {
+                gameObject.layer = _originObjectLayer;
+                foreach (var unit in _backgroundUnits)
+                {
+                    unit.Collider.excludeLayers ^= 1 << _excludeLayerMask;
+                }
+            
+                _backgroundUnits.Clear();
+            }
+        }
 
         private void CheckStandObject()
         {
@@ -249,11 +304,10 @@ namespace AxisConvertSystem
                 var info = unit._unitInfo;
                 
                 var diff = hit.point - hit.collider.bounds.center;
-                diff.y = 0;
-                
                 var standPos = hit.transform.localPosition + diff;
+                
                 standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
-                standPos.y += info.LocalScale.y / 2f;
+                standPos.y += hit.distance;
                 
                 _unitInfo.LocalPos = standPos;
             }
@@ -272,6 +326,42 @@ namespace AxisConvertSystem
 
         public override void OnPush()
         {
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+
+            if (Converter is null)
+            {
+                return;
+            }
+            
+            if (Collider is BoxCollider boxCol)
+            {
+                var boundsSize = boxCol.bounds.size * 0.7f;
+            
+                var center = boxCol.bounds.center;
+                var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
+                center -= dir;
+                
+                Gizmos.DrawWireCube(center, boundsSize);
+            }
+        
+            if (Collider is CapsuleCollider capsuleCol)
+            {
+                var radius = capsuleCol.radius * 0.7f;
+                var height = capsuleCol.height * 0.7f;
+            
+                var center = capsuleCol.bounds.center;
+                var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
+                center -= dir;
+
+                var p1 = center + Vector3.up * (height / 2f);
+                var p2 = center - Vector3.up * (height / 2f);
+
+                // return Physics.CapsuleCastNonAlloc(p1, p2, radius, dir, hits, Mathf.Infinity);
+            }
         }
     }
 }

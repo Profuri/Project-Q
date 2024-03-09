@@ -19,8 +19,7 @@ public class PlayerUnit : ObjectUnit
     private PlayerUIController _playerUiController;
 
     private InteractableObject _selectedInteractableObject;
-    private List<ObjectUnit> _backgroundUnits;
-        
+
     public bool OnGround => CheckGround();
     private readonly int _activeHash = Animator.StringToHash("Active");
     
@@ -39,8 +38,6 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerJumpState(_stateController, true, "Jump"));
         _stateController.RegisterState(new PlayerFallState(_stateController, true, "Fall"));
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
-
-        _backgroundUnits = new List<ObjectUnit>();
     }
 
     public override void UpdateUnit()
@@ -52,11 +49,6 @@ public class PlayerUnit : ObjectUnit
         _selectedInteractableObject = FindInteractable();
         
         _playerUiController.SetKeyGuide(HoldingHandler.IsHold || _selectedInteractableObject is not null);
-    }
-
-    private void LateUpdate()
-    {
-        CheckBackgroundUnit();
     }
 
     public override void ReloadUnit()
@@ -134,51 +126,6 @@ public class PlayerUnit : ObjectUnit
         return null;
     }
 
-    private void CheckBackgroundUnit()
-    {
-        var center = Collider.bounds.center;
-        var radius = ((CapsuleCollider)Collider).radius * 0.7f;
-        var height = ((CapsuleCollider)Collider).height * 0.7f;
-        var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
-
-        var p1 = center + Vector3.up * (height / 2f);
-        var p2 = center - Vector3.up * (height / 2f);
-        
-        p1.SetAxisElement(Converter.AxisType,
-            p1.GetAxisElement(Converter.AxisType) - dir.GetAxisElement(Converter.AxisType));
-        p2.SetAxisElement(Converter.AxisType,
-            p2.GetAxisElement(Converter.AxisType) - dir.GetAxisElement(Converter.AxisType));
-
-        var hits = new RaycastHit[10];
-        var size = Physics.CapsuleCastNonAlloc(p1, p2, radius, dir, hits, Mathf.Infinity, _data.backgroundMask);
-        
-        if (size > 0)
-        {
-            for (var i = 0; i < size; i++)
-            {
-                if (hits[i].transform.TryGetComponent<ObjectUnit>(out var unit))
-                {
-                    if ((unit.Collider.excludeLayers & (1 << gameObject.layer)) > 0)
-                    {
-                        continue;
-                    }
-                    
-                    unit.Collider.excludeLayers |= 1 << gameObject.layer;
-                    _backgroundUnits.Add(unit);
-                }
-            }
-        }
-        else
-        {
-            foreach (var unit in _backgroundUnits)
-            {
-                unit.Collider.excludeLayers ^= 1 << gameObject.layer;
-            }
-
-            _backgroundUnits.Clear();
-        }
-    }
-
     public void SetSection(Section section)
     {
         transform.SetParent(section.transform);
@@ -213,26 +160,6 @@ public class PlayerUnit : ObjectUnit
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (Collider)
-        {
-            Gizmos.color = Color.red;
-            var center = Collider.bounds.center;
-            var radius = ((CapsuleCollider)Collider).radius;
-            var height = ((CapsuleCollider)Collider).height;
-            var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
-
-            var p1 = center + Vector3.up * (height / 2f);
-            var p2 = center - Vector3.up * (height / 2f);
-            
-            p1.SetAxisElement(Converter.AxisType,
-                p1.GetAxisElement(Converter.AxisType) - dir.GetAxisElement(Converter.AxisType));
-            p2.SetAxisElement(Converter.AxisType,
-                p2.GetAxisElement(Converter.AxisType) - dir.GetAxisElement(Converter.AxisType));
-            
-            Gizmos.DrawWireSphere(p1, radius);
-            Gizmos.DrawWireSphere(p2, radius);
-        }
-        
         Gizmos.color = Color.cyan;
 
         var col = GetComponent<Collider>();
