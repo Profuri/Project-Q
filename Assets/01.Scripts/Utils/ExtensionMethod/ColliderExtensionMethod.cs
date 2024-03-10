@@ -68,7 +68,7 @@ public static class ColliderExtensionMethod
         
         if (col is BoxCollider boxCol)
         {
-            var boundsSize = boxCol.bounds.size * 0.8f;
+            var boundsSize = boxCol.bounds.size * 0.9f;
             
             var center = boxCol.bounds.center;
             var dir = -Vector3ExtensionMethod.GetAxisDir(converter.AxisType);
@@ -78,9 +78,9 @@ public static class ColliderExtensionMethod
         }
         
         if (col is CapsuleCollider capsuleCol)
-        {
-            var radius = capsuleCol.radius * 0.8f;
-            var height = capsuleCol.height * 0.8f;
+        {   
+            var radius = capsuleCol.radius * 0.7f;
+            var height = capsuleCol.height * 0.7f;
             
             var center = capsuleCol.bounds.center;
             var dir = -Vector3ExtensionMethod.GetAxisDir(converter.AxisType);

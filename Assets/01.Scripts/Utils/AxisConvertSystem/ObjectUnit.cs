@@ -255,14 +255,21 @@ namespace AxisConvertSystem
             var units = hits.Where(hit => hit.collider is not null && hit.collider.TryGetComponent<ObjectUnit>(out var unit) && this != unit)
                 .Select(hit => hit.collider.GetComponent<ObjectUnit>()).ToArray();
             var size = units.Length;
+
+            Debug.Log($"{gameObject.name} {size}");
             
             if (size > 0)
             {
+                if (gameObject.layer == _excludeLayerMask)
+                {
+                    return;
+                }
+                
                 for (var i = 0; i < size; i++)
                 {
                     if (hits[i].transform.TryGetComponent<ObjectUnit>(out var unit))
                     {
-                        if (this == unit || gameObject.layer == _excludeLayerMask)
+                        if (this == unit)
                         {
                             continue;
                         }
@@ -275,13 +282,16 @@ namespace AxisConvertSystem
             }
             else
             {
-                gameObject.layer = _originObjectLayer;
-                foreach (var unit in _backgroundUnits)
+                if (gameObject.layer == _excludeLayerMask)
                 {
-                    unit.Collider.excludeLayers ^= 1 << _excludeLayerMask;
+                    gameObject.layer = _originObjectLayer;
+                    foreach (var unit in _backgroundUnits)
+                    {
+                        unit.Collider.excludeLayers ^= 1 << _excludeLayerMask;
+                    }
+                
+                    _backgroundUnits.Clear();
                 }
-            
-                _backgroundUnits.Clear();
             }
         }
 
@@ -325,42 +335,6 @@ namespace AxisConvertSystem
 
         public override void OnPush()
         {
-        }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.yellow;
-
-            if (Converter is null)
-            {
-                return;
-            }
-            
-            if (Collider is BoxCollider boxCol)
-            {
-                var boundsSize = boxCol.bounds.size * 0.7f;
-            
-                var center = boxCol.bounds.center;
-                var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
-                center -= dir;
-                
-                Gizmos.DrawWireCube(center, boundsSize);
-            }
-        
-            if (Collider is CapsuleCollider capsuleCol)
-            {
-                var radius = capsuleCol.radius * 0.7f;
-                var height = capsuleCol.height * 0.7f;
-            
-                var center = capsuleCol.bounds.center;
-                var dir = -Vector3ExtensionMethod.GetAxisDir(Converter.AxisType);
-                center -= dir;
-
-                var p1 = center + Vector3.up * (height / 2f);
-                var p2 = center - Vector3.up * (height / 2f);
-
-                // return Physics.CapsuleCastNonAlloc(p1, p2, radius, dir, hits, Mathf.Infinity);
-            }
         }
     }
 }
