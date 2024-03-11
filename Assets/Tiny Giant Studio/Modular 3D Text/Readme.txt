@@ -1,0 +1,2 @@
+You can delete the 'Tiny Giant Studio/Modular 3D Text' folder. This is only required for the sample scenes. 
+The default materials are also here, which can be changed from Tools > Tiny Giant Studio > Modular 3D Text > Preference
