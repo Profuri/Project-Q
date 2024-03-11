@@ -55,6 +55,10 @@ public class PlayerUnit : ObjectUnit
     {
         base.ReloadUnit();
         Converter.ConvertDimension(AxisType.None);
+
+        var spawnVFX = PoolManager.Instance.Pop("SpawnVFX") as PoolableVFX;
+        spawnVFX.SetPositionAndRotation(transform.position);
+        spawnVFX.Play();
     }
 
     public override void OnPop()

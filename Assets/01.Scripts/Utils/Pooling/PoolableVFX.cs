@@ -30,8 +30,9 @@ public class PoolableVFX : PoolableMono
     private IEnumerator PlayRoutine()
     {
         _visualEffect.Play();
-        yield return new WaitUntil(() => _visualEffect.culled);
+        yield return new WaitUntil(() => _visualEffect.pause);
         _visualEffect.Stop();
+        PoolManager.Instance.Push(this);
     }
     
     public override void OnPop()
