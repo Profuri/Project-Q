@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="ThemeSwitcher" src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Scripts/Editor/Common/ThemeSwitcher.uxml?fileID=9197481963319205126&amp;guid=dcb2a8406bd7c26499a68e30bea7b554&amp;type=3#ThemeSwitcher" />
+    <Style src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Scripts/Editor/Style%20Sheet/Foldout.uss?fileID=7433441132597879392&amp;guid=987989d65ef9e0249b0a484e8e68c2de&amp;type=3#Foldout" />
+    <ui:GroupBox name="RootHolder" style="margin-left: -15px; margin-right: -6px; margin-top: 0; margin-bottom: -10px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-image: none; -unity-background-image-tint-color: rgb(62, 62, 62);">
+        <ui:GroupBox name="Content" style="margin-right: 10px; margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">
+            <ui:Toggle label="Is On " binding-path="_isOn" name="IsOnToggle" class="toggleThemeSupported" style="margin-left: 5px; margin-bottom: 10px;" />
+            <ui:Foldout text="On state" view-data-key="onStateFoldout" value="true" class="unity-foldout__dark">
+                <uie:ObjectField label="Graphic" type="UnityEngine.GameObject, UnityEngine.CoreModule" binding-path="onGraphic" name="GraphicsOnObjectField" />
+                <uie:PropertyField binding-path="onEvent" style="margin-left: 10px; margin-bottom: -5px;" />
+            </ui:Foldout>
+            <ui:Foldout text="Off state" view-data-key="offStateFoldout" value="true" class="unity-foldout__dark">
+                <uie:ObjectField label="Graphic" type="UnityEngine.GameObject, UnityEngine.CoreModule" binding-path="offGraphic" name="GraphicsOffObjectField" />
+                <uie:PropertyField binding-path="offEvent" style="margin-left: 10px; margin-top: 0; margin-bottom: -5px;" />
+            </ui:Foldout>
+        </ui:GroupBox>
+        <ui:Instance template="ThemeSwitcher" name="ThemeSwitcher" style="display: none; visibility: hidden;" />
+    </ui:GroupBox>
+</ui:UXML>
