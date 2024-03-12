@@ -5,6 +5,7 @@ public class SectionData : ScriptableObject
 {
     [Header("Stage Generate Setting")] 
     public float sectionIntervalDistance;
+    [Range(0f, 5f)] public float sectionYDepth;
 
     [Header("Bridge Setting")] 
     public float bridgeGenerateDelay;

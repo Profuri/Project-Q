@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AxisConvertSystem;
+using DG.Tweening;
 using UnityEngine;
 
 [RequireComponent(typeof(SectionCollisionChecker))]
@@ -13,9 +14,14 @@ public class Section : PoolableMono
     public Vector3 PlayerResetPoint => _playerResetPoint;
 
     [SerializeField] private SectionData _sectionData;
+    public SectionData SectionData => _sectionData;
 
     private List<BridgeObject> _bridgeObjects;
     public List<ObjectUnit> SectionUnits { get; private set; }
+    private List<Material> _sectionMaterials;
+
+    private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
+    private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
 
     public bool Active { get; private set; }
     public bool Lock { get; set; }
@@ -28,6 +34,34 @@ public class Section : PoolableMono
         _bridgeObjects = new List<BridgeObject>();
         SectionUnits = new List<ObjectUnit>();
         transform.GetComponentsInChildren(SectionUnits);
+        
+        _sectionMaterials = new List<Material>();
+        var renderers = transform.GetComponentsInChildren<Renderer>();
+        foreach (var renderer in renderers)
+        {
+            if(!renderer.enabled)
+            {
+                continue;
+            }
+            
+            foreach (var material in renderer.materials) 
+            {
+                _sectionMaterials.Add(material);    
+            }
+        }
+        
+        DOTween.Init(true, true, LogBehaviour.Verbose). SetCapacity(2000, 100);
+    }
+
+    private void FixedUpdate()
+    {
+        if (Active)
+        {
+            foreach (var unit in SectionUnits)
+            {
+                unit.FixedUpdateUnit();
+            }
+        }
     }
 
     public void Update()
@@ -41,24 +75,38 @@ public class Section : PoolableMono
         }
     }
 
+    public void LateUpdate()
+    {
+        if (Active)
+        {
+            foreach (var unit in SectionUnits)
+            {
+                unit.LateUpdateUnit();
+            }
+        }
+    }
+
     public void Generate(Vector3 position, bool moveRoutine = true)
     {
         CenterPosition = position;
         transform.position = CenterPosition;
         if (moveRoutine)
         {
-            transform.position = position - Vector3.up * 5;
-            StartCoroutine(SectionMoveRoutine(CenterPosition));
+            Dissolve(true, 2.5f);
+            transform.position = position - Vector3.up * _sectionData.sectionYDepth;
+            transform.DOMove(CenterPosition, 3f);
         }
     }
 
     public void Disappear()
     {
-        StartCoroutine(SectionMoveRoutine(CenterPosition - Vector3.up * 5, () =>
-        {
-            PoolManager.Instance.Push(this);
-            Active = false;
-        }));
+        Dissolve(false, 2.5f);
+        transform.DOMove(CenterPosition - Vector3.up * _sectionData.sectionYDepth, 3f)
+            .OnComplete(() =>
+            {
+                PoolManager.Instance.Push(this);
+                Active = false;
+            });
     }
 
     public virtual void OnEnter(PlayerUnit player)
@@ -108,27 +156,7 @@ public class Section : PoolableMono
     {
         StartCoroutine(BridgeRemoveRoutine());
     }
-    
-    private IEnumerator SectionMoveRoutine(Vector3 dest, Action callBack = null)
-    {
-        while (true)
-        {
-            var pos = transform.position;
-            var lerp = Vector3.Lerp(pos, dest, 0.1f);
-            transform.position = lerp;
-            
-            if (Vector3.Distance(pos, dest) <= 0.01f)
-            {
-                break;
-            }
 
-            yield return null;
-        }
-
-        transform.position = dest;
-        callBack?.Invoke();
-    }
-    
     private IEnumerator BridgeGenerateRoutine(Vector3 startPoint, Vector3 endPoint)
     {
         var waitSecond = new WaitForSeconds(_sectionData.bridgeGenerateDelay);
@@ -145,7 +173,7 @@ public class Section : PoolableMono
             var bridgePos = startPoint + (bridgeDir * (i * bridgeSize) - bridgeDir * (bridgeSize / 2f));
             
             bridge.SetWidth(_sectionData.bridgeWidth);
-            bridge.Generate(bridgePos, bridgeRotation);
+            bridge.Generate(bridgePos, bridgeRotation, this);
             _bridgeObjects.Add(bridge);
 
             yield return waitSecond;
@@ -163,6 +191,26 @@ public class Section : PoolableMono
         }
         
         _bridgeObjects.Clear();
+    }
+
+    private void Dissolve(bool on, float time)
+    {
+        var value = on ? 0f : 1f;
+        
+        foreach (var material in _sectionMaterials)
+        {
+            material.SetFloat(_visibleProgressHash, Mathf.Abs(1f - value));
+            material.SetFloat(_dissolveProgressHash, Mathf.Abs(1f - value));
+        }
+
+        foreach (var material in _sectionMaterials)
+        {
+            DOTween.To(() => material.GetFloat(_visibleProgressHash),
+                progress => material.SetFloat(_visibleProgressHash, progress), value, time);
+            
+            DOTween.To(() => material.GetFloat(_dissolveProgressHash),
+                progress => material.SetFloat(_dissolveProgressHash, progress), value, time);
+        }
     }
     
     public override void OnPop()

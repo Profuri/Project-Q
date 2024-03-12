@@ -13,13 +13,9 @@ namespace AxisConvertSystem
         [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
         [HideInInspector] public bool activeUnit = true;
-
-
         
         [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public bool useGravity = true;
-
-
 
         public AxisConverter Converter { get; protected set; }
         public Collider Collider { get; private set; }
@@ -28,16 +24,20 @@ namespace AxisConvertSystem
         public Section Section { get; protected set; }
         public bool IsHide { get; private set; }
 
-
-
         protected UnitInfo OriginUnitInfo;
         private UnitInfo _unitInfo;
         private UnitInfo _convertedInfo;
 
+        private List<ObjectUnit> _backgroundUnits;
+        private int _originObjectLayer;
+        private int _excludeLayerMask;
+
+        private float _colliderCenterDiffDistance;
+
         public virtual void Awake()
         {
             IsHide = false;
-            
+
             Section = GetComponentInParent<Section>();
             Collider = GetComponent<Collider>();
             if (!staticUnit)
@@ -48,12 +48,17 @@ namespace AxisConvertSystem
             }
             DepthHandler = new UnitDepthHandler(this);
 
+            _backgroundUnits = new List<ObjectUnit>();
+            _originObjectLayer = gameObject.layer;
+            _excludeLayerMask = LayerMask.NameToLayer("ExcludeLayerMask");
+
+            _colliderCenterDiffDistance = Mathf.Abs(transform.position.y - Collider.bounds.center.y);
+            
             Activate(activeUnit);
 
         }
 
-
-        public virtual void FixedUpdate()
+        public virtual void FixedUpdateUnit()
         {
             if (!staticUnit)
             {
@@ -72,6 +77,14 @@ namespace AxisConvertSystem
                 {
                     ReloadUnit();
                 }
+            }
+        }
+
+        public virtual void LateUpdateUnit()
+        {
+            if (!staticUnit)
+            {
+                // CheckBackgroundUnit();
             }
         }
 
@@ -244,6 +257,52 @@ namespace AxisConvertSystem
                 _unitInfo.LocalPos = transform.localPosition;
             }
         }
+        
+        public void CheckBackgroundUnit()
+        {
+            Collider.NonAllocCast(out var hits, Converter);
+            var units = hits.Where(hit => hit.collider is not null && hit.collider.TryGetComponent<ObjectUnit>(out var unit) && this != unit)
+                .Select(hit => hit.collider.GetComponent<ObjectUnit>()).ToArray();
+            var size = units.Length;
+
+            Debug.Log($"{gameObject.name} {size}");
+            
+            if (size > 0)
+            {
+                if (gameObject.layer == _excludeLayerMask)
+                {
+                    return;
+                }
+                
+                for (var i = 0; i < size; i++)
+                {
+                    if (hits[i].transform.TryGetComponent<ObjectUnit>(out var unit))
+                    {
+                        if (this == unit)
+                        {
+                            continue;
+                        }
+                        
+                        gameObject.layer = _excludeLayerMask;
+                        unit.Collider.excludeLayers |= 1 << _excludeLayerMask;
+                        _backgroundUnits.Add(unit);
+                    }
+                }
+            }
+            else
+            {
+                if (gameObject.layer == _excludeLayerMask)
+                {
+                    gameObject.layer = _originObjectLayer;
+                    foreach (var unit in _backgroundUnits)
+                    {
+                        unit.Collider.excludeLayers ^= 1 << _excludeLayerMask;
+                    }
+                
+                    _backgroundUnits.Clear();
+                }
+            }
+        }
 
         private void CheckStandObject()
         {
@@ -265,20 +324,15 @@ namespace AxisConvertSystem
             if (hit.transform.TryGetComponent<ObjectUnit>(out var unit))
             {
                 var info = unit._unitInfo;
-                
+                var distance = hit.distance - _colliderCenterDiffDistance;
                 var diff = hit.point - hit.collider.bounds.center;
-                diff.y = 0;
-                
-                var standPos = hit.transform.localPosition + diff;
-                standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
-                standPos.y += info.LocalScale.y / 2f;
-                
-                _unitInfo.LocalPos = standPos;
+                _unitInfo.LocalPos = info.LocalPos + diff + Vector3.up * distance;
             }
             else
             {
                 var diff = hit.point - hit.collider.bounds.center;
-                var standPos = hit.transform.localPosition + diff;
+                var distance = hit.distance - _colliderCenterDiffDistance;
+                var standPos = hit.transform.localPosition + diff + Vector3.up * distance;
                 standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
                 _unitInfo.LocalPos = standPos;
             }

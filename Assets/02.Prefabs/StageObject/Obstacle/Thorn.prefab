@@ -48,11 +48,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   compressLayer: 3
+  climbableUnit: 0
   staticUnit: 1
+  activeUnit: 1
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
-  rayDistance: 0
+  useGravity: 1
   _interactType: 1
   _attribute: 0
   _damageableMask:
@@ -71,11 +73,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   compressLayer: 1
+  climbableUnit: 0
   staticUnit: 1
+  activeUnit: 1
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
-  rayDistance: 0
+  useGravity: 1
 --- !u!65 &1957219871032753226
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -189,17 +193,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 0aeb6e26fb48f64489e6e7273e1c39d5, type: 2}
+      objectReference: {fileID: 2100000, guid: b76e9f9ef467c4c78b73371caad522ab, type: 2}
     - target: {fileID: 2258145609970082259, guid: bf6d5b722a514c14eb3be163a07071a6,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: ae2c73678151a432a8514b1087bd95a6, type: 2}
+    - target: {fileID: 4059876197060480333, guid: bf6d5b722a514c14eb3be163a07071a6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4926148733899720866, guid: bf6d5b722a514c14eb3be163a07071a6,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 779cb8d31db8c454d9ba2ead60ed6eb9, type: 2}
+      objectReference: {fileID: 2100000, guid: d8d73d7396aae4a4094c0be2057405b2, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

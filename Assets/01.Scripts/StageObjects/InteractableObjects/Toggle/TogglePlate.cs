@@ -9,7 +9,7 @@ public class TogglePlate : InteractableObject
     [SerializeField] private float _maxHeight;
     [SerializeField] private float _minHeight;
     
-    [SerializeField] private List<InteractableObject> _affectedObjects;
+    [SerializeField] private List<AffectedObject> _affectedObjects;
     [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
     
     private Transform _pressureMainTrm;
@@ -53,7 +53,7 @@ public class TogglePlate : InteractableObject
     {
         for (int i = 0; i < _affectedObjects.Count; i++)
         {
-            _affectedObjects[i]?.OnInteraction(null, _isToggle);
+            _affectedObjects[i]?.Invoke(null, _isToggle);
         }
         var scale = _pressureMainTrm.localScale;
         scale.y = _isToggle ? _minHeight : _maxHeight;
@@ -78,11 +78,11 @@ public class TogglePlate : InteractableObject
             Gizmos.color = Color.black;
             foreach (var obj in _affectedObjects)
             {
-                if (obj is null)
+                if (obj?.InteractableObject is null)
                 {
                     continue;
                 }
-                Gizmos.DrawLine(transform.position, obj.transform.position);
+                Gizmos.DrawLine(transform.position, obj.InteractableObject.transform.position);
             }
         }
     }
