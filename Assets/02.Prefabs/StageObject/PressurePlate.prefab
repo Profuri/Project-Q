@@ -128,7 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7006290096226045640}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: PressureMain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 2109265582110189974}
   - component: {fileID: 6899786185219648252}
   - component: {fileID: 2679913096450213354}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -361,8 +361,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8824785926155382499}
-  - component: {fileID: 876833494473940348}
   - component: {fileID: 4416080438524765584}
+  - component: {fileID: 2565114840001306614}
   m_Layer: 8
   m_Name: PressurePlate
   m_TagString: Untagged
@@ -387,7 +387,28 @@ Transform:
   - {fileID: 7006290096226045640}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &876833494473940348
+--- !u!65 &4416080438524765584
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3381424117820884390}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2565114840001306614
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -417,27 +438,6 @@ MonoBehaviour:
   _minHeight: 0.35
   _affectedObjects: []
   _onToggleChangeEvents: []
---- !u!65 &4416080438524765584
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3381424117820884390}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3807855968137367363
 GameObject:
   m_ObjectHideFlags: 0

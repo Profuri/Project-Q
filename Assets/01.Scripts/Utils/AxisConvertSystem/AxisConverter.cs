@@ -32,7 +32,6 @@ namespace AxisConvertSystem
         {
             if (!Convertable || AxisType == axisType || (AxisType != AxisType.None && axisType != AxisType.None))
             {
-                callback?.Invoke();
                 return;
             }
 
