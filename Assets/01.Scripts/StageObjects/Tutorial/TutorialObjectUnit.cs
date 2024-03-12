@@ -28,7 +28,7 @@ public class TutorialObjectUnit : InteractableObject
     {
         if(_rotateTarget != null)
         {
-            SceneControlManager.Instance?.DeleteObject(_rotateTarget);
+            _rotateTarget.Off();
         }
     }
 
@@ -37,7 +37,7 @@ public class TutorialObjectUnit : InteractableObject
         base.OnPush();
         if(_rotateTarget != null)   
         {
-            SceneControlManager.Instance.DeleteObject(_rotateTarget);
+            _rotateTarget.Off();
         }
     }
 
@@ -60,7 +60,8 @@ public class TutorialObjectUnit : InteractableObject
 
         if(axis != AxisType.None)
         {
-            SceneControlManager.Instance.DeleteObject(_rotateTarget);
+            //SceneControlManager.Instance.DeleteObject(_rotateTarget);
+            _rotateTarget.Off();
             _rotateTarget = null;
         }
         else
