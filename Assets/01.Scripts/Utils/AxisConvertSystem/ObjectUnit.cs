@@ -1,17 +1,25 @@
+using Fabgrid;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace AxisConvertSystem
 {
-    public class ObjectUnit : PoolableMono
+    public class ObjectUnit : PoolableMono,IProvidableFieldInfo
     {
         [HideInInspector] public CompressLayer compressLayer = CompressLayer.Default;
         [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
         [HideInInspector] public bool activeUnit = true;
+
+
         
         [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public bool useGravity = true;
+
+
 
         public AxisConverter Converter { get; protected set; }
         public Collider Collider { get; private set; }
@@ -19,6 +27,8 @@ namespace AxisConvertSystem
         public UnitDepthHandler DepthHandler { get; private set; }
         public Section Section { get; protected set; }
         public bool IsHide { get; private set; }
+
+
 
         protected UnitInfo OriginUnitInfo;
         private UnitInfo _unitInfo;
@@ -37,9 +47,11 @@ namespace AxisConvertSystem
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
             DepthHandler = new UnitDepthHandler(this);
-            
+
             Activate(activeUnit);
+
         }
+
 
         public virtual void FixedUpdate()
         {
@@ -71,8 +83,12 @@ namespace AxisConvertSystem
             OriginUnitInfo.LocalRot = transform.localRotation;
             OriginUnitInfo.LocalScale = transform.localScale;
             OriginUnitInfo.ColliderCenter = Collider.GetLocalCenter();
+
+
+
             _unitInfo = OriginUnitInfo;
             
+
             DepthHandler.DepthCheckPointSetting();
         }
 
@@ -123,6 +139,8 @@ namespace AxisConvertSystem
             transform.localRotation = info.LocalRot;
             transform.localScale = info.LocalScale;
             Collider.SetCenter(info.ColliderCenter);
+
+
             if (hideSetting)
             {
                 Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
@@ -272,6 +290,35 @@ namespace AxisConvertSystem
 
         public override void OnPush()
         {
+        }
+
+        public List<FieldInfo> GetFieldInfos()
+        {
+            Type type = this.GetType();
+            FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            return fields.ToList();
+        }
+
+        public void SetFieldInfos(List<FieldInfo> infos)
+        {
+            if (infos == null)
+            {
+                Debug.Log("Info is null");
+                return;
+            }
+
+            foreach (FieldInfo info in infos)
+            {
+                try
+                {
+                    object value = FieldInfoStorage.GetFieldValue(info.FieldType);
+                    info.SetValue(this, value);
+                }
+                catch
+                {
+                    Debug.Log($"This info can't set value: {info}");
+                }
+            }
         }
     }
 }

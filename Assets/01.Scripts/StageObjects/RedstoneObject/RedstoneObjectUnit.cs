@@ -4,7 +4,7 @@ using InteractableSystem;
 using UnityEngine;
 
 [System.Serializable]
-public class RedstoneInteractable
+public class TransitionInteractable
 {
     public InteractableObject interactableUnit;
 
@@ -13,7 +13,7 @@ public class RedstoneInteractable
 
 public class RedstoneObjectUnit : InteractableObject
 {
-    [SerializeField] private List<RedstoneInteractable> _redstoneInteractableList;
+    [SerializeField] private List<TransitionInteractable> _redstoneInteractableList;
     //레드스톤을 바닥으로 깔았을 경우에는 y나 3d나 똑같이 작용해야됨.
 
     //3d 상태일떄도 전이되게 만들어 놓을건지 정해야됨.
@@ -61,7 +61,7 @@ public class RedstoneObjectUnit : InteractableObject
 
             Debug.Log($"CurrentAxisType: {currentAxisType}");
 
-            foreach(RedstoneInteractable interactable in _redstoneInteractableList)
+            foreach(TransitionInteractable interactable in _redstoneInteractableList)
             {
                 var applyAxisType = interactable.applyAxisType;
 
