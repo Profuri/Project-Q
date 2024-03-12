@@ -25,7 +25,7 @@ public class TutorialObjectUnit : InteractableObject
     {
         if(_rotateTarget != null)
         {
-            SceneControlManager.Instance.DeleteObject(_rotateTarget);
+            SceneControlManager.Instance?.DeleteObject(_rotateTarget);
         }
     }
 
