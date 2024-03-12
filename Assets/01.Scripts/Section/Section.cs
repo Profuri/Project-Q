@@ -75,17 +75,6 @@ public class Section : PoolableMono
         }
     }
 
-    public void LateUpdate()
-    {
-        if (Active)
-        {
-            foreach (var unit in SectionUnits)
-            {
-                unit.LateUpdateUnit();
-            }
-        }
-    }
-
     public void Generate(Vector3 position, bool moveRoutine = true)
     {
         CenterPosition = position;

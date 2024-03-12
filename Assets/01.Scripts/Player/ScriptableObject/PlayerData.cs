@@ -20,4 +20,7 @@ public class PlayerData : ScriptableObject
     [Header("Holding Data")] 
     public float holdingRadius;
     [Range(0.1f, 1f)] public float holdingPointMoveSpeed;
+
+    [Header("Safe Convert Check Data")] 
+    public LayerMask obstructiveMask;
 }
