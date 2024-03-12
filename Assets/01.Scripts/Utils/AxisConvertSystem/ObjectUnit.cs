@@ -22,7 +22,6 @@ namespace AxisConvertSystem
         public Rigidbody Rigidbody { get; private set; }
         public UnitDepthHandler DepthHandler { get; private set; }
         public Section Section { get; protected set; }
-        public ObjectUnit StandingUnit { get; private set; }
         public bool IsHide { get; private set; }
 
         protected UnitInfo OriginUnitInfo;
@@ -94,7 +93,6 @@ namespace AxisConvertSystem
                 return;
             }
 
-            StandingUnit = null;
             if (!staticUnit)
             {
                 DepthHandler.DepthCheckPointSetting();
@@ -135,8 +133,7 @@ namespace AxisConvertSystem
             transform.localRotation = info.LocalRot;
             transform.localScale = info.LocalScale;
             Collider.SetCenter(info.ColliderCenter);
-
-
+            
             if (hideSetting)
             {
                 Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
@@ -231,24 +228,15 @@ namespace AxisConvertSystem
                 return;
             }
 
-            var standing = CheckStandObject(out var hit);
-            
             if (axis == AxisType.None)
             {
-                if (standing)
+                if (CheckStandObject(out var hit))
                 {
                     SynchronizePositionOnStanding(hit);
                 }
             }
             else
             {
-                if (standing)
-                {
-                    if (hit.transform.TryGetComponent<ObjectUnit>(out var unit))
-                    {
-                        StandingUnit = unit;
-                    }
-                }
                 _unitInfo.LocalPos = transform.localPosition;
             }
         }

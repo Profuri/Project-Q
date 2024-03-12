@@ -84,46 +84,6 @@ public class PlayerAxisControlState : PlayerBaseState
         
         // block input
 
-        Player.Converter.ConvertDimension(_controllingAxis, () =>
-        {
-            if (_controllingAxis != AxisType.None && !SafeConvertCheck(out var obstructiveUnits))
-            {
-                Player.Rigidbody.isKinematic = true;
-                ShowObstructiveUnits(obstructiveUnits);
-            }
-        });
-    }
-
-    private void ShowObstructiveUnits(List<ObjectUnit> obstructiveUnits)
-    {
-        var seq = DOTween.Sequence();
-        
-        foreach (var unit in obstructiveUnits)
-        {
-            seq.Join(unit.transform.DOShakePosition(0.25f, 0.5f, 20));
-        }
-
-        seq.OnComplete(() =>
-        {
-            Player.Converter.ConvertDimension(AxisType.None);
-            Player.Rigidbody.isKinematic = false;
-        });
-    }
-
-    private bool SafeConvertCheck(out List<ObjectUnit> obstructiveUnits)
-    {
-        var center = Player.Collider.bounds.center;
-        var radius = ((CapsuleCollider)Player.Collider).radius;
-        var height = ((CapsuleCollider)Player.Collider).height;
-
-        var p1 = center + Vector3.up * height / 2f;
-        var p2 = center - Vector3.up * height / 2f;
-
-        var cols = new Collider[10];
-        Physics.OverlapCapsuleNonAlloc(p1, p2, radius, cols, Player.Data.obstructiveMask);
-
-        obstructiveUnits = cols.Where(col => col is not null && col != Player.StandingUnit?.Collider)
-            .Select(col => col.GetComponent<ObjectUnit>()).ToList();
-        return obstructiveUnits.Count <= 0;
+        Player.Converter.ConvertDimension(_controllingAxis);
     }
 }

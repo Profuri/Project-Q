@@ -27,6 +27,7 @@ public class PlayerUnit : ObjectUnit
     {
         base.Awake();
         Converter = GetComponent<AxisConverter>();
+        Converter.Player = this;
         ModelTrm = transform.Find("Model");
         Animator = ModelTrm.GetComponent<Animator>();
         HoldingHandler = GetComponent<ObjectHoldingHandler>();
@@ -160,7 +161,7 @@ public class PlayerUnit : ObjectUnit
         
         _selectedInteractableObject.OnInteraction(this, true);
     }
-    
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

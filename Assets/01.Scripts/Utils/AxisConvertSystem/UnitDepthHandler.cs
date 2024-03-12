@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEngine;
 
 namespace AxisConvertSystem
 {
@@ -17,8 +15,8 @@ namespace AxisConvertSystem
         {
             _owner = owner;
             _depthCheckPoint = new Dictionary<AxisType, DepthPoint>();
+            Depth = float.MaxValue;
         }
-
 
         public void CalcDepth(AxisType axis)
         {
@@ -29,14 +27,12 @@ namespace AxisConvertSystem
                 return;
             }
 
-            
             if (_owner.Section.SectionUnits.Where(unit => unit != _owner).Any(
-             unit => _depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis])))
+                    unit => _depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis])))
             {
                 Depth = 0f;
             }
         }
-
 
         public void DepthCheckPointSetting()
         {
