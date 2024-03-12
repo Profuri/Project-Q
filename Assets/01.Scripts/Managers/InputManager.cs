@@ -80,6 +80,8 @@ public class InputManager : MonoSingleton<InputManager>
         }
     }
 
+
+
     public void SetEnableInputWithout(EInputCategory cg, bool enable)
     {
         foreach (EInputCategory category in Enum.GetValues(typeof(EInputCategory)))
@@ -87,7 +89,7 @@ public class InputManager : MonoSingleton<InputManager>
             bool isEnable = enable;
             isEnable = category == cg ? isEnable : !isEnable;
 
-            if (isEnable)
+            if (!isEnable)
             {
                 _inputDictionary[category].Enable();
             }
@@ -107,6 +109,21 @@ public class InputManager : MonoSingleton<InputManager>
         else
         {
             _inputDictionary[category].Disable();
+        }
+    }
+
+    public void SetEnableInputAll(bool enable)
+    {
+        foreach(EInputCategory category in Enum.GetValues(typeof(EInputCategory)))
+        {
+            if(enable)
+            {
+                _inputDictionary[category].Enable();
+            }
+            else
+            {
+                _inputDictionary[category].Disable();
+            }
         }
     }
 }

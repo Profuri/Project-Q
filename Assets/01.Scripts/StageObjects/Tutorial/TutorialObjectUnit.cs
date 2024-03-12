@@ -7,8 +7,7 @@ using UnityEngine;
 public class TutorialObjectUnit : InteractableObject
 {
     [Header("Tutorial System")]
-    [SerializeField] private TutorialSO _tutorialSO;
-    [SerializeField] private Transform _markAppearTransform;
+    [SerializeField] private TutorialSO _tutorialSO;   [SerializeField] private Transform _markAppearTransform;
 
     public bool IsOn { get; private set; } = false;
     private TutorialMark _rotateTarget;
@@ -16,8 +15,18 @@ public class TutorialObjectUnit : InteractableObject
     public override void Init(AxisConverter converter)
     {
         base.Init(converter);
+
+        gameObject.layer = LayerMask.NameToLayer("Interactable");
         IsOn = false;
         LoadTutorialMark();
+    }
+
+    private void OnDisable()
+    {
+        if(_rotateTarget != null)
+        {
+            SceneControlManager.Instance.DeleteObject(_rotateTarget);
+        }
     }
 
     public override void OnPush()
@@ -33,11 +42,11 @@ public class TutorialObjectUnit : InteractableObject
     {
         if(axis != AxisType.None)
         {
-            Activate(false);
+            gameObject.layer = LayerMask.NameToLayer("Default");
         }
         else
         {
-            Activate(true);
+            gameObject.layer = LayerMask.NameToLayer("Default");
         }
         base.Convert(axis);
     }
@@ -80,12 +89,12 @@ public class TutorialObjectUnit : InteractableObject
         if (!IsOn)
         {
             TutorialManager.Instance.StartTutorial(_tutorialSO);
-            InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, true);
+            InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, false);
         }
         else
         {
+            InputManager.Instance.SetEnableInputAll(true);
             TutorialManager.Instance.StopTutorial();
-            InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, false);
         }
         IsOn = !IsOn;
     }
