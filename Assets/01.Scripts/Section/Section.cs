@@ -36,21 +36,26 @@ public class Section : PoolableMono
         transform.GetComponentsInChildren(SectionUnits);
         
         _sectionMaterials = new List<Material>();
+        
+        DOTween.Init(true, true, LogBehaviour.Verbose). SetCapacity(2000, 100);
+    }
+
+    public void ReloadSectionMaterials()
+    {
+        _sectionMaterials.Clear();
         var renderers = transform.GetComponentsInChildren<Renderer>();
         foreach (var renderer in renderers)
         {
-            if(!renderer.enabled)
+            if (!renderer.enabled)
             {
                 continue;
             }
-            
-            foreach (var material in renderer.materials) 
+
+            foreach (var material in renderer.materials)
             {
-                _sectionMaterials.Add(material);    
+                _sectionMaterials.Add(material);
             }
         }
-        
-        DOTween.Init(true, true, LogBehaviour.Verbose). SetCapacity(2000, 100);
     }
 
     private void FixedUpdate()
@@ -88,6 +93,7 @@ public class Section : PoolableMono
 
     public void Generate(Vector3 position, bool moveRoutine = true)
     {
+        ReloadSectionMaterials();
         CenterPosition = position;
         transform.position = CenterPosition;
         if (moveRoutine)
@@ -100,6 +106,7 @@ public class Section : PoolableMono
 
     public void Disappear()
     {
+        ReloadSectionMaterials();
         Dissolve(false, 2.5f);
         transform.DOMove(CenterPosition - Vector3.up * _sectionData.sectionYDepth, 3f)
             .OnComplete(() =>

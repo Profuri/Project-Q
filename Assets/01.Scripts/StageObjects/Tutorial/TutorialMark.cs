@@ -15,7 +15,6 @@ public class TutorialMark : PoolableMono
         }
     }
 
-
     public override void OnPush()
     {
         if(_rotateCoroutine != null)

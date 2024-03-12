@@ -4,10 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[RequireComponent(typeof(BoxCollider))]    
 public class TutorialObjectUnit : InteractableObject
 {
     [Header("Tutorial System")]
-    [SerializeField] private TutorialSO _tutorialSO;   [SerializeField] private Transform _markAppearTransform;
+    [SerializeField] private TutorialSO _tutorialSO;   
+    [SerializeField] private Transform _markAppearTransform;
 
     public bool IsOn { get; private set; } = false;
     private TutorialMark _rotateTarget;
@@ -32,7 +35,7 @@ public class TutorialObjectUnit : InteractableObject
     public override void OnPush()
     {
         base.OnPush();
-        if(_rotateTarget != null)
+        if(_rotateTarget != null)   
         {
             SceneControlManager.Instance.DeleteObject(_rotateTarget);
         }
@@ -81,6 +84,8 @@ public class TutorialObjectUnit : InteractableObject
         {
             _rotateTarget.transform.position = Collider.bounds.center + Vector3.up * 2.0f;
         }
+
+        _rotateTarget.transform.SetParent(Section.transform);
     }
 
 
@@ -98,4 +103,18 @@ public class TutorialObjectUnit : InteractableObject
         }
         IsOn = !IsOn;
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Collider collider = GetComponent<Collider>();
+        if(collider != null)
+        {
+            Vector3 center = collider.bounds.center;
+            Vector3 size = collider.bounds.size;
+            Gizmos.DrawCube(center,size);
+        }
+    }
+#endif
 }
