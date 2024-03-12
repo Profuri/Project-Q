@@ -1,27 +1,51 @@
 using AxisConvertSystem;
+using InteractableSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TutorialObjectUnit : ObjectUnit
+public class TutorialObjectUnit : InteractableObject
 {
     [Header("Tutorial System")]
     [SerializeField] private TutorialSO _tutorialSO;
-    [SerializeField] private LayerMask _layerMask;
-    [SerializeField] private float _findDistance = 2f;
     [SerializeField] private Transform _markAppearTransform;
 
+    public bool IsOn { get; private set; } = false;
     private TutorialMark _rotateTarget;
 
     public override void Init(AxisConverter converter)
     {
         base.Init(converter);
+        IsOn = false;
         LoadTutorialMark();
+    }
+
+    public override void OnPush()
+    {
+        base.OnPush();
+        if(_rotateTarget != null)
+        {
+            SceneControlManager.Instance.DeleteObject(_rotateTarget);
+        }
+    }
+
+    public override void Convert(AxisType axis)
+    {
+        if(axis != AxisType.None)
+        {
+            Activate(false);
+        }
+        else
+        {
+            Activate(true);
+        }
+        base.Convert(axis);
     }
 
     public override void UnitSetting(AxisType axis)
     {
         base.UnitSetting(axis);
+
         if(axis != AxisType.None)
         {
             SceneControlManager.Instance.DeleteObject(_rotateTarget);
@@ -49,45 +73,20 @@ public class TutorialObjectUnit : ObjectUnit
             _rotateTarget.transform.position = Collider.bounds.center + Vector3.up * 2.0f;
         }
     }
-    public override void UpdateUnit()
+
+
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        base.UpdateUnit();
-
-
-
-        PlayerUnit playerUnit = FindPlayerUnit();
-        if(TutorialManager.Instance.IsTutorialViewing)
+        if (!IsOn)
         {
-            if (playerUnit == null)
-            {
-                TutorialManager.Instance.StopTutorial();
-            }
+            TutorialManager.Instance.StartTutorial(_tutorialSO);
+            InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, true);
         }
         else
         {
-            if(playerUnit != null)
-            {
-                TutorialManager.Instance.StartTutorial(_tutorialSO);
-            }
+            TutorialManager.Instance.StopTutorial();
+            InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, false);
         }
-    }
-
-    private PlayerUnit FindPlayerUnit()
-    {
-        Vector3 center = transform.position;
-        Vector3 halfExtents = Collider.bounds.extents * 0.5f;
-        Vector3 direction = Vector3.up;
-        Quaternion quaternion = transform.rotation;
-        float maxDistance = _findDistance;
-
-        bool isHit = Physics.BoxCast(center,halfExtents,direction, out RaycastHit hit, quaternion,maxDistance,_layerMask);
-        if(isHit)
-        {
-            if(hit.collider.TryGetComponent(out PlayerUnit playerUnit))
-            {
-                return playerUnit;
-            }
-        }
-        return null;
+        IsOn = !IsOn;
     }
 }
