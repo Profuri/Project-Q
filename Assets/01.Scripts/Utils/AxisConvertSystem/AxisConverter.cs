@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using TreeEditor;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -7,6 +8,7 @@ namespace AxisConvertSystem
     public class AxisConverter : MonoBehaviour
     {
         [SerializeField] private LayerMask _objectMask;
+        [SerializeField, Range(0f, 1f)] private float _underOffset;
         
         public AxisType AxisType { get; private set; }
 
@@ -50,10 +52,14 @@ namespace AxisConvertSystem
                     {
                         Player.CheckStandObject(out var hit);
                         
-                        if (!(axisType == AxisType.Y && hit.collider == back.collider))
+                        if (!(axisType == AxisType.Y && front.collider is null && hit.collider == back.collider))
                         {
                             CancelChangeAxis(axisType, front, back);
                             return;
+                        }
+                        // when y axis convert, already standing object
+                        else
+                        {
                         }
                     }
                     
@@ -75,7 +81,7 @@ namespace AxisConvertSystem
             var reverseAxisDir = Vector3ExtensionMethod.GetAxisDir(canceledAxis) - Vector3.one;
             var shakeDir = new Vector3(Mathf.Abs(reverseAxisDir.x), Mathf.Abs(reverseAxisDir.y), Mathf.Abs(reverseAxisDir.z));
 
-            if (front.collider is not null)
+            if (front.collider != back.collider && front.collider is not null)
             {
                 seq.Join(front.collider.transform.DOShakePosition(0.25f, shakeDir * 0.5f, 30));
             }
@@ -122,13 +128,14 @@ namespace AxisConvertSystem
         {
             var capsuleCol = (CapsuleCollider)Player.Collider;
 
+            var boundsCenter = capsuleCol.bounds.center + Vector3.up * _underOffset;
             var center = capsuleCol.center;
             var dir = Vector3ExtensionMethod.GetAxisDir(axis); 
 
             var radius = capsuleCol.radius;
             var height = capsuleCol.height;
             
-            var p1 = transform.position + center + Vector3.up * (-height * 0.5F);
+            var p1 = boundsCenter + center + Vector3.up * (-height * 0.5F);
             var p2 = p1 + Vector3.up * radius;
 
             var isHit1 = Physics.CapsuleCast(p1-dir, p2-dir, radius, dir, out front, Mathf.Infinity, _objectMask);
