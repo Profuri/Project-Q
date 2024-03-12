@@ -221,6 +221,14 @@ namespace AxisConvertSystem
             UnitSetting(Converter.AxisType);
         }
         
+        public void RewriteUnitInfo()
+        {
+            _unitInfo.LocalPos = transform.localPosition;
+            _unitInfo.LocalRot = transform.localRotation;
+            _unitInfo.LocalScale = transform.localScale;
+            _unitInfo.ColliderCenter = Collider.GetLocalCenter();
+        }
+        
         private void SynchronizePosition(AxisType axis)
         {
             if (staticUnit || IsHide)
@@ -260,7 +268,7 @@ namespace AxisConvertSystem
             }
         }
 
-        private bool CheckStandObject(out RaycastHit hit)
+        public bool CheckStandObject(out RaycastHit hit)
         {
             var origin = Collider.bounds.center;
             if (Converter.AxisType == AxisType.Y)
