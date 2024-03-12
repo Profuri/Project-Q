@@ -1,0 +1,427 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="ThemeSwitcher" src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Scripts/Editor/Common/ThemeSwitcher.uxml?fileID=9197481963319205126&amp;guid=dcb2a8406bd7c26499a68e30bea7b554&amp;type=3#ThemeSwitcher" />
+    <ui:Template name="MaterialPreviewField" src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Scripts/Editor/Common/UITemplates/MaterialPreviewField.uxml?fileID=9197481963319205126&amp;guid=f9b7d00c49222a643bea2cb12294425c&amp;type=3#MaterialPreviewField" />
+    <ui:Template name="PreviewGroupBox" src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Scripts/Editor/Asset%20Window/PreviewGroupBox.uxml?fileID=9197481963319205126&amp;guid=f29633cd449c15840af3cb0764084a4e&amp;type=3#PreviewGroupBox" />
+    <ui:Template name="NoteTemplate" src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Scripts/Editor/Asset%20Window/NoteTemplate.uxml?fileID=9197481963319205126&amp;guid=c0185360e083a384499af4b8227c7ef8&amp;type=3#NoteTemplate" />
+    <Style src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Scripts/Editor/Common/TGSStyleSheet.uss?fileID=7433441132597879392&amp;guid=bc57b45100516604c92a14e686605401&amp;type=3#TGSStyleSheet" />
+    <Style src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Scripts/Editor/Style%20Sheet/Foldout.uss?fileID=7433441132597879392&amp;guid=987989d65ef9e0249b0a484e8e68c2de&amp;type=3#Foldout" />
+    <Style src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Scripts/Editor/Asset%20Window/AssetWindowStyleSheet.uss?fileID=7433441132597879392&amp;guid=2d255180f2b49634aa9e30899f3a6b9b&amp;type=3#AssetWindowStyleSheet" />
+    <Style src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Scripts/Editor/Style%20Sheet/FieldsStyleSheet.uss?fileID=7433441132597879392&amp;guid=1276a5a60d904be48b1fc0dc9fb1dc37&amp;type=3#FieldsStyleSheet" />
+    <ui:GroupBox name="RootHolder" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-shrink: 1; flex-grow: 1; transition-duration: 1s;">
+        <ui:GroupBox name="Header" style="flex-direction: column;">
+            <ui:GroupBox name="Main" style="flex-direction: row; flex-grow: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center; align-items: center; flex-shrink: 1;">
+                <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; min-height: auto; min-width: auto;">
+                    <ui:Button text="Modular 3D Text" display-tooltip-when-elided="true" name="AssetNameButton" class="textButton darkThemeLinkText" style="background-color: rgba(88, 88, 88, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; -unity-text-align: middle-center; font-size: 15px; display: flex; -unity-font-style: bold;" />
+                    <ui:GroupBox name="HorizontalGroup" style="flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 2px; margin-bottom: 2px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: center; justify-content: center;">
+                        <ui:Label text="Version" display-tooltip-when-elided="true" name="Label" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px;" />
+                        <ui:Label text="4.6.3a" display-tooltip-when-elided="true" name="AssetVersion" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; -unity-font-definition: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Fonts/Montserrat-Bold%20SDF.asset?fileID=11400000&amp;guid=2acd469fc18d2e04fb4f4a73bb7baa9c&amp;type=2#Montserrat-Bold SDF&apos;); -unity-font: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Fonts/Montserrat-Bold.ttf?fileID=12800000&amp;guid=a9b28104babb56c499abe3937ca16cea&amp;type=3#Montserrat-Bold&apos;); -unity-font-style: normal; font-size: 14px;" />
+                        <ui:Label text="|" display-tooltip-when-elided="true" name="Divider" style="margin-left: 5px; margin-right: 5px; display: none;" />
+                        <ui:Button text="( Check Update )" display-tooltip-when-elided="true" name="CheckUpdateButton" class="textButton darkThemeLinkText" style="font-size: 10px;" />
+                    </ui:GroupBox>
+                </ui:GroupBox>
+            </ui:GroupBox>
+            <ui:GroupBox name="FloatingButtonGroup" style="flex-direction: row; justify-content: flex-end; align-items: flex-start; margin-left: 0; margin-right: 20px; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 0; flex-shrink: 0; display: flex; position: absolute; top: 10px; left: auto; right: 10px;">
+                <ui:Instance template="ThemeSwitcher" name="ThemeSwitcher" style="display: none;" />
+            </ui:GroupBox>
+        </ui:GroupBox>
+        <ui:VisualElement name="Container" style="flex-grow: 1; margin-left: 10px; margin-right: 10px; margin-top: 10px; flex-shrink: 1; flex-direction: column;">
+            <ui:GroupBox name="TabsGroupBox" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 10px; min-width: auto; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row;">
+                <ui:VisualElement style="min-height: 1px; flex-grow: 1;" />
+                <ui:GroupBox name="Tabs" style="flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: center; justify-content: center; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-left-color: rgba(0, 0, 0, 0.39); border-right-color: rgba(0, 0, 0, 0.39); border-top-color: rgba(0, 0, 0, 0.39); border-bottom-color: rgba(0, 0, 0, 0.39); flex-shrink: 0; flex-grow: 0; overflow: hidden;">
+                    <ui:Button display-tooltip-when-elided="true" name="InformationTabButton" class="tab tabSelected" style="flex-shrink: 1; flex-direction: row; flex-grow: 0; align-items: center;">
+                        <ui:VisualElement name="Icon" style="background-image: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Artworks/Information.png?fileID=2800000&amp;guid=2303a5be81186da4f8658cdb0e3584fe&amp;type=3#Information&apos;); width: 12px; height: 12px; margin-right: 5px; display: none;" />
+                        <ui:Label text="Information" display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; font-size: 13px;" />
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="SettingsTabButton" class="tab" style="flex-shrink: 1; flex-direction: row; flex-grow: 0; align-items: center;">
+                        <ui:VisualElement name="Icon" style="background-image: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Utility/Editor%20Icons/M3D%20Font.png?fileID=2800000&amp;guid=71a3aa7acb042be428e37e7c6720ac87&amp;type=3#M3D Font&apos;); width: 12px; height: 12px; margin-right: 5px; display: none;" />
+                        <ui:Label text="Settings" display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; font-size: 13px;" />
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="CreateFontTabButton" class="tab" style="flex-shrink: 1; flex-direction: row; flex-grow: 0; align-items: center; display: flex;">
+                        <ui:VisualElement name="Icon" style="background-image: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Utility/Editor%20Icons/M3D%20Font.png?fileID=2800000&amp;guid=71a3aa7acb042be428e37e7c6720ac87&amp;type=3#M3D Font&apos;); width: 12px; height: 12px; margin-right: 5px; display: none;" />
+                        <ui:Label text="Create Font" display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; font-size: 13px;" />
+                    </ui:Button>
+                    <ui:Button display-tooltip-when-elided="true" name="UtilityTabButton" class="tab" style="flex-shrink: 1; flex-direction: row; flex-grow: 0; align-items: center;">
+                        <ui:VisualElement name="Icon" style="background-image: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Utility/Editor%20Icons/M3D%20Font.png?fileID=2800000&amp;guid=71a3aa7acb042be428e37e7c6720ac87&amp;type=3#M3D Font&apos;); width: 12px; height: 12px; margin-right: 5px; display: none;" />
+                        <ui:Label text="Utility" display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; font-size: 13px;" />
+                    </ui:Button>
+                </ui:GroupBox>
+                <ui:VisualElement style="min-height: 1px; flex-grow: 1;" />
+            </ui:GroupBox>
+            <ui:VisualElement name="Content" style="background-color: rgba(0, 0, 0, 0.04); border-left-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-bottom-right-radius: 0; border-bottom-left-radius: 0; border-left-color: rgba(0, 0, 0, 0.39); border-right-color: rgba(0, 0, 0, 0.39); border-top-color: rgba(0, 0, 0, 0.39); border-bottom-color: rgba(0, 0, 0, 0.39); flex-grow: 1; border-top-width: 1px; border-top-left-radius: 0; border-top-right-radius: 0;">
+                <ui:GroupBox name="InformationContent" style="flex-grow: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; min-width: auto; min-height: auto; flex-shrink: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+                    <ui:ScrollView style="min-width: auto; min-height: auto; flex-grow: 0; flex-shrink: 1; padding-right: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; padding-left: 0; padding-top: 0; padding-bottom: 0;">
+                        <ui:Button text="Documentation" display-tooltip-when-elided="true" name="DocumentationButton" style="min-height: 35px; margin-bottom: 8px; font-size: 13px; margin-left: 8px; margin-right: 8px; margin-top: 8px; flex-grow: 1;" />
+                        <ui:Button text="Change Log" display-tooltip-when-elided="true" name="ChangeLogButton" style="min-height: 35px; margin-bottom: 6px; font-size: 13px; margin-left: 6px; margin-right: 6px; margin-top: 6px; flex-grow: 1;" />
+                        <ui:GroupBox style="flex-direction: row; flex-wrap: wrap; flex-shrink: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; align-items: stretch; justify-content: center;">
+                            <ui:GroupBox name="Support" class="layoutBox">
+                                <ui:GroupBox name="Header">
+                                    <ui:Label text="Discuss" display-tooltip-when-elided="true" enable-rich-text="true" />
+                                </ui:GroupBox>
+                                <ui:Label text="Join the conversation in Unity Forum. Share your work, concerns or questions." display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; opacity: 0.8; white-space: normal; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; -unity-font-style: italic;" />
+                                <ui:Button text="Open forum post" display-tooltip-when-elided="true" name="ForumButton" style="min-height: 35px; font-size: 13px;" />
+                            </ui:GroupBox>
+                            <ui:GroupBox name="ForumBox" class="layoutBox" style="margin-top: 5px; margin-left: 0; margin-right: 0; margin-bottom: 0;">
+                                <ui:GroupBox name="Header">
+                                    <ui:Label text="Support" display-tooltip-when-elided="true" enable-rich-text="true" name="Label" />
+                                </ui:GroupBox>
+                                <ui:Label text="Need assistance with anything? Drop me a email anytime.&#10;Always happy to help." display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; opacity: 0.8; white-space: normal; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; -unity-font-style: italic;" />
+                                <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; justify-content: center;">
+                                    <ui:Button text="Send email" display-tooltip-when-elided="true" name="SendEmailButton" tooltip="FerdowsurAsif@gmail.com" style="min-height: 35px; margin-bottom: 10px; font-size: 13px; margin-left: 10px; margin-right: 10px; margin-top: 10px; flex-grow: 1; flex-shrink: 1;" />
+                                    <ui:Button text="Copy email" display-tooltip-when-elided="true" name="CopyEmailButton" tooltip="FerdowsurAsif@gmail.com" style="min-height: 35px; margin-bottom: 10px; font-size: 13px; margin-left: 10px; margin-right: 10px; margin-top: 10px; flex-grow: 1; flex-shrink: 1;" />
+                                </ui:GroupBox>
+                            </ui:GroupBox>
+                        </ui:GroupBox>
+                        <ui:GroupBox name="Review" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+                            <ui:Button text="Leave a review" display-tooltip-when-elided="true" name="ReviewButton" class="Button normalButton" style="min-height: 35px; margin-bottom: 5px; font-size: 13px; margin-left: 10px; margin-right: 10px; margin-top: 10px;" />
+                            <ui:Label text="Thank you for choosing my asset. I hope you are enjoying it and finding it useful. Your feedback is very important to me and other potential buyers. &#10;If you are satisfied with the asset, please consider leaving a 5-star review and sharing your positive experience. &#10;It will only take a minute, but it will make a huge difference for me and my asset. &#10;I appreciate your support and I will continue to work hard to improve the asset." display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; opacity: 0.8; white-space: normal; padding-left: 10px; padding-right: 10px; padding-top: 0; padding-bottom: 10px; -unity-font-style: italic; -unity-text-align: upper-center;" />
+                        </ui:GroupBox>
+                    </ui:ScrollView>
+                </ui:GroupBox>
+                <ui:GroupBox name="SettingsContent" style="flex-grow: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; min-width: auto; min-height: auto; flex-shrink: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+                    <ui:ScrollView style="min-width: auto; min-height: auto; flex-grow: 1; flex-shrink: 1; padding-right: 10px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; padding-left: 5px; padding-top: 5px; padding-bottom: 5px;">
+                        <ui:Foldout text="Input Settings" name="InputSettingsFoldout" value="true" class="unity-foldout__dark" style="display: flex; max-width: none; min-width: auto; margin-top: 0;">
+                            <ui:Toggle label="Auto-generate Scene input System" value="false" tooltip="If enabled, will automatically create the M3D Input System gameobject in the scene when appropriate 3D UI is created." name="AutoGenerateSceneInputSystemToggle" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                            <ui:Toggle label="Don&apos;t auto create raycaster if XR Toolkit exists" value="false" name="DontAutoCreateRaycasterOrButtonIfVRtoolkitExists" class="toggleThemeSupported" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                            <ui:GroupBox name="InputActionAssetGroup" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; flex-grow: 0; justify-content: flex-start; align-items: center;">
+                                <uie:ObjectField label="Input Action Asset" name="InputActionAssetField" style="flex-grow: 0; flex-shrink: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+                                <ui:Button text="Apply to scene" display-tooltip-when-elided="true" name="ApplyInputActionAssetButton" style="margin-left: 10px; flex-shrink: 0;" />
+                            </ui:GroupBox>
+                        </ui:Foldout>
+                        <ui:GroupBox name="DefaultValues" class="layoutBox" style="min-width: auto; flex-grow: 1; flex-shrink: 1; width: auto; height: auto; max-width: none; display: flex;">
+                            <ui:GroupBox name="Header">
+                                <ui:Label text="Default values" display-tooltip-when-elided="true" enable-rich-text="true" style="flex-grow: 1;" />
+                            </ui:GroupBox>
+                            <ui:Foldout text="Text" name="TextSettingsFoldout" value="true" class="unity-foldout__dark" style="display: flex; max-width: none; min-width: auto; flex-direction: column; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
+                                <ui:GroupBox name="Layout" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row;">
+                                    <ui:GroupBox style="min-width: auto; flex-shrink: 1; flex-grow: 1;">
+                                        <ui:GroupBox style="flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+                                            <uie:ObjectField name="TextDefaultFontField" label="Font" style="display: flex; max-width: 50%; flex-grow: 1;" />
+                                            <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyDefaultTextFontToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                        </ui:GroupBox>
+                                        <ui:GroupBox style="flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+                                            <uie:Vector3Field x="8" y="8" z="8" name="TextDefaultSizeField" label="Size" style="flex-grow: 1;" />
+                                            <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyDefaultTextSizeToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                        </ui:GroupBox>
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; align-items: center; flex-direction: row; flex-shrink: 0; flex-grow: 1;">
+                                        <ui:Instance template="MaterialPreviewField" name="TextMaterialPreviewField" />
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center; align-items: stretch; flex-grow: 0;">
+                                            <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyDefaultTextMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                        </ui:GroupBox>
+                                    </ui:GroupBox>
+                                </ui:GroupBox>
+                            </ui:Foldout>
+                            <ui:Foldout text="Button" name="ButtonSettingsFoldout" value="false" class="unity-foldout__dark" style="display: flex; max-width: none; min-width: auto; flex-direction: column; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
+                                <ui:GroupBox name="NormalStyleGroupBox" class="layoutBox" style="min-width: auto; flex-grow: 0; flex-shrink: 1; width: auto; height: auto; max-width: none;">
+                                    <ui:GroupBox name="Top" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 10px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; border-bottom-width: 1px; border-left-color: rgba(0, 0, 0, 0.2); border-right-color: rgba(0, 0, 0, 0.2); border-top-color: rgba(0, 0, 0, 0.2); border-bottom-color: rgba(0, 0, 0, 0.2); background-color: rgba(0, 0, 0, 0.08); border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                                        <ui:Label text="Normal" display-tooltip-when-elided="true" enable-rich-text="true" style="flex-grow: 1;" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="TextSizeGroupBox" style="margin-left: 10px; margin-right: 10px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; flex-grow: 0; flex-shrink: 1;">
+                                        <ui:Label text="Size" display-tooltip-when-elided="true" />
+                                        <uie:Vector3Field x="8" y="8" z="8" name="TextSize" style="flex-grow: 1;" />
+                                        <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextSizeButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="Layout" style="flex-direction: row; margin-left: 10px; margin-right: 10px; margin-top: 0; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1; overflow: hidden;">
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="TextMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; align-items: stretch;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="BackgroundMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center; align-items: stretch; flex-grow: 0;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyBackgroundMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                    </ui:GroupBox>
+                                </ui:GroupBox>
+                                <ui:GroupBox name="SelectedStyleGroupBox" class="layoutBox" style="min-width: auto; flex-grow: 0; flex-shrink: 1; width: auto; height: auto; max-width: none;">
+                                    <ui:GroupBox name="Top" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 10px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; border-bottom-width: 1px; border-left-color: rgba(0, 0, 0, 0.2); border-right-color: rgba(0, 0, 0, 0.2); border-top-color: rgba(0, 0, 0, 0.2); border-bottom-color: rgba(0, 0, 0, 0.2); background-color: rgba(0, 0, 0, 0.08); border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                                        <ui:Label text="Selected" display-tooltip-when-elided="true" enable-rich-text="true" style="flex-grow: 1;" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="TextSizeGroupBox" style="margin-left: 10px; margin-right: 10px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; flex-grow: 0; flex-shrink: 1;">
+                                        <ui:Label text="Size" display-tooltip-when-elided="true" />
+                                        <uie:Vector3Field x="8" y="8" z="8" name="TextSize" style="flex-grow: 1;" />
+                                        <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextSizeButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="Layout" style="flex-direction: row; margin-left: 10px; margin-right: 10px; margin-top: 0; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1; overflow: hidden;">
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="TextMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; align-items: stretch;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="BackgroundMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center; align-items: stretch; flex-grow: 0;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyBackgroundMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                    </ui:GroupBox>
+                                </ui:GroupBox>
+                                <ui:GroupBox name="PressedStyleGroupBox" class="layoutBox" style="min-width: auto; flex-grow: 0; flex-shrink: 1; width: auto; height: auto; max-width: none;">
+                                    <ui:GroupBox name="Top" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 10px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; border-bottom-width: 1px; border-left-color: rgba(0, 0, 0, 0.2); border-right-color: rgba(0, 0, 0, 0.2); border-top-color: rgba(0, 0, 0, 0.2); border-bottom-color: rgba(0, 0, 0, 0.2); background-color: rgba(0, 0, 0, 0.08); border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                                        <ui:Label text="Pressed" display-tooltip-when-elided="true" enable-rich-text="true" style="flex-grow: 1;" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="TextSizeGroupBox" style="margin-left: 10px; margin-right: 10px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; flex-grow: 0; flex-shrink: 1;">
+                                        <ui:Label text="Size" display-tooltip-when-elided="true" />
+                                        <uie:Vector3Field x="8" y="8" z="8" name="TextSize" style="flex-grow: 1;" />
+                                        <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextSizeButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="Layout" style="flex-direction: row; margin-left: 10px; margin-right: 10px; margin-top: 0; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1; overflow: hidden;">
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="TextMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; align-items: stretch;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="BackgroundMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center; align-items: stretch; flex-grow: 0;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyBackgroundMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                    </ui:GroupBox>
+                                </ui:GroupBox>
+                                <ui:GroupBox name="DisabledStyleGroupBox" class="layoutBox" style="min-width: auto; flex-grow: 0; flex-shrink: 1; width: auto; height: auto; max-width: none;">
+                                    <ui:GroupBox name="Top" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 10px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; border-bottom-width: 1px; border-left-color: rgba(0, 0, 0, 0.2); border-right-color: rgba(0, 0, 0, 0.2); border-top-color: rgba(0, 0, 0, 0.2); border-bottom-color: rgba(0, 0, 0, 0.2); background-color: rgba(0, 0, 0, 0.08); border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                                        <ui:Label text="Disabled" display-tooltip-when-elided="true" enable-rich-text="true" style="flex-grow: 1;" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="TextSizeGroupBox" style="margin-left: 10px; margin-right: 10px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; flex-grow: 0; flex-shrink: 1;">
+                                        <ui:Label text="Size" display-tooltip-when-elided="true" />
+                                        <uie:Vector3Field x="8" y="8" z="8" name="TextSize" style="flex-grow: 1;" />
+                                        <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextSizeButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="Layout" style="flex-direction: row; margin-left: 10px; margin-right: 10px; margin-top: 0; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1; overflow: hidden;">
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="TextMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; align-items: stretch;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="BackgroundMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center; align-items: stretch; flex-grow: 0;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyBackgroundMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                    </ui:GroupBox>
+                                </ui:GroupBox>
+                            </ui:Foldout>
+                            <ui:Foldout text="List" name="ListSettingsFoldout" value="false" class="unity-foldout__dark" style="display: flex; max-width: none; min-width: auto; flex-direction: column; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
+                                <ui:GroupBox name="NormalStyleGroupBox" class="layoutBox" style="min-width: auto; flex-grow: 0; flex-shrink: 1; width: auto; height: auto; max-width: none;">
+                                    <ui:GroupBox name="Top" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 10px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; border-bottom-width: 1px; border-left-color: rgba(0, 0, 0, 0.2); border-right-color: rgba(0, 0, 0, 0.2); border-top-color: rgba(0, 0, 0, 0.2); border-bottom-color: rgba(0, 0, 0, 0.2); background-color: rgba(0, 0, 0, 0.08); border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                                        <ui:Label text="Normal" display-tooltip-when-elided="true" enable-rich-text="true" style="flex-grow: 1;" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="TextSizeGroupBox" style="margin-left: 10px; margin-right: 10px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; flex-grow: 0; flex-shrink: 1;">
+                                        <ui:Label text="Size" display-tooltip-when-elided="true" />
+                                        <uie:Vector3Field x="8" y="8" z="8" name="TextSize" style="flex-grow: 1;" />
+                                        <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextSizeButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="Layout" style="flex-direction: row; margin-left: 10px; margin-right: 10px; margin-top: 0; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1; overflow: hidden;">
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="TextMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; align-items: stretch;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="BackgroundMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center; align-items: stretch; flex-grow: 0;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyBackgroundMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                    </ui:GroupBox>
+                                </ui:GroupBox>
+                                <ui:GroupBox name="SelectedStyleGroupBox" class="layoutBox" style="min-width: auto; flex-grow: 0; flex-shrink: 1; width: auto; height: auto; max-width: none;">
+                                    <ui:GroupBox name="Top" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 10px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; border-bottom-width: 1px; border-left-color: rgba(0, 0, 0, 0.2); border-right-color: rgba(0, 0, 0, 0.2); border-top-color: rgba(0, 0, 0, 0.2); border-bottom-color: rgba(0, 0, 0, 0.2); background-color: rgba(0, 0, 0, 0.08); border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                                        <ui:Label text="Selected" display-tooltip-when-elided="true" enable-rich-text="true" style="flex-grow: 1;" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="TextSizeGroupBox" style="margin-left: 10px; margin-right: 10px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; flex-grow: 0; flex-shrink: 1;">
+                                        <ui:Label text="Size" display-tooltip-when-elided="true" />
+                                        <uie:Vector3Field x="8" y="8" z="8" name="TextSize" style="flex-grow: 1;" />
+                                        <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextSizeButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="Layout" style="flex-direction: row; margin-left: 10px; margin-right: 10px; margin-top: 0; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1; overflow: hidden;">
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="TextMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; align-items: stretch;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="BackgroundMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center; align-items: stretch; flex-grow: 0;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyBackgroundMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                    </ui:GroupBox>
+                                </ui:GroupBox>
+                                <ui:GroupBox name="PressedStyleGroupBox" class="layoutBox" style="min-width: auto; flex-grow: 0; flex-shrink: 1; width: auto; height: auto; max-width: none;">
+                                    <ui:GroupBox name="Top" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 10px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; border-bottom-width: 1px; border-left-color: rgba(0, 0, 0, 0.2); border-right-color: rgba(0, 0, 0, 0.2); border-top-color: rgba(0, 0, 0, 0.2); border-bottom-color: rgba(0, 0, 0, 0.2); background-color: rgba(0, 0, 0, 0.08); border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                                        <ui:Label text="Pressed" display-tooltip-when-elided="true" enable-rich-text="true" style="flex-grow: 1;" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="TextSizeGroupBox" style="margin-left: 10px; margin-right: 10px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; flex-grow: 0; flex-shrink: 1;">
+                                        <ui:Label text="Size" display-tooltip-when-elided="true" />
+                                        <uie:Vector3Field x="8" y="8" z="8" name="TextSize" style="flex-grow: 1;" />
+                                        <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextSizeButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="Layout" style="flex-direction: row; margin-left: 10px; margin-right: 10px; margin-top: 0; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1; overflow: hidden;">
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="TextMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; align-items: stretch;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButtonSmall normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="BackgroundMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center; align-items: stretch; flex-grow: 0;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyBackgroundMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                    </ui:GroupBox>
+                                </ui:GroupBox>
+                                <ui:GroupBox name="DisabledStyleGroupBox" class="layoutBox" style="min-width: auto; flex-grow: 0; flex-shrink: 1; width: auto; height: auto; max-width: none;">
+                                    <ui:GroupBox name="Top" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 10px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; border-bottom-width: 1px; border-left-color: rgba(0, 0, 0, 0.2); border-right-color: rgba(0, 0, 0, 0.2); border-top-color: rgba(0, 0, 0, 0.2); border-bottom-color: rgba(0, 0, 0, 0.2); background-color: rgba(0, 0, 0, 0.08); border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                                        <ui:Label text="Disabled" display-tooltip-when-elided="true" enable-rich-text="true" style="flex-grow: 1;" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="TextSizeGroupBox" style="margin-left: 10px; margin-right: 10px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; flex-grow: 0; flex-shrink: 1;">
+                                        <ui:Label text="Size" display-tooltip-when-elided="true" />
+                                        <uie:Vector3Field x="8" y="8" z="8" name="TextSize" style="flex-grow: 1;" />
+                                        <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextSizeButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="Layout" style="flex-direction: row; margin-left: 10px; margin-right: 10px; margin-top: 0; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1; overflow: hidden;">
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="TextMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; align-items: stretch;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyTextMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                        <ui:GroupBox name="Row" style="display: flex; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; flex-direction: row; flex-shrink: 1; flex-grow: 1; align-items: flex-end;">
+                                            <ui:Instance template="MaterialPreviewField" name="BackgroundMaterialPreviewField" style="flex-grow: 1;" />
+                                            <ui:GroupBox name="Row" style="display: flex; margin-left: 2px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center; align-items: stretch; flex-grow: 0;">
+                                                <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyBackgroundMaterialToSceneButton" tooltip="Apply to scene, otherwise, the value is only used for new elements" class="Button normalButton" />
+                                            </ui:GroupBox>
+                                        </ui:GroupBox>
+                                    </ui:GroupBox>
+                                </ui:GroupBox>
+                            </ui:Foldout>
+                        </ui:GroupBox>
+                    </ui:ScrollView>
+                </ui:GroupBox>
+                <ui:GroupBox name="CreateFontContent" style="flex-grow: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; min-width: auto; min-height: auto; flex-shrink: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+                    <ui:ScrollView style="min-width: auto; min-height: auto; flex-grow: 1; flex-shrink: 1; padding-right: 5px; padding-left: 5px; padding-top: 5px; padding-bottom: 5px;">
+                        <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; min-width: auto; align-items: center; justify-content: center;">
+                            <ui:Button text="Select TTF File" display-tooltip-when-elided="true" name="SelectFileButton" tooltip="TrueType is the most common format of fonts. If your font is in a different format, check the docs about how to convert it into a TTF file." class="normalButton" style="min-height: 35px; margin-bottom: 10px; font-size: 13px; margin-left: 10px; margin-right: 10px; margin-top: 10px; flex-grow: 0; flex-shrink: 0; max-width: 500px; min-width: 150px;">
+                                <ui:VisualElement />
+                            </ui:Button>
+                        </ui:GroupBox>
+                        <ui:Foldout text="TTF File Information" name="InformationFoldout" class="layoutBox" style="display: flex; max-width: none; min-width: auto;">
+                            <ui:GroupBox style="flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+                                <ui:Label display-tooltip-when-elided="true" text="Font name :" style="opacity: 0.7;" />
+                                <ui:Label display-tooltip-when-elided="true" name="FontNameLabel" text="asdasd" class="InformationLabel" style="color: rgb(255, 255, 255);" />
+                            </ui:GroupBox>
+                            <ui:Label display-tooltip-when-elided="true" name="FontLocationLabel" text="Location :" style="font-size: 11px; white-space: normal;" />
+                            <ui:GroupBox style="flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: center;">
+                                <ui:Button display-tooltip-when-elided="true" name="KerningDocumentation" tooltip="Kerning Documentation" class="iconButton" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; opacity: 0.7; background-image: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Modular%203D%20Text/Utility/Editor%20Icons/Icon_Documentation.png?fileID=2800000&amp;guid=40e23347097104e4f82ec7ff7f90d892&amp;type=3#Icon_Documentation&apos;); width: 15px; height: 15px; background-color: rgba(88, 88, 88, 0); padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+                                <ui:Label display-tooltip-when-elided="true" text="Kerning Table:" style="margin-left: 5px; opacity: 0.7;" />
+                                <ui:Label display-tooltip-when-elided="true" name="FontKernCountLabel" class="InformationLabel" style="font-size: 11px;" />
+                            </ui:GroupBox>
+                        </ui:Foldout>
+                        <ui:Foldout text="Mesh Settings" tooltip="This determines the look and feel of the mesh. " name="MeshSettingsFoldout" class="layoutBox" style="min-width: auto; max-width: none;">
+                            <ui:VisualElement style="flex-grow: 1; margin-right: 5px;">
+                                <ui:VisualElement name="Row0" style="flex-direction: row; margin-top: 5px; justify-content: flex-start; align-items: center; margin-bottom: 0;">
+                                    <ui:VisualElement name="StyleSelection" style="flex-direction: row;">
+                                        <uie:EnumField value="asdasd" name="StyleEnumField" style="flex-grow: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-shrink: 1;" />
+                                    </ui:VisualElement>
+                                    <ui:Button text="Reset" display-tooltip-when-elided="true" tooltip="Restore default mesh settings." name="ResetMeshSettingsButton" class="normalButton" style="border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; margin-left: 10px;" />
+                                </ui:VisualElement>
+                                <ui:VisualElement name="Row1" style="flex-direction: row; margin-top: 5px; justify-content: flex-start; align-items: center; margin-bottom: 0;">
+                                    <uie:IntegerField label="Vertex Density" value="1" name="VertexDensityField" tooltip="How dense the vertices should be." style="flex-shrink: 1; flex-grow: 1; -unity-font-definition: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Fonts/Montserrat-Regular%20SDF.asset?fileID=11400000&amp;guid=5f7aecc8015b29a4fa747b92096f9790&amp;type=2#Montserrat-Regular SDF&apos;);" />
+                                    <uie:IntegerField label="Smoothing Angle" value="30" name="SmoothingAngleField" style="flex-shrink: 1; flex-grow: 1; -unity-font-definition: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Fonts/Montserrat-Regular%20SDF.asset?fileID=11400000&amp;guid=5f7aecc8015b29a4fa747b92096f9790&amp;type=2#Montserrat-Regular SDF&apos;);" />
+                                </ui:VisualElement>
+                                <ui:VisualElement name="Row2" style="flex-direction: row; margin-top: 2px; justify-content: flex-start; align-items: center; margin-bottom: 5px;">
+                                    <uie:FloatField label="Size XY" value="42.2" name="SizeXYField" tooltip="It should be 1 in most cases." style="flex-shrink: 1; flex-grow: 1; -unity-font-definition: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Fonts/Montserrat-Regular%20SDF.asset?fileID=11400000&amp;guid=5f7aecc8015b29a4fa747b92096f9790&amp;type=2#Montserrat-Regular SDF&apos;);" />
+                                    <uie:FloatField label="Size Z/Depth" value="42.2" name="SizeZField" tooltip="It should be 1 in most cases." style="flex-shrink: 1; flex-grow: 1; -unity-font-definition: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Fonts/Montserrat-Regular%20SDF.asset?fileID=11400000&amp;guid=5f7aecc8015b29a4fa747b92096f9790&amp;type=2#Montserrat-Regular SDF&apos;);" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:Foldout>
+                        <ui:Foldout text="Preview" tooltip="How the font looks with the selected settings" name="PreviewFoldout" class="layoutBox" style="max-width: none; min-width: auto;">
+                            <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; display: flex;">
+                                <ui:VisualElement style="flex-grow: 1; flex-shrink: 0;" />
+                                <uie:IntegerField label="Amount" value="1" name="PreviewAmount" tooltip="Must be a value between 1 and 50" style="flex-shrink: 1; flex-grow: 0; -unity-font-definition: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Fonts/Montserrat-Regular%20SDF.asset?fileID=11400000&amp;guid=5f7aecc8015b29a4fa747b92096f9790&amp;type=2#Montserrat-Regular SDF&apos;); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; min-width: 85px;" />
+                            </ui:GroupBox>
+                            <ui:ScrollView mode="Horizontal" name="PreviewScrollView" style="flex-direction: column; min-width: auto; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+                                <ui:Instance template="PreviewGroupBox" name="PreviewGroupBox" />
+                            </ui:ScrollView>
+                        </ui:Foldout>
+                        <ui:Foldout text="Prebuilt Characters" tooltip="Prebuilt characters have their mesh created early, which reduces compute time by not having to create them runtime. Also, it allows the manual modification of settings for each character by selecting the created font file." name="PrebuiltCharactersFoldout" class="layoutBox" style="min-width: auto; max-width: none;">
+                            <ui:VisualElement style="flex-direction: row;">
+                                <ui:VisualElement style="flex-grow: 1; margin-right: 5px;">
+                                    <ui:VisualElement name="StyleSelection" style="flex-direction: row; margin-bottom: 5px;">
+                                        <uie:EnumField value="asdasd" name="CharInputStyle" style="flex-grow: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-shrink: 0;" />
+                                        <ui:Button text="Log" display-tooltip-when-elided="true" tooltip="Debug logs all characters that should be included in prebuilt characters" name="LogPrebuiltCharactersButton" class="Button normalButton" style="margin-left: 10px; border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px;" />
+                                        <ui:Button text="Reset" display-tooltip-when-elided="true" tooltip="Restore default prebuild characters." name="ResetPrebuiltCharactersButton" class="Button normalButton" style="margin-left: 5px; border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px;" />
+                                    </ui:VisualElement>
+                                    <ui:GroupBox name="CharacterRangeSelection" style="flex-direction: row; min-height: auto; min-width: auto; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+                                        <ui:TextField picking-mode="Ignore" label="Start" value="filler text" text="!" name="StartPrebuiltCharacter" max-length="1" style="-unity-font: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Fonts/Montserrat-Regular.ttf?fileID=12800000&amp;guid=e8239e9a7fbaa2048a9e65d5d35d76ce&amp;type=3#Montserrat-Regular&apos;); flex-grow: 1; flex-shrink: 1; -unity-font-definition: initial;" />
+                                        <ui:TextField picking-mode="Ignore" label="End" value="filler text" text="~" name="EndPrebuiltCharacter" max-length="1" style="-unity-font: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Fonts/Montserrat-Regular.ttf?fileID=12800000&amp;guid=e8239e9a7fbaa2048a9e65d5d35d76ce&amp;type=3#Montserrat-Regular&apos;); flex-grow: 1; flex-shrink: 1; -unity-font-definition: initial;" />
+                                    </ui:GroupBox>
+                                    <ui:GroupBox name="UnicodeRangeSelection" style="flex-direction: row; min-height: auto; min-width: auto; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+                                        <ui:TextField picking-mode="Ignore" label="Start" value="filler text" text="!" name="StartUnicode" max-length="1" style="-unity-font: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Fonts/Montserrat-Regular.ttf?fileID=12800000&amp;guid=e8239e9a7fbaa2048a9e65d5d35d76ce&amp;type=3#Montserrat-Regular&apos;); flex-grow: 1; flex-shrink: 1; -unity-font-definition: initial;" />
+                                        <ui:TextField picking-mode="Ignore" label="End" value="filler text" text="~" name="EndUnicode" max-length="1" style="-unity-font: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Fonts/Montserrat-Regular.ttf?fileID=12800000&amp;guid=e8239e9a7fbaa2048a9e65d5d35d76ce&amp;type=3#Montserrat-Regular&apos;); flex-grow: 1; flex-shrink: 1; -unity-font-definition: initial;" />
+                                    </ui:GroupBox>
+                                    <ui:TextField picking-mode="Ignore" value="filler text" text="filler text" multiline="true" name="CustomCharacters" style="min-height: 50px;" />
+                                    <ui:TextField picking-mode="Ignore" value="filler text" text="filler text" multiline="true" name="UnicodeSequence" style="min-height: 50px;" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:Foldout>
+                        <ui:GroupBox style="margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; display: flex; justify-content: center;">
+                            <ui:Instance template="NoteTemplate" name="MeshSettingsNote" style="display: flex; flex-grow: 1; margin-left: 0; margin-right: 20px; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                            <ui:Button text="F.A.Q" display-tooltip-when-elided="true" name="CommonIssuesButton" class="normalButton" style="flex-grow: 0; flex-shrink: 1;" />
+                        </ui:GroupBox>
+                    </ui:ScrollView>
+                    <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; min-width: auto; align-items: center; justify-content: center;">
+                        <ui:Button text="Save " display-tooltip-when-elided="true" name="CreateFontButton" class="Button normalButton" style="min-height: 35px; margin-bottom: 10px; font-size: 13px; margin-left: 10px; margin-right: 10px; margin-top: 10px; flex-grow: 1; flex-shrink: 0; min-width: 150px; max-width: 500px;" />
+                    </ui:GroupBox>
+                </ui:GroupBox>
+                <ui:GroupBox name="UtilityContent" style="flex-grow: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; min-width: auto; min-height: auto; flex-shrink: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+                    <ui:ScrollView style="min-width: auto; min-height: auto; flex-grow: 1; flex-shrink: 1; padding-right: 5px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; padding-left: 0; padding-top: 0; padding-bottom: 0;">
+                        <ui:GroupBox style="flex-direction: row; flex-wrap: wrap; flex-shrink: 1;">
+                            <ui:GroupBox name="UtilityBox" class="layoutBox">
+                                <ui:GroupBox name="Header">
+                                    <ui:Label text="Assembly Definition File" display-tooltip-when-elided="true" enable-rich-text="true" style="flex-grow: 1;" />
+                                </ui:GroupBox>
+                                <ui:Label text="Assembly Definitions are assets that you can create to organize your scripts into assemblies.&#10;If you decide to use assebly definitions, remember to have those reference the Modular 3d Text one." display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; opacity: 0.8; white-space: normal; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; -unity-font-style: italic;" />
+                                <ui:VisualElement name="Filler" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; flex-grow: 1; min-height: 0;" />
+                                <ui:Button text="Setup Assembly Definition File" display-tooltip-when-elided="true" name="SetupAssemblyButton" class="Button normalButton" style="min-height: 35px; margin-bottom: 10px; font-size: 13px; margin-left: 10px; margin-right: 10px; margin-top: 10px;" />
+                            </ui:GroupBox>
+                        </ui:GroupBox>
+                    </ui:ScrollView>
+                </ui:GroupBox>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:GroupBox name="Footer" style="background-color: rgba(0, 0, 0, 0); margin-left: 0; margin-right: 0; margin-top: 10px; margin-bottom: 0; padding-left: 20px; padding-right: 20px; padding-top: 2px; padding-bottom: 2px; flex-direction: row;">
+            <ui:GroupBox name="Left" style="flex-direction: row; flex-grow: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-start; align-items: center; flex-shrink: 1;">
+                <ui:GroupBox style="justify-content: center; align-items: flex-start; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+                    <ui:Button text="Documentation" display-tooltip-when-elided="true" name="DocumentationButton" tooltip="Open the Online Documentaion" class="textButton darkThemeLinkText" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; opacity: 0.7; align-items: flex-start;" />
+                    <ui:GroupBox name="HorizontalGroup" style="flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: flex-end;">
+                        <ui:Button text="Support" display-tooltip-when-elided="true" name="ContactSupport" tooltip="Email: FerdowsurAsif@Gmail.com                     Need assistance with anything? Always happy to help." class="textButton darkThemeLinkText" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; opacity: 0.7;" />
+                        <ui:Label text="|" display-tooltip-when-elided="true" name="Divider" style="margin-left: 10px; margin-right: 10px; -unity-text-align: middle-center; margin-top: 0; margin-bottom: 0; align-items: center;" />
+                        <ui:Button text="Forum" display-tooltip-when-elided="true" name="ForumButton" tooltip="Unity Forum post                                                   Join the conversation. Feel free to share your work, question or idea." class="textButton darkThemeLinkText" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; opacity: 0.7;" />
+                    </ui:GroupBox>
+                </ui:GroupBox>
+            </ui:GroupBox>
+            <ui:GroupBox name="Right" style="flex-direction: row; justify-content: center; align-items: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 0; flex-shrink: 0; display: flex;">
+                <ui:GroupBox style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+                    <ui:GroupBox name="HorizontalGroup" style="flex-direction: row; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; display: flex; justify-content: flex-end;">
+                        <ui:Button display-tooltip-when-elided="true" name="FaceBookButton" tooltip="Facebook" class="iconButton" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; opacity: 0.7; background-image: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Artworks/FacebookIcon.png?fileID=2800000&amp;guid=ab92f6a1c069b1c42a0efdaf8131b5c1&amp;type=3#FacebookIcon&apos;); width: 20px; height: 20px; background-color: rgba(0, 0, 0, 0);" />
+                        <ui:Button display-tooltip-when-elided="true" name="RedditButton" tooltip="Reddit" class="iconButton" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; opacity: 0.7; background-image: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Common/Artworks/RedditIcon.png?fileID=2800000&amp;guid=c0d38168509c6ce49bf9630f8a70c31c&amp;type=3#RedditIcon&apos;); width: 20px; height: 20px; background-color: rgba(88, 88, 88, 0);" />
+                    </ui:GroupBox>
+                    <ui:Button text="Get other awesome assets" display-tooltip-when-elided="true" name="GetMoreAssetsButton" tooltip="Checkout other assets on our Unity Store Page" class="textButton darkThemeLinkText" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; opacity: 0.7; padding-right: 2px;" />
+                </ui:GroupBox>
+            </ui:GroupBox>
+        </ui:GroupBox>
+    </ui:GroupBox>
+</ui:UXML>

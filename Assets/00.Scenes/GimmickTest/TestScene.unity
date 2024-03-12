@@ -167,11 +167,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 574e8a36e8fc4e95b8d5b1b9d838af60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _virtualCams:
-  - {fileID: 1303241396}
-  - {fileID: 2035177301}
-  - {fileID: 1916769178}
-  - {fileID: 335548537}
+  _camShakeCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _transitionTime: 0
 --- !u!1 &335548536
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,31 +204,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 752f7fce72eb4bd089528c32099ffb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 3
-  _easingCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &335548538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -511,6 +488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mainVolume: {fileID: 1510291572}
   _highlightVolume: {fileID: 450780245}
+  _axisControlVolume: {fileID: 0}
 --- !u!1001 &612840228
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -638,6 +616,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89e35a08f9824ae597535ad2710c2aa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
   _interactType: 0
   _attribute: -1
 --- !u!54 &680483765
@@ -1144,7 +1130,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1224572978}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.3826834, y: 0.00000012801274, z: -0.000000053024607, w: 0.92387956}
+  m_LocalRotation: {x: 0.38268343, y: -1e-45, z: 1e-45, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1322,31 +1308,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 752f7fce72eb4bd089528c32099ffb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
-  _easingCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &1303241397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1515,6 +1476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea42d77b2d5f74e4fab287dac9106a49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _coreData: {fileID: 0}
 --- !u!4 &1309739923
 Transform:
   m_ObjectHideFlags: 0
@@ -1604,7 +1566,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1351944309}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38268343, y: -1e-45, z: -0, w: 0.92387956}
+  m_LocalRotation: {x: 0.38268343, y: 3e-45, z: -1e-45, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1872,11 +1834,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c86ec896980c345b59e1762c4ba35b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
   _interactType: 2
   _attribute: 0
-  _reciprocateDir: {x: 3, y: 0, z: 0}
-  _reciprocateDistance: 1
-  _reciprocateSpeed: 2
+  _reciprocationDir: {x: 0, y: 0, z: 0}
+  _reciprocationDistance: 0
+  _reciprocationSpeed: 0
 --- !u!65 &1659905762
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2196,31 +2166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 752f7fce72eb4bd089528c32099ffb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 2
-  _easingCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &1916769179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2445,31 +2390,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 752f7fce72eb4bd089528c32099ffb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 1
-  _easingCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &2035177302
 MonoBehaviour:
   m_ObjectHideFlags: 0
