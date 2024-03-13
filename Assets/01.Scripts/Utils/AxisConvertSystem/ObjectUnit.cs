@@ -269,26 +269,28 @@ namespace AxisConvertSystem
             }
             else
             {
-                _unitInfo.LocalPos = transform.localPosition;
+                RewriteUnitInfo();
             }
         }
 
         private void SynchronizePositionOnStanding(RaycastHit hit)
         {
-            if (hit.transform.TryGetComponent<ObjectUnit>(out var unit))
-            {
-                var info = unit._unitInfo;
-                var distance = hit.distance - _colliderCenterDiffDistance;
-                var diff = hit.point - hit.collider.bounds.center;
-                _unitInfo.LocalPos = info.LocalPos + diff + Vector3.up * distance;
-            }
-            else
+            var unit = hit.transform.GetComponent<ObjectUnit>();
+            
+            if (unit is PlaneUnit)
             {
                 var diff = hit.point - hit.collider.bounds.center;
                 var distance = hit.distance - _colliderCenterDiffDistance;
                 var standPos = hit.transform.localPosition + diff + Vector3.up * distance;
                 standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
                 _unitInfo.LocalPos = standPos;
+            }
+            else
+            {
+                var info = unit._unitInfo;
+                var distance = hit.distance - _colliderCenterDiffDistance;
+                var diff = hit.point - hit.collider.bounds.center;
+                _unitInfo.LocalPos = info.LocalPos + diff + Vector3.up * distance;
             }
         }
 

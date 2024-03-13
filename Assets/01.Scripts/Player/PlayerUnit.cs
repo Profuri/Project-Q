@@ -52,7 +52,6 @@ public class PlayerUnit : ObjectUnit
         
         _stateController.UpdateState();
 
-
         var findInteractable = FindInteractable();
         if(_selectedInteractableObject == null || findInteractable == null)
         {
