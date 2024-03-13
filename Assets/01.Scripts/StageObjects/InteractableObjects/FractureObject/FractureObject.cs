@@ -8,7 +8,7 @@ public class FractureObject : InteractableObject
     private bool _edgeSet = false;
     private Vector3 _edgeVertex = Vector3.zero;
     private Vector2 _edgeUV = Vector2.zero;
-    private Plane _edgePlane = new Plane();
+    private Plane _edgePlaneUnit = new Plane();
 
     [SerializeField] private int _cutCascades = 1;
     [SerializeField] private float _explodeForce = 0;
@@ -80,7 +80,7 @@ public class FractureObject : InteractableObject
         Activate(false);
     }
 
-    private FracturePart GenerateMesh(FracturePart original, Plane plane, bool left)
+    private FracturePart GenerateMesh(FracturePart original, Plane planeUnit, bool left)
     {
         var partMesh = SceneControlManager.Instance.AddObject("FracturePart") as FracturePart;
         var ray1 = new Ray();
@@ -93,9 +93,9 @@ public class FractureObject : InteractableObject
 
             for (var j = 0; j < triangles.Length; j += 3)
             {
-                var sideA = plane.GetSide(original.Vertices[triangles[j]]) == left;
-                var sideB = plane.GetSide(original.Vertices[triangles[j + 1]]) == left;
-                var sideC = plane.GetSide(original.Vertices[triangles[j + 2]]) == left;
+                var sideA = planeUnit.GetSide(original.Vertices[triangles[j]]) == left;
+                var sideB = planeUnit.GetSide(original.Vertices[triangles[j + 1]]) == left;
+                var sideC = planeUnit.GetSide(original.Vertices[triangles[j + 2]]) == left;
 
                 var sideCount = (sideA ? 1 : 0) + (sideB ? 1 : 0) + (sideC ? 1 : 0);
 
@@ -121,13 +121,13 @@ public class FractureObject : InteractableObject
                 ray1.origin = original.Vertices[triangles[j + singleIndex]];
                 var dir1 = original.Vertices[triangles[j + ((singleIndex + 1) % 3)]] - original.Vertices[triangles[j + singleIndex]];
                 ray1.direction = dir1;
-                plane.Raycast(ray1, out var enter1);
+                planeUnit.Raycast(ray1, out var enter1);
                 var lerp1 = enter1 / dir1.magnitude;
 
                 ray2.origin = original.Vertices[triangles[j + singleIndex]];
                 var dir2 = original.Vertices[triangles[j + ((singleIndex + 2) % 3)]] - original.Vertices[triangles[j + singleIndex]];
                 ray2.direction = dir2;
-                plane.Raycast(ray2, out var enter2);
+                planeUnit.Raycast(ray2, out var enter2);
                 var lerp2 = enter2 / dir2.magnitude;
 
                 //first vertex = Anchor
@@ -135,7 +135,7 @@ public class FractureObject : InteractableObject
                 (
                     i,
                     partMesh,
-                    left ? plane.normal * -1f : plane.normal,
+                    left ? planeUnit.normal * -1f : planeUnit.normal,
                     ray1.origin + ray1.direction.normalized * enter1,
                     ray2.origin + ray2.direction.normalized * enter2,
                     Vector2.Lerp(original.UV[triangles[j + singleIndex]], original.UV[triangles[j + ((singleIndex + 1) % 3)]], lerp1),
@@ -206,13 +206,13 @@ public class FractureObject : InteractableObject
         }
         else
         {
-            _edgePlane.Set3Points(_edgeVertex, vertex1, vertex2);
+            _edgePlaneUnit.Set3Points(_edgeVertex, vertex1, vertex2);
 
             fracturePart.AddTriangle(
                 subMesh,
                 _edgeVertex,
-                _edgePlane.GetSide(_edgeVertex + normal) ? vertex1 : vertex2,
-                _edgePlane.GetSide(_edgeVertex + normal) ? vertex2 : vertex1,
+                _edgePlaneUnit.GetSide(_edgeVertex + normal) ? vertex1 : vertex2,
+                _edgePlaneUnit.GetSide(_edgeVertex + normal) ? vertex2 : vertex1,
                 normal,
                 normal,
                 normal,

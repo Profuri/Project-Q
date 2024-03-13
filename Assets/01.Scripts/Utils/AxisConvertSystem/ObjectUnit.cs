@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using DG.Tweening;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -28,7 +29,12 @@ namespace AxisConvertSystem
         private UnitInfo _unitInfo;
         private UnitInfo _convertedInfo;
 
+        private List<Material> _materials;
+
         private float _colliderCenterDiffDistance;
+        
+        private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
+        private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
 
         public virtual void Awake()
         {
@@ -45,6 +51,21 @@ namespace AxisConvertSystem
             DepthHandler = new UnitDepthHandler(this);
 
             _colliderCenterDiffDistance = Mathf.Abs(transform.position.y - Collider.bounds.center.y);
+            
+            _materials = new List<Material>();
+            var renderers = transform.GetComponentsInChildren<Renderer>();
+            foreach (var rdr in renderers)
+            {
+                if(!rdr.enabled)
+                {
+                    continue;
+                }
+            
+                foreach (var material in rdr.materials) 
+                {
+                    _materials.Add(material);    
+                }
+            }
             
             Activate(activeUnit);
 
@@ -210,7 +231,7 @@ namespace AxisConvertSystem
 
         public virtual void ReloadUnit()
         {
-            if (staticUnit)
+            if (!staticUnit)
             {
                 Rigidbody.velocity = Vector3.zero;
             }
@@ -281,6 +302,36 @@ namespace AxisConvertSystem
             var isHit = Physics.Raycast(origin, dir, out hit, Mathf.Infinity, canStandMask);
 
             return isHit;
+        }
+        
+        public void Dissolve(bool on, bool useVisibleShader, float time, Action callBack = null)
+        {
+            var value = on ? 0f : 1f;
+        
+            foreach (var material in _materials)
+            {
+                var initVal = Mathf.Abs(1f - value);
+                material.SetFloat(_dissolveProgressHash, initVal);
+                if (useVisibleShader)
+                {
+                    material.SetFloat(_visibleProgressHash, initVal);
+                }
+            }
+
+            var seq = DOTween.Sequence();
+
+            foreach (var material in _materials)
+            {
+                seq.Join(DOTween.To(() => material.GetFloat(_dissolveProgressHash),
+                    progress => material.SetFloat(_dissolveProgressHash, progress), value, time));
+                if (useVisibleShader)
+                {
+                    seq.Join(DOTween.To(() => material.GetFloat(_visibleProgressHash),
+                        progress => material.SetFloat(_visibleProgressHash, progress), value, time));
+                }
+            }
+
+            seq.OnComplete(() => callBack?.Invoke());
         }
 
         public override void OnPop()

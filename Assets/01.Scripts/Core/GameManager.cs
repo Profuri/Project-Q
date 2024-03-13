@@ -1,3 +1,4 @@
+using DG.Tweening;
 using ManagingSystem;
 using Singleton;
 using UnityEngine;
@@ -27,6 +28,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Awake()
     {
+        DOTween.Init(true, true, LogBehaviour.Verbose). SetCapacity(2000, 100);
+        
         var managers = GetComponentsInChildren<IManager>();
         foreach (var manager in managers)
         {
