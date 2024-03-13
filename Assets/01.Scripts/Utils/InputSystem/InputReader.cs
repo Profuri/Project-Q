@@ -17,6 +17,7 @@ namespace InputControl
         [HideInInspector] public Vector3 movementInput;
 
         private InputControls _inputControls;
+        public InputControls InputControls => _inputControls;
 
         private void OnEnable()
         {
@@ -35,6 +36,11 @@ namespace InputControl
                 _inputControls.Player.Enable();
             else
                 _inputControls.Player.Disable();
+        }
+
+        public void SetEnableInput(EInputCategory inputCategory)
+        {
+
         }
 
         public void ClearInputEvent()

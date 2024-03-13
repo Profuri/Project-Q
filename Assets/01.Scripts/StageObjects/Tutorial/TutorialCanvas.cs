@@ -6,15 +6,23 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using DG.Tweening;
 using TMPro;
-using System.Runtime.CompilerServices;
+
+[System.Serializable]
+public struct TutorialImage
+{
+    public MaskableGraphic image;
+    public float targetAlphaValue;
+}
 
 
 public class TutorialCanvas : PoolableMono
 {
+    public bool IsShowing { get; private set;}
+
     private VideoPlayer _videoPlayer;
     private RawImage _videoImage;
     private Image _tutorialInfo;
-    private Image _fadeImage;
+    private Image _tutorialViewer;
 
     private TextMeshProUGUI _infoText;
     private TutorialSO _tutorialSO;
@@ -23,13 +31,18 @@ public class TutorialCanvas : PoolableMono
 
     private IndexButtonController _indexBtnController;
 
+    [Header("Please enter a value between 0 and 1.")]
+    [SerializeField] private List<TutorialImage> _tutorialImageList = new List<TutorialImage>();
+
     public override void OnPop()
     {
-        Transform videoPlayerTrm = transform.Find("TutorialViewer/VideoPlayer");
-        Transform tutorialInfoTrm = transform.Find("TutorialViewer/TutorialInfo");
+        Transform tutorialViewerTrm = transform.Find("TutorialViewer");
+        _tutorialViewer = tutorialViewerTrm.GetComponent<Image>();
+
+        Transform videoPlayerTrm = tutorialViewerTrm.Find("VideoPlayer");
+        Transform tutorialInfoTrm = tutorialViewerTrm.Find("TutorialInfo");
 
         _tutorialInfo = tutorialInfoTrm.GetComponent<Image>();
-        _fadeImage = transform.Find("TutorialViewer/FadeImage").GetComponent<Image>();
 
         _videoPlayer = videoPlayerTrm.GetComponent<VideoPlayer>();
         _videoImage = videoPlayerTrm.GetComponent<RawImage>();
@@ -43,6 +56,8 @@ public class TutorialCanvas : PoolableMono
         _videoImage.enabled = false;
 
         _videoPlayer.loopPointReached += VideoEnd;
+
+        IsShowing = false;
     }
 
     public override void OnPush()
@@ -52,29 +67,65 @@ public class TutorialCanvas : PoolableMono
         _videoPlayer.loopPointReached -= VideoEnd;
         _indexBtnController.OnIndexChanged -= StartVideo;
         OnVideoEnd = null;
+        IsShowing = false;
     }
 
     public void ShowTutorial(TutorialSO tutorialSO)
     {
+        if (IsShowing) return;
+
         TutorialManager.Instance.IsTutorialViewing = true;
         _indexBtnController.IndexCnt = tutorialSO.tutorialList.Count;
         _indexBtnController.OnIndexChanged += StartVideo;
         _tutorialSO = tutorialSO;
 
-        ShowSequence(() =>
+        StartVideo(0);
+        
+        IsShowing = true;
+
+        float startValue = 0f;
+        foreach(TutorialImage image in _tutorialImageList)
         {
-            StartVideo(0);
-        });
+            float targetValue = image.targetAlphaValue;
+            ShowSequence(image.image, startValue, targetValue, () =>
+            {
+
+            });
+        }
     }
 
-    private void ShowSequence(Action Callback = null)
+    public void StopTutorial(Action Callback = null)
+    {
+        float targetValue = 0f;
+        //콜백이 여러개 들어감
+        int index = 0;
+        foreach(TutorialImage image in _tutorialImageList)
+        {
+            int tempIndex = index;
+            float startValue = image.targetAlphaValue;
+            ShowSequence(image.image, startValue, targetValue, () =>
+            {
+                if(tempIndex == 0)
+                {
+                    Callback?.Invoke();
+                    IsShowing = false;
+                    SceneControlManager.Instance.DeleteObject(this);
+                }
+            });
+            index++;
+        }
+
+    }
+
+    private void ShowSequence(MaskableGraphic targetImage,float startValue,float targetValue, Action Callback = null)
     {
         Sequence seq = DOTween.Sequence();
-        seq.Append(_fadeImage.DOFade(0.5f, 1f));
-        seq.Join(_tutorialInfo.DOFade(1f, 1f));
+        seq.Append(targetImage.DOFade(startValue, 0f));
+        seq.Append(targetImage.DOFade(targetValue, 0.85f));
         seq.AppendCallback(() =>
         {
             Callback?.Invoke();
+            DOTween.Kill(this);
         });
     }
 

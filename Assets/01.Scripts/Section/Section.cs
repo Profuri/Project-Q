@@ -28,7 +28,6 @@ public class Section : PoolableMono
         Lock = false;
         _bridgeObjects = new List<BridgeObject>();
         SectionUnits = new List<ObjectUnit>();
-        transform.GetComponentsInChildren(SectionUnits);
     }
 
     private void FixedUpdate()
@@ -55,6 +54,7 @@ public class Section : PoolableMono
 
     public void Generate(Vector3 position, bool moveRoutine = true)
     {
+        ReloadSectionUnits();
         CenterPosition = position;
         transform.position = CenterPosition;
         if (moveRoutine)
@@ -67,6 +67,7 @@ public class Section : PoolableMono
 
     public void Disappear()
     {
+        ReloadSectionUnits();
         Dissolve(false, 2.5f);
         transform.DOMove(CenterPosition - Vector3.up * _sectionData.sectionYDepth, 3f)
             .OnComplete(() =>
@@ -74,6 +75,12 @@ public class Section : PoolableMono
                 PoolManager.Instance.Push(this);
                 Active = false;
             });
+    }
+
+    public void ReloadSectionUnits()
+    {
+        SectionUnits.Clear();
+        transform.GetComponentsInChildren(SectionUnits);
     }
 
     public virtual void OnEnter(PlayerUnit player)
