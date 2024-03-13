@@ -23,14 +23,17 @@ public class SlimeObjectUnit : ObjectUnit
         {
             var unitList = GetMovementUnit();
 
-            ShowBounceEffect(axis, () =>
+            if(unitList.Count > 0)
             {
-                foreach (var unit in unitList)
+                ShowBounceEffect(() =>
                 {
-                    Debug.Log($"Unit: {unit}");
-                    SlimeImpact(unit);
-                }
-            });
+                    foreach (var unit in unitList)
+                    {
+                        Debug.Log($"Unit: {unit}");
+                        SlimeImpact(unit);
+                    }
+                });
+            }
         }
         _prevAxisType = axis;
     }
@@ -42,19 +45,24 @@ public class SlimeObjectUnit : ObjectUnit
         unit.SetVelocity(bounceDirection * _bouncePower, false);
     }
 
-    private void ShowBounceEffect(AxisType axisType, Action Callback)
+    private void ShowBounceEffect(Action Callback)
     {
         Vector3 originScale = transform.localScale;
         Vector3 targetScale = transform.localScale;
 
         transform.localScale = targetScale;
 
-
+        InputManager.Instance.SetEnableInputAll(true);
         Sequence seq = DOTween.Sequence();
         seq.Append(transform.DOScale(originScale * 0.8f,_bounceTime * 0.5f)).SetEase(Ease.InBounce);
         seq.Append(transform.DOScale(originScale * 1.2f,_bounceTime * 0.5f)).SetEase(Ease.InBounce);
         seq.Append(transform.DOScale(originScale, _bounceTime * 0.5f)).SetEase(Ease.InBounce);
-        seq.AppendCallback(() => Callback?.Invoke());
+        seq.AppendCallback(() =>
+        {
+            Callback?.Invoke();
+            InputManager.Instance.SetEnableInputAll(true);
+        });
+
     }
 
     private List<ObjectUnit> GetMovementUnit()
@@ -85,6 +93,7 @@ public class SlimeObjectUnit : ObjectUnit
 
 
 
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
@@ -92,10 +101,14 @@ public class SlimeObjectUnit : ObjectUnit
 
         var col = GetComponent<Collider>();
 
-        Vector3 checkCenterPos = transform.position + Vector3.up * Collider.bounds.size.y;
-        Vector3 checkScale = Collider.bounds.size;
+        Debug.Log($"Collider: {col}");
+        if(col != null)
+        {
+            Vector3 checkCenterPos = transform.position + Vector3.up * col.bounds.size.y;
+            Vector3 checkScale = col.bounds.size;
 
-        Gizmos.DrawWireCube(checkCenterPos, checkScale);
+            Gizmos.DrawWireCube(checkCenterPos, checkScale);
+        }
     }
 #endif
 }

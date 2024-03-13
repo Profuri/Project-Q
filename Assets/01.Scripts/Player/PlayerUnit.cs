@@ -54,9 +54,13 @@ public class PlayerUnit : ObjectUnit
 
 
         var findInteractable = FindInteractable();
-        if(_selectedInteractableObject == null || findInteractable == null)
+        if(_selectedInteractableObject == null)
         {
             _selectedInteractableObject = findInteractable;
+            if(findInteractable == null)
+            {
+                _selectedInteractableObject = findInteractable;
+            }
         }
         else
         {
