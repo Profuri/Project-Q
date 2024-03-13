@@ -29,7 +29,6 @@ public class SlimeObjectUnit : ObjectUnit
                 {
                     foreach (var unit in unitList)
                     {
-                        Debug.Log($"Unit: {unit}");
                         SlimeImpact(unit);
                     }
                 });
@@ -37,6 +36,7 @@ public class SlimeObjectUnit : ObjectUnit
         }
         _prevAxisType = axis;
     }
+
 
     //이건 압축 해제되었을 때 팍 튕겨나가는거.
     private void SlimeImpact(ObjectUnit unit)
@@ -52,7 +52,7 @@ public class SlimeObjectUnit : ObjectUnit
 
         transform.localScale = targetScale;
 
-        InputManager.Instance.SetEnableInputAll(true);
+        InputManager.Instance.SetEnableInputAll(false);
         Sequence seq = DOTween.Sequence();
         seq.Append(transform.DOScale(originScale * 0.8f,_bounceTime * 0.5f)).SetEase(Ease.InBounce);
         seq.Append(transform.DOScale(originScale * 1.2f,_bounceTime * 0.5f)).SetEase(Ease.InBounce);
@@ -62,13 +62,12 @@ public class SlimeObjectUnit : ObjectUnit
             Callback?.Invoke();
             InputManager.Instance.SetEnableInputAll(true);
         });
-
     }
 
     private List<ObjectUnit> GetMovementUnit()
     {
         List<ObjectUnit> unitList = new List<ObjectUnit>();
-        //+ Vector3.up * Collider.bounds.size.y
+        
         Vector3 checkCenterPos = Collider.bounds.center ;
         Vector3 halfExtents = Collider.bounds.extents * 0.5f + Vector3.up * 2f;
         Quaternion rotation = transform.rotation;
@@ -92,8 +91,6 @@ public class SlimeObjectUnit : ObjectUnit
     }
 
 
-
-
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
@@ -101,7 +98,6 @@ public class SlimeObjectUnit : ObjectUnit
 
         var col = GetComponent<Collider>();
 
-        Debug.Log($"Collider: {col}");
         if(col != null)
         {
             Vector3 checkCenterPos = transform.position + Vector3.up * col.bounds.size.y;
