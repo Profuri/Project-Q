@@ -13,7 +13,7 @@ public class TutorialObjectUnit : InteractableObject
     [SerializeField] private Transform _markAppearTransform;
 
     public bool IsOn { get; private set; } = false;
-    private TutorialMark _rotateTarget;
+    private TutorialMark _tutorialMark;
 
     public override void Init(AxisConverter converter)
     {
@@ -21,23 +21,22 @@ public class TutorialObjectUnit : InteractableObject
 
         gameObject.layer = LayerMask.NameToLayer("Interactable");
         IsOn = false;
-        LoadTutorialMark();
     }
 
     private void OnDisable()
     {
-        if(_rotateTarget != null)
+        if(_tutorialMark != null)
         {
-            _rotateTarget.Off();
+            _tutorialMark.Off();
         }
     }
 
     public override void OnPush()
     {
         base.OnPush();
-        if(_rotateTarget != null)   
+        if(_tutorialMark != null)   
         {
-            _rotateTarget.Off();
+            _tutorialMark.Off();
         }
     }
 
@@ -60,13 +59,15 @@ public class TutorialObjectUnit : InteractableObject
 
         if(axis != AxisType.None)
         {
-            //SceneControlManager.Instance.DeleteObject(_rotateTarget);
-            _rotateTarget.Off();
-            _rotateTarget = null;
+            if(_tutorialMark != null)
+            {
+                _tutorialMark.Off();
+                _tutorialMark = null;
+            }
         }
         else
         {
-            if(_rotateTarget == null)
+            if(_tutorialMark == null)
             {
                 LoadTutorialMark();
             }
@@ -75,18 +76,19 @@ public class TutorialObjectUnit : InteractableObject
 
     private void LoadTutorialMark()
     {
-        _rotateTarget = SceneControlManager.Instance.AddObject("TutorialMark") as TutorialMark;
+        _tutorialMark = SceneControlManager.Instance.AddObject("TutorialMark") as TutorialMark;
 
         if (_markAppearTransform != null)
         {
-            _rotateTarget.transform.position = _markAppearTransform.position;
+            _tutorialMark.transform.position = _markAppearTransform.position;
         }
         else
         {
-            _rotateTarget.transform.position = Collider.bounds.center + Vector3.up * 2.0f;
+            _tutorialMark.transform.position = Collider.bounds.center + Vector3.up * 2.0f;
         }
 
-        _rotateTarget.transform.SetParent(Section.transform);
+        _tutorialMark.transform.SetParent(Section.transform);
+        _tutorialMark.On();
     }
 
 
@@ -96,13 +98,40 @@ public class TutorialObjectUnit : InteractableObject
         {
             TutorialManager.Instance.StartTutorial(_tutorialSO);
             InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, false);
+
+            _tutorialMark.Off();
+            _tutorialMark = null;
         }
         else
         {
             InputManager.Instance.SetEnableInputAll(true);
             TutorialManager.Instance.StopTutorial();
+
+            if (_tutorialMark == null)
+            {
+                LoadTutorialMark();
+            }
         }
         IsOn = !IsOn;
+    }
+    public override void OnDetectedEnter()
+    {
+        base.OnDetectedEnter();
+        if (_tutorialMark == null)
+        {
+            LoadTutorialMark();
+        }
+    }
+
+    public override void OnDetectedLeave()
+    {
+        base.OnDetectedLeave();
+
+        if(_tutorialMark != null)
+        {
+            _tutorialMark.Off();
+            _tutorialMark = null;
+        }
     }
 
 #if UNITY_EDITOR
