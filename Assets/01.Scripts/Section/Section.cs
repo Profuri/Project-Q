@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using AxisConvertSystem;
@@ -76,17 +75,6 @@ public class Section : PoolableMono
             foreach (var unit in SectionUnits)
             {
                 unit.UpdateUnit();
-            }
-        }
-    }
-
-    public void LateUpdate()
-    {
-        if (Active)
-        {
-            foreach (var unit in SectionUnits)
-            {
-                unit.LateUpdateUnit();
             }
         }
     }

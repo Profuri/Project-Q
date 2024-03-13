@@ -19,12 +19,6 @@ public class Stage : Section
         }
     }
 
-    public override void OnExit(PlayerUnit player)
-    {
-        base.OnExit(player);
-        player.Converter.SetConvertable(false);
-    }
-    
 #if UNITY_EDITOR
     private void OnValidate()
     {
