@@ -231,18 +231,19 @@ namespace AxisConvertSystem
 
         public virtual void ReloadUnit()
         {
-            // 여기 나중에 콜백으로 인풋 막기
-            Dissolve(true, 2f);
-            
-            if (!staticUnit)
-            {
-                Rigidbody.velocity = Vector3.zero;
-            }
-            
             _unitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
             _convertedInfo = ConvertInfo(_unitInfo, Converter.AxisType);
             UnitSetting(Converter.AxisType);
+            Physics.SyncTransforms();
+
+            if (!staticUnit)
+            {
+                // 여기 나중에 콜백으로 인풋 막기
+                Dissolve(true, 2f);
+                Rigidbody.velocity = Vector3.zero;
+                PlaySpawnVFX();
+            }
         }
         
         public void RewriteUnitInfo()
@@ -252,7 +253,7 @@ namespace AxisConvertSystem
             _unitInfo.LocalScale = transform.localScale;
             _unitInfo.ColliderCenter = Collider.GetLocalCenter();
         }
-        
+
         private void SynchronizePosition(AxisType axis)
         {
             if (staticUnit || IsHide)
@@ -331,6 +332,18 @@ namespace AxisConvertSystem
             }
 
             seq.OnComplete(() => callBack?.Invoke());
+        }
+
+        private void PlaySpawnVFX()
+        {
+            var spawnVFX = PoolManager.Instance.Pop("SpawnVFX") as PoolableVFX;
+            var bounds = Collider.bounds;
+            var position = transform.position;
+            position.y = bounds.min.y;
+
+            spawnVFX.SetPositionAndRotation(position, Quaternion.identity);
+            spawnVFX.SetScale(new Vector3(bounds.size.x, 1, bounds.size.z));
+            spawnVFX.Play();
         }
 
         public override void OnPop()
