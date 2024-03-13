@@ -28,10 +28,6 @@ namespace AxisConvertSystem
         private UnitInfo _unitInfo;
         private UnitInfo _convertedInfo;
 
-        private List<ObjectUnit> _backgroundUnits;
-        private int _originObjectLayer;
-        private int _excludeLayerMask;
-
         private float _colliderCenterDiffDistance;
 
         public virtual void Awake()
@@ -47,10 +43,6 @@ namespace AxisConvertSystem
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
             DepthHandler = new UnitDepthHandler(this);
-
-            _backgroundUnits = new List<ObjectUnit>();
-            _originObjectLayer = gameObject.layer;
-            _excludeLayerMask = LayerMask.NameToLayer("ExcludeLayerMask");
 
             _colliderCenterDiffDistance = Mathf.Abs(transform.position.y - Collider.bounds.center.y);
             
@@ -80,14 +72,6 @@ namespace AxisConvertSystem
             }
         }
 
-        public virtual void LateUpdateUnit()
-        {
-            if (!staticUnit)
-            {
-                // CheckBackgroundUnit();
-            }
-        }
-
         public virtual void Init(AxisConverter converter)
         {
             Converter ??= converter;
@@ -96,12 +80,9 @@ namespace AxisConvertSystem
             OriginUnitInfo.LocalRot = transform.localRotation;
             OriginUnitInfo.LocalScale = transform.localScale;
             OriginUnitInfo.ColliderCenter = Collider.GetLocalCenter();
-
-
-
+            
             _unitInfo = OriginUnitInfo;
             
-
             DepthHandler.DepthCheckPointSetting();
         }
 
@@ -116,7 +97,7 @@ namespace AxisConvertSystem
             {
                 DepthHandler.DepthCheckPointSetting();
             }
-            SynchronizationUnitPos(axis);
+            SynchronizePosition(axis);
             _convertedInfo = ConvertInfo(_unitInfo, axis);
         }
         
@@ -152,8 +133,7 @@ namespace AxisConvertSystem
             transform.localRotation = info.LocalRot;
             transform.localScale = info.LocalScale;
             Collider.SetCenter(info.ColliderCenter);
-
-
+            
             if (hideSetting)
             {
                 Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
@@ -241,86 +221,36 @@ namespace AxisConvertSystem
             UnitSetting(Converter.AxisType);
         }
         
-        private void SynchronizationUnitPos(AxisType axis)
+        public void RewriteUnitInfo()
+        {
+            _unitInfo.LocalPos = transform.localPosition;
+            _unitInfo.LocalRot = transform.localRotation;
+            _unitInfo.LocalScale = transform.localScale;
+            _unitInfo.ColliderCenter = Collider.GetLocalCenter();
+        }
+        
+        private void SynchronizePosition(AxisType axis)
         {
             if (staticUnit || IsHide)
             {
                 return;
             }
-            
+
             if (axis == AxisType.None)
             {
-                CheckStandObject();
+                if (CheckStandObject(out var hit))
+                {
+                    SynchronizePositionOnStanding(hit);
+                }
             }
             else
             {
                 _unitInfo.LocalPos = transform.localPosition;
             }
         }
-        
-        public void CheckBackgroundUnit()
+
+        private void SynchronizePositionOnStanding(RaycastHit hit)
         {
-            Collider.NonAllocCast(out var hits, Converter);
-            var units = hits.Where(hit => hit.collider is not null && hit.collider.TryGetComponent<ObjectUnit>(out var unit) && this != unit)
-                .Select(hit => hit.collider.GetComponent<ObjectUnit>()).ToArray();
-            var size = units.Length;
-
-            Debug.Log($"{gameObject.name} {size}");
-            
-            if (size > 0)
-            {
-                if (gameObject.layer == _excludeLayerMask)
-                {
-                    return;
-                }
-                
-                for (var i = 0; i < size; i++)
-                {
-                    if (hits[i].transform.TryGetComponent<ObjectUnit>(out var unit))
-                    {
-                        if (this == unit)
-                        {
-                            continue;
-                        }
-                        
-                        gameObject.layer = _excludeLayerMask;
-                        unit.Collider.excludeLayers |= 1 << _excludeLayerMask;
-                        _backgroundUnits.Add(unit);
-                    }
-                }
-            }
-            else
-            {
-                if (gameObject.layer == _excludeLayerMask)
-                {
-                    gameObject.layer = _originObjectLayer;
-                    foreach (var unit in _backgroundUnits)
-                    {
-                        unit.Collider.excludeLayers ^= 1 << _excludeLayerMask;
-                    }
-                
-                    _backgroundUnits.Clear();
-                }
-            }
-        }
-
-        private void CheckStandObject()
-        {
-            var origin = Collider.bounds.center;
-            if (Converter.AxisType == AxisType.Y)
-            {
-                ++origin.y;
-            }
-            
-            var dir = Vector3.down;
-
-            var isHit = Physics.Raycast(origin, dir, out var hit, Mathf.Infinity, canStandMask);
-        
-            if (!isHit)
-            {
-                return;
-            }
-
             if (hit.transform.TryGetComponent<ObjectUnit>(out var unit))
             {
                 var info = unit._unitInfo;
@@ -336,6 +266,21 @@ namespace AxisConvertSystem
                 standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
                 _unitInfo.LocalPos = standPos;
             }
+        }
+
+        public bool CheckStandObject(out RaycastHit hit)
+        {
+            var origin = Collider.bounds.center;
+            if (Converter.AxisType == AxisType.Y)
+            {
+                ++origin.y;
+            }
+            
+            var dir = Vector3.down;
+
+            var isHit = Physics.Raycast(origin, dir, out hit, Mathf.Infinity, canStandMask);
+
+            return isHit;
         }
 
         public override void OnPop()

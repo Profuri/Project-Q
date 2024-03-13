@@ -45,9 +45,10 @@ public class StageManager : BaseManager<StageManager>
         CurrentStage = NextStage;
     }
 
-    public void StageClear()
+    public void StageClear(PlayerUnit player)
     {
         CurrentStage.Lock = false;
+        player.Converter.SetConvertable(false);
         var nextChapter = CurrentStage.stageOrder + 1;
 
         if (nextChapter >= _currentPlayChapterData.stageCnt)

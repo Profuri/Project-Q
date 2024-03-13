@@ -7,7 +7,7 @@ public class GoalObject : InteractableObject
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         communicator.Converter.ConvertDimension(AxisType.None);
-        StageManager.Instance.StageClear();
+        StageManager.Instance.StageClear(communicator as PlayerUnit);
         Activate(false);
     }
 }
