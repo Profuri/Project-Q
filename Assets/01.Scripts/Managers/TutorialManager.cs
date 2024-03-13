@@ -17,7 +17,8 @@ public class TutorialManager : MonoSingleton<TutorialManager>
 
     public void StopTutorial()
     {
-        SceneControlManager.Instance.DeleteObject(_currentCanvas);
+        //SceneControlManager.Instance.DeleteObject(_currentCanvas);
+        _currentCanvas.StopTutorial();
     }
 
 }
