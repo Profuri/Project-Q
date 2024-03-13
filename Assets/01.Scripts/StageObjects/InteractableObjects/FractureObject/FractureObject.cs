@@ -8,7 +8,7 @@ public class FractureObject : InteractableObject
     private bool _edgeSet = false;
     private Vector3 _edgeVertex = Vector3.zero;
     private Vector2 _edgeUV = Vector2.zero;
-    private Plane _edgePlaneUnit = new Plane();
+    private Plane _edgePlane = new Plane();
 
     [SerializeField] private int _cutCascades = 1;
     [SerializeField] private float _explodeForce = 0;
@@ -206,13 +206,13 @@ public class FractureObject : InteractableObject
         }
         else
         {
-            _edgePlaneUnit.Set3Points(_edgeVertex, vertex1, vertex2);
+            _edgePlane.Set3Points(_edgeVertex, vertex1, vertex2);
 
             fracturePart.AddTriangle(
                 subMesh,
                 _edgeVertex,
-                _edgePlaneUnit.GetSide(_edgeVertex + normal) ? vertex1 : vertex2,
-                _edgePlaneUnit.GetSide(_edgeVertex + normal) ? vertex2 : vertex1,
+                _edgePlane.GetSide(_edgeVertex + normal) ? vertex1 : vertex2,
+                _edgePlane.GetSide(_edgeVertex + normal) ? vertex2 : vertex1,
                 normal,
                 normal,
                 normal,
