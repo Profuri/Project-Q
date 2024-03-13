@@ -231,6 +231,9 @@ namespace AxisConvertSystem
 
         public virtual void ReloadUnit()
         {
+            // 여기 나중에 콜백으로 인풋 막기
+            Dissolve(true, true, 2f);
+            
             if (!staticUnit)
             {
                 Rigidbody.velocity = Vector3.zero;
