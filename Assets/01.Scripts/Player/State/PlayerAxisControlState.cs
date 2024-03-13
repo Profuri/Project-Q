@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using AxisConvertSystem;
-using DG.Tweening;
-using UnityEngine;
 
 public class PlayerAxisControlState : PlayerBaseState
 {

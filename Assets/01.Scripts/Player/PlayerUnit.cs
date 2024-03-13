@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using AxisConvertSystem;
 using InputControl;
 using InteractableSystem;
@@ -15,6 +14,7 @@ public class PlayerUnit : ObjectUnit
     public Transform ModelTrm { get; private set; }
     public Animator Animator { get; private set; }
     public ObjectHoldingHandler HoldingHandler { get; private set; }
+    public ObjectUnit standingUnit;
     private StateController _stateController;
     private PlayerUIController _playerUiController;
 
@@ -44,6 +44,11 @@ public class PlayerUnit : ObjectUnit
     public override void UpdateUnit()
     {
         base.UpdateUnit();
+
+        if (standingUnit)
+        {
+            StandingCheck();
+        }
         
         _stateController.UpdateState();
 
@@ -78,6 +83,18 @@ public class PlayerUnit : ObjectUnit
     public void Rotate(Quaternion rot, float speed = -1)
     {
         ModelTrm.rotation = Quaternion.Lerp(ModelTrm.rotation, rot, speed < 0 ? _data.rotationSpeed : speed);
+    }
+
+    private void StandingCheck()
+    {
+        if (!standingUnit.Collider.bounds.Contains(Collider.bounds.center))
+        {
+            standingUnit.Collider.excludeLayers ^= 1 << gameObject.layer;
+            standingUnit = null;
+            return;
+        }
+        
+        standingUnit.Collider.excludeLayers |= 1 << gameObject.layer;
     }
     
     private bool CheckGround()

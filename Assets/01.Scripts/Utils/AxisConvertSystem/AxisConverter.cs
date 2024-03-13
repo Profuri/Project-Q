@@ -17,6 +17,8 @@ namespace AxisConvertSystem
         public PlayerUnit Player { get; set; }
         private Section _section;
 
+        private bool _cancelConvert;
+
         public void Init(Section section)
         {
             AxisType = AxisType.None;
@@ -37,6 +39,7 @@ namespace AxisConvertSystem
                 return;
             }
 
+            _cancelConvert = false;
             Convertable = false;
 
             if(axisType == AxisType.None)
@@ -50,17 +53,12 @@ namespace AxisConvertSystem
                 {
                     if (!SafeConvertAxis(axisType, out var front, out var back))
                     {
-                        Player.CheckStandObject(out var hit);
-                        
-                        if (!(axisType == AxisType.Y && front.collider is null && hit.collider == back.collider))
-                        {
-                            CancelChangeAxis(axisType, front, back);
-                            return;
-                        }
-                        // when y axis convert, already standing object
-                        else
-                        {
-                        }
+                        HandleAxisConversionFailure(axisType, front.collider, back.collider);
+                    }
+
+                    if (_cancelConvert)
+                    {
+                        return;
                     }
                     
                     if(axisType != AxisType.None)
@@ -74,21 +72,41 @@ namespace AxisConvertSystem
             }
         }
 
-        private void CancelChangeAxis(AxisType canceledAxis, RaycastHit front, RaycastHit back)
+        private void HandleAxisConversionFailure(AxisType axis, Collider frontCol, Collider backCol)
+        {
+            Player.CheckStandObject(out var hit);
+
+            if (!(axis == AxisType.Y && frontCol is null && hit.collider == backCol))
+            {
+                CancelChangeAxis(axis, frontCol, backCol);
+                _cancelConvert = true;
+            }
+            // when y axis convert, already standing object
+            else
+            {
+                var unit = backCol.GetComponent<ObjectUnit>();
+                if (!unit.climbableUnit)
+                {
+                    Player.standingUnit = unit;
+                }
+            }
+        }
+
+        private void CancelChangeAxis(AxisType canceledAxis, Collider frontCol, Collider backCol)
         {
             var seq = DOTween.Sequence();
         
             var reverseAxisDir = Vector3ExtensionMethod.GetAxisDir(canceledAxis) - Vector3.one;
             var shakeDir = new Vector3(Mathf.Abs(reverseAxisDir.x), Mathf.Abs(reverseAxisDir.y), Mathf.Abs(reverseAxisDir.z));
 
-            if (front.collider != back.collider && front.collider is not null)
+            if (frontCol != backCol && frontCol is not null)
             {
-                seq.Join(front.collider.transform.DOShakePosition(0.25f, shakeDir * 0.5f, 30));
+                seq.Join(frontCol.transform.DOShakePosition(0.25f, shakeDir * 0.5f, 30));
             }
 
-            if (back.collider is not null)
+            if (backCol is not null)
             {
-                seq.Join(back.collider.transform.DOShakePosition(0.25f, shakeDir * 0.5f, 30));
+                seq.Join(backCol.transform.DOShakePosition(0.25f, shakeDir * 0.5f, 30));
             }
         
             seq.OnComplete(() =>
