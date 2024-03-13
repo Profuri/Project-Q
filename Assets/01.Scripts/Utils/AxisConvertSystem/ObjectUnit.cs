@@ -232,7 +232,7 @@ namespace AxisConvertSystem
         public virtual void ReloadUnit()
         {
             // 여기 나중에 콜백으로 인풋 막기
-            Dissolve(true, true, 2f);
+            Dissolve(true, 2f);
             
             if (!staticUnit)
             {
@@ -307,7 +307,7 @@ namespace AxisConvertSystem
             return isHit;
         }
         
-        public void Dissolve(bool on, bool useVisibleShader, float time, Action callBack = null)
+        public void Dissolve(bool on, float time, Action callBack = null)
         {
             var value = on ? 0f : 1f;
         
@@ -315,10 +315,7 @@ namespace AxisConvertSystem
             {
                 var initVal = Mathf.Abs(1f - value);
                 material.SetFloat(_dissolveProgressHash, initVal);
-                if (useVisibleShader)
-                {
-                    material.SetFloat(_visibleProgressHash, initVal);
-                }
+                material.SetFloat(_visibleProgressHash, initVal);
             }
 
             var seq = DOTween.Sequence();
@@ -327,11 +324,8 @@ namespace AxisConvertSystem
             {
                 seq.Join(DOTween.To(() => material.GetFloat(_dissolveProgressHash),
                     progress => material.SetFloat(_dissolveProgressHash, progress), value, time));
-                if (useVisibleShader)
-                {
-                    seq.Join(DOTween.To(() => material.GetFloat(_visibleProgressHash),
-                        progress => material.SetFloat(_visibleProgressHash, progress), value, time));
-                }
+                seq.Join(DOTween.To(() => material.GetFloat(_visibleProgressHash),
+                    progress => material.SetFloat(_visibleProgressHash, progress), value, time));
             }
 
             seq.OnComplete(() => callBack?.Invoke());

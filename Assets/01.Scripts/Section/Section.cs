@@ -164,7 +164,7 @@ public class Section : PoolableMono
     {
         foreach (var unit in SectionUnits)
         {
-            unit.Dissolve(on, true, time);
+            unit.Dissolve(on, time);
         }
     }
     
