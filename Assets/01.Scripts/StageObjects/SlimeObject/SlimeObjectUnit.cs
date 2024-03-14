@@ -92,10 +92,13 @@ public class SlimeObjectUnit : ObjectUnit
 
         var col = GetComponent<Collider>();
 
-        Vector3 checkCenterPos = transform.position + Vector3.up * Collider.bounds.size.y;
-        Vector3 checkScale = Collider.bounds.size;
+        if(col != null)
+        {
+            Vector3 checkCenterPos = transform.position + Vector3.up * col.bounds.size.y;
+            Vector3 checkScale = col.bounds.size;
 
-        Gizmos.DrawWireCube(checkCenterPos, checkScale);
+            Gizmos.DrawWireCube(checkCenterPos, checkScale);
+        }
     }
 #endif
 }
