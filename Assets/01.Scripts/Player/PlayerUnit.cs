@@ -52,8 +52,26 @@ public class PlayerUnit : ObjectUnit
         
         _stateController.UpdateState();
 
-        _selectedInteractableObject = FindInteractable();
-        
+
+        var findInteractable = FindInteractable();
+        if(_selectedInteractableObject == null)
+        {
+            _selectedInteractableObject = findInteractable;
+            if(findInteractable == null)
+            {
+                _selectedInteractableObject = findInteractable;
+            }
+        }
+        else
+        {
+            if(findInteractable != null && !_selectedInteractableObject.Equals(findInteractable))
+            {
+                _selectedInteractableObject?.OnDetectedLeave();
+                _selectedInteractableObject = findInteractable;
+            }
+        }
+        _selectedInteractableObject?.OnDetectedEnter();
+
         _playerUiController.SetKeyGuide(HoldingHandler.IsHold || _selectedInteractableObject is not null);
     }
 
@@ -144,7 +162,7 @@ public class PlayerUnit : ObjectUnit
                 }
             }
         }
-
+            
         return null;
     }
 
