@@ -7,15 +7,17 @@ using UnityEngine;
 
 public class UIAnimationHandler
 {
-    private readonly UIComponent _component;
+    private readonly UIAnimator _animator;
+    private readonly UIComponentEditor _componentEditor;
     private readonly UIAnimation _clip;
     private readonly List<FieldInfo> _fields;
     private bool _foldValue;
     
-    public UIAnimationHandler(UIAnimation clip, UIComponent component)
+    public UIAnimationHandler(UIAnimator animator, UIAnimation clip, UIComponentEditor componentEditor)
     {
+        _animator = animator;
         _clip = clip;
-        _component = component;
+        _componentEditor = componentEditor;
         _fields = _clip.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).ToList();
     }
     
@@ -27,9 +29,15 @@ public class UIAnimationHandler
             {
                 GUILayout.Space(10);
                 _foldValue = EditorGUILayout.Foldout(_foldValue, _clip.GetType().Name);
-                GUILayout.Space(10);
+                GUILayout.Space(70);
+                if (GUILayout.Button("Remove"))
+                {
+                    RemoveBtnHandler();
+                }
             }
             EditorGUILayout.EndHorizontal();
+            
+            GUILayout.Space(10);
             
             if(_foldValue)
             {
@@ -40,6 +48,11 @@ public class UIAnimationHandler
             }
         }
         EditorGUILayout.EndHorizontal();
+    }
+
+    private void RemoveBtnHandler()
+    {
+        _componentEditor.RemoveClip(_animator, _clip);
     }
 
     private void VariableLoad(FieldInfo field)
@@ -63,11 +76,15 @@ public class UIAnimationHandler
         {
             value = EditorGUILayout.Vector2Field(field.Name, (Vector2)value);
         }
+        else if (field.FieldType == typeof(RectTransform))
+        {
+            value = EditorGUILayout.ObjectField(field.Name, (RectTransform)value, typeof(RectTransform), true);
+        }
         
         if (value != null && !origin.Equals(value))
         {
             field.SetValue(_clip, value);
-            EditorUtility.SetDirty(_component);
+            EditorUtility.SetDirty(_componentEditor.Component);
         }
     }
 }

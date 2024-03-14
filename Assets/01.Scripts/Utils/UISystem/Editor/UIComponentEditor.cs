@@ -7,23 +7,27 @@ using UnityEngine;
 [CustomEditor(typeof(UIComponent))]
 public class UIComponentEditor : Editor
 {
-    private UIComponent _component;
+    public UIComponent Component { get; private set; }
     
     private bool _test;
+    
     private List<Type> _animationTypes;
     private Dictionary<UIAnimation, UIAnimationHandler> _uiAnimationEditors;
 
+    private Dictionary<UIAnimator, List<UIAnimation>> _removedClips;
+
     private void OnEnable()
     {
-        _component = (UIComponent)target;
+        Component = (UIComponent)target;
         _animationTypes = new List<Type>();
         _uiAnimationEditors = new Dictionary<UIAnimation, UIAnimationHandler>();
+        _removedClips = new Dictionary<UIAnimator, List<UIAnimation>>();
         
         // 딕셔너리에 초기값 담아주는 로직 제작해야함
         
         // for test
-        _component.appearAnimator.Clips.Clear();
-        _component.disappearAnimator.Clips.Clear();
+        Component.appearAnimator.Clips.Clear();
+        Component.disappearAnimator.Clips.Clear();
         
         LoadUIAnimationType();
     }
@@ -32,8 +36,8 @@ public class UIComponentEditor : Editor
     {
         base.OnInspectorGUI();
         
-        DrawAnimatorInspector("Appear Animations", ref _component.appearAnimator);
-        DrawAnimatorInspector("Disappear Animations", ref _component.disappearAnimator);
+        DrawAnimatorInspector("Appear Animations", ref Component.appearAnimator);
+        DrawAnimatorInspector("Disappear Animations", ref Component.disappearAnimator);
     }
 
     private void DrawAnimatorInspector(string title, ref UIAnimator animator)
@@ -49,6 +53,7 @@ public class UIComponentEditor : Editor
             {
                 _uiAnimationEditors[clip].DrawClipGUI();
             }
+            ApplyRemoveResult();
             EditorGUILayout.Space(1f);
 
             if (GUILayout.Button("Add Animation Clip"))
@@ -70,11 +75,40 @@ public class UIComponentEditor : Editor
             menu.AddItem(new GUIContent(type.Name), false, () =>
             {
                 var clip = (UIAnimation)Activator.CreateInstance(type);
-                var handler = new UIAnimationHandler(clip, _component);
-                animator.Clips.Add(clip);
-                _uiAnimationEditors.Add(clip, handler);
+                AddClip(animator, clip);
             });
         }
+    }
+
+    private void AddClip(UIAnimator animator, UIAnimation clip)
+    {
+        var handler = new UIAnimationHandler(animator, clip, this);
+        animator.Clips.Add(clip);
+        _uiAnimationEditors.Add(clip, handler);
+        EditorUtility.SetDirty(Component);
+    }
+
+    public void RemoveClip(UIAnimator animator, UIAnimation clip)
+    {
+        if (!_removedClips.ContainsKey(animator))
+        {
+            _removedClips.Add(animator, new List<UIAnimation>());
+        }
+        _removedClips[animator].Add(clip);
+    }
+
+    private void ApplyRemoveResult()
+    {
+        foreach (var animator in _removedClips.Keys)
+        {
+            foreach (var clip in _removedClips[animator])
+            {
+                animator.Clips.Remove(clip);
+                _uiAnimationEditors.Remove(clip);
+            }
+            _removedClips[animator].Clear();
+        }
+        EditorUtility.SetDirty(Component);
     }
 
     private void LoadUIAnimationType()
