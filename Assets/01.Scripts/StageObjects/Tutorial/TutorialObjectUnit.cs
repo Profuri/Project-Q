@@ -65,13 +65,6 @@ public class TutorialObjectUnit : InteractableObject
                 _tutorialMark = null;
             }
         }
-        else
-        {
-            if(_tutorialMark == null)
-            {
-                LoadTutorialMark();
-            }
-        }
     }
 
     private void LoadTutorialMark()
