@@ -48,7 +48,7 @@ public class TutorialObjectUnit : InteractableObject
         }
         else
         {
-            gameObject.layer = LayerMask.NameToLayer("Default");
+            gameObject.layer = LayerMask.NameToLayer("Interactable");
         }
         base.Convert(axis);
     }

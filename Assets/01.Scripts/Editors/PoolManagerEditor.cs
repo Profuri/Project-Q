@@ -4,11 +4,15 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using System.Reflection;
+using UnityEditor.PackageManager;
+using Unity.VisualScripting;
 
 [CustomEditor(typeof(PoolManager))]
 public class PoolManagerEditor : Editor
 {
     public PoolManager manager;
+    private static string s_folderPath = "Assets/07.ScriptableObjects/PoolingList/";
+
 
     private void OnEnable()
     {
@@ -26,31 +30,45 @@ public class PoolManagerEditor : Editor
 
     private void LoadPoolingList()
     {
-        //get PoolableMono classes
-        List<Type> derivedTypeList = GetDerivedClasses(typeof(PoolableMono));
+        List<PoolingList> poolingListList = new List<PoolingList>();
 
-        foreach(Type type in derivedTypeList)
-        {
-            Debug.Log($"Type: {type}");
-        }
-    }
+        PoolingList poolingList = ScriptableObject.CreateInstance<PoolingList>();
 
-    public static List<Type> GetDerivedClasses(Type baseType)
-    {
-        // 현재 어셈블리(현재 실행되는 어셈블리)에서 모든 타입을 가져옵니다.
-        Assembly assembly = Assembly.GetExecutingAssembly();
-        Type[] allTypes = assembly.GetTypes();
-        
-        foreach(Type type in allTypes)
+        string assetPath = s_folderPath + "PoolingList.asset";
+        if (!AssetDatabase.IsValidFolder(s_folderPath))
         {
-            Debug.Log($"AllType: {type}");
+            PoolingList originList = AssetDatabase.LoadAssetAtPath<PoolingList>(assetPath);
+            if(originList != null)
+            {
+                poolingList = originList;
+            }
         }
 
-        // baseType을 상속받는 클래스를 필터링합니다.
-        List<Type> derivedTypes = allTypes
-            .Where(type => type.IsSubclassOf(baseType))
-            .ToList();
 
-        return derivedTypes;
+
+
+        AssetDatabase.CreateAsset(poolingList, assetPath);
+
+        string[] guids = AssetDatabase.FindAssets("t:Prefab");
+
+
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            if (prefab != null)
+            {
+                Debug.Log("Loaded prefab: " + prefab.name);
+
+                if(prefab.TryGetComponent(out PoolableMono poolableMono))
+                {
+                    if (poolableMono.poolingCnt <= 0) continue; 
+                    PoolingItem poolingItem = new PoolingItem { prefab = poolableMono, cnt =  poolableMono.poolingCnt};
+                    poolingList.poolingItems.Add(poolingItem);
+                }
+            }
+        }
+        poolingListList.Add(poolingList);
+        manager.SettingPoolinglist(poolingListList);
     }
 }
