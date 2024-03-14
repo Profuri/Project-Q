@@ -28,6 +28,7 @@ public class Section : PoolableMono
         Lock = false;
         _bridgeObjects = new List<BridgeObject>();
         SectionUnits = new List<ObjectUnit>();
+        ReloadSectionUnits();
     }
 
     private void FixedUpdate()
