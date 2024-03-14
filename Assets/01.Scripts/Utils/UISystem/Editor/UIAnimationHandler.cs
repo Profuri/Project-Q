@@ -36,11 +36,10 @@ public class UIAnimationHandler
                 }
             }
             EditorGUILayout.EndHorizontal();
-            
-            GUILayout.Space(10);
-            
+
             if(_foldValue)
             {
+                GUILayout.Space(10);
                 foreach (var field in _fields)
                 {
                     VariableLoad(field);
