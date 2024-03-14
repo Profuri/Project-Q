@@ -1,5 +1,4 @@
 using AxisConvertSystem;
-using System;
 using UnityEngine;
 
 namespace InteractableSystem
@@ -16,14 +15,14 @@ namespace InteractableSystem
         [SerializeField] private EInteractableAttribute _attribute;
         public EInteractableAttribute Attribute => _attribute;
 
-
         public abstract void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param);
 
         public virtual void OnDetectedEnter()
         {
             IsDetected = true;
         }
-        public virtual void OnDetectedLeave() 
+        
+        public virtual void OnDetectedLeave()
         {
             IsDetected = false;
         }
