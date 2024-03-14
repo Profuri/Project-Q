@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class UIComponent : PoolableMono
 {
-    [HideInInspector] public UIAnimator appearAnimator;
-    [HideInInspector] public UIAnimator disappearAnimator;
+    [HideInInspector] public UIAnimator appearAnimator = new UIAnimator();
+    [HideInInspector] public UIAnimator disappearAnimator = new UIAnimator();
     
     public void Appear(Transform canvasTrm, bool useEnterAnim = false)
     {
