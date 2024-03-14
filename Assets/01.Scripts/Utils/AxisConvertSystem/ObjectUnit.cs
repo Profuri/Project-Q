@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using DG.Tweening;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -28,7 +29,12 @@ namespace AxisConvertSystem
         private UnitInfo _unitInfo;
         private UnitInfo _convertedInfo;
 
+        private List<Material> _materials;
+
         private float _colliderCenterDiffDistance;
+        
+        private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
+        private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
 
         public virtual void Awake()
         {
@@ -45,6 +51,21 @@ namespace AxisConvertSystem
             DepthHandler = new UnitDepthHandler(this);
 
             _colliderCenterDiffDistance = Mathf.Abs(transform.position.y - Collider.bounds.center.y);
+            
+            _materials = new List<Material>();
+            var renderers = transform.GetComponentsInChildren<Renderer>();
+            foreach (var rdr in renderers)
+            {
+                if(!rdr.enabled)
+                {
+                    continue;
+                }
+            
+                foreach (var material in rdr.materials) 
+                {
+                    _materials.Add(material);    
+                }
+            }
             
             Activate(activeUnit);
 
@@ -210,15 +231,19 @@ namespace AxisConvertSystem
 
         public virtual void ReloadUnit()
         {
-            if (staticUnit)
-            {
-                Rigidbody.velocity = Vector3.zero;
-            }
-            
             _unitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
             _convertedInfo = ConvertInfo(_unitInfo, Converter.AxisType);
             UnitSetting(Converter.AxisType);
+            Physics.SyncTransforms();
+
+            if (!staticUnit)
+            {
+                // 여기 나중에 콜백으로 인풋 막기
+                Dissolve(true, 2f);
+                Rigidbody.velocity = Vector3.zero;
+                PlaySpawnVFX();
+            }
         }
         
         public void RewriteUnitInfo()
@@ -228,7 +253,7 @@ namespace AxisConvertSystem
             _unitInfo.LocalScale = transform.localScale;
             _unitInfo.ColliderCenter = Collider.GetLocalCenter();
         }
-        
+
         private void SynchronizePosition(AxisType axis)
         {
             if (staticUnit || IsHide)
@@ -245,26 +270,28 @@ namespace AxisConvertSystem
             }
             else
             {
-                _unitInfo.LocalPos = transform.localPosition;
+                RewriteUnitInfo();
             }
         }
 
         private void SynchronizePositionOnStanding(RaycastHit hit)
         {
-            if (hit.transform.TryGetComponent<ObjectUnit>(out var unit))
-            {
-                var info = unit._unitInfo;
-                var distance = hit.distance - _colliderCenterDiffDistance;
-                var diff = hit.point - hit.collider.bounds.center;
-                _unitInfo.LocalPos = info.LocalPos + diff + Vector3.up * distance;
-            }
-            else
+            var unit = hit.transform.GetComponent<ObjectUnit>();
+            
+            if (unit is PlaneUnit)
             {
                 var diff = hit.point - hit.collider.bounds.center;
                 var distance = hit.distance - _colliderCenterDiffDistance;
                 var standPos = hit.transform.localPosition + diff + Vector3.up * distance;
                 standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
                 _unitInfo.LocalPos = standPos;
+            }
+            else
+            {
+                var info = unit._unitInfo;
+                var distance = hit.distance - _colliderCenterDiffDistance;
+                var diff = hit.point - hit.collider.bounds.center;
+                _unitInfo.LocalPos = info.LocalPos + diff + Vector3.up * distance;
             }
         }
 
@@ -281,6 +308,42 @@ namespace AxisConvertSystem
             var isHit = Physics.Raycast(origin, dir, out hit, Mathf.Infinity, canStandMask);
 
             return isHit;
+        }
+        
+        public void Dissolve(bool on, float time, Action callBack = null)
+        {
+            var value = on ? 0f : 1f;
+        
+            foreach (var material in _materials)
+            {
+                var initVal = Mathf.Abs(1f - value);
+                material.SetFloat(_dissolveProgressHash, initVal);
+                material.SetFloat(_visibleProgressHash, initVal);
+            }
+
+            var seq = DOTween.Sequence();
+
+            foreach (var material in _materials)
+            {
+                seq.Join(DOTween.To(() => material.GetFloat(_dissolveProgressHash),
+                    progress => material.SetFloat(_dissolveProgressHash, progress), value, time));
+                seq.Join(DOTween.To(() => material.GetFloat(_visibleProgressHash),
+                    progress => material.SetFloat(_visibleProgressHash, progress), value, time));
+            }
+
+            seq.OnComplete(() => callBack?.Invoke());
+        }
+
+        private void PlaySpawnVFX()
+        {
+            var spawnVFX = PoolManager.Instance.Pop("SpawnVFX") as PoolableVFX;
+            var bounds = Collider.bounds;
+            var position = transform.position;
+            position.y = bounds.min.y;
+
+            spawnVFX.SetPositionAndRotation(position, Quaternion.identity);
+            spawnVFX.SetScale(new Vector3(bounds.size.x, 1, bounds.size.z));
+            spawnVFX.Play();
         }
 
         public override void OnPop()

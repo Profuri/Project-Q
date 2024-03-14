@@ -17,10 +17,6 @@ public class Section : PoolableMono
 
     private List<BridgeObject> _bridgeObjects;
     public List<ObjectUnit> SectionUnits { get; private set; }
-    private List<Material> _sectionMaterials;
-
-    private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
-    private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
 
     public bool Active { get; private set; }
     public bool Lock { get; set; }
@@ -32,29 +28,7 @@ public class Section : PoolableMono
         Lock = false;
         _bridgeObjects = new List<BridgeObject>();
         SectionUnits = new List<ObjectUnit>();
-        transform.GetComponentsInChildren(SectionUnits);
-        
-        _sectionMaterials = new List<Material>();
-        
-        DOTween.Init(true, true, LogBehaviour.Verbose). SetCapacity(2000, 100);
-    }
-
-    public void ReloadSectionMaterials()
-    {
-        _sectionMaterials.Clear();
-        var renderers = transform.GetComponentsInChildren<Renderer>();
-        foreach (var renderer in renderers)
-        {
-            if (!renderer.enabled)
-            {
-                continue;
-            }
-
-            foreach (var material in renderer.materials)
-            {
-                _sectionMaterials.Add(material);
-            }
-        }
+        ReloadSectionUnits();
     }
 
     private void FixedUpdate()
@@ -81,7 +55,7 @@ public class Section : PoolableMono
 
     public void Generate(Vector3 position, bool moveRoutine = true)
     {
-        ReloadSectionMaterials();
+        ReloadSectionUnits();
         CenterPosition = position;
         transform.position = CenterPosition;
         if (moveRoutine)
@@ -94,7 +68,7 @@ public class Section : PoolableMono
 
     public void Disappear()
     {
-        ReloadSectionMaterials();
+        ReloadSectionUnits();
         Dissolve(false, 2.5f);
         transform.DOMove(CenterPosition - Vector3.up * _sectionData.sectionYDepth, 3f)
             .OnComplete(() =>
@@ -102,6 +76,12 @@ public class Section : PoolableMono
                 PoolManager.Instance.Push(this);
                 Active = false;
             });
+    }
+
+    public void ReloadSectionUnits()
+    {
+        SectionUnits.Clear();
+        transform.GetComponentsInChildren(SectionUnits);
     }
 
     public virtual void OnEnter(PlayerUnit player)
@@ -190,21 +170,9 @@ public class Section : PoolableMono
 
     private void Dissolve(bool on, float time)
     {
-        var value = on ? 0f : 1f;
-        
-        foreach (var material in _sectionMaterials)
+        foreach (var unit in SectionUnits)
         {
-            material.SetFloat(_visibleProgressHash, Mathf.Abs(1f - value));
-            material.SetFloat(_dissolveProgressHash, Mathf.Abs(1f - value));
-        }
-
-        foreach (var material in _sectionMaterials)
-        {
-            DOTween.To(() => material.GetFloat(_visibleProgressHash),
-                progress => material.SetFloat(_visibleProgressHash, progress), value, time);
-            
-            DOTween.To(() => material.GetFloat(_dissolveProgressHash),
-                progress => material.SetFloat(_dissolveProgressHash, progress), value, time);
+            unit.Dissolve(on, time);
         }
     }
     

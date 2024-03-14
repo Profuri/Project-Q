@@ -52,25 +52,7 @@ public class PlayerUnit : ObjectUnit
         
         _stateController.UpdateState();
 
-
-        var findInteractable = FindInteractable();
-        if(_selectedInteractableObject == null)
-        {
-            _selectedInteractableObject = findInteractable;
-            if(findInteractable == null)
-            {
-                _selectedInteractableObject = findInteractable;
-            }
-        }
-        else
-        {
-            if(findInteractable != null && !_selectedInteractableObject.Equals(findInteractable))
-            {
-                _selectedInteractableObject?.OnDetectedLeave();
-                _selectedInteractableObject = findInteractable;
-            }
-        }
-        _selectedInteractableObject?.OnDetectedEnter();
+        _selectedInteractableObject = FindInteractable();
 
         _playerUiController.SetKeyGuide(HoldingHandler.IsHold || _selectedInteractableObject is not null);
     }
@@ -79,10 +61,6 @@ public class PlayerUnit : ObjectUnit
     {
         base.ReloadUnit();
         Converter.ConvertDimension(AxisType.None);
-
-        var spawnVFX = PoolManager.Instance.Pop("SpawnVFX") as PoolableVFX;
-        spawnVFX.SetPositionAndRotation(transform.position);
-        spawnVFX.Play();
     }
 
     public override void OnPop()
@@ -157,10 +135,20 @@ public class PlayerUnit : ObjectUnit
                     {
                         continue;
                     }
+
+                    if (interactable != _selectedInteractableObject)
+                    {
+                        interactable.OnDetectedEnter();
+                    }
                     
                     return interactable;
                 }
             }
+        }
+        
+        if (_selectedInteractableObject)
+        {
+            _selectedInteractableObject.OnDetectedLeave();
         }
             
         return null;

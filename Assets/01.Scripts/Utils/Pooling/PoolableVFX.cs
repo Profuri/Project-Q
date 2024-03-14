@@ -13,9 +13,14 @@ public class PoolableVFX : PoolableMono
         _visualEffect = GetComponent<VisualEffect>();
     }
 
-    public void SetPositionAndRotation(Vector3 position = default, Quaternion quaternion = default)
+    public void SetPositionAndRotation(Vector3 position, Quaternion quaternion)
     {
         _visualEffect.transform.SetPositionAndRotation(position, quaternion);
+    }
+
+    public void SetScale(Vector3 scale)
+    {
+        _visualEffect.transform.localScale = scale;
     }
     
     public void Play()
@@ -30,7 +35,8 @@ public class PoolableVFX : PoolableMono
     private IEnumerator PlayRoutine()
     {
         _visualEffect.Play();
-        yield return new WaitUntil(() => _visualEffect.pause);
+        yield return new WaitUntil(() => _visualEffect.aliveParticleCount > 0);
+        yield return new WaitUntil(() => _visualEffect.aliveParticleCount <= 0);
         _visualEffect.Stop();
         PoolManager.Instance.Push(this);
     }
