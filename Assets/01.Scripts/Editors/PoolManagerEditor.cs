@@ -45,12 +45,9 @@ public class PoolManagerEditor : Editor
         }
 
 
-
-
         AssetDatabase.CreateAsset(poolingList, assetPath);
 
         string[] guids = AssetDatabase.FindAssets("t:Prefab");
-
 
         foreach (string guid in guids)
         {
