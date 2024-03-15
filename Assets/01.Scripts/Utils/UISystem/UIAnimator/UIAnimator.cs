@@ -7,35 +7,24 @@ public class UIAnimator
 {
     public readonly List<UIAnimation> Clips = new List<UIAnimation>();
 
-    private Sequence _sequence;
-
-    public UIAnimator()
-    {
-        _sequence = DOTween.Sequence();
-        _sequence.SetAutoKill(false);
-        _sequence.SetUpdate(true);
-    }
-
     public void Play()
     {
-        _sequence.Complete();
+        var seq = DOTween.Sequence();
+        seq.SetAutoKill(false);
+        seq.SetUpdate(true);
+        
         foreach (var clip in Clips)
         {
             if (clip.joinPrevAnimation)
             {
-                _sequence.Join(clip.GetAnimationTween());
+                seq.Join(clip.GetAnimationTween());
             }
             else
             {
-                _sequence.Append(clip.GetAnimationTween());
+                seq.Append(clip.GetAnimationTween());
             }
         }
-        _sequence.OnComplete(Stop);
-        _sequence.Play();
-    }
-
-    public void Stop()
-    {
-        _sequence.Pause();
+        
+        seq.Play();
     }
 }

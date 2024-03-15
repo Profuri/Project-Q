@@ -50,11 +50,23 @@ public class UIComponentEditor : Editor
             }
             EditorGUILayout.Space(1f);
 
-            if (GUILayout.Button("Add Animation Clip"))
+            EditorGUILayout.BeginHorizontal();
             {
-                GetAnimationTypeMenu(animator, out var menu);
-                menu.ShowAsContext();
+                if (Application.isPlaying)
+                {
+                    if (GUILayout.Button("Preview"))
+                    {
+                        Debug.Log("preview");
+                        animator.Play();
+                    }
+                }
+                if (GUILayout.Button("Add Animation Clip"))
+                {
+                    GetAnimationTypeMenu(animator, out var menu);
+                    menu.ShowAsContext();
+                }
             }
+            EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.Space(2);
         }

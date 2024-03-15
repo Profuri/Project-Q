@@ -80,7 +80,7 @@ public class UIAnimationHandler
             value = EditorGUILayout.ObjectField(field.Name, (RectTransform)value, typeof(RectTransform), true);
         }
         
-        if (value != null && !origin.Equals(value))
+        if (value != null && (origin == null || !origin.Equals(value)))
         {
             field.SetValue(_clip, value);
             EditorUtility.SetDirty(_componentEditor.Component);
