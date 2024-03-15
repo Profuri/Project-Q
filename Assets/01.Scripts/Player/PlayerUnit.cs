@@ -73,6 +73,11 @@ public class PlayerUnit : ObjectUnit
         _selectedInteractableObject?.OnDetectedEnter();
 
         _playerUiController.SetKeyGuide(HoldingHandler.IsHold || _selectedInteractableObject is not null);
+
+        if(Input.GetKeyDown(KeyCode.J))
+        {
+            StageManager.Instance.StageClear(this);
+        }
     }
 
     public override void ReloadUnit()
