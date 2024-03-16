@@ -21,6 +21,9 @@ public class TutorialObjectUnit : InteractableObject
 
         gameObject.layer = LayerMask.NameToLayer("Interactable");
         IsOn = false;
+
+        UnClimbableEffect effect = SceneControlManager.Instance.AddObject("UnClimbableEffect") as UnClimbableEffect;
+        effect.Setting(Collider);
     }
 
     private void OnDisable()
@@ -48,7 +51,7 @@ public class TutorialObjectUnit : InteractableObject
         }
         else
         {
-            gameObject.layer = LayerMask.NameToLayer("Default");
+            gameObject.layer = LayerMask.NameToLayer("Interactable");
         }
         base.Convert(axis);
     }
@@ -63,13 +66,6 @@ public class TutorialObjectUnit : InteractableObject
             {
                 _tutorialMark.Off();
                 _tutorialMark = null;
-            }
-        }
-        else
-        {
-            if(_tutorialMark == null)
-            {
-                LoadTutorialMark();
             }
         }
     }

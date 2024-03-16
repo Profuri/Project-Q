@@ -11,7 +11,7 @@ public class PlayerAxisControlState : PlayerBaseState
     public override void EnterState()
     {
         base.EnterState();
-        
+
         if (!Player.Converter.Convertable)
         {
             Controller.ChangeState(typeof(PlayerIdleState));
@@ -43,6 +43,7 @@ public class PlayerAxisControlState : PlayerBaseState
     public override void ExitState()
     {
         base.ExitState();
+
         Player.InputReader.OnAxisControlEvent -= AxisControlHandle;
         Player.InputReader.OnClickEvent -= SelectAxisHandle;
         VolumeManager.Instance.SetAxisControlVolume(false, 0.2f);
