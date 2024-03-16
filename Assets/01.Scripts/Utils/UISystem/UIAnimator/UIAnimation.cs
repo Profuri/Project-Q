@@ -2,7 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 
 [System.Serializable]
-public class UIAnimation
+public class UIAnimation : ScriptableObject
 {
     public float duration;
     public RectTransform target;

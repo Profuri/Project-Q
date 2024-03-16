@@ -9,19 +9,21 @@ public class UIComponentEditor : Editor
 {
     public UIComponent Component { get; private set; }
     
-    private bool _test;
-    
     private List<Type> _animationTypes;                                             // READONLY
     private Dictionary<UIAnimation, UIAnimationHandler> _uiAnimationEditors;        // READONLY
 
     private void OnEnable()
     {
         Component = (UIComponent)target;
+        
         _animationTypes = new List<Type>();
         _uiAnimationEditors = new Dictionary<UIAnimation, UIAnimationHandler>();
-        
-        InitClipDictionary(Component.appearAnimator);
-        InitClipDictionary(Component.disappearAnimator);
+
+        if (Component.tweenData != null)
+        {
+            InitClipDictionary(Component.tweenData.appearAnimator);
+            InitClipDictionary(Component.tweenData.disappearAnimator);
+        }
         
         LoadUIAnimationType();
     }
@@ -29,9 +31,42 @@ public class UIComponentEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        
-        DrawAnimatorInspector("Appear Animations", ref Component.appearAnimator);
-        DrawAnimatorInspector("Disappear Animations", ref Component.disappearAnimator);
+
+        if (Component.tweenData != null)
+        {
+            DrawAnimatorInspector("Appear Animations", ref Component.tweenData.appearAnimator);
+            DrawAnimatorInspector("Disappear Animations", ref Component.tweenData.disappearAnimator);
+        }
+        else
+        {
+            DrawCreateDataButton();
+        }
+    }
+
+    private void DrawCreateDataButton()
+    {
+        if (GUILayout.Button("Create New Data"))
+        {
+            CreateNewTweenData();
+        }
+    }
+
+    private void CreateNewTweenData()
+    {
+        var assetPath = $"Assets/07.ScriptableObjects/UITweenData/{Component.gameObject.name}TweenData.asset";
+        var uniqueAssetPath = AssetDatabase.GenerateUniqueAssetPath(assetPath);
+
+        var asset = ScriptableObject.CreateInstance<UIComponentTweenData>();
+        asset.appearAnimator = new UIAnimator();
+        asset.disappearAnimator = new UIAnimator();
+
+        AssetDatabase.CreateAsset(asset, uniqueAssetPath);
+        EditorUtility.SetDirty(asset);
+        AssetDatabase.Refresh();
+        AssetDatabase.SaveAssets();
+
+        Component.tweenData = asset;
+        EditorUtility.SetDirty(Component);
     }
 
     private void DrawAnimatorInspector(string title, ref UIAnimator animator)
@@ -80,17 +115,26 @@ public class UIComponentEditor : Editor
         {
             menu.AddItem(new GUIContent(type.Name), false, () =>
             {
-                var clip = (UIAnimation)Activator.CreateInstance(type);
-                AddClip(animator, clip);
+                AddClip(animator, GenerateClipAsset(type));
             });
         }
+    }
+
+    private UIAnimation GenerateClipAsset(Type type)
+    {
+        var clip = ScriptableObject.CreateInstance(type);
+        clip.name = type.ToString();
+        AssetDatabase.AddObjectToAsset(clip, Component.tweenData);
+        EditorUtility.SetDirty(Component.tweenData);
+        AssetDatabase.Refresh();
+        AssetDatabase.SaveAssets();
+        return (UIAnimation)clip;
     }
 
     private void AddClip(UIAnimator animator, UIAnimation clip)
     {
         animator.clips.Add(clip);
         AddClipToEditor(animator, clip);
-        EditorUtility.SetDirty(Component);
     }
 
     private void AddClipToEditor(UIAnimator animator, UIAnimation clip)
@@ -103,7 +147,11 @@ public class UIComponentEditor : Editor
     {
         animator.clips.Remove(clip);
         _uiAnimationEditors.Remove(clip);
-        EditorUtility.SetDirty(Component);
+        
+        Undo.DestroyObjectImmediate(clip);
+        EditorUtility.SetDirty(Component.tweenData);
+        AssetDatabase.Refresh();
+        AssetDatabase.SaveAssets();
     }
 
     private void InitClipDictionary(UIAnimator animator)

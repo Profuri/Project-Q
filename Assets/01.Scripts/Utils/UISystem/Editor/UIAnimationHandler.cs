@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -83,7 +82,9 @@ public class UIAnimationHandler
         if (value != null && (origin == null || !origin.Equals(value)))
         {
             field.SetValue(_clip, value);
-            EditorUtility.SetDirty(_componentEditor.Component);
+            EditorUtility.SetDirty(_componentEditor.Component.tweenData);
+            AssetDatabase.Refresh();
+            AssetDatabase.SaveAssets();
         }
     }
 }

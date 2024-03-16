@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class UIComponent : PoolableMono
 {
-    public UIAnimator appearAnimator;
-    public UIAnimator disappearAnimator;
+    public UIComponentTweenData tweenData;
     
     public void Appear(Transform canvasTrm, bool useEnterAnim = false)
     {
