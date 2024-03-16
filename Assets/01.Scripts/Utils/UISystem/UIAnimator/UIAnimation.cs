@@ -2,11 +2,12 @@ using DG.Tweening;
 using UnityEngine;
 
 [System.Serializable]
-public abstract class UIAnimation
+public class UIAnimation
 {
     public float duration;
     public RectTransform target;
     public bool joinPrevAnimation;
 
-    public abstract Tween GetAnimationTween();
+    public virtual void Init() { }
+    public virtual Tween GetTween() { return null; }
 }

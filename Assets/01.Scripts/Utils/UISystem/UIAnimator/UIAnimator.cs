@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using DG.Tweening;
-using UnityEngine;
 
 [System.Serializable]
 public class UIAnimator
 {
-    public readonly List<UIAnimation> Clips = new List<UIAnimation>();
+    public List<UIAnimation> clips = new List<UIAnimation>();
 
     public void Play()
     {
@@ -13,18 +12,18 @@ public class UIAnimator
         seq.SetAutoKill(false);
         seq.SetUpdate(true);
         
-        foreach (var clip in Clips)
+        foreach (var clip in clips)
         {
+            seq.AppendCallback(() => clip.Init());
+            
             if (clip.joinPrevAnimation)
             {
-                seq.Join(clip.GetAnimationTween());
+                seq.Join(clip.GetTween());
             }
             else
             {
-                seq.Append(clip.GetAnimationTween());
+                seq.Append(clip.GetTween());
             }
         }
-        
-        seq.Play();
     }
 }

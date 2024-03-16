@@ -44,9 +44,9 @@ public class UIComponentEditor : Editor
 
             EditorGUILayout.Space(1f);
             var idx = 0;
-            while (idx < animator.Clips.Count)
+            while (idx < animator.clips.Count)
             {
-                _uiAnimationEditors[animator.Clips[idx++]].DrawClipGUI();
+                _uiAnimationEditors[animator.clips[idx++]].DrawClipGUI();
             }
             EditorGUILayout.Space(1f);
 
@@ -88,7 +88,7 @@ public class UIComponentEditor : Editor
 
     private void AddClip(UIAnimator animator, UIAnimation clip)
     {
-        animator.Clips.Add(clip);
+        animator.clips.Add(clip);
         AddClipToEditor(animator, clip);
         EditorUtility.SetDirty(Component);
     }
@@ -101,14 +101,14 @@ public class UIComponentEditor : Editor
 
     public void RemoveClip(UIAnimator animator, UIAnimation clip)
     {
-        animator.Clips.Remove(clip);
+        animator.clips.Remove(clip);
         _uiAnimationEditors.Remove(clip);
         EditorUtility.SetDirty(Component);
     }
 
     private void InitClipDictionary(UIAnimator animator)
     {
-        foreach (var clip in animator.Clips)
+        foreach (var clip in animator.clips)
         {
             AddClipToEditor(animator, clip);
         }

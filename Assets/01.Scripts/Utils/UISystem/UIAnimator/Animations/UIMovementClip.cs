@@ -6,10 +6,14 @@ public class UIMovementClip : UIAnimation
 {
     public Vector2 fromPosition;
     public Vector2 toPosition;
-    
-    public override Tween GetAnimationTween()
+
+    public override void Init()
     {
         target.anchoredPosition = fromPosition;
-        return target.DOMove(toPosition, duration);
+    }
+
+    public override Tween GetTween()
+    {
+        return target.DOAnchorPos(toPosition, duration).SetUpdate(true);
     }
 }
