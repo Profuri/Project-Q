@@ -10,13 +10,15 @@ public class UIAnimationHandler
     private readonly UIComponentEditor _componentEditor;
     private readonly UIAnimation _clip;
     private readonly List<FieldInfo> _fields;
+    private int _index;
     private bool _foldValue;
     
-    public UIAnimationHandler(UIAnimator animator, UIAnimation clip, UIComponentEditor componentEditor)
+    public UIAnimationHandler(UIAnimator animator, UIAnimation clip, int index, UIComponentEditor componentEditor)
     {
         _animator = animator;
         _clip = clip;
         _componentEditor = componentEditor;
+        _index = index;
         _fields = _clip.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).ToList();
     }
     
@@ -28,7 +30,15 @@ public class UIAnimationHandler
             {
                 GUILayout.Space(10);
                 _foldValue = EditorGUILayout.Foldout(_foldValue, _clip.GetType().Name);
-                GUILayout.Space(70);
+                GUILayout.Space(200);
+                if (GUILayout.Button("↑"))
+                {
+                    UpBtnHandler();
+                }
+                if (GUILayout.Button("↓"))
+                {
+                    DownButtonHandler();
+                }
                 if (GUILayout.Button("Remove"))
                 {
                     RemoveBtnHandler();
@@ -46,6 +56,24 @@ public class UIAnimationHandler
             }
         }
         EditorGUILayout.EndHorizontal();
+    }
+
+    private void UpBtnHandler()
+    {
+        if (_index - 1 < 0)
+        {
+            return;
+        }
+        _animator.clips.Swap(_index, --_index);
+    }
+
+    private void DownButtonHandler()
+    {
+        if (_index + 1 >= _animator.clips.Count)
+        {
+            return;
+        }
+        _animator.clips.Swap(_index, ++_index);
     }
 
     private void RemoveBtnHandler()

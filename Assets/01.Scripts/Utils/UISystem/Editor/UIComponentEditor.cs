@@ -115,7 +115,7 @@ public class UIComponentEditor : Editor
         {
             menu.AddItem(new GUIContent(type.Name), false, () =>
             {
-                AddClip(animator, GenerateClipAsset(type));
+                AddClip(animator, GenerateClipAsset(type), animator.clips.Count);
             });
         }
     }
@@ -131,15 +131,15 @@ public class UIComponentEditor : Editor
         return (UIAnimation)clip;
     }
 
-    private void AddClip(UIAnimator animator, UIAnimation clip)
+    private void AddClip(UIAnimator animator, UIAnimation clip, int index)
     {
         animator.clips.Add(clip);
-        AddClipToEditor(animator, clip);
+        AddClipToEditor(animator, clip, index);
     }
 
-    private void AddClipToEditor(UIAnimator animator, UIAnimation clip)
+    private void AddClipToEditor(UIAnimator animator, UIAnimation clip, int index)
     {
-        var handler = new UIAnimationHandler(animator, clip, this);
+        var handler = new UIAnimationHandler(animator, clip, index, this);
         _uiAnimationEditors.Add(clip, handler); 
     }
 
@@ -156,9 +156,9 @@ public class UIComponentEditor : Editor
 
     private void InitClipDictionary(UIAnimator animator)
     {
-        foreach (var clip in animator.clips)
+        for (var i = 0; i < animator.clips.Count; i++)
         {
-            AddClipToEditor(animator, clip);
+            AddClipToEditor(animator, animator.clips[i], i);
         }
     }
 
