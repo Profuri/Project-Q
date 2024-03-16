@@ -7,10 +7,22 @@ public class UIComponent : PoolableMono
     public void Appear(Transform canvasTrm, bool useEnterAnim = false)
     {
         transform.SetParent(canvasTrm);
+        if (useEnterAnim)
+        {
+            tweenData.appearAnimator.Play();
+        }
     }
 
-    public void Disappear()
+    public void Disappear(bool useExitAnim = false)
     {
+        if (useExitAnim)
+        {
+            tweenData.disappearAnimator.Play(() =>
+            {
+                PoolManager.Instance.Push(this);
+            });
+            return;
+        }
         PoolManager.Instance.Push(this);
     }
 

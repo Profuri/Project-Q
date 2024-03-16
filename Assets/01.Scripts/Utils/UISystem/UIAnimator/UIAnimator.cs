@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 
@@ -9,7 +10,7 @@ public class UIAnimator
     private float _prevStartTime;
     private float _prevEndTime;
 
-    public void Play()
+    public void Play(Action callBack = null)
     {
         var seq = DOTween.Sequence();
         seq.SetAutoKill(false);
@@ -34,5 +35,7 @@ public class UIAnimator
             
             _prevEndTime = _prevStartTime + clip.duration;
         }
+
+        seq.OnComplete(() => callBack?.Invoke());
     }
 }
