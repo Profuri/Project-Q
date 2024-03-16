@@ -14,6 +14,6 @@ public class UIMovementClip : UIAnimation
 
     public override Tween GetTween()
     {
-        return target.DOAnchorPos(toPosition, duration).SetUpdate(true);
+        return target.DOAnchorPos(toPosition, duration);
     }
 }

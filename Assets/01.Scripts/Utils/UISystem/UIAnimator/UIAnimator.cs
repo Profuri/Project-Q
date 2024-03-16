@@ -6,24 +6,33 @@ public class UIAnimator
 {
     public List<UIAnimation> clips = new List<UIAnimation>();
 
+    private float _prevStartTime;
+    private float _prevEndTime;
+
     public void Play()
     {
         var seq = DOTween.Sequence();
         seq.SetAutoKill(false);
         seq.SetUpdate(true);
+
+        _prevStartTime = 0f;
+        _prevEndTime = 0f;
         
         foreach (var clip in clips)
         {
-            seq.AppendCallback(() => clip.Init());
-            
             if (clip.joinPrevAnimation)
             {
-                seq.Join(clip.GetTween());
+                clip.Init();
+                seq.Insert(_prevStartTime, clip.GetTween());
             }
             else
             {
-                seq.Append(clip.GetTween());
+                seq.InsertCallback(_prevEndTime, () => clip.Init());
+                seq.Insert(_prevEndTime, clip.GetTween());
+                _prevStartTime = _prevEndTime;
             }
+            
+            _prevEndTime = _prevStartTime + clip.duration;
         }
     }
 }

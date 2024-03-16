@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5701190631324051809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6c902545fb43e0ab385629a8002f3c, type: 3}
+  m_Name: UIScalingClip
+  m_EditorClassIdentifier: 
+  duration: 0.5
+  target: {fileID: 0}
+  joinPrevAnimation: 0
+  fromScale: {x: 2, y: 2, z: 2}
+  toScale: {x: 1, y: 1, z: 1}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16534c4049b84d44a9b3de6594bbdb8e, type: 3}
+  m_Name: TestTweenData
+  m_EditorClassIdentifier: 
+  appearAnimator:
+    clips:
+    - {fileID: 5997552049255565281}
+    - {fileID: 131872989528218058}
+    - {fileID: -5701190631324051809}
+  disappearAnimator:
+    clips: []
+--- !u!114 &131872989528218058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6c902545fb43e0ab385629a8002f3c, type: 3}
+  m_Name: UIScalingClip
+  m_EditorClassIdentifier: 
+  duration: 0.5
+  target: {fileID: 0}
+  joinPrevAnimation: 1
+  fromScale: {x: 1, y: 1, z: 1}
+  toScale: {x: 2, y: 2, z: 2}
+--- !u!114 &5997552049255565281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b80fb6561d5b4f38927fef63623daf01, type: 3}
+  m_Name: UIMovementClip
+  m_EditorClassIdentifier: 
+  duration: 2
+  target: {fileID: 0}
+  joinPrevAnimation: 0
+  fromPosition: {x: 0, y: 0}
+  toPosition: {x: 200, y: 200}
