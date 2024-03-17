@@ -3,27 +3,23 @@ using UnityEngine;
 public class UIComponent : PoolableMono
 {
     public UIComponentTweenData tweenData;
+    public UIComponentType componentType;
     
-    public void Appear(Transform canvasTrm, bool useEnterAnim = false)
+    public Transform ParentTrm { get; private set; }
+    
+    public void Appear(Transform parentTrm)
     {
-        transform.SetParent(canvasTrm);
-        if (useEnterAnim)
-        {
-            tweenData.appearAnimator.Play();
-        }
+        ParentTrm = parentTrm;
+        transform.SetParent(parentTrm);
+        tweenData.appearAnimator.Play();
     }
 
-    public void Disappear(bool useExitAnim = false)
+    public void Disappear()
     {
-        if (useExitAnim)
+        tweenData.disappearAnimator.Play(() =>
         {
-            tweenData.disappearAnimator.Play(() =>
-            {
-                PoolManager.Instance.Push(this);
-            });
-            return;
-        }
-        PoolManager.Instance.Push(this);
+            PoolManager.Instance.Push(this);
+        });
     }
 
     public override void OnPop()

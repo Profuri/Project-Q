@@ -4,7 +4,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(UIComponent))]
+[CustomEditor(typeof(UIComponent), true)]
 public class UIComponentEditor : Editor
 {
     public UIComponent Component { get; private set; }
@@ -19,18 +19,17 @@ public class UIComponentEditor : Editor
         _animationTypes = new List<Type>();
         _uiAnimationEditors = new Dictionary<UIAnimation, UIAnimationHandler>();
 
-        if (Component.tweenData != null)
-        {
-            InitClipDictionary(Component.tweenData.appearAnimator);
-            InitClipDictionary(Component.tweenData.disappearAnimator);
-        }
-        
-        LoadUIAnimationType();
+        Init();
     }
 
     public override void OnInspectorGUI()
     {
+        var tweenData = Component.tweenData;
         base.OnInspectorGUI();
+        if (tweenData is null && Component.tweenData is not null)
+        {
+            Init();
+        }
 
         if (Component.tweenData != null)
         {
@@ -41,6 +40,17 @@ public class UIComponentEditor : Editor
         {
             DrawCreateDataButton();
         }
+    }
+
+    private void Init()
+    {
+        if (Component.tweenData != null)
+        {
+            InitClipDictionary(Component.tweenData.appearAnimator);
+            InitClipDictionary(Component.tweenData.disappearAnimator);
+        }
+        
+        LoadUIAnimationType();
     }
 
     private void DrawCreateDataButton()
