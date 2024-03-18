@@ -52,10 +52,11 @@ public class TutorialMark : PoolableMono
         _ringTrm.localScale = Vector3.up;
         _tutMat.SetFloat("_time", 0.9f);
         _projectionConeTrm.localScale = new Vector3(10f, 0f, 10f);
+        _visualTrm.localScale = Vector3.zero;
 
         seq.Append(_ringTrm.DOScale(new Vector3(0.2f, 1f, 0.2f), _time));
         //seq.Join(DOTween.To(() => _tutMat.GetFloat("_time"), value => _tutMat.SetFloat("_time", value), 0.9f, _time));
-        seq.Join(_visualTrm.DOScale(new Vector3(1f, 1f, 1f), _time));
+        seq.Join(_visualTrm.DOScale(new Vector3(1f, 1f, -1f), _time));
         seq.Join(_projectionConeTrm.DOScale(new Vector3(10f, 10f, 10f), _time));
     }
 
@@ -66,6 +67,7 @@ public class TutorialMark : PoolableMono
         _ringTrm.localScale = new Vector3(0.2f, 1f, 0.2f);
         _tutMat.SetFloat("_time", 0.9f);
         _projectionConeTrm.localScale = Vector3.one * 10f;
+        _visualTrm.localScale = Vector3.one;
 
         seq.Append(_ringTrm.DOScale(new Vector3(0f, 1f, 0f), _time));
         //seq.Join(DOTween.To(() => _tutMat.GetFloat("_time"), value => _tutMat.SetFloat("_time", value), 0f, _time));
