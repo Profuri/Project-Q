@@ -10,8 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8079561603263014744}
   - component: {fileID: 4255968578637327514}
-  - component: {fileID: 605905774799626996}
-  - component: {fileID: 741837462569507551}
+  - component: {fileID: 7006389709569472054}
   m_Layer: 6
   m_Name: Platform_0
   m_TagString: Untagged
@@ -57,7 +56,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.2, y: 1, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &605905774799626996
+--- !u!114 &7006389709569472054
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -66,50 +65,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 4061327372815110138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c86ec896980c345b59e1762c4ba35b4c, type: 3}
+  m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 5
   compressLayer: 1
-  climbableUnit: 1
-  staticUnit: 0
+  climbableUnit: 0
+  staticUnit: 1
   activeUnit: 1
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
-  useGravity: 0
-  _interactType: 0
-  _attribute: 0
-  _reciprocationDir: {x: 0, y: 0, z: -1}
-  _reciprocationDistance: 6
-  _reciprocationSpeed: 5
---- !u!54 &741837462569507551
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4061327372815110138}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  useGravity: 1
 --- !u!1 &8391198394935333878
 GameObject:
   m_ObjectHideFlags: 0
