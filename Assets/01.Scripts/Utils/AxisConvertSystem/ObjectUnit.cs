@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -31,8 +32,6 @@ namespace AxisConvertSystem
 
         private List<Material> _materials;
 
-        private float _colliderCenterDiffDistance;
-        
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
 
@@ -50,8 +49,6 @@ namespace AxisConvertSystem
             }
             DepthHandler = new UnitDepthHandler(this);
 
-            _colliderCenterDiffDistance = Mathf.Abs(transform.position.y - Collider.bounds.center.y);
-            
             _materials = new List<Material>();
             var renderers = transform.GetComponentsInChildren<Renderer>();
             foreach (var rdr in renderers)
@@ -263,9 +260,9 @@ namespace AxisConvertSystem
 
             if (axis == AxisType.None)
             {
-                if (CheckStandObject(out var hit))
+                if (CheckStandObject(out var col))
                 {
-                    SynchronizePositionOnStanding(hit);
+                    SynchronizePositionOnStanding(col);
                 }
             }
             else
@@ -274,40 +271,44 @@ namespace AxisConvertSystem
             }
         }
 
-        private void SynchronizePositionOnStanding(RaycastHit hit)
+        private void SynchronizePositionOnStanding(Collider col)
         {
-            var unit = hit.transform.GetComponent<ObjectUnit>();
-            
-            if (unit is PlaneUnit)
+            var unit = col.transform.GetComponent<ObjectUnit>();
+            var info = unit._unitInfo;
+
+            var standPos = transform.localPosition;
+            standPos.y = col.bounds.max.y;
+            if (Converter.AxisType == AxisType.Y)
             {
-                var diff = hit.point - hit.collider.bounds.center;
-                var distance = hit.distance - _colliderCenterDiffDistance;
-                var standPos = hit.transform.localPosition + diff + Vector3.up * distance;
-                standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
-                _unitInfo.LocalPos = standPos;
+                standPos.y *= info.LocalScale.y;
+                standPos.SetAxisElement(Converter.AxisType, standPos.y + info.LocalPos.GetAxisElement(Converter.AxisType));
             }
             else
             {
-                var info = unit._unitInfo;
-                var distance = hit.distance - _colliderCenterDiffDistance;
-                var diff = hit.point - hit.collider.bounds.center;
-                _unitInfo.LocalPos = info.LocalPos + diff + Vector3.up * distance;
+                standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
             }
+
+            _unitInfo.LocalPos = standPos;
         }
 
-        public bool CheckStandObject(out RaycastHit hit)
+        public bool CheckStandObject(out Collider col)
         {
             var origin = Collider.bounds.center;
+            
             if (Converter.AxisType == AxisType.Y)
             {
-                ++origin.y;
+                var cols = new Collider[10];
+                Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask);
+                col = cols[0];
+                return col;
             }
-            
-            var dir = Vector3.down;
-
-            var isHit = Physics.Raycast(origin, dir, out hit, Mathf.Infinity, canStandMask);
-
-            return isHit;
+            else
+            {
+                var dir = Vector3.down;
+                var isHit = Physics.Raycast(origin, dir, out var hit, Mathf.Infinity, canStandMask);
+                col = isHit ? hit.collider : null;
+                return isHit;
+            }
         }
         
         public void Dissolve(bool on, float time, Action callBack = null)

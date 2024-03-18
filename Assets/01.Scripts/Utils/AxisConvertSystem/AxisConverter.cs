@@ -75,7 +75,7 @@ namespace AxisConvertSystem
         {
             Player.CheckStandObject(out var hit);
 
-            if (!(axis == AxisType.Y && frontCol is null && hit.collider == backCol))
+            if (!(axis == AxisType.Y && frontCol is null && hit.GetComponent<Collider>() == backCol))
             {
                 CancelChangeAxis(axis, frontCol, backCol);
                 _cancelConvert = true;
@@ -123,20 +123,18 @@ namespace AxisConvertSystem
             VolumeManager.Instance.Highlight(0.2f);
             LightManager.Instance.SetShadow(axisType == AxisType.None ? LightShadows.Soft : LightShadows.None);
 
-            _section.SectionUnits.ForEach(unit =>
+            foreach (var unit in _section.SectionUnits)
             {
                 unit.Convert(axisType);
-            });
-            
-            _section.SectionUnits.ForEach(unit =>
+            }
+            foreach (var unit in _section.SectionUnits)
             {
                 unit.DepthHandler.CalcDepth(axisType);
-            });
-            
-            _section.SectionUnits.ForEach(unit =>
+            }
+            foreach (var unit in _section.SectionUnits)
             {
                 unit.UnitSetting(axisType);
-            });
+            }
 
             AxisType = axisType;
         }
