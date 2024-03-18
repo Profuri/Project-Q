@@ -67,10 +67,12 @@ public class SlimeObjectUnit : ObjectUnit
     private List<ObjectUnit> GetMovementUnit()
     {
         List<ObjectUnit> unitList = new List<ObjectUnit>();
-        
-        Vector3 checkCenterPos = Collider.bounds.center ;
+
+                
+        Vector3 checkCenterPos = Collider.bounds.center;
         Vector3 halfExtents = Collider.bounds.extents * 0.5f + Vector3.up * 2f;
         Quaternion rotation = transform.rotation;
+
 
         Collider[] cols = Physics.OverlapBox(checkCenterPos, halfExtents, rotation);
 
@@ -90,6 +92,7 @@ public class SlimeObjectUnit : ObjectUnit
         return unitList;
     }
 
+   
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
@@ -100,7 +103,7 @@ public class SlimeObjectUnit : ObjectUnit
 
         if(col != null)
         {
-            Vector3 checkCenterPos = transform.position + Vector3.up * col.bounds.size.y;
+            Vector3 checkCenterPos = col.bounds.center+ Vector3.up * col.bounds.size.y;
             Vector3 checkScale = col.bounds.size;
 
             Gizmos.DrawWireCube(checkCenterPos, checkScale);

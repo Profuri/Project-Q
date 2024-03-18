@@ -26,6 +26,7 @@ public class PlayerUnit : ObjectUnit
     public override void Awake()
     {
         base.Awake();
+        
         Converter = GetComponent<AxisConverter>();
         Converter.Player = this;
         ModelTrm = transform.Find("Model");
@@ -55,6 +56,12 @@ public class PlayerUnit : ObjectUnit
         _selectedInteractableObject = FindInteractable();
 
         _playerUiController.SetKeyGuide(HoldingHandler.IsHold || _selectedInteractableObject is not null);
+
+
+        if(Input.GetKeyDown(KeyCode.J))
+        {
+            StageManager.Instance.StageClear(this);
+        }
     }
 
     public override void ReloadUnit()
