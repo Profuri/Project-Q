@@ -119,6 +119,7 @@ namespace AxisConvertSystem
 
         private void ChangeAxis(AxisType axisType)
         {
+            Player.Converter.UnShowClimbableEffect();
             CameraManager.Instance.ShakeCam(1f, 0.1f);
             VolumeManager.Instance.Highlight(0.2f);
             LightManager.Instance.SetShadow(axisType == AxisType.None ? LightShadows.Soft : LightShadows.None);
@@ -157,6 +158,22 @@ namespace AxisConvertSystem
             var isHit2 = Physics.CapsuleCast(p1+dir, p2+dir, radius, -dir, out back, Mathf.Infinity, _objectMask);
 
             return !(isHit1 || isHit2);
+        }
+
+        public void ShowClimbableEffect()
+        {
+            foreach (ObjectUnit unit in _section.SectionUnits)
+            {
+                unit.ShowUnClimbableEffect();
+            }
+        }
+
+        public void UnShowClimbableEffect()
+        {
+            foreach (ObjectUnit unit in _section.SectionUnits)
+            {
+                unit.UnShowClimbableEffect();
+            }
         }
     }
 }

@@ -35,6 +35,7 @@ namespace AxisConvertSystem
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
 
+        private UnClimbableEffect _unClimbableEffect;
         public virtual void Awake()
         {
             IsHide = false;
@@ -138,6 +139,8 @@ namespace AxisConvertSystem
             {
                 Collider.isTrigger = axis == AxisType.Y;
             }
+
+
             
             if (!staticUnit)
             {
@@ -382,6 +385,34 @@ namespace AxisConvertSystem
                     Debug.Log($"This info can't set value: {info}");
                 }
             }
+        }
+
+        public void ShowUnClimbableEffect()
+        {
+            if (CanAppearClimbable())
+            {
+                if(_unClimbableEffect == null)
+                {
+                    _unClimbableEffect = SceneControlManager.Instance.AddObject("UnClimbableEffect") as UnClimbableEffect;
+                    _unClimbableEffect.Setting(Collider);
+                }
+            }
+        }
+
+        public void UnShowClimbableEffect()
+        {
+            if(_unClimbableEffect != null)
+            {
+                SceneControlManager.Instance.DeleteObject(_unClimbableEffect);
+                _unClimbableEffect = null;
+            }
+        }
+
+        private bool CanAppearClimbable()
+        {
+            bool onLayer = (int)compressLayer < (int)CompressLayer.Obstacle;
+            Debug.Log($"OnLayer {onLayer} IsTriggerFalse: {!Collider.isTrigger}");
+            return !climbableUnit && onLayer && !Collider.isTrigger;
         }
     }
 }
