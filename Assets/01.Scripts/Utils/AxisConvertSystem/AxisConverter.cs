@@ -75,7 +75,7 @@ namespace AxisConvertSystem
         {
             Player.CheckStandObject(out var hit);
 
-            if (!(axis == AxisType.Y && frontCol is null && hit.collider == backCol))
+            if (!(axis == AxisType.Y && frontCol is null && hit.GetComponent<Collider>() == backCol))
             {
                 CancelChangeAxis(axis, frontCol, backCol);
                 _cancelConvert = true;
@@ -119,24 +119,23 @@ namespace AxisConvertSystem
 
         private void ChangeAxis(AxisType axisType)
         {
+            Player.Converter.UnShowClimbableEffect();
             CameraManager.Instance.ShakeCam(1f, 0.1f);
             VolumeManager.Instance.Highlight(0.2f);
             LightManager.Instance.SetShadow(axisType == AxisType.None ? LightShadows.Soft : LightShadows.None);
 
-            _section.SectionUnits.ForEach(unit =>
+            foreach (var unit in _section.SectionUnits)
             {
                 unit.Convert(axisType);
-            });
-            
-            _section.SectionUnits.ForEach(unit =>
+            }
+            foreach (var unit in _section.SectionUnits)
             {
                 unit.DepthHandler.CalcDepth(axisType);
-            });
-            
-            _section.SectionUnits.ForEach(unit =>
+            }
+            foreach (var unit in _section.SectionUnits)
             {
                 unit.UnitSetting(axisType);
-            });
+            }
 
             AxisType = axisType;
         }
@@ -159,6 +158,22 @@ namespace AxisConvertSystem
             var isHit2 = Physics.CapsuleCast(p1+dir, p2+dir, radius, -dir, out back, Mathf.Infinity, _objectMask);
 
             return !(isHit1 || isHit2);
+        }
+
+        public void ShowClimbableEffect()
+        {
+            foreach (ObjectUnit unit in _section.SectionUnits)
+            {
+                unit.ShowUnClimbableEffect();
+            }
+        }
+
+        public void UnShowClimbableEffect()
+        {
+            foreach (ObjectUnit unit in _section.SectionUnits)
+            {
+                unit.UnShowClimbableEffect();
+            }
         }
     }
 }
