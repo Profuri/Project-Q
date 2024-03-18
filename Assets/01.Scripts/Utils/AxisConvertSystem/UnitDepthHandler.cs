@@ -8,7 +8,7 @@ namespace AxisConvertSystem
     {
         private readonly ObjectUnit _owner;
         private readonly Dictionary<AxisType, DepthPoint> _depthCheckPoint;
-        
+
         public float Depth { get; private set; }
 
         public UnitDepthHandler(ObjectUnit owner)
