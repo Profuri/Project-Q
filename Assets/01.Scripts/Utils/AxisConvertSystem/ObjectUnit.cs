@@ -409,14 +409,6 @@ namespace AxisConvertSystem
         private bool CanAppearClimbable()
         {
             bool onLayer = (int)compressLayer < (int)CompressLayer.Obstacle;
-            if (this.gameObject.name == "TutorialObjectUnit")
-            {
-                Debug.Log($"OnLayer {onLayer} IsTriggerFalse: {!Collider.isTrigger}");
-            }
-            else
-            {
-                Debug.Log($"GameObjectName: {this.gameObject.name}");
-            }
             return !climbableUnit && onLayer && !Collider.isTrigger;
         }
     }

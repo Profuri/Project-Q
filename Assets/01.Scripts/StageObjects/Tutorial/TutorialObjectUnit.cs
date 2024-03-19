@@ -21,9 +21,6 @@ public class TutorialObjectUnit : InteractableObject
 
         gameObject.layer = LayerMask.NameToLayer("Interactable");
         IsOn = false;
-
-        UnClimbableEffect effect = SceneControlManager.Instance.AddObject("UnClimbableEffect") as UnClimbableEffect;
-        effect.Setting(Collider);
     }
 
     private void OnDisable()
