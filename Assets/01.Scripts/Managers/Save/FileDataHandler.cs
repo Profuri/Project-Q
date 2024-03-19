@@ -58,8 +58,7 @@ public class FileDataHandler
         }
         catch (Exception ex)
         {
-            //Debug.LogError($"Error on trying to save data to file: {fullPath} \n {ex.Message}");
-            Debug.LogError(ex.Message);
+            Debug.LogError($"Error on trying to save data to file: {fullPath} \n {ex.Message}");
         }
     }
 

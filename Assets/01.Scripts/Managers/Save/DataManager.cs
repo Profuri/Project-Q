@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class SaveData
 {
-    public Dictionary<ChapterType, bool> ChapterProgressDictionary = new Dictionary<ChapterType, bool>();
+    public SerializableDictionary<ChapterType, bool> ChapterProgressDictionary = new SerializableDictionary<ChapterType, bool>();
 }
 
 public interface IDataProvidable
@@ -35,7 +35,6 @@ public class DataManager : MonoSingleton<DataManager>
     private void Awake()
     {
         s_saveData = new SaveData();
-        Debug.Log($"Directory: {Application.dataPath}");
         _fileDataHandler = new FileDataHandler(Application.dataPath, _fileName,_isEncrypt,_isBase64);
         SettingDataProvidable();
     }

@@ -1,6 +1,4 @@
 using ManagingSystem;
-using System.Collections;
-using System.Collections.Generic;
 using AxisConvertSystem;
 using UnityEngine;
 using System;
@@ -75,9 +73,6 @@ public class StageManager : BaseManager<StageManager>,IDataProvidable
             var currentChapter = _currentPlayChapterData.chapter;
             bool isClear = CurrentStage.stageOrder + 1 >= _currentPlayChapterData.stageCnt;
 
-            Debug.Log($"SaveData: {saveData}");
-            Debug.Log($"Dictionary: {saveData.ChapterProgressDictionary}");
-            Debug.Log($"CurrentChatper: {currentChapter}");
             if (saveData.ChapterProgressDictionary.ContainsKey(currentChapter) == false)
             {
                 saveData.ChapterProgressDictionary.Add(currentChapter, isClear);
@@ -86,7 +81,6 @@ public class StageManager : BaseManager<StageManager>,IDataProvidable
             {
                 saveData.ChapterProgressDictionary[currentChapter] = isClear;
             }
-            Debug.Log($"CurrentChapter: {currentChapter}, IsClear: {saveData.ChapterProgressDictionary[currentChapter]}");
         };
     }
 
