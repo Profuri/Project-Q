@@ -112,7 +112,10 @@ namespace AxisConvertSystem
             {
                 AxisType = canceledAxis;
                 Convertable = true;
-                _section.SectionUnits.ForEach(unit => unit.RewriteUnitInfo());
+                foreach (var unit in _section.SectionUnits)
+                {
+                    unit.RewriteUnitInfo();
+                }
                 Player.Converter.ConvertDimension(AxisType.None);
             });
         }
