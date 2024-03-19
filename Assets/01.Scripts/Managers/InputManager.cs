@@ -20,6 +20,8 @@ public enum EInputCategory
     Reset,
 }
 
+
+
 public class InputManager : MonoSingleton<InputManager>
 {
     [field:SerializeField] public InputReader InputReader {get;private set; }
@@ -47,9 +49,9 @@ public class InputManager : MonoSingleton<InputManager>
         };
     }
 
-    public void SetEnableInput(List<EInputCategory> categoryList,bool enable)
+    public void SetEnableInput(EInputCategory[] categories,bool enable)
     {
-        foreach(EInputCategory category in categoryList)
+        foreach(EInputCategory category in categories)
         {
             if (enable)
             {
@@ -61,22 +63,26 @@ public class InputManager : MonoSingleton<InputManager>
             }
         }
     }
+    
+    
+    /// <summary>
+    /// if in categories => enable not categories => !enable
+    /// </summary>
+    /// <param name="categories"></param>
+    /// <param name="enable"></param>
 
-    public void SetEnableInputWithout(List<EInputCategory> categoryList, bool enable)
+    public void SetEnableInputWithout(EInputCategory[] categories, bool enable)
     {
         foreach (EInputCategory category in Enum.GetValues(typeof(EInputCategory)))
         {
-            bool isEnable = enable;
-            isEnable = categoryList.Contains(category) ? isEnable : !isEnable;
-
+            bool isInCategories = categories.Contains(category);
+            bool isEnable = isInCategories ? enable : !enable; 
+            
+            
             if (isEnable)
-            {
                 _inputDictionary[category].Enable();
-            }
             else
-            {
                 _inputDictionary[category].Disable();
-            }
         }
     }
 
@@ -126,4 +132,15 @@ public class InputManager : MonoSingleton<InputManager>
             }
         }
     }
+}
+
+
+public static class InputManagerHelper
+{
+    public static void OnControllingAxis()
+    {
+        EInputCategory[] inputs = { EInputCategory.AxisControl, EInputCategory.Click };
+        InputManager.Instance.SetEnableInputWithout(inputs, true);
+    }
+    public static void OnCancelingAxis() => InputManager.Instance.SetEnableInputAll(true);
 }

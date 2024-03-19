@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AxisConvertSystem;
 
 public class PlayerAxisControlState : PlayerBaseState
@@ -32,6 +33,7 @@ public class PlayerAxisControlState : PlayerBaseState
         {
             SelectAxisHandle();
         }
+        InputManagerHelper.OnControllingAxis();
     }
 
     public override void UpdateState()
@@ -49,6 +51,8 @@ public class PlayerAxisControlState : PlayerBaseState
         VolumeManager.Instance.SetAxisControlVolume(false, 0.2f);
         LightManager.Instance.SetAxisLight(AxisType.None);
         ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(false);
+        
+        InputManager.Instance.SetEnableInputAll(true);
     }
     
     private void CalcCurrentControlAxis()
@@ -79,7 +83,9 @@ public class PlayerAxisControlState : PlayerBaseState
         Controller.ChangeState(typeof(PlayerIdleState));
         
         // block input
+        InputManager.Instance.SetEnableInputAll(false);
 
-        Player.Converter.ConvertDimension(_controllingAxis);
+        Player.Converter.ConvertDimension(_controllingAxis,() => 
+            InputManagerHelper.OnCancelingAxis());
     }
 }

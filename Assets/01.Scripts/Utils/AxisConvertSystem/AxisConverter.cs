@@ -114,6 +114,7 @@ namespace AxisConvertSystem
                 Convertable = true;
                 _section.SectionUnits.ForEach(unit => unit.RewriteUnitInfo());
                 Player.Converter.ConvertDimension(AxisType.None);
+                InputManagerHelper.OnCancelingAxis();
             });
         }
 

@@ -26,7 +26,6 @@ public class PlayerUnit : ObjectUnit
     public override void Awake()
     {
         base.Awake();
-        
         Converter = GetComponent<AxisConverter>();
         Converter.Player = this;
         ModelTrm = transform.Find("Model");
@@ -57,11 +56,13 @@ public class PlayerUnit : ObjectUnit
 
         _playerUiController.SetKeyGuide(HoldingHandler.IsHold || _selectedInteractableObject is not null);
 
-
+        #if UNITY_EDITOR
+        //Test code
         if(Input.GetKeyDown(KeyCode.J))
         {
             StageManager.Instance.StageClear(this);
         }
+        #endif
     }
 
     public override void ReloadUnit()
@@ -76,7 +77,7 @@ public class PlayerUnit : ObjectUnit
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
     }   
-
+    
     public override void OnPush()
     {
         _inputReader.OnInteractionEvent -= OnInteraction;
