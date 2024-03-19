@@ -14,7 +14,7 @@ public class PlayerUnit : ObjectUnit
     public Transform ModelTrm { get; private set; }
     public Animator Animator { get; private set; }
     public ObjectHoldingHandler HoldingHandler { get; private set; }
-    public ObjectUnit standingUnit;
+    public ObjectUnit StandingUnit { get; set; }
     private StateController _stateController;
     private PlayerUIController _playerUiController;
 
@@ -45,7 +45,7 @@ public class PlayerUnit : ObjectUnit
     {
         base.UpdateUnit();
 
-        if (standingUnit)
+        if (StandingUnit)
         {
             StandingCheck();
         }
@@ -83,14 +83,14 @@ public class PlayerUnit : ObjectUnit
 
     private void StandingCheck()
     {
-        if (!standingUnit.Collider.bounds.Contains(Collider.bounds.center))
+        if (!StandingUnit.Collider.bounds.Contains(Collider.bounds.center))
         {
-            standingUnit.Collider.excludeLayers ^= 1 << gameObject.layer;
-            standingUnit = null;
+            StandingUnit.Collider.excludeLayers ^= 1 << gameObject.layer;
+            StandingUnit = null;
             return;
         }
         
-        standingUnit.Collider.excludeLayers |= 1 << gameObject.layer;
+        StandingUnit.Collider.excludeLayers |= 1 << gameObject.layer;
     }
     
     private bool CheckGround()

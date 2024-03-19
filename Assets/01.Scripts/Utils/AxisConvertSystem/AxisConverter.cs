@@ -86,7 +86,7 @@ namespace AxisConvertSystem
                 var unit = backCol.GetComponent<ObjectUnit>();
                 if (!unit.climbableUnit)
                 {
-                    Player.standingUnit = unit;
+                    Player.StandingUnit = unit;
                 }
             }
         }

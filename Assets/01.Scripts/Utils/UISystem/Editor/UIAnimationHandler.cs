@@ -106,6 +106,10 @@ public class UIAnimationHandler
         {
             value = EditorGUILayout.Vector3Field(field.Name, (Vector3)value);
         }
+        else if (field.FieldType == typeof(Transform))
+        {
+            value = EditorGUILayout.ObjectField(field.Name, (Transform)value, typeof(Transform), true);
+        }
         else if (field.FieldType == typeof(RectTransform))
         {
             value = EditorGUILayout.ObjectField(field.Name, (RectTransform)value, typeof(RectTransform), true);
