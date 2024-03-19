@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -15,6 +14,7 @@ namespace AxisConvertSystem
         [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
         [HideInInspector] public bool activeUnit = true;
+        [HideInInspector] public bool subUnit = false;
         
         [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public bool useGravity = true;
@@ -36,6 +36,7 @@ namespace AxisConvertSystem
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
 
         private UnClimbableEffect _unClimbableEffect;
+        
         public virtual void Awake()
         {
             IsHide = false;
@@ -66,7 +67,6 @@ namespace AxisConvertSystem
             }
             
             Activate(activeUnit);
-
         }
 
         public virtual void FixedUpdateUnit()
@@ -109,6 +109,7 @@ namespace AxisConvertSystem
         {
             if (!activeUnit)
             {
+                _convertedInfo = OriginUnitInfo;
                 return;
             }
 
@@ -122,12 +123,6 @@ namespace AxisConvertSystem
         
         public virtual void UnitSetting(AxisType axis)
         {
-            if (!activeUnit)
-            {
-                ApplyInfo(OriginUnitInfo, false);
-                return;
-            }
-            
             ApplyInfo(_convertedInfo);
 
             if (IsHide)
@@ -139,8 +134,6 @@ namespace AxisConvertSystem
             {
                 Collider.isTrigger = axis == AxisType.Y;
             }
-
-
             
             if (!staticUnit)
             {
@@ -170,7 +163,7 @@ namespace AxisConvertSystem
 
             var layerDepth = (float)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
             
-            basic.LocalPos.SetAxisElement(axis, layerDepth);
+            basic.LocalPos.SetAxisElement(axis, subUnit ? 0f : layerDepth);
 
             basic.LocalScale = Quaternion.Inverse(basic.LocalRot) * basic.LocalScale;
             basic.LocalScale.SetAxisElement(axis, 1);
@@ -205,9 +198,8 @@ namespace AxisConvertSystem
 
         public void SetVelocity(Vector3 velocity, bool useGravity = true)
         {
-            if (staticUnit)
+            if (staticUnit || Rigidbody.isKinematic)
             {
-                Debug.LogWarning("[ObjectUnit] this unit is not dynamic object.");
                 return;
             }
             
@@ -220,9 +212,8 @@ namespace AxisConvertSystem
 
         public void StopImmediately(bool withYAxis)
         {
-            if (staticUnit)
+            if (staticUnit || Rigidbody.isKinematic)
             {
-                Debug.LogWarning("[ObjectUnit] this unit is not dynamic object.");
                 return;
             }
             
@@ -239,7 +230,6 @@ namespace AxisConvertSystem
 
             if (!staticUnit)
             {
-                // 여기 나중에 콜백으로 인풋 막기
                 Dissolve(true, 2f);
                 Rigidbody.velocity = Vector3.zero;
                 PlaySpawnVFX();
