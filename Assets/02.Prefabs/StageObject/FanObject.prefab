@@ -34,7 +34,7 @@ Transform:
   m_Children:
   - {fileID: 6815763475999627073}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!65 &1031624782047499998
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -80,9 +80,9 @@ MonoBehaviour:
   useGravity: 1
   _interactType: 2
   _attribute: 0
-  _airDir: 2
+  _airAxis: 2
   _collisionSize: 2
-  _airMaxHeight: 30
+  _airMaxHeight: 10
   _airPower: 5
   _effectedMask:
     serializedVersion: 2
@@ -224,7 +224,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3
+      scalar: 1
       minScalar: 0.5
       maxCurve:
         serializedVersion: 2
