@@ -45,7 +45,6 @@ namespace InteractableSystem
         #if UNITY_EDITOR
         protected virtual void OnDrawGizmos()
         {
-            Debug.Log("LeagueOfLegends");
             Vector3 center = transform.position;
             if (Offset < 0.1f)
             {
