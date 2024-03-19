@@ -278,7 +278,14 @@ namespace AxisConvertSystem
             }
             else
             {
-                standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
+                if (unit is PlaneUnit)
+                {
+                    standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
+                }
+                else
+                {
+                    standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
+                }
             }
 
             _unitInfo.LocalPos = standPos;
@@ -293,6 +300,13 @@ namespace AxisConvertSystem
                 var cols = new Collider[10];
                 Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask);
                 col = cols[0];
+
+                if (col is null)
+                {
+                    Physics.OverlapBoxNonAlloc(origin - Vector3.up, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask);
+                    col = cols[0];
+                }
+                
                 return col;
             }
             else
