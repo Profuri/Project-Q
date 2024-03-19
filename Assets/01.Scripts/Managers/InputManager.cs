@@ -143,4 +143,7 @@ public static class InputManagerHelper
         InputManager.Instance.SetEnableInputWithout(inputs, true);
     }
     public static void OnCancelingAxis() => InputManager.Instance.SetEnableInputAll(true);
+
+    public static void OnDeadPlayer() => InputManager.Instance.SetEnableInputAll(false);
+    public static void OnRevivePlayer() => InputManager.Instance.SetEnableInputAll(true);
 }

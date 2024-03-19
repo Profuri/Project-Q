@@ -232,7 +232,7 @@ namespace AxisConvertSystem
             Rigidbody.velocity = withYAxis ? Vector3.zero : new Vector3(0, Rigidbody.velocity.y, 0);
         }
 
-        public virtual void ReloadUnit()
+        public virtual void ReloadUnit(Action callBack = null)
         {
             _unitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
@@ -242,8 +242,7 @@ namespace AxisConvertSystem
 
             if (!staticUnit)
             {
-                // 여기 나중에 콜백으로 인풋 막기
-                Dissolve(true, 2f);
+                Dissolve(true, 2f, callBack);
                 Rigidbody.velocity = Vector3.zero;
                 PlaySpawnVFX();
             }

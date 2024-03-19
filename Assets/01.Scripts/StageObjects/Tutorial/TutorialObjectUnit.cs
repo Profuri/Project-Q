@@ -131,8 +131,11 @@ public class TutorialObjectUnit : InteractableObject
     }
 
 #if UNITY_EDITOR
-    private void OnDrawGizmos()
+    protected override void OnDrawGizmos()
     {
+        base.OnDrawGizmos();
+        
+        
         Gizmos.color = Color.red;
         Collider collider = GetComponent<Collider>();
         if(collider != null)
