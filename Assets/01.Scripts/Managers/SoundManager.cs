@@ -151,6 +151,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         Debug.Log($"OriginVolume: {volume}");
         _masterMixer.SetFloat(targetName,volume);
     }
+    
 
     private float GetOriginVolume(float volume)
     {
