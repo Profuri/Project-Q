@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using Singleton;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -9,6 +8,13 @@ public enum SoundEnum
     EFFECT,
     BGM,
     END
+}
+
+public enum EAUDIO_MIXER
+{
+    MASTER,
+    BGM,
+    SFX
 }
 
 public class SoundManager : MonoSingleton<SoundManager>
@@ -36,12 +42,19 @@ public class SoundManager : MonoSingleton<SoundManager>
             _audioSources[i].outputAudioMixerGroup = (soundNames[i] == "BGM" ? _bgmGroup : _sfxGroup);
             go.transform.SetParent(transform);
         }
-
+        
         _audioSources[(int)SoundEnum.BGM].loop = true;
 
         PlayBGM("TestBGM");
     }
-    
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            SettingVolume(EAUDIO_MIXER.BGM,0.7f);
+        }
+    }
     public void PlaySFX(string clipName)
     {
         AudioClip clip = _audioClipSO.GetAudioClip(clipName);
@@ -117,6 +130,30 @@ public class SoundManager : MonoSingleton<SoundManager>
         if (!fadeIn)
             Play(source.clip, type);
     }
-    
-    
+
+
+    public void SettingVolume(EAUDIO_MIXER mixerType,float volume)
+    {
+        volume = GetOriginVolume(volume);
+        string targetName = string.Empty;
+        switch (mixerType)
+        {
+            case EAUDIO_MIXER.MASTER:
+                targetName = "MASTER";
+                break;
+            case EAUDIO_MIXER.BGM:
+                targetName = "BGM";
+                break;
+            case EAUDIO_MIXER.SFX:
+                targetName = "SFX";
+                break;
+        }
+        Debug.Log($"OriginVolume: {volume}");
+        _masterMixer.SetFloat(targetName,volume);
+    }
+
+    private float GetOriginVolume(float volume)
+    {
+        return Mathf.Lerp( -40, 0,volume);
+    }
 }
