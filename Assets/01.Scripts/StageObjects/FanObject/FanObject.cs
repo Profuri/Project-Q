@@ -28,13 +28,13 @@ public class FanObject : InteractableObject
 
     public override void Awake()
     {
-        base.Awake();
-
         var model = transform.Find("Model");
         _fanTrm = model.Find("Fan");
         _airParticle = _fanTrm.Find("AirParticle").GetComponent<ParticleSystem>();
 
         _affectedUnits = new List<ObjectUnit>();
+        
+        base.Awake();
     }
 
     public override void UpdateUnit()
@@ -49,6 +49,22 @@ public class FanObject : InteractableObject
     {
         base.Init(converter);
         EnableFan();
+    }
+
+    public override void Activate(bool active)
+    {
+        base.Activate(active);
+        if (active)
+        {
+            if (_enabled)
+            {
+                EnableFan();
+            }
+            else
+            {
+                ReleaseFan();
+            }
+        }
     }
 
     private void EnableFan()

@@ -176,7 +176,7 @@ namespace AxisConvertSystem
             return basic;
         }
 
-        public void Activate(bool active)
+        public virtual void Activate(bool active)
         {
             activeUnit = active;
             gameObject.SetActive(active);
