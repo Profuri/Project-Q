@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ManagingSystem;
@@ -41,5 +42,10 @@ public class PoolManager : BaseManager<PoolManager>
     public void Push(PoolableMono obj)
     {
         _pools[obj.name].Push(obj);
+    }
+
+    public void SettingPoolinglist(List<PoolingList> poolingListList)
+    {
+        _poolingLists = poolingListList;
     }
 }

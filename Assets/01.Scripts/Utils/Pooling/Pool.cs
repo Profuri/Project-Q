@@ -22,10 +22,10 @@ public class Pool
 
     private PoolableMono CreateNewPrefab()
     {
-        var obj = Object.Instantiate(_prefab, _parent);
-        obj.gameObject.name = obj.gameObject.name.Replace("(Clone)", "");
-        obj.gameObject.SetActive(false);
-        return obj;
+            var obj = Object.Instantiate(_prefab, _parent);
+            obj.gameObject.name = obj.gameObject.name.Replace("(Clone)", "");
+            obj.gameObject.SetActive(false);
+            return obj;
     }
 
     public PoolableMono Pop()

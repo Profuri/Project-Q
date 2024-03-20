@@ -14,6 +14,7 @@ namespace AxisConvertSystem
         [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
         [HideInInspector] public bool activeUnit = true;
+        [HideInInspector] public bool subUnit = false;
         
         [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public bool useGravity = true;
@@ -31,11 +32,11 @@ namespace AxisConvertSystem
 
         private List<Material> _materials;
 
-        private float _colliderCenterDiffDistance;
-        
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
 
+        private UnClimbableEffect _unClimbableEffect;
+        
         public virtual void Awake()
         {
             IsHide = false;
@@ -50,8 +51,6 @@ namespace AxisConvertSystem
             }
             DepthHandler = new UnitDepthHandler(this);
 
-            _colliderCenterDiffDistance = Mathf.Abs(transform.position.y - Collider.bounds.center.y);
-            
             _materials = new List<Material>();
             var renderers = transform.GetComponentsInChildren<Renderer>();
             foreach (var rdr in renderers)
@@ -68,7 +67,6 @@ namespace AxisConvertSystem
             }
             
             Activate(activeUnit);
-
         }
 
         public virtual void FixedUpdateUnit()
@@ -111,6 +109,7 @@ namespace AxisConvertSystem
         {
             if (!activeUnit)
             {
+                _convertedInfo = OriginUnitInfo;
                 return;
             }
 
@@ -124,12 +123,6 @@ namespace AxisConvertSystem
         
         public virtual void UnitSetting(AxisType axis)
         {
-            if (!activeUnit)
-            {
-                ApplyInfo(OriginUnitInfo, false);
-                return;
-            }
-            
             ApplyInfo(_convertedInfo);
 
             if (IsHide)
@@ -170,7 +163,7 @@ namespace AxisConvertSystem
 
             var layerDepth = (float)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
             
-            basic.LocalPos.SetAxisElement(axis, layerDepth);
+            basic.LocalPos.SetAxisElement(axis, subUnit ? 0f : layerDepth);
 
             basic.LocalScale = Quaternion.Inverse(basic.LocalRot) * basic.LocalScale;
             basic.LocalScale.SetAxisElement(axis, 1);
@@ -183,7 +176,7 @@ namespace AxisConvertSystem
             return basic;
         }
 
-        public void Activate(bool active)
+        public virtual void Activate(bool active)
         {
             activeUnit = active;
             gameObject.SetActive(active);
@@ -205,9 +198,8 @@ namespace AxisConvertSystem
 
         public void SetVelocity(Vector3 velocity, bool useGravity = true)
         {
-            if (staticUnit)
+            if (staticUnit || Rigidbody.isKinematic)
             {
-                Debug.LogWarning("[ObjectUnit] this unit is not dynamic object.");
                 return;
             }
             
@@ -220,16 +212,15 @@ namespace AxisConvertSystem
 
         public void StopImmediately(bool withYAxis)
         {
-            if (staticUnit)
+            if (staticUnit || Rigidbody.isKinematic)
             {
-                Debug.LogWarning("[ObjectUnit] this unit is not dynamic object.");
                 return;
             }
             
             Rigidbody.velocity = withYAxis ? Vector3.zero : new Vector3(0, Rigidbody.velocity.y, 0);
         }
 
-        public virtual void ReloadUnit()
+        public virtual void ReloadUnit(Action callBack = null)
         {
             _unitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
@@ -239,8 +230,7 @@ namespace AxisConvertSystem
 
             if (!staticUnit)
             {
-                // 여기 나중에 콜백으로 인풋 막기
-                Dissolve(true, 2f);
+                Dissolve(true, 2f, callBack);
                 Rigidbody.velocity = Vector3.zero;
                 PlaySpawnVFX();
             }
@@ -263,9 +253,9 @@ namespace AxisConvertSystem
 
             if (axis == AxisType.None)
             {
-                if (CheckStandObject(out var hit))
+                if (CheckStandObject(out var col))
                 {
-                    SynchronizePositionOnStanding(hit);
+                    SynchronizePositionOnStanding(col);
                 }
             }
             else
@@ -274,40 +264,58 @@ namespace AxisConvertSystem
             }
         }
 
-        private void SynchronizePositionOnStanding(RaycastHit hit)
+        private void SynchronizePositionOnStanding(Collider col)
         {
-            var unit = hit.transform.GetComponent<ObjectUnit>();
-            
-            if (unit is PlaneUnit)
+            var unit = col.transform.GetComponent<ObjectUnit>();
+            var info = unit._unitInfo;
+
+            var standPos = transform.localPosition;
+            standPos.y = col.bounds.max.y;
+            if (Converter.AxisType == AxisType.Y)
             {
-                var diff = hit.point - hit.collider.bounds.center;
-                var distance = hit.distance - _colliderCenterDiffDistance;
-                var standPos = hit.transform.localPosition + diff + Vector3.up * distance;
-                standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
-                _unitInfo.LocalPos = standPos;
+                standPos.y *= info.LocalScale.y;
+                standPos.SetAxisElement(Converter.AxisType, standPos.y + info.LocalPos.GetAxisElement(Converter.AxisType));
             }
             else
             {
-                var info = unit._unitInfo;
-                var distance = hit.distance - _colliderCenterDiffDistance;
-                var diff = hit.point - hit.collider.bounds.center;
-                _unitInfo.LocalPos = info.LocalPos + diff + Vector3.up * distance;
+                if (unit is PlaneUnit)
+                {
+                    standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
+                }
+                else
+                {
+                    standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
+                }
             }
+
+            _unitInfo.LocalPos = standPos;
         }
 
-        public bool CheckStandObject(out RaycastHit hit)
+        public bool CheckStandObject(out Collider col)
         {
             var origin = Collider.bounds.center;
+            
             if (Converter.AxisType == AxisType.Y)
             {
-                ++origin.y;
+                var cols = new Collider[10];
+                Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask);
+                col = cols[0];
+
+                if (col is null)
+                {
+                    Physics.OverlapBoxNonAlloc(origin - Vector3.up, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask);
+                    col = cols[0];
+                }
+                
+                return col;
             }
-            
-            var dir = Vector3.down;
-
-            var isHit = Physics.Raycast(origin, dir, out hit, Mathf.Infinity, canStandMask);
-
-            return isHit;
+            else
+            {
+                var dir = Vector3.down;
+                var isHit = Physics.Raycast(origin, dir, out var hit, Mathf.Infinity, canStandMask);
+                col = isHit ? hit.collider : null;
+                return isHit;
+            }
         }
         
         public void Dissolve(bool on, float time, Action callBack = null)
@@ -381,6 +389,33 @@ namespace AxisConvertSystem
                     Debug.Log($"This info can't set value: {info}");
                 }
             }
+        }
+
+        public void ShowUnClimbableEffect()
+        {
+            if (CanAppearClimbable())
+            {
+                if(_unClimbableEffect == null)
+                {
+                    _unClimbableEffect = SceneControlManager.Instance.AddObject("UnClimbableEffect") as UnClimbableEffect;
+                    _unClimbableEffect.Setting(Collider);
+                }
+            }
+        }
+
+        public void UnShowClimbableEffect()
+        {
+            if(_unClimbableEffect != null)
+            {
+                SceneControlManager.Instance.DeleteObject(_unClimbableEffect);
+                _unClimbableEffect = null;
+            }
+        }
+
+        private bool CanAppearClimbable()
+        {
+            bool onLayer = (int)compressLayer < (int)CompressLayer.Obstacle;
+            return !climbableUnit && onLayer && !Collider.isTrigger;
         }
     }
 }

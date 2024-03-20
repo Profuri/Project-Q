@@ -11,12 +11,19 @@ public abstract class PlayerBaseState : State
 
     protected void AxisControlHandle(bool toggle)
     {
+        if (!Player.Converter.Convertable)
+        {
+            return;
+        }
+        
         if (toggle)
         {
+            Player.Converter.ShowClimbableEffect();
             Controller.ChangeState(typeof(PlayerAxisControlState));
         }
         else
         {
+            Player.Converter.UnShowClimbableEffect();
             Controller.ChangeState(typeof(PlayerIdleState));
         }
     }

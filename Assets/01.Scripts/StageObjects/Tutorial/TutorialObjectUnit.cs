@@ -48,7 +48,7 @@ public class TutorialObjectUnit : InteractableObject
         }
         else
         {
-            gameObject.layer = LayerMask.NameToLayer("Default");
+            gameObject.layer = LayerMask.NameToLayer("Interactable");
         }
         base.Convert(axis);
     }
@@ -63,13 +63,6 @@ public class TutorialObjectUnit : InteractableObject
             {
                 _tutorialMark.Off();
                 _tutorialMark = null;
-            }
-        }
-        else
-        {
-            if(_tutorialMark == null)
-            {
-                LoadTutorialMark();
             }
         }
     }
@@ -135,8 +128,11 @@ public class TutorialObjectUnit : InteractableObject
     }
 
 #if UNITY_EDITOR
-    private void OnDrawGizmos()
+    protected override void OnDrawGizmos()
     {
+        base.OnDrawGizmos();
+        
+        
         Gizmos.color = Color.red;
         Collider collider = GetComponent<Collider>();
         if(collider != null)

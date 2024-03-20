@@ -1,7 +1,9 @@
+using System;
 using AxisConvertSystem;
 using InputControl;
 using InteractableSystem;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerUnit : ObjectUnit
 {
@@ -16,10 +18,9 @@ public class PlayerUnit : ObjectUnit
     public ObjectHoldingHandler HoldingHandler { get; private set; }
     public ObjectUnit StandingUnit { get; set; }
     private StateController _stateController;
-    private PlayerUIController _playerUiController;
 
     private InteractableObject _selectedInteractableObject;
-
+    
     public bool OnGround => CheckGround();
     private readonly int _activeHash = Animator.StringToHash("Active");
     
@@ -31,7 +32,6 @@ public class PlayerUnit : ObjectUnit
         ModelTrm = transform.Find("Model");
         Animator = ModelTrm.GetComponent<Animator>();
         HoldingHandler = GetComponent<ObjectHoldingHandler>();
-        _playerUiController = transform.Find("PlayerCanvas").GetComponent<PlayerUIController>();
         
         _stateController = new StateController(this);
         _stateController.RegisterState(new PlayerIdleState(_stateController, true, "Idle"));
@@ -44,6 +44,12 @@ public class PlayerUnit : ObjectUnit
     public override void UpdateUnit()
     {
         base.UpdateUnit();
+        
+        // debug
+        if (Keyboard.current.jKey.wasPressedThisFrame)
+        {
+            StageManager.Instance.StageClear(this);
+        }
 
         if (StandingUnit)
         {
@@ -54,12 +60,24 @@ public class PlayerUnit : ObjectUnit
 
         _selectedInteractableObject = FindInteractable();
 
-        _playerUiController.SetKeyGuide(HoldingHandler.IsHold || _selectedInteractableObject is not null);
+        #if UNITY_EDITOR
+        //Test code
+        if(Input.GetKeyDown(KeyCode.J))
+        {
+            StageManager.Instance.StageClear(this);
+        }
+        #endif
     }
 
-    public override void ReloadUnit()
+    public override void ReloadUnit(Action callBack = null)
     {
-        base.ReloadUnit();
+        base.ReloadUnit(() =>
+        {
+            InputManagerHelper.OnRevivePlayer();
+        });
+        
+        InputManagerHelper.OnDeadPlayer();
+
         Converter.ConvertDimension(AxisType.None);
     }
 
@@ -69,7 +87,7 @@ public class PlayerUnit : ObjectUnit
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
     }   
-
+    
     public override void OnPush()
     {
         _inputReader.OnInteractionEvent -= OnInteraction;
