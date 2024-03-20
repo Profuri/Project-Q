@@ -1,11 +1,15 @@
+using System;
+using System.Collections.Generic;
 using InteractableSystem;
 using AxisConvertSystem;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class FanObject : InteractableObject
 {
     [Header("Air Settings")] 
-    [SerializeField] private AxisType _airDir;
+    [SerializeField] private FanAirAxisType _airAxis;
     [SerializeField] private float _collisionSize;
     [SerializeField] private float _airMaxHeight;
     [SerializeField] private float _airPower;
@@ -23,13 +27,17 @@ public class FanObject : InteractableObject
 
     private bool _enabled;
 
+    private List<ObjectUnit> _affectedUnits;
+
     public override void Awake()
     {
-        base.Awake();
-
         var model = transform.Find("Model");
         _fanTrm = model.Find("Fan");
         _airParticle = _fanTrm.Find("AirParticle").GetComponent<ParticleSystem>();
+
+        _affectedUnits = new List<ObjectUnit>();
+        
+        base.Awake();
     }
 
     public override void UpdateUnit()
@@ -37,13 +45,34 @@ public class FanObject : InteractableObject
         base.UpdateUnit();
         
         RotateFan();
-        FloatingOther();
+        CheckAffectedUnit();
+    }
+
+    public void LateUpdate()
+    {
+        FloatingUnits();
     }
 
     public override void Init(AxisConverter converter)
     {
         base.Init(converter);
         EnableFan();
+    }
+
+    public override void Activate(bool active)
+    {
+        base.Activate(active);
+        if (active)
+        {
+            if (_enabled)
+            {
+                EnableFan();
+            }
+            else
+            {
+                ReleaseFan();
+            }
+        }
     }
 
     private void EnableFan()
@@ -75,49 +104,74 @@ public class FanObject : InteractableObject
         }
     }
 
-    private void FloatingOther()
+    private void CheckAffectedUnit()
     {
         if (!_enabled)
         {
             return;
         }
 
-        if (!CheckCollision(out var hits, out var size))
+        if (!CheckCollision(out var cols))
         {
+            foreach (var unit in _affectedUnits)
+            {
+                unit.useGravity = true;
+            }
+            _affectedUnits.Clear();
             return;
         }
-        
-        for (var i = 0; i < size; i++)
-        {
-            var hit = hits[i];
 
-            if (hit.collider.TryGetComponent(out ObjectUnit unit))
+        foreach (var col in cols)
+        {
+            if (col.TryGetComponent(out ObjectUnit unit))
             {
+                if (_affectedUnits.Contains(unit))
+                {
+                    continue;
+                }
+                
                 if (!unit.staticUnit)
                 {
-                    var airVelocity = unit.Rigidbody.velocity;
-                    airVelocity.SetAxisElement(_airDir, _airPower);
-                    unit.SetVelocity(airVelocity, false);       
+                    _affectedUnits.Add(unit);
                 }
             }
         }
     }
 
-    private bool CheckCollision(out RaycastHit[] hits, out int size)
+    private void FloatingUnits()
     {
-        hits = new RaycastHit[10];
+        foreach (var unit in _affectedUnits)
+        {
+            var velocity = unit.Rigidbody.velocity;
+            
+            if (Mathf.Abs(velocity.y) >= 0.01f)
+            {
+                velocity.y -= Mathf.Sign(velocity.y) * 
+                              GameManager.Instance.CoreData.gravityScale * 
+                              Mathf.Sqrt(Mathf.Abs(velocity.y)) * Time.deltaTime;
+            }
+            else
+            {
+                velocity.y = 0f;
+            }
+
+            var airPower = GetAirDir() * _airPower;
+            velocity.SetAxisElement(GetAirNormalAxis(), airPower.GetAxisElement(GetAirNormalAxis()));
+
+            unit.useGravity = false;
+            unit.SetVelocity(velocity, false);
+        }
+    }
+
+    private bool CheckCollision(out Collider[] cols)
+    {
+        var center = transform.position + GetAirDir() * (_airMaxHeight / 2f);
         var colSize = Vector3.one * _collisionSize;
-        colSize.SetAxisElement(_airDir, 0.1f);
-        size = Physics.BoxCastNonAlloc(
-            transform.position,
-            colSize / 2f,
-            Vector3ExtensionMethod.GetAxisDir(_airDir),
-            hits, 
-            transform.rotation,
-            _airMaxHeight,
-            _effectedMask
-        );
-        return size > 0;
+        colSize.SetAxisElement(GetAirNormalAxis(), _airMaxHeight);
+
+        cols = Physics.OverlapBox(center, colSize / 2f, Quaternion.identity, _effectedMask);
+        
+        return cols.Length > 0;
     }
 
     private void RotateFan()
@@ -127,14 +181,31 @@ public class FanObject : InteractableObject
         _fanTrm.Rotate(new Vector3(0, _currentFanSpeed * Time.deltaTime, 0));
     }
 
+    private Vector3 GetAirDir()
+    {
+        if ((int)_airAxis >= 4)
+        {
+            return -Vector3ExtensionMethod.GetAxisDir(GetAirNormalAxis());
+        }
+        else
+        {
+            return Vector3ExtensionMethod.GetAxisDir(GetAirNormalAxis());
+        }
+    }
+
+    private AxisType GetAirNormalAxis()
+    {
+        return (AxisType)((int)(_airAxis - 1) % 3 + 1);
+    }
+
 #if UNITY_EDITOR
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        var center = transform.position + Vector3ExtensionMethod.GetAxisDir(_airDir) * _airMaxHeight;
+        var center = transform.position + GetAirDir() * (_airMaxHeight / 2f);
         var colSize = Vector3.one * _collisionSize;
-        colSize.SetAxisElement(_airDir, 0.1f);
+        colSize.SetAxisElement(GetAirNormalAxis(), _airMaxHeight);
         Gizmos.DrawWireCube(center, colSize);
     }
     
@@ -143,6 +214,22 @@ public class FanObject : InteractableObject
         _airParticle = transform.Find("Model/Fan/AirParticle").GetComponent<ParticleSystem>();
         var particleMainSetting = _airParticle.main;
         particleMainSetting.startLifetime = _airMaxHeight / 10f;
+
+        transform.eulerAngles = GetAxisRot();
+    }
+
+    private Vector3 GetAxisRot()
+    {
+        return _airAxis switch
+        {
+            FanAirAxisType.X => new Vector3(0, 0, -90),
+            FanAirAxisType.Y => new Vector3(0, 0, 0),
+            FanAirAxisType.Z => new Vector3(-90, 0, 0),
+            FanAirAxisType.ReverseX => new Vector3(0, 0, 90),
+            FanAirAxisType.ReverseY => new Vector3(180, 0, 0),
+            FanAirAxisType.ReverseZ => new Vector3(90, 0, 0),
+            _ => Vector3.zero // 기본값 처리
+        };
     }
 
 #endif
