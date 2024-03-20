@@ -91,7 +91,7 @@ public class FanObject : InteractableObject
         {
             foreach (var unit in _affectedUnits)
             {
-                unit.StopImmediately(true);
+                unit.StopImmediately(false);
             }
             return;
         }
