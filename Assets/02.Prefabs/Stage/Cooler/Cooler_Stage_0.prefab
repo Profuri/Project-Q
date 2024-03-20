@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a20ae8a59cd4e1b4eaebd92ae706779d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolingCnt: 1
+  poolingCnt: 5
   _enterPoint: {x: -3.94, y: -1, z: -5.52}
   _exitPoint: {x: 3, y: -1, z: 5.19}
   _playerResetPoint: {x: 0, y: 3, z: -3}
@@ -848,11 +848,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolingCnt: 0
+  poolingCnt: 5
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
+  subUnit: 0
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
@@ -1713,11 +1714,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolingCnt: 0
+  poolingCnt: 5
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
+  subUnit: 0
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
@@ -1849,7 +1851,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7932440477615480241}
   - component: {fileID: 2179013012235819880}
-  - component: {fileID: 4419924521306775550}
+  - component: {fileID: 983384411189835272}
   m_Layer: 9
   m_Name: Plane
   m_TagString: Untagged
@@ -1895,7 +1897,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4419924521306775550
+--- !u!114 &983384411189835272
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1909,9 +1911,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolingCnt: 5
   compressLayer: 1
-  climbableUnit: 0
+  climbableUnit: 1
   staticUnit: 1
   activeUnit: 1
+  subUnit: 0
   canStandMask:
     serializedVersion: 2
     m_Bits: 0

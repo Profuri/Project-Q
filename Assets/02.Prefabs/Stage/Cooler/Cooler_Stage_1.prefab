@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a20ae8a59cd4e1b4eaebd92ae706779d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolingCnt: 1
+  poolingCnt: 5
   _enterPoint: {x: -0.37, y: -1, z: -5.51}
   _exitPoint: {x: 4.73, y: -1, z: 5.5}
   _playerResetPoint: {x: 0, y: 2, z: -3.85}
@@ -493,11 +493,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolingCnt: 0
+  poolingCnt: 5
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
+  subUnit: 0
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
@@ -1190,11 +1191,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolingCnt: 0
+  poolingCnt: 5
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
+  subUnit: 0
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
@@ -1350,11 +1352,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolingCnt: 0
+  poolingCnt: 5
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
+  subUnit: 0
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
@@ -2133,11 +2136,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolingCnt: 0
+  poolingCnt: 5
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
+  subUnit: 0
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
@@ -2272,6 +2276,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7932440477615480241}
   - component: {fileID: 2179013012235819880}
+  - component: {fileID: 5409012403825987729}
   m_Layer: 9
   m_Name: Plane
   m_TagString: Untagged
@@ -2317,6 +2322,28 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.4, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5409012403825987729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7713451869101256351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9da0173425ab468db4dc195d25edcd93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  compressLayer: 1
+  climbableUnit: 0
+  staticUnit: 1
+  activeUnit: 1
+  subUnit: 0
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
 --- !u!1 &7918539826629531908
 GameObject:
   m_ObjectHideFlags: 0
@@ -4968,22 +4995,22 @@ PrefabInstance:
     - target: {fileID: 5819674201580867651, guid: ed6cef6b912ec473886235670af3176f,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5819674201580867651, guid: ed6cef6b912ec473886235670af3176f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5819674201580867651, guid: ed6cef6b912ec473886235670af3176f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5819674201580867651, guid: ed6cef6b912ec473886235670af3176f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.7071068
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5819674201580867651, guid: ed6cef6b912ec473886235670af3176f,
         type: 3}

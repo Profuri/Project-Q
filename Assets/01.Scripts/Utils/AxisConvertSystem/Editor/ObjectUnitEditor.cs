@@ -49,6 +49,7 @@ namespace AxisConvertSystem.Editor
             VariableLoad(ref _target.staticUnit, EditorGUILayout.Toggle("Static Unit", _target.staticUnit));
             VariableLoad(ref _target.climbableUnit, EditorGUILayout.Toggle("Climbable Unit", _target.climbableUnit));
             VariableLoad(ref _target.activeUnit, EditorGUILayout.Toggle("Active Unit", _target.activeUnit));
+            VariableLoad(ref _target.subUnit, EditorGUILayout.Toggle("Sub Unit", _target.subUnit));
 
             if (!_target.staticUnit)
             {                                      

@@ -3,6 +3,7 @@ using AxisConvertSystem;
 using InputControl;
 using InteractableSystem;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerUnit : ObjectUnit
 {
@@ -43,6 +44,12 @@ public class PlayerUnit : ObjectUnit
     public override void UpdateUnit()
     {
         base.UpdateUnit();
+        
+        // debug
+        if (Keyboard.current.jKey.wasPressedThisFrame)
+        {
+            StageManager.Instance.StageClear(this);
+        }
 
         if (standingUnit)
         {
