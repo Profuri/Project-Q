@@ -220,7 +220,7 @@ namespace AxisConvertSystem
             Rigidbody.velocity = withYAxis ? Vector3.zero : new Vector3(0, Rigidbody.velocity.y, 0);
         }
 
-        public virtual void ReloadUnit()
+        public virtual void ReloadUnit(Action callBack = null)
         {
             _unitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
@@ -230,7 +230,7 @@ namespace AxisConvertSystem
 
             if (!staticUnit)
             {
-                Dissolve(true, 2f);
+                Dissolve(true, 2f, callBack);
                 Rigidbody.velocity = Vector3.zero;
                 PlaySpawnVFX();
             }
@@ -415,7 +415,6 @@ namespace AxisConvertSystem
         private bool CanAppearClimbable()
         {
             bool onLayer = (int)compressLayer < (int)CompressLayer.Obstacle;
-            Debug.Log($"OnLayer {onLayer} IsTriggerFalse: {!Collider.isTrigger}");
             return !climbableUnit && onLayer && !Collider.isTrigger;
         }
     }
