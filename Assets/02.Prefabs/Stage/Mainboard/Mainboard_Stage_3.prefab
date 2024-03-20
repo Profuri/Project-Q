@@ -853,7 +853,7 @@ MonoBehaviour:
   _maxHeight: 1
   _minHeight: 0.35
   _affectedObjects:
-  - InteractableObject: {fileID: 0}
+  - InteractableObject: {fileID: 8573125143205531880}
     inverseValue: 0
   _onToggleChangeEvents: []
 --- !u!4 &6172230779461328713 stripped
@@ -950,10 +950,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7006389709569472054, guid: 8d536e825b0cf47bca234020f2348540, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4061327372815110138, guid: 8d536e825b0cf47bca234020f2348540,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8573125143205531880}
   m_SourcePrefab: {fileID: 100100000, guid: 8d536e825b0cf47bca234020f2348540, type: 3}
 --- !u!4 &731713607017293671 stripped
 Transform:
@@ -961,3 +966,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8793225352285863999}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4781543405949964229 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4061327372815110138, guid: 8d536e825b0cf47bca234020f2348540,
+    type: 3}
+  m_PrefabInstance: {fileID: 8793225352285863999}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8573125143205531880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4781543405949964229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c86ec896980c345b59e1762c4ba35b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  compressLayer: 2
+  climbableUnit: 1
+  staticUnit: 1
+  activeUnit: 1
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 1
+  <Offset>k__BackingField: 0
+  _interactType: 2
+  _attribute: 0
+  _reciprocationDir: {x: 0, y: 0, z: -1}
+  _reciprocationDistance: 6
+  _reciprocationSpeed: 6

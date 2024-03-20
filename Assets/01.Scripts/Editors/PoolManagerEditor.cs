@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using System.Reflection;
-using UnityEditor.PackageManager;
-using Unity.VisualScripting;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(PoolManager))]
 public class PoolManagerEditor : Editor
 {
@@ -70,3 +66,4 @@ public class PoolManagerEditor : Editor
         poolingList.SetDirty();
     }
 }
+#endif
