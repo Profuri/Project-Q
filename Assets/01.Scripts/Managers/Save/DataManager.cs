@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Singleton;
 using UnityEngine;
-using System.Reflection;
 
 public class SaveData
 {
-    public SerializableDictionary<ChapterType, bool> ChapterProgressDictionary = new SerializableDictionary<ChapterType, bool>();
-    public bool IsClearTutorial => ChapterProgressDictionary[ChapterType.MAINBOARD];
+    public SaveData()
+    {
+        ChapterProgressDictionary = new SerializableDictionary<ChapterType, bool>();
+    }
+    public SerializableDictionary<ChapterType, bool> ChapterProgressDictionary;
+    public bool IsShowSequence = false;
 }
+
 
 public interface IDataProvidable
 {
@@ -17,6 +21,7 @@ public interface IDataProvidable
     public Action<SaveData> GetProvideAction();
     public Action<SaveData> GetSaveAction();
 }
+
 
 public class DataManager : MonoSingleton<DataManager>
 {
@@ -37,8 +42,19 @@ public class DataManager : MonoSingleton<DataManager>
     
     private void Awake()
     {
-        s_saveData = new SaveData();
         _fileDataHandler = new FileDataHandler(Application.dataPath, _fileName,_isEncrypt,_isBase64);
+
+        SaveData saveData = _fileDataHandler.Load();
+        if(saveData != null)
+        {
+            s_saveData = saveData;
+        }
+        else
+        {
+            s_saveData = new SaveData();
+        }
+
+        Debug.Log($"SaveData: {s_saveData}");
     }
 
     public void SettingDataProvidable(IDataProvidable dataProvidable)
@@ -58,35 +74,39 @@ public class DataManager : MonoSingleton<DataManager>
             _dataSettableDictionary[dataProvidable] = loadAction;
     }
 
-    public void SaveData(IDataProvidable providable = null)
+    [ContextMenu("Save")]
+    public void SaveData()
     {
-        List<IDataProvidable> dataProvidableList = new List<IDataProvidable>();
-
-        if(providable != null)
-            dataProvidableList.Add(providable);
-        else
-            dataProvidableList = _dataProvidableDictionary.Keys.ToList();
-
-        foreach(IDataProvidable dataProvidable in dataProvidableList)
+        foreach(IDataProvidable dataProvidable in _dataProvidableDictionary.Keys) 
         {
             _dataProvidableDictionary[dataProvidable]?.Invoke(s_saveData);
         }
         _fileDataHandler.Save(s_saveData);
     }
 
+    public void SaveData(IDataProvidable providable = null)
+    {
+         _dataProvidableDictionary[providable]?.Invoke(s_saveData);
+        _fileDataHandler.Save(s_saveData);
+    }
+
+    [ContextMenu("Load")]
+
+    public void LoadData()
+    {
+        s_saveData = _fileDataHandler.Load();
+
+        foreach (IDataProvidable dataProvidable in _dataProvidableDictionary.Keys.ToList())
+        {
+            _dataSettableDictionary[dataProvidable]?.Invoke(s_saveData);
+        }
+    }
+
     public void LoadData(IDataProvidable providable = null)
     {
         s_saveData = _fileDataHandler.Load();
-            List<IDataProvidable> dataProvidableList;
 
-            if (providable != null)
-                dataProvidableList = new List<IDataProvidable> { providable };
-            else
-                dataProvidableList = _dataProvidableDictionary.Keys.ToList();
-
-            foreach (IDataProvidable dataProvidable in dataProvidableList)
-            {
-                _dataSettableDictionary[dataProvidable]?.Invoke(s_saveData);
-            }
+        _dataSettableDictionary[providable]?.Invoke(s_saveData);
     }
+
 }

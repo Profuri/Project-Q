@@ -8,10 +8,11 @@ public class TutorialChapter : Chapter
 
     public override void ShowingSequence(ChapterType chapterType,SaveData saveData)
     {
-        if(saveData.IsClearTutorial)
+        if(saveData.IsShowSequence)
         {
             _cpuTrm.position = new Vector3(_cpuTrm.position.x, _cpuTrm.position.y + _upOffset,_cpuTrm.position.z);
-            gameObject.SetActive(false);
+            Activate(false);
+            return;
         }
 
         if(chapterType == Data.chapter)
@@ -23,8 +24,7 @@ public class TutorialChapter : Chapter
             {
                 this.gameObject.SetActive(false);
             });
-
-            OnShowSequence?.Invoke();
         }
+        OnShowSequence?.Invoke();
     }
 }

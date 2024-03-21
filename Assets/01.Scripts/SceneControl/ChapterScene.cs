@@ -31,7 +31,8 @@ public class ChapterScene : Scene, IDataProvidable
     private void LoadChapterEvents(SaveData saveData)
     {
         if (saveData == null)
-            Debug.LogError("SaveData is null!!!!");
+            return;
+
         
         Dictionary<ChapterType,bool> dictionary = saveData.ChapterProgressDictionary;
 
@@ -40,9 +41,7 @@ public class ChapterScene : Scene, IDataProvidable
         {
             ChapterType chapterType = kvp.Key;
 
-            bool isClearTutorial = saveData.IsClearTutorial;
-
-            if (kvp.Value && !isClearTutorial)
+            if (kvp.Value)
             {
                 clearCnt++;
                 OnChapterClear?.Invoke(chapterType,saveData);
