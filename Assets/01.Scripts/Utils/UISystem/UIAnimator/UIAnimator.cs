@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using UnityEngine;
 
 [System.Serializable]
 public class UIAnimator
@@ -9,6 +10,14 @@ public class UIAnimator
 
     private float _prevStartTime;
     private float _prevEndTime;
+
+    public void Init(UIComponent component)
+    {
+        foreach (var clip in clips)
+        {
+            clip.SetTargetTrm(component.transform);
+        }
+    }
 
     public void Play(Action callBack = null)
     {

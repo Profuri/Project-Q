@@ -14,17 +14,14 @@ public enum EInputCategory
     Interaction,
     Click,
     AxisControl,
-    X_CameraSwitcher,
-    Y_CameraSwitcher,
-    Z_CameraSwitcher,
-    Reset,
+    LeftClick
 }
 
 
 
 public class InputManager : MonoSingleton<InputManager>
 {
-    [field:SerializeField] public InputReader InputReader {get;private set; }
+    [field:SerializeField] public InputReader InputReader {get; private set; }
 
     private Dictionary<EInputCategory, InputAction> _inputDictionary;
 
@@ -40,12 +37,9 @@ public class InputManager : MonoSingleton<InputManager>
             { EInputCategory.Movement,          InputReader.InputControls.Player.Movement },
             { EInputCategory.Jump,              InputReader.InputControls.Player.Jump },
             { EInputCategory.Interaction,       InputReader.InputControls.Player.Interaction },
-            { EInputCategory.Click,              InputReader.InputControls.Player.Click },
-            { EInputCategory.AxisControl,              InputReader.InputControls.Player.AxisControl },
-            { EInputCategory.X_CameraSwitcher,  InputReader.InputControls.Editor.XCameraSwitcher },
-            { EInputCategory.Y_CameraSwitcher,  InputReader.InputControls.Editor.YCameraSwitcher },
-            { EInputCategory.Z_CameraSwitcher,  InputReader.InputControls.Editor.ZCameraSwitcher },
-            { EInputCategory.Reset,             InputReader.InputControls.Editor.Reset }
+            { EInputCategory.Click,             InputReader.InputControls.Player.Click },
+            { EInputCategory.AxisControl,       InputReader.InputControls.Player.AxisControl },
+            { EInputCategory.LeftClick,         InputReader.InputControls.UI.LeftClick },
         };
     }
 

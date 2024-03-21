@@ -94,6 +94,10 @@ public class UIAnimationHandler
         {
             value = EditorGUILayout.FloatField(field.Name, (float)value);
         }
+        else if (field.FieldType == typeof(string))
+        {
+            value = EditorGUILayout.TextField(field.Name, (string)value);
+        }
         else if (field.FieldType == typeof(bool))
         {
             value = EditorGUILayout.Toggle(field.Name, (bool)value);

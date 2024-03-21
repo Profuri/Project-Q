@@ -9,11 +9,11 @@ public class UIScalingClip : UIAnimation
     
     public override void Init()
     {
-        target.localScale = fromScale;
+        targetTrm.localScale = fromScale;
     }
 
     public override Tween GetTween()
     {
-        return target.DOScale(toScale, duration);
+        return targetTrm.DOScale(toScale, duration);
     }
 }

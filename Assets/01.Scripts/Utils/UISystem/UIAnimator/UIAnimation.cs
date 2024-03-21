@@ -5,9 +5,20 @@ using UnityEngine;
 public class UIAnimation : ScriptableObject
 {
     public float duration;
-    public Transform target;
+    public string targetTrmPath;
     public bool joinPrevAnimation;
 
+    protected Transform targetTrm;
+
+    public void SetTargetTrm(Transform componentTrm)
+    {
+        targetTrm = componentTrm.Find(targetTrmPath);
+        if (targetTrm is null)
+        {
+            Debug.LogError($"[UIAnimation] transform path is invalid ( {targetTrmPath} )");
+        }
+    }
+    
     public virtual void Init() { }
     public virtual Tween GetTween() { return null; }
 }

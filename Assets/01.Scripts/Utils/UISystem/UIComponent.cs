@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class UIComponent : PoolableMono
@@ -6,7 +7,16 @@ public class UIComponent : PoolableMono
     public UIComponentType componentType;
     
     public Transform ParentTrm { get; private set; }
-    
+
+    private void Awake()
+    {
+        if (tweenData is not null)
+        {
+            tweenData.appearAnimator.Init(this);
+            tweenData.disappearAnimator.Init(this);
+        }
+    }
+
     public void Appear(Transform parentTrm)
     {
         ParentTrm = parentTrm;

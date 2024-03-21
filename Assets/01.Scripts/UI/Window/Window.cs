@@ -1,6 +1,6 @@
 using AxisConvertSystem;
 using UnityEngine;
 
-public class Window : ObjectUnit
+public class Window : UIComponent
 {
 }

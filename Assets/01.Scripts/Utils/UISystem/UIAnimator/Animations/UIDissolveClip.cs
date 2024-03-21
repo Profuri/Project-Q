@@ -19,7 +19,7 @@ public class UIDissolveClip : UIAnimation
     public override void Init()
     {
         _materials.Clear();
-        var renderers = target.GetComponents<Renderer>();
+        var renderers = targetTrm.GetComponents<Renderer>();
         foreach (var renderer in renderers)
         {
             foreach (var material in renderer.materials)

@@ -9,11 +9,11 @@ public class UIMovementClip : UIAnimation
 
     public override void Init()
     {
-        ((RectTransform)target).anchoredPosition = fromPosition;
+        targetTrm.localPosition = fromPosition;
     }
 
     public override Tween GetTween()
     {
-        return ((RectTransform)target).DOAnchorPos(toPosition, duration);
+        return targetTrm.DOLocalMove(toPosition, duration);
     }
 }

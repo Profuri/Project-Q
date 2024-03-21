@@ -4,17 +4,20 @@ using UnityEngine.InputSystem;
 namespace InputControl
 {
     [CreateAssetMenu(menuName = "SO/InputReader")]
-    public class InputReader : ScriptableObject, InputControls.IPlayerActions
+    public class InputReader : ScriptableObject, InputControls.IPlayerActions, InputControls.IUIActions
     {
         public delegate void InputEventListener();
         public delegate void InputEventListener<in T>(T value);
         
+        // Player Input Actions
         public event InputEventListener OnJumpEvent = null;
         public event InputEventListener OnInteractionEvent = null;
         public event InputEventListener<bool> OnAxisControlEvent = null;
         public event InputEventListener OnClickEvent = null;
-
         [HideInInspector] public Vector3 movementInput;
+        
+        // UI Input Actions
+        public event InputEventListener OnLeftClickEvent = null;
 
         private InputControls _inputControls;
         public InputControls InputControls => _inputControls;
@@ -30,25 +33,13 @@ namespace InputControl
             _inputControls.Player.Enable();
         }
 
-        public void SetEnableInput(bool enabled)
-        {
-            if (enabled)
-                _inputControls.Player.Enable();
-            else
-                _inputControls.Player.Disable();
-        }
-
-        public void SetEnableInput(EInputCategory inputCategory)
-        {
-
-        }
-
-        public void ClearInputEvent()
+        public void Clear()
         {
             OnJumpEvent = null;
             OnInteractionEvent = null;
             OnAxisControlEvent = null;
             OnClickEvent = null;
+            OnLeftClickEvent = null;
         }
 
         public void OnMovement(InputAction.CallbackContext context)
@@ -87,10 +78,12 @@ namespace InputControl
 
         public void OnClick(InputAction.CallbackContext context)
         {
-            if (context.performed)
-            {
-                OnClickEvent?.Invoke();
-            }
+            OnClickEvent?.Invoke();
+        }
+
+        public void OnLeftClick(InputAction.CallbackContext context)
+        {
+            OnLeftClickEvent?.Invoke();
         }
     }
 }

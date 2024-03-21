@@ -4,12 +4,10 @@ using InputControl;
 using InteractableSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class PlayerUnit : ObjectUnit
 {
-    [SerializeField] private InputReader _inputReader;
-    public InputReader InputReader => _inputReader;
-    
     [SerializeField] private PlayerData _data;
     public PlayerData Data => _data;
 
@@ -83,14 +81,14 @@ public class PlayerUnit : ObjectUnit
 
     public override void OnPop()
     {
-        _inputReader.OnInteractionEvent += OnInteraction;
+        InputManager.Instance.InputReader.OnInteractionEvent += OnInteraction;
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
     }   
     
     public override void OnPush()
     {
-        _inputReader.OnInteractionEvent -= OnInteraction;
+        InputManager.Instance.InputReader.OnInteractionEvent -= OnInteraction;
         Animator.SetBool(_activeHash, false);
     }
 
