@@ -1907,7 +1907,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4985822656173248211}
   - component: {fileID: 5823741796946600594}
-  - component: {fileID: 6953046217192303922}
   m_Layer: 9
   m_Name: MemoPanel
   m_TagString: Untagged
@@ -1956,21 +1955,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 13.5, y: 1, z: 9.5}
   m_Center: {x: -2.06, y: 0.55, z: 0}
---- !u!114 &6953046217192303922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1331332954235889344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b067da18c0b94889be2c118b0476f9d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  poolingCnt: 5
-  tweenData: {fileID: 0}
-  componentType: 0
 --- !u!1 &1430140474977483444
 GameObject:
   m_ObjectHideFlags: 0
@@ -2718,7 +2702,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1467633529804957906}
-  m_Layer: 9
+  - component: {fileID: 209178157883189967}
+  - component: {fileID: 293573799235245249}
+  m_Layer: 21
   m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2742,6 +2728,57 @@ Transform:
   - {fileID: 8796631369708173672}
   m_Father: {fileID: 6305426382907137191}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &209178157883189967
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772171768998717637}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.5, z: 3}
+  m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!114 &293573799235245249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772171768998717637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b35e20a762b44139fb104b5c83b4245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  tweenData: {fileID: 0}
+  componentType: 0
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9110327168492875896}
+        m_TargetAssemblyTypeName: SettingWindow, Assembly-CSharp
+        m_MethodName: GoMain
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1780697854355360748
 GameObject:
   m_ObjectHideFlags: 0
@@ -3350,6 +3387,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6305426382907137191}
+  - component: {fileID: 7047770995285997360}
   m_Layer: 9
   m_Name: AudioSettingPanel
   m_TagString: Untagged
@@ -3375,6 +3413,18 @@ Transform:
   - {fileID: 1467633529804957906}
   m_Father: {fileID: 6585536313235994407}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7047770995285997360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101367795330409384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab0d92c4eb647699883f90959ad5f67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2154923110105699407
 GameObject:
   m_ObjectHideFlags: 0
@@ -4303,7 +4353,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 980160006901428383}
-  m_Layer: 9
+  - component: {fileID: 8237250582834382791}
+  - component: {fileID: 987413834849438943}
+  m_Layer: 21
   m_Name: ControlSetting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4327,6 +4379,57 @@ Transform:
   - {fileID: 4959132010407302236}
   m_Father: {fileID: 3115216675139813307}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &8237250582834382791
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2518059612721052439}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 0.5, z: 3}
+  m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!114 &987413834849438943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2518059612721052439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b35e20a762b44139fb104b5c83b4245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  tweenData: {fileID: 0}
+  componentType: 0
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9110327168492875896}
+        m_TargetAssemblyTypeName: SettingWindow, Assembly-CSharp
+        m_MethodName: GoControlSetting
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2518487081666679898
 GameObject:
   m_ObjectHideFlags: 0
@@ -7354,7 +7457,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2683274076757269307}
-  m_Layer: 9
+  - component: {fileID: 4725143495598945649}
+  - component: {fileID: 3425704201679713204}
+  m_Layer: 21
   m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7378,6 +7483,57 @@ Transform:
   - {fileID: 1858318618546807687}
   m_Father: {fileID: 7921243538951198900}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4725143495598945649
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3661388976980609854}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.5, z: 3}
+  m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!114 &3425704201679713204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3661388976980609854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b35e20a762b44139fb104b5c83b4245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  tweenData: {fileID: 0}
+  componentType: 0
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9110327168492875896}
+        m_TargetAssemblyTypeName: SettingWindow, Assembly-CSharp
+        m_MethodName: GoMain
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3682000641848933697
 GameObject:
   m_ObjectHideFlags: 0
@@ -7553,7 +7709,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1866978014557562449}
-  m_Layer: 9
+  - component: {fileID: 5627734281808059320}
+  - component: {fileID: 3974882416601353073}
+  m_Layer: 21
   m_Name: VidioSetting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7577,6 +7735,57 @@ Transform:
   - {fileID: 5748837553450375582}
   m_Father: {fileID: 3115216675139813307}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5627734281808059320
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3730124597793940024}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 0.5, z: 3}
+  m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!114 &3974882416601353073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3730124597793940024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b35e20a762b44139fb104b5c83b4245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  tweenData: {fileID: 0}
+  componentType: 0
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9110327168492875896}
+        m_TargetAssemblyTypeName: SettingWindow, Assembly-CSharp
+        m_MethodName: GoVideoSetting
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3751633515795528794
 GameObject:
   m_ObjectHideFlags: 0
@@ -8640,7 +8849,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 162231752488043095}
-  m_Layer: 9
+  - component: {fileID: 1812939344916736194}
+  - component: {fileID: 452838036975251615}
+  m_Layer: 21
   m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8664,6 +8875,57 @@ Transform:
   - {fileID: 1857981177482788191}
   m_Father: {fileID: 4352564471478450447}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1812939344916736194
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4363361754061845079}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.5, z: 3}
+  m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!114 &452838036975251615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4363361754061845079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b35e20a762b44139fb104b5c83b4245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  tweenData: {fileID: 0}
+  componentType: 0
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9110327168492875896}
+        m_TargetAssemblyTypeName: SettingWindow, Assembly-CSharp
+        m_MethodName: GoMain
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4397911686326372182
 GameObject:
   m_ObjectHideFlags: 0
@@ -9619,13 +9881,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4352564471478450447}
+  - component: {fileID: 6362353396547073698}
   m_Layer: 9
-  m_Name: VidioSettingPanel
+  m_Name: VideoSettingPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4352564471478450447
 Transform:
   m_ObjectHideFlags: 0
@@ -9647,6 +9910,18 @@ Transform:
   - {fileID: 162231752488043095}
   m_Father: {fileID: 6585536313235994407}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6362353396547073698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4691609762090271729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 812a82d07a2b41fe92e07b297a13cc68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4701272677811079199
 GameObject:
   m_ObjectHideFlags: 0
@@ -11758,7 +12033,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2277001002988029238}
-  m_Layer: 9
+  - component: {fileID: 8935124535235016440}
+  - component: {fileID: 2298568977282528746}
+  m_Layer: 21
   m_Name: AudioSettiing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11782,6 +12059,57 @@ Transform:
   - {fileID: 4567636199298067518}
   m_Father: {fileID: 3115216675139813307}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &8935124535235016440
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5704723699989112740}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 0.5, z: 3}
+  m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!114 &2298568977282528746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5704723699989112740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b35e20a762b44139fb104b5c83b4245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  tweenData: {fileID: 0}
+  componentType: 0
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9110327168492875896}
+        m_TargetAssemblyTypeName: SettingWindow, Assembly-CSharp
+        m_MethodName: GoAudioSetting
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5778519740254085978
 GameObject:
   m_ObjectHideFlags: 0
@@ -17053,6 +17381,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3115216675139813307}
+  - component: {fileID: 7883017125132930235}
   m_Layer: 9
   m_Name: SettingMainPanel
   m_TagString: Untagged
@@ -17078,6 +17407,18 @@ Transform:
   - {fileID: 1866978014557562449}
   m_Father: {fileID: 6585536313235994407}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7883017125132930235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7833866384950069355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5810905f1f0846a288e6f43ce3ace158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7989894864015668205
 GameObject:
   m_ObjectHideFlags: 0
@@ -17087,6 +17428,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7921243538951198900}
+  - component: {fileID: 5922978859118855596}
   m_Layer: 9
   m_Name: ControlSettingPanel
   m_TagString: Untagged
@@ -17115,6 +17457,18 @@ Transform:
   - {fileID: 2683274076757269307}
   m_Father: {fileID: 6585536313235994407}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5922978859118855596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7989894864015668205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beb381984ccf4585afa35333eb0c880f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7998827349787129203
 GameObject:
   m_ObjectHideFlags: 0
@@ -17682,12 +18036,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 8277674065575618994}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b067da18c0b94889be2c118b0476f9d1, type: 3}
+  m_Script: {fileID: 11500000, guid: d8b2b896ad864a39a1327912d5955125, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolingCnt: 5
+  poolingCnt: 0
   tweenData: {fileID: 0}
-  componentType: 1
+  componentType: 0
+  _mainSettingPanel: {fileID: 7883017125132930235}
+  _audioSettingPanel: {fileID: 7047770995285997360}
+  _controlSettingPanel: {fileID: 5922978859118855596}
+  _videoSettingPanel: {fileID: 6362353396547073698}
 --- !u!1 &8398246868881889649
 GameObject:
   m_ObjectHideFlags: 0
@@ -19414,10 +19772,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c9236f3bc2ec4488abee1c19c6458467,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2034772352911378746}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c9236f3bc2ec4488abee1c19c6458467,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 4994800099302678851}
   m_SourcePrefab: {fileID: 100100000, guid: c9236f3bc2ec4488abee1c19c6458467, type: 3}
 --- !u!1 &288374776081231087 stripped
@@ -19426,32 +19780,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 631043281346367934}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2034772352911378746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 288374776081231087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92ceda378e8740d88b4d66c1ea53e9af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  poolingCnt: 5
-  compressLayer: 1
-  climbableUnit: 0
-  staticUnit: 1
-  activeUnit: 1
-  subUnit: 0
-  canStandMask:
-    serializedVersion: 2
-    m_Bits: 0
-  useGravity: 1
-  <Offset>k__BackingField: 0
-  _interactType: 0
-  _attribute: 0
-  _window: {fileID: 1331332954235889344}
 --- !u!65 &4994800099302678851
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20006,10 +20334,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c9236f3bc2ec4488abee1c19c6458467,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1765714826054307096}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c9236f3bc2ec4488abee1c19c6458467,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8713002735972559558}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c9236f3bc2ec4488abee1c19c6458467,
         type: 3}
@@ -20028,32 +20352,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4677686604751799148}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1765714826054307096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5488501457757453885}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92ceda378e8740d88b4d66c1ea53e9af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  poolingCnt: 5
-  compressLayer: 1
-  climbableUnit: 0
-  staticUnit: 1
-  activeUnit: 1
-  subUnit: 0
-  canStandMask:
-    serializedVersion: 2
-    m_Bits: 0
-  useGravity: 1
-  <Offset>k__BackingField: 0
-  _interactType: 0
-  _attribute: 0
-  _window: {fileID: 8277674065575618994}
 --- !u!65 &8713002735972559558
 BoxCollider:
   m_ObjectHideFlags: 0

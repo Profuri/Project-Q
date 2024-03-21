@@ -8,7 +8,7 @@ public class UIComponent : PoolableMono
     
     public Transform ParentTrm { get; private set; }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if (tweenData is not null)
         {
@@ -17,14 +17,14 @@ public class UIComponent : PoolableMono
         }
     }
 
-    public void Appear(Transform parentTrm)
+    public virtual void Appear(Transform parentTrm)
     {
         ParentTrm = parentTrm;
         transform.SetParent(parentTrm);
         tweenData.appearAnimator.Play();
     }
 
-    public void Disappear()
+    public virtual void Disappear()
     {
         tweenData.disappearAnimator.Play(() =>
         {

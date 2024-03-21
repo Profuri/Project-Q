@@ -25,7 +25,7 @@ public class UIManager : BaseManager<UIManager>
     private void OnUIClickHandle(Vector2 mouseScreenPoint)
     {
         var ray = CameraManager.Instance.MainCam.ScreenPointToRay(mouseScreenPoint);
-        var isHit = Physics.Raycast(ray, out var hit, Mathf.Infinity);
+        var isHit = Physics.Raycast(ray, out var hit, Mathf.Infinity, _clickableMask);
 
         if (!isHit)
         {
@@ -33,7 +33,7 @@ public class UIManager : BaseManager<UIManager>
         }
 
         if (hit.collider.TryGetComponent<IClickable>(out var clickable))
-        {
+        { 
             clickable.OnClickHandle();
         }
     }

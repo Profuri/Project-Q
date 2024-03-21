@@ -8,6 +8,5 @@ public class UIButton3D : UIComponent, IClickable
     public void OnClickHandle()
     {
         OnClickEvent?.Invoke();
-        Debug.Log(1);
     }
 }
