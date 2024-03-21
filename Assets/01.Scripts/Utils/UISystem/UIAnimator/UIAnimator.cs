@@ -33,12 +33,12 @@ public class UIAnimator
             if (clip.joinPrevAnimation)
             {
                 clip.Init();
-                seq.Insert(_prevStartTime, clip.GetTween());
+                seq.Insert(_prevStartTime, clip.GetTween().SetEase(clip.ease));
             }
             else
             {
                 seq.InsertCallback(_prevEndTime, () => clip.Init());
-                seq.Insert(_prevEndTime, clip.GetTween());
+                seq.Insert(_prevEndTime, clip.GetTween().SetEase(clip.ease));
                 _prevStartTime = _prevEndTime;
             }
             

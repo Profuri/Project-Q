@@ -7,7 +7,6 @@ public class UIButton3D : UIComponent, IClickHandler, IHoverHandler
 {
     public UnityEvent OnClickEvent;
 
-    private bool _isHover;
     private Vector3 _originScale;
 
     protected override void Awake()
@@ -23,13 +22,11 @@ public class UIButton3D : UIComponent, IClickHandler, IHoverHandler
 
     public virtual void OnHoverHandle()
     {
-        _isHover = true;
         transform.DOScale(_originScale * 1.2f, 0.2f);
     }
 
     public void OnHoverCancelHandle()
     {
-        _isHover = false;
         transform.DOScale(_originScale, 0.2f);
     }
 }

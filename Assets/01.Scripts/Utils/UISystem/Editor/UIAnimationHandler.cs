@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
 
@@ -117,6 +118,10 @@ public class UIAnimationHandler
         else if (field.FieldType == typeof(RectTransform))
         {
             value = EditorGUILayout.ObjectField(field.Name, (RectTransform)value, typeof(RectTransform), true);
+        }
+        else if (field.FieldType == typeof(Ease))
+        {
+            value = EditorGUILayout.EnumPopup(field.Name, (Ease)value);
         }
         
         if (value != null && (origin == null || !origin.Equals(value)))

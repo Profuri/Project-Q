@@ -1,3 +1,4 @@
+using AxisConvertSystem;
 using DG.Tweening;
 using UnityEngine;
 
@@ -5,6 +6,8 @@ using UnityEngine;
 public class UIAnimation : ScriptableObject
 {
     public float duration;
+    public Ease ease;
+    
     public string targetTrmPath;
     public bool joinPrevAnimation;
 
