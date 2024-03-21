@@ -18,6 +18,7 @@ namespace InputControl
         
         // UI Input Actions
         public event InputEventListener<Vector2> OnLeftClickEvent = null;
+        public event InputEventListener<Vector2> OnLeftClickUpEvent = null;
         [HideInInspector] public Vector2 mouseScreenPoint;
 
         private InputControls _inputControls;
@@ -92,6 +93,10 @@ namespace InputControl
             if (context.started)
             {
                 OnLeftClickEvent?.Invoke(mouseScreenPoint);
+            }
+            else if (context.canceled)
+            {
+                OnLeftClickUpEvent?.Invoke(mouseScreenPoint);
             }
         }
 

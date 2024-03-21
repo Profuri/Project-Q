@@ -11,6 +11,8 @@ public class UIManager : BaseManager<UIManager>
     
     private Stack<UIComponent> _componentStack;
 
+    private IClickUpHandler _heldHandler;
+
     public override void Init()
     {
         base.Init();
@@ -20,6 +22,7 @@ public class UIManager : BaseManager<UIManager>
     public override void StartManager()
     {
         InputManager.Instance.InputReader.OnLeftClickEvent += OnUIClickHandle;
+        InputManager.Instance.InputReader.OnLeftClickUpEvent += OnUIClickUpHandle;
     }
 
     private void OnUIClickHandle(Vector2 mouseScreenPoint)
@@ -32,9 +35,23 @@ public class UIManager : BaseManager<UIManager>
             return;
         }
 
-        if (hit.collider.TryGetComponent<IClickable>(out var clickable))
+        if (hit.collider.TryGetComponent<IClickHandler>(out var clickable))
         { 
             clickable.OnClickHandle();
+
+            if (hit.collider.TryGetComponent<IClickUpHandler>(out var clickUpHandler))
+            {
+                _heldHandler = clickUpHandler;
+            }
+        }
+    }
+
+    private void OnUIClickUpHandle(Vector2 mouseScreenPoint)
+    {
+        if (_heldHandler is not null)
+        {
+            _heldHandler.OnClickUpHandle();
+            _heldHandler = null;
         }
     }
 
