@@ -1,8 +1,11 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class UISlider3D : UIComponent
 {
+    [SerializeField] private float _defaultValue;
+    
     private UISliderHolder3D _holder;
 
     public Transform LineMinTrm { get; private set; }
@@ -13,6 +16,8 @@ public class UISlider3D : UIComponent
 
     public float Percent { get; private set; }
 
+    public UnityEvent<float> onSliderValueChanged = null;
+    
     protected override void Awake()
     {
         base.Awake();
@@ -25,7 +30,7 @@ public class UISlider3D : UIComponent
         
         _progressPivot = transform.Find("Pivot");
         
-        SetProgress(0f);
+        SetProgress(_defaultValue);
     }
 
     public void SetProgress(float percent)
@@ -39,5 +44,7 @@ public class UISlider3D : UIComponent
         var pivotScale = _progressPivot.localScale;
         pivotScale.z = Percent;
         _progressPivot.localScale = pivotScale;
+        
+        onSliderValueChanged?.Invoke(Percent);
     }
 }

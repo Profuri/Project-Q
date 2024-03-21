@@ -134,27 +134,14 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     public void SettingVolume(EAUDIO_MIXER mixerType,float volume)
     {
-        volume = GetOriginVolume(volume);
-        string targetName = string.Empty;
-        switch (mixerType)
-        {
-            case EAUDIO_MIXER.MASTER:
-                targetName = "MASTER";
-                break;
-            case EAUDIO_MIXER.BGM:
-                targetName = "BGM";
-                break;
-            case EAUDIO_MIXER.SFX:
-                targetName = "SFX";
-                break;
-        }
-        Debug.Log($"OriginVolume: {volume}");
-        _masterMixer.SetFloat(targetName,volume);
+        var originVolume = GetOriginVolume(volume);
+        Debug.Log($"OriginVolume: {originVolume}");
+        _masterMixer.SetFloat(mixerType.ToString(), originVolume);
     }
     
 
     private float GetOriginVolume(float volume)
     {
-        return Mathf.Lerp( -40, 0,volume);
+        return Mathf.Lerp(-40, 0, volume);
     }
 }
