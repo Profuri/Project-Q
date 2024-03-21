@@ -1,14 +1,13 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 
-public class UIButton3D : UIComponent, IPointerClickHandler
+public class UIButton3D : UIComponent, IClickable
 {
     public UnityEvent OnClickEvent;
-    
-    public void OnPointerClick(PointerEventData eventData)
+
+    public void OnClickHandle()
     {
-        Debug.Log("click");    
+        OnClickEvent?.Invoke();
+        Debug.Log(1);
     }
 }

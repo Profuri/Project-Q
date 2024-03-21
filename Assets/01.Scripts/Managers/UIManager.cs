@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIManager : BaseManager<UIManager>
 {
     [SerializeField] private Canvas _mainCanvas;
+    [SerializeField] private LayerMask _clickableMask;
 
     public UIComponent TopComponent => _componentStack.Peek();
     
@@ -18,7 +19,23 @@ public class UIManager : BaseManager<UIManager>
 
     public override void StartManager()
     {
-        
+        InputManager.Instance.InputReader.OnLeftClickEvent += OnUIClickHandle;
+    }
+
+    private void OnUIClickHandle(Vector2 mouseScreenPoint)
+    {
+        var ray = CameraManager.Instance.MainCam.ScreenPointToRay(mouseScreenPoint);
+        var isHit = Physics.Raycast(ray, out var hit, Mathf.Infinity);
+
+        if (!isHit)
+        {
+            return;
+        }
+
+        if (hit.collider.TryGetComponent<IClickable>(out var clickable))
+        {
+            clickable.OnClickHandle();
+        }
     }
 
     public UIComponent GenerateUI(string key, Transform parent = null)

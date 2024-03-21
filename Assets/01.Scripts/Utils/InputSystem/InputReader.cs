@@ -17,7 +17,8 @@ namespace InputControl
         [HideInInspector] public Vector3 movementInput;
         
         // UI Input Actions
-        public event InputEventListener OnLeftClickEvent = null;
+        public event InputEventListener<Vector2> OnLeftClickEvent = null;
+        [HideInInspector] public Vector2 mouseScreenPoint;
 
         private InputControls _inputControls;
         public InputControls InputControls => _inputControls;
@@ -28,18 +29,20 @@ namespace InputControl
             {
                 _inputControls = new InputControls();
                 _inputControls.Player.SetCallbacks(this);
+                _inputControls.UI.SetCallbacks(this);
             }
             
             _inputControls.Player.Enable();
+            _inputControls.UI.Enable();
         }
 
-        public void Clear()
+        public void ClearPlayerInputEvent()
         {
             OnJumpEvent = null;
             OnInteractionEvent = null;
             OnAxisControlEvent = null;
             OnClickEvent = null;
-            OnLeftClickEvent = null;
+            // OnLeftClickEvent = null;
         }
 
         public void OnMovement(InputAction.CallbackContext context)
@@ -78,12 +81,23 @@ namespace InputControl
 
         public void OnClick(InputAction.CallbackContext context)
         {
-            OnClickEvent?.Invoke();
+            if (context.started)
+            {
+                OnClickEvent?.Invoke();
+            }
         }
 
         public void OnLeftClick(InputAction.CallbackContext context)
         {
-            OnLeftClickEvent?.Invoke();
+            if (context.started)
+            {
+                OnLeftClickEvent?.Invoke(mouseScreenPoint);
+            }
+        }
+
+        public void OnMousePoint(InputAction.CallbackContext context)
+        {
+            mouseScreenPoint = context.ReadValue<Vector2>();
         }
     }
 }

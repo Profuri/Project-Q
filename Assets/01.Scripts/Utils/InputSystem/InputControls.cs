@@ -189,6 +189,15 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MousePoint"",
+                    ""type"": ""Value"",
+                    ""id"": ""b2e0f273-77d4-40b3-9a4c-8442f15d4510"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -200,6 +209,17 @@ namespace InputControl
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""LeftClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7a1f45cb-936f-45ac-ae6e-25cfd0ebd06c"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""MousePoint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -235,6 +255,7 @@ namespace InputControl
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_LeftClick = m_UI.FindAction("LeftClick", throwIfNotFound: true);
+            m_UI_MousePoint = m_UI.FindAction("MousePoint", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -375,11 +396,13 @@ namespace InputControl
         private readonly InputActionMap m_UI;
         private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
         private readonly InputAction m_UI_LeftClick;
+        private readonly InputAction m_UI_MousePoint;
         public struct UIActions
         {
             private @InputControls m_Wrapper;
             public UIActions(@InputControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @LeftClick => m_Wrapper.m_UI_LeftClick;
+            public InputAction @MousePoint => m_Wrapper.m_UI_MousePoint;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -392,6 +415,9 @@ namespace InputControl
                 @LeftClick.started += instance.OnLeftClick;
                 @LeftClick.performed += instance.OnLeftClick;
                 @LeftClick.canceled += instance.OnLeftClick;
+                @MousePoint.started += instance.OnMousePoint;
+                @MousePoint.performed += instance.OnMousePoint;
+                @MousePoint.canceled += instance.OnMousePoint;
             }
 
             private void UnregisterCallbacks(IUIActions instance)
@@ -399,6 +425,9 @@ namespace InputControl
                 @LeftClick.started -= instance.OnLeftClick;
                 @LeftClick.performed -= instance.OnLeftClick;
                 @LeftClick.canceled -= instance.OnLeftClick;
+                @MousePoint.started -= instance.OnMousePoint;
+                @MousePoint.performed -= instance.OnMousePoint;
+                @MousePoint.canceled -= instance.OnMousePoint;
             }
 
             public void RemoveCallbacks(IUIActions instance)
@@ -436,6 +465,7 @@ namespace InputControl
         public interface IUIActions
         {
             void OnLeftClick(InputAction.CallbackContext context);
+            void OnMousePoint(InputAction.CallbackContext context);
         }
     }
 }

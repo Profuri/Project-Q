@@ -3490,15 +3490,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 5
-  compressLayer: 1
-  climbableUnit: 0
-  staticUnit: 1
-  activeUnit: 1
-  subUnit: 0
-  canStandMask:
-    serializedVersion: 2
-    m_Bits: 0
-  useGravity: 1
+  tweenData: {fileID: 0}
+  componentType: 0
 --- !u!65 &327288757
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15296,6 +15289,7 @@ Transform:
   - {fileID: 1374282444}
   - {fileID: 2078530145}
   - {fileID: 407606759}
+  - {fileID: 1802913812}
   m_Father: {fileID: 1997790810}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1621035128
@@ -17512,15 +17506,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 5
-  compressLayer: 1
-  climbableUnit: 0
-  staticUnit: 1
-  activeUnit: 1
-  subUnit: 0
-  canStandMask:
-    serializedVersion: 2
-    m_Bits: 0
-  useGravity: 1
+  tweenData: {fileID: 0}
+  componentType: 0
 --- !u!65 &1768595193
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17831,6 +17818,54 @@ Transform:
   - {fileID: 668273302}
   m_Father: {fileID: 22572638}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1802913811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1802913812}
+  - component: {fileID: 1802913813}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1802913812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802913811}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1621035127}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1802913813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802913811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdffed9c476041acb41f0134d03c53b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainCanvas: {fileID: 0}
+  _clickableMask:
+    serializedVersion: 2
+    m_Bits: 2097152
 --- !u!1 &1805411126
 GameObject:
   m_ObjectHideFlags: 0

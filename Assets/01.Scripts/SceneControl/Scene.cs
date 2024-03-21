@@ -22,7 +22,7 @@ public class Scene : PoolableMono
 
     public override void OnPush()
     {
-        InputManager.Instance.InputReader.Clear();
+        InputManager.Instance.InputReader.ClearPlayerInputEvent();
         while (_objects.Count > 0)
         {
             DeleteObject(_objects.First());
