@@ -1,4 +1,5 @@
 using InteractableSystem;
+using UnityEngine.Events;
 using AxisConvertSystem;
 using UnityEngine;
 using System.Collections.Generic;
@@ -8,9 +9,12 @@ public class Chapter : InteractableObject
 {
     [field:SerializeField] public ChapterData Data {get; private set; }
     [SerializeField] private float _symbolRotateSpeed;
-    [SerializeField] private List<Transform> _moveTransformList;
-    [SerializeField] private Vector3 _targetPos = Vector3.zero;
-    private static float s_sequenceTime = 5f;
+
+    public UnityEvent OnShowSequence;
+
+    private Transform[] _moveTransforms;
+
+    protected static float s_sequenceTime = 5f;
 
     private Transform _symbolTrm;
 
@@ -19,10 +23,8 @@ public class Chapter : InteractableObject
         base.Awake();
         _symbolTrm = transform.Find("Symbol");
 
-        if(_targetPos == Vector3.zero)
-        {
-            _targetPos = transform.position;
-        }
+        _moveTransforms = new Transform[transform.childCount];
+        _moveTransforms = GetComponentsInChildren<Transform>();
     }
 
     public override void UpdateUnit()
@@ -43,31 +45,24 @@ public class Chapter : InteractableObject
     }
 
 
-    public void ShowingSequence(ChapterType chapterType)
+    public virtual void ShowingSequence(ChapterType chapterType,SaveData saveData)
     {
-        Debug.Log($"ChapterType: {chapterType}");
+        gameObject.SetActive(true);
+
+        if (saveData.IsClearTutorial)
+        {
+            return;
+        }
+
         if (chapterType == ChapterType.MAINBOARD)
         {
-            Sequence sequence = DOTween.Sequence();
-            foreach (Transform trm in _moveTransformList)
-            {
-                trm.gameObject.SetActive(true);
-                trm.position = _targetPos + Vector3.up * -5f;
-                sequence.Join(trm.DOMove(_targetPos, s_sequenceTime));
-            }
-        }
-    }
+            Vector3 targetPos = transform.position;
 
-#if UNITY_EDITOR
-    protected override void OnDrawGizmos()
-    {
-        base.OnDrawGizmos();
-        Gizmos.color = Color.red;
-        if(_targetPos == Vector3.zero)
-        {
-            _targetPos = transform.position;
+            transform.position = targetPos - Vector3.up * 3f;
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(transform.DOMove(targetPos,s_sequenceTime));
+
+            OnShowSequence?.Invoke();
         }
-            Gizmos.DrawSphere(_targetPos, 1f);
     }
-#endif
 }

@@ -3,14 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
-using System.Diagnostics;
 
 public class ChapterScene : Scene, IDataProvidable
 {
     private Dictionary<ChapterType, Chapter> _chapterDictionary;
-    private Dictionary<ChapterType, bool> _chapterSequenceDictionary;
 
-    public UnityEvent<ChapterType> OnChapterClear;
+    public UnityEvent<ChapterType,SaveData> OnChapterClear;
     public UnityEvent OnSubChaptersClear;
     
     public override void OnPop()
@@ -32,29 +30,22 @@ public class ChapterScene : Scene, IDataProvidable
 
     private void LoadChapterEvents(SaveData saveData)
     {
+        if (saveData == null)
+            Debug.LogError("SaveData is null!!!!");
+        
         Dictionary<ChapterType,bool> dictionary = saveData.ChapterProgressDictionary;
-        _chapterSequenceDictionary = saveData.ChapterSequenceDictionary as Dictionary<ChapterType,bool>;
 
         int clearCnt = 0;
         foreach(KeyValuePair<ChapterType,bool> kvp in dictionary)
         {
             ChapterType chapterType = kvp.Key;
 
-            bool isShowingSequence = false;
-            if(_chapterSequenceDictionary.ContainsKey(chapterType))
-            {
-                isShowingSequence = _chapterSequenceDictionary[chapterType];
-            }
-            else
-            {
-                _chapterSequenceDictionary.Add(chapterType, false);
-            }
+            bool isClearTutorial = saveData.IsClearTutorial;
 
-            if (kvp.Value && !isShowingSequence)
+            if (kvp.Value && !isClearTutorial)
             {
                 clearCnt++;
-                OnChapterClear?.Invoke(chapterType);
-                _chapterSequenceDictionary[chapterType] = true;
+                OnChapterClear?.Invoke(chapterType,saveData);
             }
         }
         if(clearCnt > 4)
@@ -65,21 +56,7 @@ public class ChapterScene : Scene, IDataProvidable
 
     public Action<SaveData> GetProvideAction()
     {
-        return (saveData) =>
-        {
-            var dictionary = saveData.ChapterSequenceDictionary;
-            foreach(var kvp in _chapterSequenceDictionary)
-            {
-                if(dictionary.ContainsKey(kvp.Key))
-                {
-                    dictionary[kvp.Key] = kvp.Value;
-                }
-                else
-                {
-                    dictionary.Add(kvp.Key, kvp.Value);
-                }
-            }
-        };
+        return null;
     }
 
     public Action<SaveData> GetSaveAction()

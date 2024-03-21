@@ -8,7 +8,7 @@ using System.Reflection;
 public class SaveData
 {
     public SerializableDictionary<ChapterType, bool> ChapterProgressDictionary = new SerializableDictionary<ChapterType, bool>();
-    public SerializableDictionary<ChapterType, bool> ChapterSequenceDictionary = new SerializableDictionary<ChapterType, bool>();
+    public bool IsClearTutorial => ChapterProgressDictionary[ChapterType.MAINBOARD];
 }
 
 public interface IDataProvidable
@@ -45,14 +45,17 @@ public class DataManager : MonoSingleton<DataManager>
     {
         Action<SaveData> saveAction = dataProvidable.GetProvideAction();
         Action<SaveData> loadAction = dataProvidable.GetSaveAction();
+
         if (_dataProvidableDictionary.ContainsKey(dataProvidable) == false)
-        {
             _dataProvidableDictionary.Add(dataProvidable, saveAction);
-        }
-        if(_dataSettableDictionary.ContainsKey(dataProvidable) == false)
-        {
-            _dataSettableDictionary.Add(dataProvidable,loadAction);
-        }
+        else
+            _dataProvidableDictionary[dataProvidable] = saveAction;
+
+
+        if (_dataSettableDictionary.ContainsKey(dataProvidable) == false)
+            _dataSettableDictionary.Add(dataProvidable, loadAction);
+        else
+            _dataSettableDictionary[dataProvidable] = loadAction;
     }
 
     public void SaveData(IDataProvidable providable = null)
@@ -74,12 +77,10 @@ public class DataManager : MonoSingleton<DataManager>
     public void LoadData(IDataProvidable providable = null)
     {
         s_saveData = _fileDataHandler.Load();
-        try
-        {
-            List<IDataProvidable> dataProvidableList = new List<IDataProvidable>();
+            List<IDataProvidable> dataProvidableList;
 
             if (providable != null)
-                dataProvidableList.Add(providable);
+                dataProvidableList = new List<IDataProvidable> { providable };
             else
                 dataProvidableList = _dataProvidableDictionary.Keys.ToList();
 
@@ -87,10 +88,5 @@ public class DataManager : MonoSingleton<DataManager>
             {
                 _dataSettableDictionary[dataProvidable]?.Invoke(s_saveData);
             }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Message: {ex.Message}");
-        }
     }
 }
