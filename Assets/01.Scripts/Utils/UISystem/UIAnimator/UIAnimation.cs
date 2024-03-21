@@ -12,7 +12,7 @@ public class UIAnimation : ScriptableObject
 
     public void SetTargetTrm(Transform componentTrm)
     {
-        targetTrm = componentTrm.Find(targetTrmPath);
+        targetTrm = targetTrmPath == "" ? componentTrm : componentTrm.Find(targetTrmPath);
         if (targetTrm is null)
         {
             Debug.LogError($"[UIAnimation] transform path is invalid ( {targetTrmPath} )");

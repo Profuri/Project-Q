@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class SettingButton : InteractableObject
 {
-    [SerializeField] private GameObject _window;
+    [SerializeField] private SettingWindow _window;
+    [SerializeField] private Transform _canvas;
     
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        _window.SetActive(true);
+        _window.Appear(_canvas);
     }
 }

@@ -30,7 +30,8 @@ public class UISliderHolder3D : MonoBehaviour, IClickHandler, IClickUpHandler
 
         if (isHit)
         {
-            var pointVector = hit.point - Slider.LineMinTrm.position;
+            var adjustHitPoint = new Vector3(hit.point.x, Slider.LineMinTrm.position.y, hit.point.z);
+            var pointVector = adjustHitPoint - Slider.LineMinTrm.position;
             var scalar = Vector3.Dot(pointVector, Slider.LineVector) / Slider.LineVector.magnitude;
 
             return scalar / Slider.LineVector.magnitude;

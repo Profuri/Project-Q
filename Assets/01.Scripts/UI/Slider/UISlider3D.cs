@@ -32,7 +32,12 @@ public class UISlider3D : UIComponent
     {
         Percent = Mathf.Clamp(percent, 0f, 1f);
 
-        _holder.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(LineMinTrm.localPosition.z, LineMaxTrm.localPosition.z, Percent));
-        _progressPivot.localScale = new Vector3(1, 1, Percent);
+        var holderLocalPos = _holder.transform.localPosition;
+        holderLocalPos.z = Mathf.Lerp(LineMinTrm.localPosition.z, LineMaxTrm.localPosition.z, Percent);
+        _holder.transform.localPosition = holderLocalPos;
+
+        var pivotScale = _progressPivot.localScale;
+        pivotScale.z = Percent;
+        _progressPivot.localScale = pivotScale;
     }
 }
