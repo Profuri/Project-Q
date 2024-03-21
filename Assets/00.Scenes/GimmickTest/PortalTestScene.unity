@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -246,14 +246,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727ba34533b60cb4480af39f7b3ba756, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chapterData: {fileID: 11400000, guid: 71a43e675c6de40c69654eee00436bf8, type: 2}
-  _stageIntervalDistance: 7.5
-  _bridgeGenerateDelay: 0.1
-  _bridgeWidth: 1
-  _bridgeIntervalDistance: 0.5
-  _generateStageOnStart: 1
-  _startChapter: 1
-  _startStage: 0
 --- !u!1 &207150854
 GameObject:
   m_ObjectHideFlags: 0
@@ -818,79 +810,6 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 226987618}
---- !u!1001 &599160645
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 785774967493583767, guid: b5e515a88f73442b9a7834b19fa63b16,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 785774967493583767, guid: b5e515a88f73442b9a7834b19fa63b16,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 785774967493583767, guid: b5e515a88f73442b9a7834b19fa63b16,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 785774967493583767, guid: b5e515a88f73442b9a7834b19fa63b16,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 785774967493583767, guid: b5e515a88f73442b9a7834b19fa63b16,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 785774967493583767, guid: b5e515a88f73442b9a7834b19fa63b16,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 785774967493583767, guid: b5e515a88f73442b9a7834b19fa63b16,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 785774967493583767, guid: b5e515a88f73442b9a7834b19fa63b16,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 785774967493583767, guid: b5e515a88f73442b9a7834b19fa63b16,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 785774967493583767, guid: b5e515a88f73442b9a7834b19fa63b16,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8342396842370978753, guid: b5e515a88f73442b9a7834b19fa63b16,
-        type: 3}
-      propertyPath: m_Name
-      value: GPU_Stage_0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8342396842370978753, guid: b5e515a88f73442b9a7834b19fa63b16,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b5e515a88f73442b9a7834b19fa63b16, type: 3}
 --- !u!1 &684935267
 GameObject:
   m_ObjectHideFlags: 3
@@ -1618,6 +1537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea42d77b2d5f74e4fab287dac9106a49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _coreData: {fileID: 0}
 --- !u!1 &1295592133
 GameObject:
   m_ObjectHideFlags: 3
@@ -3407,4 +3327,3 @@ SceneRoots:
   - {fileID: 1996498121}
   - {fileID: 956717773}
   - {fileID: 839749675}
-  - {fileID: 599160645}

@@ -72,6 +72,7 @@ namespace Fabgrid
             _inputField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[2]);
 #endif
 
+
             _tilemap.OnSelectedPanelChanged += LoadFieldInfo;
 
 

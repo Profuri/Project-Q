@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 
-public class StageManager : BaseManager<StageManager>,IDataProvidable
+public class StageManager : BaseManager<StageManager>, IDataProvidable
 {
     public Stage CurrentStage { get; private set; }
     public Stage NextStage { get; private set; }
@@ -16,6 +16,7 @@ public class StageManager : BaseManager<StageManager>,IDataProvidable
     {
         CurrentStage = null;
         NextStage = null;
+        LoadToDataManager();
     }        
 
     public void StartNewChapter(ChapterData chapterData)
@@ -90,5 +91,10 @@ public class StageManager : BaseManager<StageManager>,IDataProvidable
         {
             Debug.Log("ClearChapter");
         };
+    }
+
+    public void LoadToDataManager()
+    {
+        DataManager.Instance.SettingDataProvidable(this);
     }
 }
