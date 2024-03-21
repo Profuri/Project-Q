@@ -117,6 +117,7 @@ namespace AxisConvertSystem
                     unit.RewriteUnitInfo();
                 }
                 Player.Converter.ConvertDimension(AxisType.None);
+                InputManagerHelper.OnCancelingAxis();
             });
         }
 

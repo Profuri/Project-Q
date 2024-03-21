@@ -176,7 +176,7 @@ namespace AxisConvertSystem
             return basic;
         }
 
-        public void Activate(bool active)
+        public virtual void Activate(bool active)
         {
             activeUnit = active;
             gameObject.SetActive(active);
@@ -220,7 +220,7 @@ namespace AxisConvertSystem
             Rigidbody.velocity = withYAxis ? Vector3.zero : new Vector3(0, Rigidbody.velocity.y, 0);
         }
 
-        public virtual void ReloadUnit()
+        public virtual void ReloadUnit(Action callBack = null)
         {
             _unitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
@@ -230,7 +230,7 @@ namespace AxisConvertSystem
 
             if (!staticUnit)
             {
-                Dissolve(true, 2f);
+                Dissolve(true, 2f, callBack);
                 Rigidbody.velocity = Vector3.zero;
                 PlaySpawnVFX();
             }
@@ -278,7 +278,14 @@ namespace AxisConvertSystem
             }
             else
             {
-                standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
+                if (unit is PlaneUnit)
+                {
+                    standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
+                }
+                else
+                {
+                    standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
+                }
             }
 
             _unitInfo.LocalPos = standPos;
@@ -293,6 +300,13 @@ namespace AxisConvertSystem
                 var cols = new Collider[10];
                 Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask);
                 col = cols[0];
+
+                if (col is null)
+                {
+                    Physics.OverlapBoxNonAlloc(origin - Vector3.up, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask);
+                    col = cols[0];
+                }
+                
                 return col;
             }
             else
@@ -401,7 +415,6 @@ namespace AxisConvertSystem
         private bool CanAppearClimbable()
         {
             bool onLayer = (int)compressLayer < (int)CompressLayer.Obstacle;
-            Debug.Log($"OnLayer {onLayer} IsTriggerFalse: {!Collider.isTrigger}");
             return !climbableUnit && onLayer && !Collider.isTrigger;
         }
     }
