@@ -17,8 +17,6 @@ public enum EInputCategory
     LeftClick
 }
 
-
-
 public class InputManager : MonoSingleton<InputManager>
 {
     [field:SerializeField] public InputReader InputReader {get; private set; }

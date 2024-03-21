@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ManagingSystem;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class UIManager : BaseManager<UIManager>
     
     private Stack<UIComponent> _componentStack;
 
+    private UIButton3D _handleUI;
     private IClickUpHandler _heldHandler;
 
     public override void Init()
@@ -25,21 +27,56 @@ public class UIManager : BaseManager<UIManager>
         InputManager.Instance.InputReader.OnLeftClickUpEvent += OnUIClickUpHandle;
     }
 
-    private void OnUIClickHandle(Vector2 mouseScreenPoint)
+    private void Update()
     {
+        FindUIHandler();
+    }
+
+    private void FindUIHandler()
+    {
+        if (_heldHandler is not null)
+        {
+            return;
+        }
+        
+        var mouseScreenPoint = InputManager.Instance.InputReader.mouseScreenPoint;
         var ray = CameraManager.Instance.MainCam.ScreenPointToRay(mouseScreenPoint);
         var isHit = Physics.Raycast(ray, out var hit, Mathf.Infinity, _clickableMask);
 
         if (!isHit)
         {
+            if (_handleUI is not null)
+            {
+                _handleUI.OnHoverCancelHandle();
+                _handleUI = null;
+            }
             return;
         }
 
-        if (hit.collider.TryGetComponent<IClickHandler>(out var clickable))
+        if (hit.collider.TryGetComponent<UIButton3D>(out var component))
+        {
+            if (_handleUI is not null)
+            {
+                _handleUI.OnHoverCancelHandle();
+            }
+            
+            _handleUI = component;
+            _handleUI.OnHoverHandle();
+        }
+    }
+
+    private void OnUIClickHandle(Vector2 mouseScreenPoint)
+    {
+        if (_handleUI == null)
+        {
+            return;
+        }
+        
+        if (_handleUI.TryGetComponent<IClickHandler>(out var clickable))
         { 
             clickable.OnClickHandle();
 
-            if (hit.collider.TryGetComponent<IClickUpHandler>(out var clickUpHandler))
+            if (_handleUI.TryGetComponent<IClickUpHandler>(out var clickUpHandler))
             {
                 _heldHandler = clickUpHandler;
             }

@@ -1,21 +1,21 @@
+using System;
 using UnityEngine;
 
-public class UISliderHolder3D : MonoBehaviour, IClickHandler, IClickUpHandler
+public class UISliderHolder3D : UIButton3D, IClickUpHandler
 {
     private LayerMask _sliderLineMask;
     public UISlider3D Slider { get; set; }
     
     private bool _isHold;
-    private float _offset;
-
-    private void Awake()
+    
+    protected override void Awake()
     {
+        base.Awake();
         _sliderLineMask = LayerMask.GetMask("SliderLine");
     }
 
     private void Update()
-    {
-        if (_isHold)
+    { if (_isHold)
         {
             Slider.SetProgress(GetHolderValue());
         }
@@ -42,9 +42,10 @@ public class UISliderHolder3D : MonoBehaviour, IClickHandler, IClickUpHandler
         }
     }
 
-    public void OnClickHandle()
+    public override void OnClickHandle()
     {
         _isHold = true;
+        base.OnClickHandle();
     }
 
     public void OnClickUpHandle()
