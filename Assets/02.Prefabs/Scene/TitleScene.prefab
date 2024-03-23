@@ -9687,7 +9687,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8044491004456548456}
-  m_Layer: 9
+  - component: {fileID: 2836863325974449032}
+  - component: {fileID: 9075342940038460816}
+  m_Layer: 21
   m_Name: ResolutionButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9711,6 +9713,57 @@ Transform:
   - {fileID: 7653826901064243759}
   m_Father: {fileID: 3871283406488530580}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2836863325974449032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4681975637730897009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b35e20a762b44139fb104b5c83b4245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  tweenData: {fileID: 0}
+  componentType: 2
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6362353396547073698}
+        m_TargetAssemblyTypeName: VideoSettingPanel, Assembly-CSharp
+        m_MethodName: GenerateResolutionDropdown
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!65 &9075342940038460816
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4681975637730897009}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1, y: 0.5, z: 7}
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!1 &4691609762090271729
 GameObject:
   m_ObjectHideFlags: 0

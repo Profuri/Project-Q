@@ -133,7 +133,7 @@ public class UIManager : BaseManager<UIManager>
         return component;
     }
 
-    public void RemoveUI()
+    public void RemoveTopUI()
     {
         if (_componentStack.Count <= 0)
         {
@@ -146,7 +146,7 @@ public class UIManager : BaseManager<UIManager>
 
     public void ReturnUI()
     {
-        RemoveUI();
+        RemoveTopUI();
         if (TopComponent is not null)
         {
             GenerateUI(TopComponent, TopComponent.ParentTrm);
@@ -157,7 +157,7 @@ public class UIManager : BaseManager<UIManager>
     {
         while (_componentStack.Count > 0)
         {
-            RemoveUI();
+            RemoveTopUI();
         }
     }
 }

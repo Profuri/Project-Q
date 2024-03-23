@@ -10,7 +10,7 @@ public class UIComponent : PoolableMono
 
     protected virtual void Awake()
     {
-        if (tweenData is not null)
+        if (tweenData)
         {
             tweenData.appearAnimator.Init(this);
             tweenData.disappearAnimator.Init(this);
@@ -21,15 +21,25 @@ public class UIComponent : PoolableMono
     {
         ParentTrm = parentTrm;
         transform.SetParent(parentTrm);
-        tweenData.appearAnimator.Play();
+        if (tweenData)
+        {
+            tweenData.appearAnimator.Play();
+        }
     }
 
     public virtual void Disappear()
     {
-        tweenData.disappearAnimator.Play(() =>
+        if (tweenData)
+        {
+            tweenData.disappearAnimator.Play(() =>
+            {
+                PoolManager.Instance.Push(this);
+            });
+        }
+        else
         {
             PoolManager.Instance.Push(this);
-        });
+        }
     }
 
     public override void OnPop()

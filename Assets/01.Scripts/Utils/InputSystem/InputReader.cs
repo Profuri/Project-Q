@@ -20,6 +20,9 @@ namespace InputControl
         public event InputEventListener<Vector2> OnLeftClickEvent = null;
         public event InputEventListener<Vector2> OnLeftClickUpEvent = null;
         public event InputEventListener<Vector2> OnMouseMoveEvent = null;
+        public event InputEventListener OnUpArrowClickEvent = null;
+        public event InputEventListener OnDownArrowClickEvent = null;
+        public event InputEventListener OnEnterClickEvent = null;
         [HideInInspector] public Vector2 mouseScreenPoint;
 
         private InputControls _inputControls;
@@ -105,6 +108,30 @@ namespace InputControl
         {
             mouseScreenPoint = context.ReadValue<Vector2>();
             OnMouseMoveEvent?.Invoke(mouseScreenPoint);
+        }
+
+        public void OnUpArrow(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+            {
+                OnUpArrowClickEvent?.Invoke();
+            }
+        }
+
+        public void OnDownArrow(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+            {
+                OnDownArrowClickEvent?.Invoke();
+            }
+        }
+
+        public void OnEnter(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+            {
+                OnEnterClickEvent?.Invoke();
+            }
         }
     }
 }

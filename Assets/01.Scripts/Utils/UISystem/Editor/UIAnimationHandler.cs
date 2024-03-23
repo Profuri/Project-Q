@@ -11,6 +11,7 @@ public class UIAnimationHandler
     private readonly UIComponentEditor _componentEditor;
     private readonly UIAnimation _clip;
     private readonly List<FieldInfo> _fields;
+    
     private int _index;
     private bool _foldValue;
     

@@ -198,6 +198,33 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""UpArrow"",
+                    ""type"": ""Button"",
+                    ""id"": ""287ff507-2721-48b9-acc8-99187ca817aa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DownArrow"",
+                    ""type"": ""Button"",
+                    ""id"": ""2d7e8dd9-3bd2-40f7-b324-f6b6fcf51bc4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Enter"",
+                    ""type"": ""Button"",
+                    ""id"": ""4c080734-d039-448f-8df0-f78f64e66773"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -220,6 +247,39 @@ namespace InputControl
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""MouseMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""10efc039-c0d9-4828-8f2a-f74e78dc4b4e"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""UpArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21a12fd3-d8ad-4ce6-9868-a4b9c1c714ae"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""DownArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b6cf443e-0d4d-4818-a989-a0e77716585f"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Enter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -256,6 +316,9 @@ namespace InputControl
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_LeftClick = m_UI.FindAction("LeftClick", throwIfNotFound: true);
             m_UI_MouseMove = m_UI.FindAction("MouseMove", throwIfNotFound: true);
+            m_UI_UpArrow = m_UI.FindAction("UpArrow", throwIfNotFound: true);
+            m_UI_DownArrow = m_UI.FindAction("DownArrow", throwIfNotFound: true);
+            m_UI_Enter = m_UI.FindAction("Enter", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -397,12 +460,18 @@ namespace InputControl
         private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
         private readonly InputAction m_UI_LeftClick;
         private readonly InputAction m_UI_MouseMove;
+        private readonly InputAction m_UI_UpArrow;
+        private readonly InputAction m_UI_DownArrow;
+        private readonly InputAction m_UI_Enter;
         public struct UIActions
         {
             private @InputControls m_Wrapper;
             public UIActions(@InputControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @LeftClick => m_Wrapper.m_UI_LeftClick;
             public InputAction @MouseMove => m_Wrapper.m_UI_MouseMove;
+            public InputAction @UpArrow => m_Wrapper.m_UI_UpArrow;
+            public InputAction @DownArrow => m_Wrapper.m_UI_DownArrow;
+            public InputAction @Enter => m_Wrapper.m_UI_Enter;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -418,6 +487,15 @@ namespace InputControl
                 @MouseMove.started += instance.OnMouseMove;
                 @MouseMove.performed += instance.OnMouseMove;
                 @MouseMove.canceled += instance.OnMouseMove;
+                @UpArrow.started += instance.OnUpArrow;
+                @UpArrow.performed += instance.OnUpArrow;
+                @UpArrow.canceled += instance.OnUpArrow;
+                @DownArrow.started += instance.OnDownArrow;
+                @DownArrow.performed += instance.OnDownArrow;
+                @DownArrow.canceled += instance.OnDownArrow;
+                @Enter.started += instance.OnEnter;
+                @Enter.performed += instance.OnEnter;
+                @Enter.canceled += instance.OnEnter;
             }
 
             private void UnregisterCallbacks(IUIActions instance)
@@ -428,6 +506,15 @@ namespace InputControl
                 @MouseMove.started -= instance.OnMouseMove;
                 @MouseMove.performed -= instance.OnMouseMove;
                 @MouseMove.canceled -= instance.OnMouseMove;
+                @UpArrow.started -= instance.OnUpArrow;
+                @UpArrow.performed -= instance.OnUpArrow;
+                @UpArrow.canceled -= instance.OnUpArrow;
+                @DownArrow.started -= instance.OnDownArrow;
+                @DownArrow.performed -= instance.OnDownArrow;
+                @DownArrow.canceled -= instance.OnDownArrow;
+                @Enter.started -= instance.OnEnter;
+                @Enter.performed -= instance.OnEnter;
+                @Enter.canceled -= instance.OnEnter;
             }
 
             public void RemoveCallbacks(IUIActions instance)
@@ -466,6 +553,9 @@ namespace InputControl
         {
             void OnLeftClick(InputAction.CallbackContext context);
             void OnMouseMove(InputAction.CallbackContext context);
+            void OnUpArrow(InputAction.CallbackContext context);
+            void OnDownArrow(InputAction.CallbackContext context);
+            void OnEnter(InputAction.CallbackContext context);
         }
     }
 }

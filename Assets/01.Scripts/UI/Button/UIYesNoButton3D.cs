@@ -8,13 +8,11 @@ public class UIYesNoButton3D : UIButton3D
     [SerializeField] private Material _noMaterial;
 
     private Renderer _renderer;
-    private Modular3DText _3dText;
 
     protected override void Awake()
     {
         base.Awake();
         _renderer = GetComponent<Renderer>();
-        _3dText = GetComponentInChildren<Modular3DText>();
     }
 
     public void SettingActive(bool active)
