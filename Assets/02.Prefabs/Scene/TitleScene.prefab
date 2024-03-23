@@ -1436,6 +1436,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6362353396547073698}
+        m_TargetAssemblyTypeName: VideoSettingPanel, Assembly-CSharp
+        m_MethodName: FullScreenSetting
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _yesMaterial: {fileID: 2100000, guid: d2869c563f6de4f0d8739de3c0e6dac2, type: 2}
   _noMaterial: {fileID: 2100000, guid: 1538921c67b9a4712a5da91c772e4531, type: 2}
 --- !u!65 &8199456141251412998
@@ -6005,7 +6017,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8557790987775942434}
-  m_Layer: 9
+  - component: {fileID: 2164394478263337216}
+  - component: {fileID: 6142848168877237518}
+  m_Layer: 21
   m_Name: QualityButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6029,6 +6043,57 @@ Transform:
   - {fileID: 116625128664321764}
   m_Father: {fileID: 6889903846686712387}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2164394478263337216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3095126216787817380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b35e20a762b44139fb104b5c83b4245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  tweenData: {fileID: 0}
+  componentType: 2
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6362353396547073698}
+        m_TargetAssemblyTypeName: VideoSettingPanel, Assembly-CSharp
+        m_MethodName: GenerateQualityDropdown
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!65 &6142848168877237518
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3095126216787817380}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1, y: 0.5, z: 7}
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!1 &3095928195452246302
 GameObject:
   m_ObjectHideFlags: 0
@@ -11497,6 +11562,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6362353396547073698}
+        m_TargetAssemblyTypeName: VideoSettingPanel, Assembly-CSharp
+        m_MethodName: FullScreenSetting
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
   _yesMaterial: {fileID: 2100000, guid: d2869c563f6de4f0d8739de3c0e6dac2, type: 2}
   _noMaterial: {fileID: 2100000, guid: 1538921c67b9a4712a5da91c772e4531, type: 2}

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class VideoSettingPanel : MonoBehaviour
@@ -22,8 +23,25 @@ public class VideoSettingPanel : MonoBehaviour
         }
     }
     
+    public void FullScreenSetting(bool fullScreen)
+    {
+        VideoManager.Instance.SetFullScreen(fullScreen);
+    }
+    
     public void GenerateQualityDropdown(UIButton3D caller)
     {
-        
+        var dropdown = UIManager.Instance.GenerateUI("DropdownPanel") as UIDropdown;
+        dropdown.Title = "QUALITY";
+
+        foreach (QualityType quality in Enum.GetValues(typeof(QualityType)))
+        {
+            var qualityName = quality.ToString();
+            
+            dropdown.AddOption(qualityName, () =>
+            {
+                caller.Text = qualityName.ToUpper();
+               VideoManager.Instance.SetQuality(quality); 
+            });
+        }
     }
 }
