@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class UIDropdown : UIComponent
 {
-    private List<UIDropdownOption> _options;
+    public List<UIDropdownOption> _options;
 
     private TextMeshProUGUI _titleText;
 
@@ -18,7 +18,7 @@ public class UIDropdown : UIComponent
 
     private GridLayoutGroup _gridLayout;
 
-    private const int MaxShowOptionCount = 8;
+    private int _maxShowOptionCount;
 
     public string Title
     {
@@ -41,6 +41,8 @@ public class UIDropdown : UIComponent
         base.Appear(parentTrm);
         _options.Clear();
         _cursorIndex = 0;
+        _optionOffset = 0;
+        _maxShowOptionCount = 0;
         UpdateCursorPos();
         InputManager.Instance.InputReader.OnUpArrowClickEvent += CursorUp;
         InputManager.Instance.InputReader.OnDownArrowClickEvent += CursorDown;
@@ -66,6 +68,15 @@ public class UIDropdown : UIComponent
         var option = UIManager.Instance.GenerateUI("DropdownOption", _itemParentTrm) as UIDropdownOption;
         option.Setting(optionName, callback);
         _options.Add(option);
+
+        if (_maxShowOptionCount < 8)
+        {
+            _maxShowOptionCount++;
+        }
+        else
+        {
+            UpdateShowOptions();
+        }
     }
 
     private void CursorUp()
@@ -76,6 +87,7 @@ public class UIDropdown : UIComponent
         }
 
         _cursorIndex--;
+        CalcOptionOffset();
         UpdateCursorPos();
     }
 
@@ -87,6 +99,7 @@ public class UIDropdown : UIComponent
         }
 
         _cursorIndex++;
+        CalcOptionOffset();
         UpdateCursorPos();
     }
 
@@ -98,26 +111,39 @@ public class UIDropdown : UIComponent
 
     private void UpdateCursorPos()
     {
-        var cursorPosY = -(_cursorIndex * 60 + _gridLayout.spacing.y * _cursorIndex);
+        var adjustIndex = _cursorIndex - _optionOffset;
+        var cursorPosY = -(adjustIndex * 60 + _gridLayout.spacing.y * adjustIndex);
         _cursor.anchoredPosition3D = new Vector3(0, cursorPosY, 0);
     }
 
     private void CalcOptionOffset()
     {
-        bool offsetDownState = _cursorIndex - _optionOffset < 0; 
-
+        // can offset down
         if (_cursorIndex - _optionOffset < 0)
         {
-            
-        }   
-        else if (_cursorIndex - _optionOffset >= MaxShowOptionCount && _cursorIndex + _optionOffset + 1)
+            _optionOffset--;
+            UpdateShowOptions();
+        }
+        // can offset up
+        else if (_cursorIndex - _optionOffset >= _maxShowOptionCount)
         {
-            
+            _optionOffset++;
+            UpdateShowOptions();
         }
     }
 
     private void UpdateShowOptions()
     {
-        
+        for (var i = 0; i < _options.Count; i++)
+        {
+            if (i >= _optionOffset && i < _maxShowOptionCount + _optionOffset)
+            {
+                _options[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                _options[i].gameObject.SetActive(false);
+            }
+        }
     }
 }
