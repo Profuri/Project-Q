@@ -10,6 +10,7 @@ public class UIDropdown : UIComponent
 
     private TextMeshProUGUI _titleText;
 
+    private RectTransform _bodyTrm;
     private Transform _itemParentTrm;
 
     private RectTransform _cursor;
@@ -30,7 +31,8 @@ public class UIDropdown : UIComponent
     {
         base.Awake();
         _titleText = transform.Find("Header/Text").GetComponent<TextMeshProUGUI>();
-        _itemParentTrm = transform.Find("Body/MainPanel/Items");
+        _bodyTrm = (RectTransform)transform.Find("Body");
+        _itemParentTrm = _bodyTrm.Find("MainPanel/Items");
         _gridLayout = _itemParentTrm.GetComponent<GridLayoutGroup>();
         _cursor = (RectTransform)transform.Find("Body/MainPanel/Cursor");
         _options = new List<UIDropdownOption>();
@@ -72,6 +74,7 @@ public class UIDropdown : UIComponent
         if (_maxShowOptionCount < 8)
         {
             _maxShowOptionCount++;
+            UpdateBodySize();
         }
         else
         {
@@ -112,7 +115,7 @@ public class UIDropdown : UIComponent
     private void UpdateCursorPos()
     {
         var adjustIndex = _cursorIndex - _optionOffset;
-        var cursorPosY = -(adjustIndex * 60 + _gridLayout.spacing.y * adjustIndex);
+        var cursorPosY = -(adjustIndex * _gridLayout.cellSize.y + _gridLayout.spacing.y * adjustIndex);
         _cursor.anchoredPosition3D = new Vector3(0, cursorPosY, 0);
     }
 
@@ -145,5 +148,11 @@ public class UIDropdown : UIComponent
                 _options[i].gameObject.SetActive(false);
             }
         }
+    }
+
+    private void UpdateBodySize()
+    {
+        var bodySizeY = _maxShowOptionCount * _gridLayout.cellSize.y + _gridLayout.spacing.y * _maxShowOptionCount;
+        _bodyTrm.sizeDelta = new Vector2(_bodyTrm.sizeDelta.x, bodySizeY);
     }
 }
