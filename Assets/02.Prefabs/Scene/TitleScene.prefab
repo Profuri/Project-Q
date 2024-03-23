@@ -1530,7 +1530,9 @@ GameObject:
   - component: {fileID: 4277269806922850400}
   - component: {fileID: 2076804343466142934}
   - component: {fileID: 7829400061693018315}
-  m_Layer: 9
+  - component: {fileID: 460668262987155806}
+  - component: {fileID: 8199456141251412998}
+  m_Layer: 21
   m_Name: NoButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1603,6 +1605,71 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &460668262987155806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938272999497148986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eabd9deb01f14b5ba3e44131a7394998, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  tweenData: {fileID: 0}
+  componentType: 2
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 460668262987155806}
+        m_TargetAssemblyTypeName: UIYesNoButton3D, Assembly-CSharp
+        m_MethodName: SettingActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 3190621789697949996}
+        m_TargetAssemblyTypeName: UIYesNoButton3D, Assembly-CSharp
+        m_MethodName: SettingActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _yesMaterial: {fileID: 2100000, guid: d2869c563f6de4f0d8739de3c0e6dac2, type: 2}
+  _noMaterial: {fileID: 2100000, guid: 1538921c67b9a4712a5da91c772e4531, type: 2}
+--- !u!65 &8199456141251412998
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938272999497148986}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0000001, y: 1, z: 1.0000001}
+  m_Center: {x: -0.00000047683716, y: 0, z: 0}
 --- !u!1 &965721022265854785
 GameObject:
   m_ObjectHideFlags: 0
@@ -11420,7 +11487,9 @@ GameObject:
   - component: {fileID: 3684061149361835272}
   - component: {fileID: 8188931165019877930}
   - component: {fileID: 5612179188923194437}
-  m_Layer: 9
+  - component: {fileID: 3190621789697949996}
+  - component: {fileID: 2774166600035584282}
+  m_Layer: 21
   m_Name: YesButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11493,6 +11562,71 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3190621789697949996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5373407145009380292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eabd9deb01f14b5ba3e44131a7394998, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  tweenData: {fileID: 0}
+  componentType: 2
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3190621789697949996}
+        m_TargetAssemblyTypeName: UIYesNoButton3D, Assembly-CSharp
+        m_MethodName: SettingActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 460668262987155806}
+        m_TargetAssemblyTypeName: UIYesNoButton3D, Assembly-CSharp
+        m_MethodName: SettingActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _yesMaterial: {fileID: 2100000, guid: d2869c563f6de4f0d8739de3c0e6dac2, type: 2}
+  _noMaterial: {fileID: 2100000, guid: 1538921c67b9a4712a5da91c772e4531, type: 2}
+--- !u!65 &2774166600035584282
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5373407145009380292}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0.00000011920929}
 --- !u!1 &5409914981652486450
 GameObject:
   m_ObjectHideFlags: 0
