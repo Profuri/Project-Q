@@ -5,6 +5,8 @@ public class VideoSettingPanel : MonoBehaviour
     public void GenerateResolutionDropdown(UIButton3D caller)
     {
         var dropdown = UIManager.Instance.GenerateUI("DropdownPanel") as UIDropdown;
+        dropdown.Title = "RESOLUTION";
+        
         for (var i = 0; i < VideoManager.Instance.Resolutions.Length; i++)
         {
             var resolution = VideoManager.Instance.Resolutions[i];

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,16 +8,28 @@ public class UIDropdown : UIComponent
 {
     private List<UIDropdownOption> _options;
 
+    private TextMeshProUGUI _titleText;
+
     private Transform _itemParentTrm;
 
     private RectTransform _cursor;
     private int _cursorIndex;
+    private int _optionOffset;
 
     private GridLayoutGroup _gridLayout;
+
+    private const int MaxShowOptionCount = 8;
+
+    public string Title
+    {
+        get => _titleText.text;
+        set => _titleText.text = value;
+    }
 
     protected override void Awake()
     {
         base.Awake();
+        _titleText = transform.Find("Header/Text").GetComponent<TextMeshProUGUI>();
         _itemParentTrm = transform.Find("Body/MainPanel/Items");
         _gridLayout = _itemParentTrm.GetComponent<GridLayoutGroup>();
         _cursor = (RectTransform)transform.Find("Body/MainPanel/Cursor");
@@ -85,7 +98,26 @@ public class UIDropdown : UIComponent
 
     private void UpdateCursorPos()
     {
-        _cursor.anchoredPosition3D = new Vector3(0, -(_cursorIndex * 60 + _gridLayout.spacing.y * _cursorIndex), 0);
+        var cursorPosY = -(_cursorIndex * 60 + _gridLayout.spacing.y * _cursorIndex);
+        _cursor.anchoredPosition3D = new Vector3(0, cursorPosY, 0);
     }
 
+    private void CalcOptionOffset()
+    {
+        bool offsetDownState = _cursorIndex - _optionOffset < 0; 
+
+        if (_cursorIndex - _optionOffset < 0)
+        {
+            
+        }   
+        else if (_cursorIndex - _optionOffset >= MaxShowOptionCount && _cursorIndex + _optionOffset + 1)
+        {
+            
+        }
+    }
+
+    private void UpdateShowOptions()
+    {
+        
+    }
 }
