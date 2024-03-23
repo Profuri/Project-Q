@@ -1,4 +1,5 @@
 using System.Collections;
+using ManagingSystem;
 using Singleton;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -17,7 +18,7 @@ public enum EAUDIO_MIXER
     SFX
 }
 
-public class SoundManager : MonoSingleton<SoundManager>
+public class SoundManager : BaseManager<SoundManager>
 {
     [SerializeField] private AudioClipSO _audioClipSO;
     [SerializeField] private AudioClipSO _bgmClipSO;
@@ -31,8 +32,9 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     private AudioSource[] _audioSources = new AudioSource[(int)SoundEnum.END];
 
-    private void Awake()
+    public override void Init()
     {
+        base.Init();
         string[] soundNames = System.Enum.GetNames(typeof(SoundEnum));
         for (int i = 0; i < soundNames.Length - 1; i++)
         {
@@ -44,7 +46,10 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
         
         _audioSources[(int)SoundEnum.BGM].loop = true;
-
+    }
+    
+    public override void StartManager()
+    {
         PlayBGM("TestBGM");
     }
 
