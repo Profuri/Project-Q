@@ -52,14 +52,7 @@ public class SoundManager : BaseManager<SoundManager>
     {
         PlayBGM("TestBGM");
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            SettingVolume(EAUDIO_MIXER.BGM,0.7f);
-        }
-    }
+    
     public void PlaySFX(string clipName)
     {
         AudioClip clip = _audioClipSO.GetAudioClip(clipName);
@@ -115,6 +108,7 @@ public class SoundManager : BaseManager<SoundManager>
     {
         _masterMixer.SetFloat(type.ToString().ToLower(), mute ? -80 : 0);
     }
+    
     IEnumerator SoundFade(bool fadeIn, AudioSource source, float duration, float endVolume, SoundEnum type)
     {
         if (!fadeIn)

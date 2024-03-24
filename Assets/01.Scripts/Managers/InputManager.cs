@@ -41,6 +41,31 @@ public class InputManager : MonoSingleton<InputManager>
         };
     }
 
+    public void ChangeKeyBinding(
+        EInputCategory category,
+        int bindingIndex = -1,
+        Action<InputActionRebindingExtensions.RebindingOperation> onCancel = null,
+        Action<InputActionRebindingExtensions.RebindingOperation> onComplete = null)
+    {
+        InputReader.InputControls.Player.Disable();
+        _inputDictionary[category].PerformInteractiveRebinding(bindingIndex)
+            .WithControlsExcluding("Mouse")
+            .WithCancelingThrough("<keyboard>/escape")
+            .OnComplete(operation =>
+            {
+                onComplete?.Invoke(operation);
+                operation.Dispose();
+                InputReader.InputControls.Player.Enable();
+            })
+            .OnCancel(operation =>
+            {
+                onCancel?.Invoke(operation);
+                operation.Dispose();
+                InputReader.InputControls.Player.Enable();
+            })
+            .Start();
+    }
+
     public void SetEnableInput(EInputCategory[] categories,bool enable)
     {
         foreach(EInputCategory category in categories)
