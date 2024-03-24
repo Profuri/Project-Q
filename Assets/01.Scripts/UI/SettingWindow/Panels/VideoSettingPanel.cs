@@ -7,7 +7,7 @@ public class VideoSettingPanel : MonoBehaviour
     {
         var dropdown = UIManager.Instance.GenerateUI("DropdownPanel") as UIDropdown;
         dropdown.Title = "RESOLUTION";
-        
+
         for (var i = 0; i < VideoManager.Instance.Resolutions.Length; i++)
         {
             var resolution = VideoManager.Instance.Resolutions[i];
@@ -21,6 +21,9 @@ public class VideoSettingPanel : MonoBehaviour
                 VideoManager.Instance.SetResolution(index);
             });
         }
+        
+        var mousePoint = InputManager.Instance.InputReader.mouseScreenPoint;
+        dropdown.SetPosition(mousePoint);
     }
     
     public void FullScreenSetting(bool fullScreen)
@@ -43,5 +46,8 @@ public class VideoSettingPanel : MonoBehaviour
                VideoManager.Instance.SetQuality(quality); 
             });
         }
+        
+        var mousePoint = InputManager.Instance.InputReader.mouseScreenPoint;
+        dropdown.SetPosition(mousePoint);
     }
 }

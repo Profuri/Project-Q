@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIComponent : PoolableMono
 {
@@ -39,6 +40,20 @@ public class UIComponent : PoolableMono
         else
         {
             PoolManager.Instance.Push(this);
+        }
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        if (transform is RectTransform rectTransform)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
+            var adjustPos = UIManager.Instance.AdjustUIRectPosition(position, rectTransform.rect);
+            rectTransform.anchoredPosition = adjustPos;
+        }
+        else
+        {
+            transform.localPosition = position;
         }
     }
 

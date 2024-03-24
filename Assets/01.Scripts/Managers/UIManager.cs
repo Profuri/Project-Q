@@ -6,6 +6,7 @@ using UnityEngine;
 public class UIManager : BaseManager<UIManager>
 {
     [SerializeField] private Canvas _mainCanvas;
+    [SerializeField] private Vector2 _padding;
     [SerializeField] private LayerMask _clickableMask;
 
     public UIComponent TopComponent => _componentStack.Peek();
@@ -159,5 +160,26 @@ public class UIManager : BaseManager<UIManager>
         {
             RemoveTopUI();
         }
+    }
+    
+    public Vector3 AdjustUIRectPosition(Vector3 position, Rect rect)
+    {
+        var canvasRect = _mainCanvas.pixelRect;
+        var adjustPos = position;
+
+        var xDiff = adjustPos.x + rect.width - (canvasRect.width - _padding.x);
+        var yDiff = adjustPos.y - rect.height - _padding.y;
+
+        if (xDiff > 0)
+        {
+            adjustPos.x -= xDiff;
+        }
+        
+        if (yDiff < 0)
+        {
+            adjustPos.y -= yDiff;
+        }
+        
+        return adjustPos;
     }
 }
