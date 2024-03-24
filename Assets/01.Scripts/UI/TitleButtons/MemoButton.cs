@@ -12,8 +12,7 @@ public class MemoButton : InteractableObject
         if (_memoWindow is null || !_memoWindow.poolOut)
         {
             _memoWindow = UIManager.Instance.GenerateUI("MemoWindow", _titleCanvasTrm) as MemoWindow;
-            _memoWindow.transform.localPosition = new Vector3(0.52f, 0f, 6.56f);
-            _memoWindow.transform.localRotation = Quaternion.identity;
+            _memoWindow.transform.localPosition = new Vector3(0.77f, 0f, 6.36f);
         }
     }
 }

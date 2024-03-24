@@ -13,7 +13,6 @@ public class SettingButton : InteractableObject
         {
             _settingWindow = UIManager.Instance.GenerateUI("SettingWindow", _titleCanvasTrm) as SettingWindow;
             _settingWindow.transform.localPosition = new Vector3(5.05f, 1.2f, 7.48f);
-            _settingWindow.transform.localRotation = Quaternion.identity;
         }
     }
 }
