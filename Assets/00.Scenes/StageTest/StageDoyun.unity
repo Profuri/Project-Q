@@ -897,7 +897,8 @@ Transform:
   m_LocalPosition: {x: 25.000002, y: 35.35534, z: -25.000002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 538335667}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 53, y: -30, z: 0}
 --- !u!1 &78950716
@@ -3325,6 +3326,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 5
+  poolOut: 0
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
@@ -3337,8 +3339,7 @@ MonoBehaviour:
   <Offset>k__BackingField: 0
   _interactType: 0
   _attribute: 0
-  _window: {fileID: 0}
-  _canvas: {fileID: 0}
+  _titleCanvasTrm: {fileID: 0}
 --- !u!1 &284236323
 GameObject:
   m_ObjectHideFlags: 0
@@ -6702,6 +6703,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 508593256}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &538335666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 538335667}
+  m_Layer: 0
+  m_Name: 3DCanvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &538335667
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 538335666}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 20}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 53194638}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &548224728
 GameObject:
   m_ObjectHideFlags: 0
@@ -20638,6 +20670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 5
+  poolOut: 0
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
@@ -21821,8 +21854,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdffed9c476041acb41f0134d03c53b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mainCanvas: {fileID: 1188586247}
+  _mainCanvas2D: {fileID: 1188586247}
   _padding: {x: 30, y: 30}
+  _mainCanvas3D: {fileID: 538335667}
   _clickableMask:
     serializedVersion: 2
     m_Bits: 2097152
@@ -25183,6 +25217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 5
+  poolOut: 0
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1

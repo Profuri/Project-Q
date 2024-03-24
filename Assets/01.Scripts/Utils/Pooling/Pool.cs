@@ -32,6 +32,7 @@ public class Pool
     {
         var obj = _pool.Count <= 0 ? CreateNewPrefab() : _pool.Pop();
         obj.gameObject.SetActive(true);
+        obj.poolOut = true;
         obj.OnPop();
         return obj;
     }
@@ -39,6 +40,7 @@ public class Pool
     public void Push(PoolableMono obj)
     {
         obj.OnPush();
+        obj.poolOut = false;
         obj.transform.SetParent(_parent);
         obj.gameObject.SetActive(false);
         _pool.Push(obj);

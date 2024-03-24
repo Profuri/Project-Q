@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class UIDropdown : UIComponent
 {
-    public List<UIDropdownOption> _options;
+    private List<UIDropdownOption> _options;
 
     private TextMeshProUGUI _titleText;
 

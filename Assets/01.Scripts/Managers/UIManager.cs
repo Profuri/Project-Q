@@ -2,11 +2,18 @@ using System;
 using System.Collections.Generic;
 using ManagingSystem;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class UIManager : BaseManager<UIManager>
 {
-    [SerializeField] private Canvas _mainCanvas;
+    [Header("For 2D UI")]
+    [SerializeField] private Canvas _mainCanvas2D;
     [SerializeField] private Vector2 _padding;
+    
+    [Header("For 3D UI")]
+    [SerializeField] private Transform _mainCanvas3D;
+    
+    [Space(10)]
     [SerializeField] private LayerMask _clickableMask;
 
     public UIComponent TopComponent => _componentStack.Peek();
@@ -123,12 +130,13 @@ public class UIManager : BaseManager<UIManager>
 
     public UIComponent GenerateUI(string key, Transform parent = null)
     {
+        var component = SceneControlManager.Instance.AddObject(key) as UIComponent;
+        
         if (parent is null)
         {
-            parent = _mainCanvas.transform;
+            parent = component.transform is RectTransform ? _mainCanvas2D.transform : _mainCanvas3D;
         }
 
-        var component = SceneControlManager.Instance.AddObject(key) as UIComponent;
         return ComponentSetting(component, parent);
     }
     
@@ -136,7 +144,7 @@ public class UIManager : BaseManager<UIManager>
     {
         if (parent is null)
         {
-            parent = _mainCanvas.transform;
+            parent = _mainCanvas2D.transform;
         }
         
         return ComponentSetting(component, parent);
@@ -192,7 +200,7 @@ public class UIManager : BaseManager<UIManager>
     
     public Vector3 AdjustUIRectPosition(Vector3 position, Rect rect)
     {
-        var canvasRect = _mainCanvas.pixelRect;
+        var canvasRect = _mainCanvas2D.pixelRect;
         var adjustPos = position;
 
         var xDiff = adjustPos.x + rect.width - (canvasRect.width - _padding.x);

@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class MemoButton : InteractableObject
 {
-    // test
-    [SerializeField] private GameObject _window;
+    [SerializeField] private Transform _titleCanvasTrm;
+    private MemoWindow _memoWindow;
     
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        _window.SetActive(true);
+        if (_memoWindow is null || !_memoWindow.poolOut)
+        {
+            _memoWindow = UIManager.Instance.GenerateUI("MemoWindow", _titleCanvasTrm) as MemoWindow;
+            _memoWindow.transform.localPosition = new Vector3(0.52f, 0f, 6.56f);
+            _memoWindow.transform.localRotation = Quaternion.identity;
+        }
     }
 }
