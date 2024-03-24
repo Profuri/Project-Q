@@ -13,7 +13,7 @@ public class UIScalingClip : UIAnimation
     }
 
     public override Tween GetTween()
-    {
+    {targetTrm.DOScale(toScale, duration);
         return targetTrm.DOScale(toScale, duration);
     }
 }

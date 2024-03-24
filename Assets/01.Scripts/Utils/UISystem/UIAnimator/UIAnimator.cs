@@ -30,18 +30,12 @@ public class UIAnimator
         
         foreach (var clip in clips)
         {
-            if (clip.joinPrevAnimation)
+            if(!clip.joinPrevAnimation)
             {
-                clip.Init();
-                seq.Insert(_prevStartTime, clip.GetTween().SetEase(clip.ease));
-            }
-            else
-            {
-                seq.InsertCallback(_prevEndTime, () => clip.Init());
-                seq.Insert(_prevEndTime, clip.GetTween().SetEase(clip.ease));
                 _prevStartTime = _prevEndTime;
             }
-            
+
+            seq.InsertCallback(_prevStartTime, clip.Init).Join(clip.GetTween().SetEase(clip.ease));
             _prevEndTime = _prevStartTime + clip.duration;
         }
 

@@ -9,6 +9,7 @@ public class UIDissolveClip : UIAnimation
 
     private float _curProgress;
     
+    private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
     private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
 
     private void OnEnable()
@@ -18,19 +19,12 @@ public class UIDissolveClip : UIAnimation
 
     public override void Init()
     {
-        _materials.Clear();
-        var renderers = targetTrm.GetComponents<Renderer>();
-        foreach (var renderer in renderers)
-        {
-            foreach (var material in renderer.materials)
-            {
-                _materials.Add(material);
-            }
-        }
+        ResetMaterialList();
         
         _curProgress = dissolve ? 0f : 1f;
         foreach (var material in _materials)
         {
+            material.SetFloat(_visibleProgressHash, _curProgress);
             material.SetFloat(_dissolveProgressHash, _curProgress);
         }
     }
@@ -41,8 +35,22 @@ public class UIDissolveClip : UIAnimation
         {
             foreach (var material in _materials)
             {
+                material.SetFloat(_visibleProgressHash, progress);
                 material.SetFloat(_dissolveProgressHash, progress);
             }
         }, dissolve ? 1f : 0f, duration);
+    }
+
+    private void ResetMaterialList()
+    {
+        _materials.Clear();
+        var renderers = targetTrm.GetComponentsInChildren<Renderer>(true);
+        foreach (var renderer in renderers)
+        {
+            foreach (var material in renderer.materials)
+            {
+                _materials.Add(material);
+            }
+        }
     }
 }

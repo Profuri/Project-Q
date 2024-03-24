@@ -41,4 +41,9 @@ public class GameManager : MonoSingleton<GameManager>
     {
         OnStartEvent?.Invoke();
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

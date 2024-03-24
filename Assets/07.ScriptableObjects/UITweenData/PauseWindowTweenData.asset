@@ -1,6 +1,23 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9202293200791972196
+--- !u!114 &-8914212763326714266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c92f31ee738b4266a661e67b477c77ef, type: 3}
+  m_Name: UIDissolveClip
+  m_EditorClassIdentifier: 
+  duration: 0.5
+  ease: 0
+  targetTrmPath: 
+  joinPrevAnimation: 1
+  dissolve: 1
+--- !u!114 &-3636783572367479961
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -17,7 +34,7 @@ MonoBehaviour:
   targetTrmPath: 
   joinPrevAnimation: 0
   dissolve: 0
---- !u!114 &-891798633337849729
+--- !u!114 &-1562488884976329369
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -26,14 +43,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c92f31ee738b4266a661e67b477c77ef, type: 3}
-  m_Name: UIDissolveClip
+  m_Script: {fileID: 11500000, guid: 46c6f691822e4df1bd241e4806c412b6, type: 3}
+  m_Name: UIRotationClip
   m_EditorClassIdentifier: 
-  duration: 0.5
-  ease: 0
+  duration: 0.4
+  ease: 28
   targetTrmPath: 
-  joinPrevAnimation: 0
-  dissolve: 1
+  joinPrevAnimation: 1
+  fromEuler: {x: 0, y: 105, z: -120}
+  toEuler: {x: -10, y: 120, z: -80}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44,11 +62,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16534c4049b84d44a9b3de6594bbdb8e, type: 3}
-  m_Name: SettingPanelTweenData
+  m_Name: PauseWindowTweenData
   m_EditorClassIdentifier: 
   appearAnimator:
     clips:
-    - {fileID: -9202293200791972196}
+    - {fileID: -3636783572367479961}
+    - {fileID: -1562488884976329369}
   disappearAnimator:
     clips:
-    - {fileID: -891798633337849729}
+    - {fileID: -8914212763326714266}

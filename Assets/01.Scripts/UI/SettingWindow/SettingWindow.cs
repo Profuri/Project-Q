@@ -12,6 +12,10 @@ public class SettingWindow : UIComponent
     protected override void Awake()
     {
         base.Awake();
+        _mainSettingPanel.gameObject.SetActive(false);
+        _audioSettingPanel.gameObject.SetActive(false);
+        _controlSettingPanel.gameObject.SetActive(false);
+        _videoSettingPanel.gameObject.SetActive(false);
         ChangePanel(_mainSettingPanel);
     }
 
