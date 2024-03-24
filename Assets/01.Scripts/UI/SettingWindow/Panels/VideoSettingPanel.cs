@@ -5,6 +5,8 @@ public class VideoSettingPanel : MonoBehaviour
 {
     public void GenerateResolutionDropdown(UIButton3D caller)
     {
+        UIManager.Instance.Interact3DButton = false;
+        
         var dropdown = UIManager.Instance.GenerateUI("DropdownPanel") as UIDropdown;
         dropdown.Title = "RESOLUTION";
 
@@ -19,6 +21,7 @@ public class VideoSettingPanel : MonoBehaviour
             {
                 caller.Text = $"{width}x{height}";
                 VideoManager.Instance.SetResolution(index);
+                UIManager.Instance.Interact3DButton = true;
             });
         }
         
@@ -33,6 +36,8 @@ public class VideoSettingPanel : MonoBehaviour
     
     public void GenerateQualityDropdown(UIButton3D caller)
     {
+        UIManager.Instance.Interact3DButton = false;
+        
         var dropdown = UIManager.Instance.GenerateUI("DropdownPanel") as UIDropdown;
         dropdown.Title = "QUALITY";
 
@@ -44,6 +49,7 @@ public class VideoSettingPanel : MonoBehaviour
             {
                 caller.Text = qualityName.ToUpper();
                VideoManager.Instance.SetQuality(quality); 
+               UIManager.Instance.Interact3DButton = true;
             });
         }
         

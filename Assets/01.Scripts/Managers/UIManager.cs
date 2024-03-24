@@ -16,6 +16,30 @@ public class UIManager : BaseManager<UIManager>
     private UIButton3D _handleUI;
     private IClickUpHandler _heldHandler;
 
+    private bool _interact3DButton;
+    public bool Interact3DButton
+    {
+        get => _interact3DButton;
+        set
+        {
+            _interact3DButton = value;
+            if (!_interact3DButton)
+            {
+                if (_handleUI)
+                {
+                    _handleUI.OnHoverCancelHandle();
+                    _handleUI = null;
+                }
+
+                if (_heldHandler != null)
+                {
+                    _heldHandler.OnClickUpHandle();
+                    _heldHandler = null;
+                }
+            }
+        }
+    }
+
     public override void Init()
     {
         base.Init();
@@ -26,11 +50,15 @@ public class UIManager : BaseManager<UIManager>
     {
         InputManager.Instance.InputReader.OnLeftClickEvent += OnUIClickHandle;
         InputManager.Instance.InputReader.OnLeftClickUpEvent += OnUIClickUpHandle;
+        Interact3DButton = true;
     }
 
     private void Update()
     {
-        FindUIHandler();
+        if (Interact3DButton)
+        {
+            FindUIHandler();
+        }
     }
 
     private void FindUIHandler()
@@ -74,13 +102,13 @@ public class UIManager : BaseManager<UIManager>
         }
         
         if (_handleUI.TryGetComponent<IClickHandler>(out var clickable))
-        { 
-            clickable.OnClickHandle();
-
+        {
             if (_handleUI.TryGetComponent<IClickUpHandler>(out var clickUpHandler))
             {
                 _heldHandler = clickUpHandler;
             }
+            
+            clickable.OnClickHandle();
         }
     }
 
