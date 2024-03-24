@@ -3,9 +3,12 @@ using UnityEngine;
 
 public static class RigidbodyExtensionMethod
 {
-    public static void FreezeAxisPosition(this Rigidbody rigid, AxisType axis)
+    public static void FreezeAxisPosition(this Rigidbody rigid, AxisType axis, bool clearConstraints = true)
     {
-        rigid.constraints &= RigidbodyConstraints.FreezeRotation;
+        if (clearConstraints)
+        {
+            rigid.constraints &= RigidbodyConstraints.FreezeRotation;
+        }
         
         if (axis == AxisType.X)
         {
