@@ -13,8 +13,18 @@ public class GameManager : MonoSingleton<GameManager>
     
     public delegate void UnityEventListener();
     public event UnityEventListener OnStartEvent = null;
-    
-    public bool InPause { get; private set; }
+
+    private bool _inPause;
+    public bool InPause
+    {
+        get => _inPause;
+        set
+        {
+            _inPause = value;
+            Time.timeScale = _inPause ? 0 : 1;
+            InputManager.Instance.SetEnableInputAll(!_inPause);
+        }
+    }
 
     public PlayerUnit PlayerUnit
     {
@@ -53,10 +63,8 @@ public class GameManager : MonoSingleton<GameManager>
         {
             return;
         }
-        
-        InPause = true;
-        Time.timeScale = 0f;
-        InputManager.Instance.SetEnableInputAll(false);
+
+        InPause = true;        
         UIManager.Instance.GenerateUI("PauseWindow");
     }
 
@@ -68,8 +76,6 @@ public class GameManager : MonoSingleton<GameManager>
         }
         
         InPause = false;
-        InputManager.Instance.SetEnableInputAll(true);
-        Time.timeScale = 1f;
     }
 
     public void QuitGame()
