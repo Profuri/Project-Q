@@ -8,19 +8,22 @@ public class SceneControlManager : BaseManager<SceneControlManager>
     public PlayerUnit Player => _currentScene == null ? null : _currentScene.Player;
 
 
+    [SerializeField] private float _fadeTime;
+    [SerializeField] private float _loadingTime;
+
     private SceneTransitionCanvas _currentCanvas;
     public override void StartManager()
     {
         LoadScene(SceneType.Chapter);
     }
 
-    public void LoadScene(SceneType type, Action onLoadedCallback = null, float loadingTime = 1.5f)
+    public void LoadScene(SceneType type, Action onLoadedCallback = null, bool loading = true)
     {
         if (_currentCanvas != null) return;
 
 
         _currentCanvas = PoolManager.Instance.Pop("SceneTransitionCanvas") as SceneTransitionCanvas;
-        _currentCanvas.PresentTransition(SceneTransitionCanvas.sMaxSize, Vector2.zero, 1.5f, () =>
+        _currentCanvas.PresentTransition(0.0f, 1.0f, _fadeTime, () =>
         {
             if (_currentScene is not null)
             {
@@ -31,9 +34,9 @@ public class SceneControlManager : BaseManager<SceneControlManager>
             onLoadedCallback?.Invoke();
 
             //위에 함수가 전부다 정상 작동 했을 경우 밑에 있는 것을 실행시켜주어야 함
-            _currentCanvas.PauseTransition(loadingTime, () =>
+            _currentCanvas.PauseTransition(_loadingTime, () =>
             {
-                _currentCanvas.PresentTransition(Vector2.zero, SceneTransitionCanvas.sMaxSize, 1.5f, () =>
+                _currentCanvas.PresentTransition(1.0f, 0.0f, _fadeTime, () =>
                 {
                     PoolManager.Instance.Push(_currentCanvas);
                     _currentCanvas = null;

@@ -2,14 +2,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections;
+using DG.Tweening;
 
 public class SceneTransitionCanvas : PoolableMono
 {
-    [SerializeField] private RectTransform _circleRectTrm;
+    [SerializeField] private Image _image;
     private Coroutine _transitionCor;
     private Coroutine _delayCor;
-
-    public static Vector2 sMaxSize = new Vector2(2200f, 2200f);
 
     public override void OnPop()
     {
@@ -29,14 +28,14 @@ public class SceneTransitionCanvas : PoolableMono
     /// <param name="endWidth"></param>
     /// <param name="time"></param>
     /// <param name="Callback"></param>
-    public void PresentTransition(Vector2 startWidth, Vector2 endWidth, float time, Action Callback = null)
+    public void PresentTransition(float startValue, float endValue, float time, Action Callback = null)
     {
         if(_transitionCor != null)
         {
             StopCoroutine(_transitionCor);
             _transitionCor = null;
         }
-        _transitionCor = StartCoroutine(TransitionCoroutine(startWidth, endWidth, time, Callback));
+        _transitionCor = StartCoroutine(TransitionCoroutine(startValue, endValue, time, Callback));
 
     }
 
@@ -56,24 +55,25 @@ public class SceneTransitionCanvas : PoolableMono
         Callback?.Invoke();
     }
 
-    private IEnumerator TransitionCoroutine(Vector2 startWidth, Vector2 endWidth, float time, Action Callback = null)
+    private IEnumerator TransitionCoroutine(float startValue, float endValue, float time, Action Callback = null)
     {
         float timer = 0f;
         float percent = timer / time;
 
-        Vector2 sizeDelta = Vector2.Lerp(startWidth, endWidth, percent);
-
-        _circleRectTrm.sizeDelta = sizeDelta;
-        while(percent <= 0.99f)
+        float currentValue = Mathf.Lerp(startValue, endValue, percent);
+        Color originColor = _image.color;
+        originColor.a = currentValue;
+        _image.color = originColor;
+        while (percent <= 0.99f)
         {
             timer += Time.deltaTime;
             percent = timer / time;
-            sizeDelta = Vector2.Lerp(startWidth, endWidth, percent);
-            _circleRectTrm.sizeDelta = sizeDelta;
+            currentValue = Mathf.Lerp(startValue, endValue, percent);
+            originColor.a = currentValue;
+            _image.color = originColor; 
             yield return null;
         }
 
-        _circleRectTrm.sizeDelta = endWidth;
         Callback?.Invoke();
     }
 }
