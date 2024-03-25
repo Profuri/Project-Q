@@ -44,12 +44,6 @@ public class PlayerUnit : ObjectUnit
     public override void UpdateUnit()
     {
         base.UpdateUnit();
-        
-        // debug
-        if (Keyboard.current.jKey.wasPressedThisFrame)
-        {
-            StageManager.Instance.StageClear(this);
-        }
 
         if (standingUnit)
         {
