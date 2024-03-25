@@ -3,7 +3,19 @@ using UnityEngine;
 public class PauseWindow : UIComponent
 {
      private SettingWindow _settingWindow;
-     
+
+     public override void Appear(Transform parentTrm)
+     {
+          base.Appear(parentTrm);
+          InputManager.Instance.InputReader.OnPauseClickEvent += OnPauseKeyClickHandle;
+     }
+
+     public override void Disappear()
+     {
+          base.Disappear();
+          InputManager.Instance.InputReader.OnPauseClickEvent -= OnPauseKeyClickHandle;
+     }
+
      public void Resume()
      {
           if (_settingWindow is not null && _settingWindow.poolOut)
@@ -34,5 +46,17 @@ public class PauseWindow : UIComponent
      {
           Resume();
           SceneControlManager.Instance.LoadScene(SceneType.Title);
+     }
+     
+     private void OnPauseKeyClickHandle()
+     {
+          if (_settingWindow is not null && _settingWindow.poolOut)
+          {
+               _settingWindow.Disappear();
+          }
+          else
+          {
+               Resume();
+          }
      }
 }

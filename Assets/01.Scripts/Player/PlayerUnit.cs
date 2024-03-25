@@ -94,7 +94,8 @@ public class PlayerUnit : ObjectUnit
 
     public void Rotate(Quaternion rot, float speed = -1)
     {
-        ModelTrm.rotation = Quaternion.Lerp(ModelTrm.rotation, rot, speed < 0 ? _data.rotationSpeed : speed);
+        ModelTrm.rotation = Quaternion.Lerp(ModelTrm.rotation, rot,
+            speed < 0 ? _data.rotationSpeed : speed);
     }
 
     private void StandingCheck()

@@ -30,11 +30,11 @@ public class UIButton3D : UIComponent, IClickHandler, IHoverHandler
 
     public virtual void OnHoverHandle()
     {
-        transform.DOScale(_originScale * 1.1f, 0.2f);
+        transform.DOScale(_originScale * 1.1f, 0.2f).SetUpdate(true);
     }
 
     public virtual void OnHoverCancelHandle()
     {
-        transform.DOScale(_originScale, 0.2f);
+        transform.DOScale(_originScale, 0.2f).SetUpdate(true);
     }
 }

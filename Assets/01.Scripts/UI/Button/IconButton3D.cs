@@ -14,11 +14,11 @@ public class IconButton3D : UIButton3D
 
     public override void OnHoverHandle()
     {
-        _iconTrm.DOScale(_originScale * 1.1f, 0.2f);
+        _iconTrm.DOScale(_originScale * 1.1f, 0.2f).SetUpdate(true);
     }
 
     public override void OnHoverCancelHandle()
     {
-        _iconTrm.DOScale(_originScale, 0.2f);
+        _iconTrm.DOScale(_originScale, 0.2f).SetUpdate(true);
     }
 }

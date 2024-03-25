@@ -1,6 +1,5 @@
 using InputControl;
 using Singleton;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,7 +14,6 @@ public enum EInputCategory
     Interaction,
     Click,
     AxisControl,
-    LeftClick
 }
 
 public class InputManager : MonoSingleton<InputManager>
@@ -42,7 +40,6 @@ public class InputManager : MonoSingleton<InputManager>
             { EInputCategory.Interaction,       InputReader.InputControls.Player.Interaction },
             { EInputCategory.Click,             InputReader.InputControls.Player.Click },
             { EInputCategory.AxisControl,       InputReader.InputControls.Player.AxisControl },
-            { EInputCategory.LeftClick,         InputReader.InputControls.UI.LeftClick },
         };
     }
 
