@@ -1,4 +1,5 @@
 using System.Collections;
+using ManagingSystem;
 using Singleton;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -17,7 +18,7 @@ public enum EAUDIO_MIXER
     SFX
 }
 
-public class SoundManager : MonoSingleton<SoundManager>
+public class SoundManager : BaseManager<SoundManager>
 {
     [SerializeField] private AudioClipSO _audioClipSO;
     [SerializeField] private AudioClipSO _bgmClipSO;
@@ -31,8 +32,9 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     private AudioSource[] _audioSources = new AudioSource[(int)SoundEnum.END];
 
-    private void Awake()
+    public override void Init()
     {
+        base.Init();
         string[] soundNames = System.Enum.GetNames(typeof(SoundEnum));
         for (int i = 0; i < soundNames.Length - 1; i++)
         {
@@ -44,17 +46,13 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
         
         _audioSources[(int)SoundEnum.BGM].loop = true;
-
+    }
+    
+    public override void StartManager()
+    {
         PlayBGM("TestBGM");
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            SettingVolume(EAUDIO_MIXER.BGM,0.7f);
-        }
-    }
+    
     public void PlaySFX(string clipName)
     {
         AudioClip clip = _audioClipSO.GetAudioClip(clipName);
@@ -110,6 +108,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     {
         _masterMixer.SetFloat(type.ToString().ToLower(), mute ? -80 : 0);
     }
+    
     IEnumerator SoundFade(bool fadeIn, AudioSource source, float duration, float endVolume, SoundEnum type)
     {
         if (!fadeIn)
@@ -134,27 +133,14 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     public void SettingVolume(EAUDIO_MIXER mixerType,float volume)
     {
-        volume = GetOriginVolume(volume);
-        string targetName = string.Empty;
-        switch (mixerType)
-        {
-            case EAUDIO_MIXER.MASTER:
-                targetName = "MASTER";
-                break;
-            case EAUDIO_MIXER.BGM:
-                targetName = "BGM";
-                break;
-            case EAUDIO_MIXER.SFX:
-                targetName = "SFX";
-                break;
-        }
-        Debug.Log($"OriginVolume: {volume}");
-        _masterMixer.SetFloat(targetName,volume);
+        var originVolume = GetOriginVolume(volume);
+        Debug.Log($"OriginVolume: {originVolume}");
+        _masterMixer.SetFloat(mixerType.ToString(), originVolume);
     }
     
 
     private float GetOriginVolume(float volume)
     {
-        return Mathf.Lerp( -40, 0,volume);
+        return Mathf.Lerp(-40, 0, volume);
     }
 }

@@ -84,10 +84,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 1
+  poolOut: 0
   _enterPoint: {x: -3, y: -1, z: -5.5}
   _exitPoint: {x: 0, y: -1, z: 5.5}
   _playerResetPoint: {x: -3, y: -0.5, z: -3}
   _sectionData: {fileID: 11400000, guid: 02306878c371648a48d518abc435a287, type: 2}
+  _setPlayerFollowCam: 1
   _chapter: 0
   _stageOrder: 3
 --- !u!65 &2769444571010531425
@@ -622,6 +624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 0
+  poolOut: 0
   compressLayer: 2
   climbableUnit: 0
   staticUnit: 1
@@ -840,6 +843,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 0
+  poolOut: 0
   compressLayer: 2
   climbableUnit: 0
   staticUnit: 1
@@ -855,7 +859,7 @@ MonoBehaviour:
   _maxHeight: 1
   _minHeight: 0.35
   _affectedObjects:
-  - InteractableObject: {fileID: 8573125143205531880}
+  - InteractableObject: {fileID: 7301529315881575045}
     inverseValue: 0
   _onToggleChangeEvents: []
 --- !u!4 &6172230779461328713 stripped
@@ -960,11 +964,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4061327372815110138, guid: 8d536e825b0cf47bca234020f2348540,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8573125143205531880}
+      addedObject: {fileID: 7301529315881575045}
     - targetCorrespondingSourceObject: {fileID: 4061327372815110138, guid: 8d536e825b0cf47bca234020f2348540,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5895406378878052938}
+      addedObject: {fileID: 1600821820793836672}
   m_SourcePrefab: {fileID: 100100000, guid: 8d536e825b0cf47bca234020f2348540, type: 3}
 --- !u!4 &731713607017293671 stripped
 Transform:
@@ -978,7 +982,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8793225352285863999}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8573125143205531880
+--- !u!114 &7301529315881575045
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -991,7 +995,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 5
-  compressLayer: 2
+  poolOut: 0
+  compressLayer: 1
   climbableUnit: 1
   staticUnit: 0
   activeUnit: 1
@@ -1001,12 +1006,12 @@ MonoBehaviour:
     m_Bits: 0
   useGravity: 0
   <Offset>k__BackingField: 0
-  _interactType: 2
+  _interactType: 0
   _attribute: 0
   _reciprocationDir: {x: 0, y: 0, z: -1}
-  _reciprocationDistance: 6
-  _reciprocationSpeed: 6
---- !u!54 &5895406378878052938
+  _reciprocationDistance: 5.5
+  _reciprocationSpeed: 5
+--- !u!54 &1600821820793836672
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

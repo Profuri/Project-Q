@@ -1,11 +1,11 @@
 using InputControl;
 using Singleton;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 using System;
+using System.Text.RegularExpressions;
 
 public enum EInputCategory
 {
@@ -14,19 +14,17 @@ public enum EInputCategory
     Interaction,
     Click,
     AxisControl,
-    X_CameraSwitcher,
-    Y_CameraSwitcher,
-    Z_CameraSwitcher,
-    Reset,
 }
-
-
 
 public class InputManager : MonoSingleton<InputManager>
 {
     [field:SerializeField] public InputReader InputReader { get; private set; }
 
     private Dictionary<EInputCategory, InputAction> _inputDictionary;
+
+    public static readonly string AnyKey = @"^.*$";
+    public static readonly string OnlyAlphabet = @"^[a-zA-Z]$";
+    public static readonly string AlphabetOrSpace = @"^(?:[a-zA-Z]|Space)$";
 
     private void Awake()
     {
@@ -40,13 +38,48 @@ public class InputManager : MonoSingleton<InputManager>
             { EInputCategory.Movement,          InputReader.InputControls.Player.Movement },
             { EInputCategory.Jump,              InputReader.InputControls.Player.Jump },
             { EInputCategory.Interaction,       InputReader.InputControls.Player.Interaction },
-            { EInputCategory.Click,              InputReader.InputControls.Player.Click },
-            { EInputCategory.AxisControl,              InputReader.InputControls.Player.AxisControl },
-            { EInputCategory.X_CameraSwitcher,  InputReader.InputControls.Editor.XCameraSwitcher },
-            { EInputCategory.Y_CameraSwitcher,  InputReader.InputControls.Editor.YCameraSwitcher },
-            { EInputCategory.Z_CameraSwitcher,  InputReader.InputControls.Editor.ZCameraSwitcher },
-            { EInputCategory.Reset,             InputReader.InputControls.Editor.Reset }
+            { EInputCategory.Click,             InputReader.InputControls.Player.Click },
+            { EInputCategory.AxisControl,       InputReader.InputControls.Player.AxisControl },
         };
+    }
+
+    public void ChangeKeyBinding(
+        EInputCategory category,
+        string bidingPattern,
+        int bindingIndex,
+        Action<InputActionRebindingExtensions.RebindingOperation> onCancel,
+        Action<InputActionRebindingExtensions.RebindingOperation> onComplete)
+    {
+        InputReader.InputControls.Player.Disable();
+        _inputDictionary[category].PerformInteractiveRebinding(bindingIndex)
+            .WithControlsExcluding("Mouse")
+            .WithCancelingThrough("<keyboard>/Backspace")
+            .OnComplete(operation =>
+            {
+                var keyString = operation.action.bindings[bindingIndex].ToDisplayString();
+                if (InvalidBindingKey(keyString, bidingPattern))
+                {
+                    operation.Cancel();
+                    return;
+                }
+                
+                onComplete?.Invoke(operation);
+                operation.Dispose();
+                InputReader.InputControls.Player.Enable();
+            })
+            .OnCancel(operation =>
+            {
+                onCancel?.Invoke(operation);
+                operation.Dispose();
+                InputReader.InputControls.Player.Enable();
+            })
+            .Start();
+    }
+
+    private bool InvalidBindingKey(string key, string pattern)
+    {
+        var regex = new Regex(pattern);
+        return !regex.Match(key).Success;
     }
 
     public void SetEnableInput(EInputCategory[] categories,bool enable)

@@ -15,6 +15,8 @@ public class Section : PoolableMono
     [SerializeField] private SectionData _sectionData;
     public SectionData SectionData => _sectionData;
 
+    [SerializeField] private bool _setPlayerFollowCam = true;
+
     private List<BridgeObject> _bridgeObjects;
     public List<ObjectUnit> SectionUnits { get; private set; }
 
@@ -90,14 +92,14 @@ public class Section : PoolableMono
         Lock = true;
         player.SetSection(this);
         CameraManager.Instance.ChangeVCamController(VirtualCamType.SECTION);
-        ((SectionCamController)CameraManager.Instance.CurrentCamController).SetPlayer(player);
+        ((SectionCamController)CameraManager.Instance.CurrentCamController).SetPlayer(_setPlayerFollowCam ? player : null);
         ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(AxisType.None);
     }
 
     public virtual void OnExit(PlayerUnit player)
     {
         CameraManager.Instance.ChangeVCamController(VirtualCamType.PLAYER);
-        ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetPlayer(player);
+        ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetPlayer(_setPlayerFollowCam ? player : null);
         ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetCurrentCam();
     }
     

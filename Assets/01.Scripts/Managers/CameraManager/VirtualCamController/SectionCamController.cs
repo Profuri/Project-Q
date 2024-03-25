@@ -54,7 +54,7 @@ public class SectionCamController : VirtualCamController
 
     public void SetPlayer(PlayerUnit player)
     {
-        var playerTrm = player.transform;
+        var playerTrm = player?.transform;
         
         _axisControlCam.SetFollowTarget(playerTrm);
         _axisControlCam.SetLookAtTarget(playerTrm);

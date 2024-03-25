@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SceneControlManager : BaseManager<SceneControlManager>
 {
+    [SerializeField] private SceneType _startSceneType;
+    
     private Scene _currentScene;
     public PlayerUnit Player => _currentScene == null ? null : _currentScene.Player;
 
@@ -14,7 +16,7 @@ public class SceneControlManager : BaseManager<SceneControlManager>
     private SceneTransitionCanvas _currentCanvas;
     public override void StartManager()
     {
-        LoadScene(SceneType.Chapter);
+        LoadScene(_startSceneType);
     }
 
     public void LoadScene(SceneType type, Action onLoadedCallback = null, bool loading = true)
