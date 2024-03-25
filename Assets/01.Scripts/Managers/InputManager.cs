@@ -18,7 +18,7 @@ public enum EInputCategory
 
 public class InputManager : MonoSingleton<InputManager>
 {
-    [field:SerializeField] public InputReader InputReader {get; private set; }
+    [field:SerializeField] public InputReader InputReader { get; private set; }
 
     private Dictionary<EInputCategory, InputAction> _inputDictionary;
 
