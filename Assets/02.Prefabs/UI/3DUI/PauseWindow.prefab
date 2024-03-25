@@ -109,13 +109,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 745764380117147028}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.49999994, y: -0.4999999, z: -0.5000001, w: 0.5}
-  m_LocalPosition: {x: 1.38, y: 0.4, z: -0}
+  m_LocalRotation: {x: 0.00000021606681, y: -0.00000023841855, z: -0.7071068, w: 0.70710677}
+  m_LocalPosition: {x: 0.023576975, y: 0.4, z: -1.3564236}
   m_LocalScale: {x: 350, y: 370, z: 140}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1165619053245664463}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!33 &6677310191774223617
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -241,7 +241,19 @@ MonoBehaviour:
   componentType: 2
   OnClickEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6980218885091766739}
+        m_TargetAssemblyTypeName: PauseWindow, Assembly-CSharp
+        m_MethodName: GenerateSettingPopup
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2423638600524024054
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,7 +540,19 @@ MonoBehaviour:
   componentType: 2
   OnClickEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6980218885091766739}
+        m_TargetAssemblyTypeName: PauseWindow, Assembly-CSharp
+        m_MethodName: GoChapterSelectScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2905241759346055738
 GameObject:
   m_ObjectHideFlags: 0
@@ -766,14 +790,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2952146734333334772}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.07, y: 0.53, z: -0}
+  m_LocalRotation: {x: -0, y: 0.7071065, z: -0, w: 0.7071071}
+  m_LocalPosition: {x: 0.02357483, y: 0.53, z: 4.0935755}
   m_LocalScale: {x: 1.5, y: 1, z: 7.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5550869291798242088}
   m_Father: {fileID: 1165619053245664463}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &2885155191850365853
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1130,7 +1154,7 @@ GameObject:
   - component: {fileID: 1078457509497387617}
   - component: {fileID: 566408308400981896}
   m_Layer: 21
-  m_Name: QuitBtn
+  m_Name: TitleBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1193,7 +1217,19 @@ MonoBehaviour:
   componentType: 2
   OnClickEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6980218885091766739}
+        m_TargetAssemblyTypeName: PauseWindow, Assembly-CSharp
+        m_MethodName: GoTitleScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5310165532119654541
 GameObject:
   m_ObjectHideFlags: 0
@@ -1466,10 +1502,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d100e06f4a0744c8728e86700b5472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _text: QUIT
-  oldText: QUIT
+  _text: TITLE
+  oldText: TITLE
   wordArray:
-  - QUIT
+  - TITLE
   characterObjectList: []
   _allCharacterObjectList:
   - {fileID: 0}
@@ -1640,8 +1676,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6369884161883481517}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.34, y: 0.79, z: -0.06}
+  m_LocalRotation: {x: -0, y: 0.7071065, z: -0, w: 0.7071071}
+  m_LocalPosition: {x: -0.036423445, y: 0.79, z: -1.3164241}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1650,7 +1686,7 @@ Transform:
   - {fileID: 2835062132211799148}
   - {fileID: 7721331275548594451}
   m_Father: {fileID: 1165619053245664463}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &6391822992232688407
 GameObject:
   m_ObjectHideFlags: 0
@@ -1661,7 +1697,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1165619053245664463}
   - component: {fileID: 6980218885091766739}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: PauseWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1676,7 +1712,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6391822992232688407}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.70705116, z: 0, w: 0.7071624}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.7066913, y: 0, z: -3.7072732}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1685,7 +1721,7 @@ Transform:
   - {fileID: 8406284035043902011}
   - {fileID: 8970773368743050682}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 89.991, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6980218885091766739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1797,7 +1833,7 @@ GameObject:
   - component: {fileID: 7465213237122463227}
   - component: {fileID: 2098203004889254715}
   m_Layer: 21
-  m_Name: PlayBtn
+  m_Name: ResumeBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1859,7 +1895,19 @@ MonoBehaviour:
   componentType: 2
   OnClickEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6980218885091766739}
+        m_TargetAssemblyTypeName: PauseWindow, Assembly-CSharp
+        m_MethodName: Resume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8827587827225947520
 GameObject:
   m_ObjectHideFlags: 0

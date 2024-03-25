@@ -1,7 +1,9 @@
+using System;
 using DG.Tweening;
 using ManagingSystem;
 using Singleton;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -10,6 +12,8 @@ public class GameManager : MonoSingleton<GameManager>
     
     public delegate void UnityEventListener();
     public event UnityEventListener OnStartEvent = null;
+    
+    public bool InPause { get; private set; }
 
     public PlayerUnit PlayerUnit
     {
@@ -40,6 +44,35 @@ public class GameManager : MonoSingleton<GameManager>
     private void Start()
     {
         OnStartEvent?.Invoke();
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            Pause();
+        }
+    }
+
+    public void Pause()
+    {
+        if (InPause)
+        {
+            return;
+        }
+        
+        InPause = true;
+        UIManager.Instance.GenerateUI("PauseWindow");
+    }
+
+    public void Resume()
+    {
+        if(!InPause)
+        {
+            return;
+        }
+        
+        InPause = false;
     }
 
     public void QuitGame()
