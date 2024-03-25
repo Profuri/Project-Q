@@ -109,7 +109,7 @@ public class UIDropdown : UIComponent
     private void EnterOption()
     {
         _options[_cursorIndex].Invoke();
-        UIManager.Instance.RemoveTopUI();
+        Disappear();
     }
 
     private void UpdateCursorPos()

@@ -46,14 +46,6 @@ public class GameManager : MonoSingleton<GameManager>
         OnStartEvent?.Invoke();
     }
 
-    private void Update()
-    {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            Pause();
-        }
-    }
-
     public void Pause()
     {
         if (InPause)

@@ -11,6 +11,7 @@ public class PauseWindow : UIComponent
                _settingWindow.Disappear();
           }
           GameManager.Instance.Resume();
+          Disappear();
      }
 
      public void GenerateSettingPopup()

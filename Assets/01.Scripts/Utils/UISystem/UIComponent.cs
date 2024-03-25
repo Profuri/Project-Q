@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class UIComponent : PoolableMono
 {
     public UIComponentTweenData tweenData;
-    public UIComponentType componentType;
     
     public Transform ParentTrm { get; private set; }
 

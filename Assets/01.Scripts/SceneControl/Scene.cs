@@ -18,11 +18,18 @@ public class Scene : PoolableMono
     {
         Player = AddObject("Player") as PlayerUnit;
         Player.transform.position = Vector3.zero;
+
+        if (_type != SceneType.Title)
+        {
+            InputManager.Instance.InputReader.OnPauseClickEvent += GameManager.Instance.Pause;    
+        }
     }
 
     public override void OnPush()
     {
         InputManager.Instance.InputReader.ClearPlayerInputEvent();
+        InputManager.Instance.InputReader.OnPauseClickEvent -= GameManager.Instance.Pause;
+        
         while (_objects.Count > 0)
         {
             DeleteObject(_objects.First());
