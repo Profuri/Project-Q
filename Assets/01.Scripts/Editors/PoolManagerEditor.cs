@@ -67,6 +67,6 @@ public class PoolManagerEditor : Editor
         }
         poolingListList.Add(poolingList);
         manager.SettingPoolinglist(poolingListList);
-        poolingList.SetDirty();
+        EditorUtility.SetDirty(poolingList);
     }
 }

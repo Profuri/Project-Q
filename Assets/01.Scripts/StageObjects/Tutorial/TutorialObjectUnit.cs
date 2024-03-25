@@ -126,21 +126,4 @@ public class TutorialObjectUnit : InteractableObject
             _tutorialMark = null;
         }
     }
-
-#if UNITY_EDITOR
-    protected override void OnDrawGizmos()
-    {
-        base.OnDrawGizmos();
-        
-        
-        Gizmos.color = Color.red;
-        Collider collider = GetComponent<Collider>();
-        if(collider != null)
-        {
-            Vector3 center = collider.bounds.center;
-            Vector3 size = collider.bounds.size;
-            Gizmos.DrawCube(center,size);
-        }
-    }
-#endif
 }

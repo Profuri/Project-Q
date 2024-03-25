@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ManagingSystem;
 using Singleton;
 using UnityEngine;
 
@@ -15,15 +16,13 @@ public interface IDataProvidable
     public Action<SaveData> GetSaveAction();
 }
 
-public class DataManager : MonoSingleton<DataManager>
+public class DataManager : BaseManager<DataManager>
 {
     [Header("SaveSettings")]
     [SerializeField] private string _fileName;
     [SerializeField] private bool _isEncrypt;
     [SerializeField] private bool _isBase64;
-
-
-
+    
     private FileDataHandler _fileDataHandler;
 
     //얘는 저장하는 이벤트가 달린 딕셔너리
@@ -31,12 +30,17 @@ public class DataManager : MonoSingleton<DataManager>
     //얘는 저장된 데이터를 바탕으로 게임에 설정하는 딕셔너리
     private Dictionary<IDataProvidable, Action<SaveData>> _dataSettableDictionary   = new Dictionary<IDataProvidable, Action<SaveData>>();
     private static SaveData s_saveData;
-    
-    private void Awake()
+
+    public override void Init()
     {
+        base.Init();
         s_saveData = new SaveData();
         _fileDataHandler = new FileDataHandler(Application.dataPath, _fileName,_isEncrypt,_isBase64);
         SettingDataProvidable();
+    }
+
+    public override void StartManager()
+    {
     }
 
     private void SettingDataProvidable()
