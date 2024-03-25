@@ -134,7 +134,6 @@ public class SoundManager : BaseManager<SoundManager>
     public void SettingVolume(EAUDIO_MIXER mixerType,float volume)
     {
         var originVolume = GetOriginVolume(volume);
-        Debug.Log($"OriginVolume: {originVolume}");
         _masterMixer.SetFloat(mixerType.ToString(), originVolume);
     }
     
