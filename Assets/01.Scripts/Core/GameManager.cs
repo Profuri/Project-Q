@@ -1,10 +1,8 @@
-using System;
 using AxisConvertSystem;
 using DG.Tweening;
 using ManagingSystem;
 using Singleton;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -59,7 +57,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void Pause()
     {
-        if (InPause || StageManager.Instance.CurrentStageAxis != AxisType.None)
+        if (InPause || TutorialManager.Instance.OnTutorial || StageManager.Instance.CurrentStageAxis != AxisType.None)
         {
             return;
         }

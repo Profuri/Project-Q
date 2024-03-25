@@ -55,8 +55,6 @@ public class PoolManagerEditor : Editor
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
             if (prefab != null)
             {
-                Debug.Log("Loaded prefab: " + prefab.name);
-
                 if(prefab.TryGetComponent(out PoolableMono poolableMono))
                 {
                     if (poolableMono.poolingCnt <= 0) continue; 

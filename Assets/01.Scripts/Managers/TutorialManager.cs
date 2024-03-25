@@ -1,24 +1,36 @@
 using Singleton;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Video;
 
 public class TutorialManager : MonoSingleton<TutorialManager>
 {
-    public bool IsTutorialViewing { get; set; } = false;
-    private TutorialCanvas _currentCanvas;
+    public bool OnTutorial { get; private set; }
+    
+    private TutorialWindow _tutorialWindow;
 
-    public void StartTutorial(TutorialSO tutorialSO)
+    public void SetUpTutorial(TutorialInfo info)
     {
-        _currentCanvas = SceneControlManager.Instance.AddObject("TutorialCanvas") as TutorialCanvas;
-        _currentCanvas.ShowTutorial(tutorialSO);
+        if (OnTutorial)
+        {
+            return;
+        }
+        
+        _tutorialWindow = UIManager.Instance.GenerateUI("TutorialWindow") as TutorialWindow;
+        // _tutorialWindow.SettingTutorial(info);
+        // _tutorialWindow.PlayTutorial();
+        
+        InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, false);
+        OnTutorial = true;
     }
 
     public void StopTutorial()
     {
-        //SceneControlManager.Instance.DeleteObject(_currentCanvas);
-        _currentCanvas.StopTutorial();
+        if (!OnTutorial)
+        {
+            return;
+        }
+        
+        _tutorialWindow.Disappear();
+        InputManager.Instance.SetEnableInputAll(true);
+        OnTutorial = false;
     }
 
 }
