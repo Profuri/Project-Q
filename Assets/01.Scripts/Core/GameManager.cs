@@ -1,4 +1,5 @@
 using System;
+using AxisConvertSystem;
 using DG.Tweening;
 using ManagingSystem;
 using Singleton;
@@ -48,7 +49,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void Pause()
     {
-        if (InPause)
+        if (InPause || StageManager.Instance.CurrentStageAxis != AxisType.None)
         {
             return;
         }
