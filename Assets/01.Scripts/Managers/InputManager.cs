@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 using System;
+using System.Text.RegularExpressions;
 
 public enum EInputCategory
 {
@@ -22,6 +23,10 @@ public class InputManager : MonoSingleton<InputManager>
     [field:SerializeField] public InputReader InputReader {get; private set; }
 
     private Dictionary<EInputCategory, InputAction> _inputDictionary;
+
+    public static readonly string AnyKey = @"^.*$";
+    public static readonly string OnlyAlphabet = @"^[a-zA-Z]$";
+    public static readonly string AlphabetOrSpace = @"^(?:[a-zA-Z]|Space)$";
 
     private void Awake()
     {
@@ -43,16 +48,24 @@ public class InputManager : MonoSingleton<InputManager>
 
     public void ChangeKeyBinding(
         EInputCategory category,
-        int bindingIndex = -1,
-        Action<InputActionRebindingExtensions.RebindingOperation> onCancel = null,
-        Action<InputActionRebindingExtensions.RebindingOperation> onComplete = null)
+        string bidingPattern,
+        int bindingIndex,
+        Action<InputActionRebindingExtensions.RebindingOperation> onCancel,
+        Action<InputActionRebindingExtensions.RebindingOperation> onComplete)
     {
         InputReader.InputControls.Player.Disable();
         _inputDictionary[category].PerformInteractiveRebinding(bindingIndex)
             .WithControlsExcluding("Mouse")
-            .WithCancelingThrough("<keyboard>/escape")
+            .WithCancelingThrough("<keyboard>/Backspace")
             .OnComplete(operation =>
             {
+                var keyString = operation.action.bindings[bindingIndex].ToDisplayString();
+                if (InvalidBindingKey(keyString, bidingPattern))
+                {
+                    operation.Cancel();
+                    return;
+                }
+                
                 onComplete?.Invoke(operation);
                 operation.Dispose();
                 InputReader.InputControls.Player.Enable();
@@ -64,6 +77,12 @@ public class InputManager : MonoSingleton<InputManager>
                 InputReader.InputControls.Player.Enable();
             })
             .Start();
+    }
+
+    private bool InvalidBindingKey(string key, string pattern)
+    {
+        var regex = new Regex(pattern);
+        return !regex.Match(key).Success;
     }
 
     public void SetEnableInput(EInputCategory[] categories,bool enable)

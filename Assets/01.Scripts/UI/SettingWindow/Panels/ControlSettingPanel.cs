@@ -9,47 +9,47 @@ public class ControlSettingPanel : MonoBehaviour
     
     public void ChangeMoveFrontKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.Movement, 1);
+        ChangeKeyBinding(caller, EInputCategory.Movement, InputManager.OnlyAlphabet, 1);
     }
     
     public void ChangeMoveBackwardKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.Movement, 2);
+        ChangeKeyBinding(caller, EInputCategory.Movement, InputManager.OnlyAlphabet, 2);
     }
     
     public void ChangeMoveLeftKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.Movement, 3);
+        ChangeKeyBinding(caller, EInputCategory.Movement, InputManager.OnlyAlphabet, 3);
     }
     
     public void ChangeMoveRightKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.Movement, 4);   
+        ChangeKeyBinding(caller, EInputCategory.Movement, InputManager.OnlyAlphabet, 4);   
     }
     
     public void ChangeJumpKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.Jump);
+        ChangeKeyBinding(caller, EInputCategory.Jump, InputManager.AlphabetOrSpace);
     }
     
     public void ChangeInteractionKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.Interaction);
+        ChangeKeyBinding(caller, EInputCategory.Interaction, InputManager.OnlyAlphabet);
     }
     
     public void ChangeAxisControlKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.AxisControl);
+        ChangeKeyBinding(caller, EInputCategory.AxisControl, InputManager.OnlyAlphabet);
     }
     
-    private void ChangeKeyBinding(UIButton3D caller, EInputCategory category, int bindingIndex = 0)
+    private void ChangeKeyBinding(UIButton3D caller, EInputCategory category, string bidingPattern, int bindingIndex = 0)
     {
         UIManager.Instance.Interact3DButton = false;
         
         var backgroundRenderer = caller.transform.Find("BackGroundPlane").GetComponent<Renderer>();
         backgroundRenderer.material = _controlButtonAccessMat;
         
-        InputManager.Instance.ChangeKeyBinding(category, bindingIndex, 
+        InputManager.Instance.ChangeKeyBinding(category, bidingPattern, bindingIndex, 
             // On Cancel
             operation =>
             {

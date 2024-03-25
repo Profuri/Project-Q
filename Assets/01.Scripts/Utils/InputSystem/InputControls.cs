@@ -225,6 +225,15 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""20e4fd6f-ff4c-4699-8810-f2daacc6051c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -282,6 +291,17 @@ namespace InputControl
                     ""action"": ""Enter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce074dae-954e-4ac3-bf2c-e5df8cb364b7"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -319,6 +339,7 @@ namespace InputControl
             m_UI_UpArrow = m_UI.FindAction("UpArrow", throwIfNotFound: true);
             m_UI_DownArrow = m_UI.FindAction("DownArrow", throwIfNotFound: true);
             m_UI_Enter = m_UI.FindAction("Enter", throwIfNotFound: true);
+            m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -463,6 +484,7 @@ namespace InputControl
         private readonly InputAction m_UI_UpArrow;
         private readonly InputAction m_UI_DownArrow;
         private readonly InputAction m_UI_Enter;
+        private readonly InputAction m_UI_Pause;
         public struct UIActions
         {
             private @InputControls m_Wrapper;
@@ -472,6 +494,7 @@ namespace InputControl
             public InputAction @UpArrow => m_Wrapper.m_UI_UpArrow;
             public InputAction @DownArrow => m_Wrapper.m_UI_DownArrow;
             public InputAction @Enter => m_Wrapper.m_UI_Enter;
+            public InputAction @Pause => m_Wrapper.m_UI_Pause;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -496,6 +519,9 @@ namespace InputControl
                 @Enter.started += instance.OnEnter;
                 @Enter.performed += instance.OnEnter;
                 @Enter.canceled += instance.OnEnter;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
 
             private void UnregisterCallbacks(IUIActions instance)
@@ -515,6 +541,9 @@ namespace InputControl
                 @Enter.started -= instance.OnEnter;
                 @Enter.performed -= instance.OnEnter;
                 @Enter.canceled -= instance.OnEnter;
+                @Pause.started -= instance.OnPause;
+                @Pause.performed -= instance.OnPause;
+                @Pause.canceled -= instance.OnPause;
             }
 
             public void RemoveCallbacks(IUIActions instance)
@@ -556,6 +585,7 @@ namespace InputControl
             void OnUpArrow(InputAction.CallbackContext context);
             void OnDownArrow(InputAction.CallbackContext context);
             void OnEnter(InputAction.CallbackContext context);
+            void OnPause(InputAction.CallbackContext context);
         }
     }
 }
