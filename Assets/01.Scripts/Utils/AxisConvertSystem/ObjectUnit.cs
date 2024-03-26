@@ -30,13 +30,14 @@ namespace AxisConvertSystem
         private UnitInfo _unitInfo;
         private UnitInfo _convertedInfo;
 
+        private List<Renderer> _renderers;
         private List<Material> _materials;
 
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
 
         private UnClimbableEffect _unClimbableEffect;
-        
+
         public virtual void Awake()
         {
             IsHide = false;
@@ -52,19 +53,9 @@ namespace AxisConvertSystem
             DepthHandler = new UnitDepthHandler(this);
 
             _materials = new List<Material>();
-            var renderers = transform.GetComponentsInChildren<Renderer>();
-            foreach (var rdr in renderers)
-            {
-                if(!rdr.enabled)
-                {
-                    continue;
-                }
-            
-                foreach (var material in rdr.materials) 
-                {
-                    _materials.Add(material);    
-                }
-            }
+            _renderers = new List<Renderer>();
+            transform.GetComponentsInChildren<Renderer>(_renderers);
+            MaterialResetUp();
             
             Activate(activeUnit);
         }
@@ -425,6 +416,23 @@ namespace AxisConvertSystem
         {
             bool onLayer = (int)compressLayer < (int)CompressLayer.Obstacle;
             return !climbableUnit && onLayer && !Collider.isTrigger;
+        }
+
+        protected void MaterialResetUp()
+        {
+            _materials.Clear();
+            foreach (var rdr in _renderers)
+            {
+                if(!rdr.enabled)
+                {
+                    continue;
+                }
+
+                foreach (var material in rdr.materials) 
+                {
+                    _materials.Add(material);    
+                }
+            }
         }
     }
 }

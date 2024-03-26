@@ -25,10 +25,12 @@ public class PictureUnit : ObjectUnit
         if (axis == AxisType.None)
         {
             _renderer.material = _disableMat;
+            MaterialResetUp();
         }
         else if (axis == _enableAxis)
         {
             _renderer.material = _enableMat;
+            MaterialResetUp();
         }
         Activate(_enableAxis == axis || axis == AxisType.None);
     }
