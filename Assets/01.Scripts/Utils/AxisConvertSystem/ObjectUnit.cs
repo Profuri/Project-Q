@@ -233,7 +233,7 @@ namespace AxisConvertSystem
 
             if (!staticUnit)
             {
-                Dissolve(1f, 2f, true, callBack);
+                Dissolve(0f, 2f, true, callBack);
                 Rigidbody.velocity = Vector3.zero;
                 PlaySpawnVFX();
             }
