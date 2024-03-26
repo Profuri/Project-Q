@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class FractureObject : InteractableObject
 {
@@ -19,11 +20,21 @@ public class FractureObject : InteractableObject
     private MeshRenderer _meshRenderer;
     public MeshRenderer MeshRenderer => _meshRenderer;
 
+    
     public override void Awake()
     {
         base.Awake();
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
+    }
+
+    public void OnEnable()
+    {
+        if(gameObject.name == "FractureObject")
+        {
+            Debug.Log($"{Time.time}");
+        }
+        Debug.Break();
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
@@ -77,8 +88,9 @@ public class FractureObject : InteractableObject
             part.AddForce(part.Bounds.center * _explodeForce, transform.position);
         }
 
-        SceneControlManager.Instance.DeleteObject(this);
-        //Activate(false);
+
+        //SceneControlManager.Instance.DeleteObject(this);
+        Activate(false);
     }
 
     private FracturePart GenerateMesh(FracturePart original, Plane planeUnit, bool left)

@@ -76,4 +76,10 @@ public class SceneTransitionCanvas : PoolableMono
 
         Callback?.Invoke();
     }
+
+    [ContextMenu("ShowSequence")]
+    public void ShowSequence()
+    {
+        PresentTransition(1.0f, 0.0f, 1.5f);
+    }
 }

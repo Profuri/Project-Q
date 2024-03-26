@@ -119,11 +119,15 @@ namespace AxisConvertSystem
             }
             SynchronizePosition(axis);
             _convertedInfo = ConvertInfo(_unitInfo, axis);
+            if (gameObject.name == "FractureObject")
+            {
+                Debug.Log($"Convert");
+            }
         }
         
         public virtual void UnitSetting(AxisType axis)
         {
-            ApplyInfo(_convertedInfo);
+            ApplyInfo(_convertedInfo, activeUnit);
 
             if (IsHide)
             {
@@ -139,6 +143,10 @@ namespace AxisConvertSystem
             {
                 Rigidbody.FreezeAxisPosition(axis);
             }
+            if (gameObject.name == "FractureObject")
+            {
+                Debug.Log($"UnitSetting");
+            }
         }
 
         private void ApplyInfo(UnitInfo info, bool hideSetting = true)
@@ -151,6 +159,10 @@ namespace AxisConvertSystem
             if (hideSetting)
             {
                 Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
+            }
+            if (gameObject.name == "FractureObject")
+            {
+                Debug.Log($"ApplyInfo");
             }
         }
         

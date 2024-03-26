@@ -58,6 +58,11 @@ public class PlayerUnit : ObjectUnit
         {
             StageManager.Instance.StageClear(this);
         }
+
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            SceneControlManager.Instance.LoadScene(SceneType.Chapter);
+        }
         #endif
     }
 
