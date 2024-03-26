@@ -1,18 +1,15 @@
 using AxisConvertSystem;
 using InteractableSystem;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
 [RequireComponent(typeof(BoxCollider))]    
 public class TutorialObjectUnit : InteractableObject
 {
-    [Header("Tutorial System")]
-    [SerializeField] private TutorialSO _tutorialSO;   
+    [Header("Tutorial System")] 
+    [SerializeField] private TutorialInfo _info;   
     [SerializeField] private Transform _markAppearTransform;
 
-    public bool IsOn { get; private set; } = false;
     private TutorialMark _tutorialMark;
 
     public override void Init(AxisConverter converter)
@@ -20,7 +17,6 @@ public class TutorialObjectUnit : InteractableObject
         base.Init(converter);
 
         gameObject.layer = LayerMask.NameToLayer("Interactable");
-        IsOn = false;
     }
 
     private void OnDisable()
@@ -87,17 +83,15 @@ public class TutorialObjectUnit : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        if (!IsOn)
+        if (!TutorialManager.Instance.OnTutorial)
         {
-            TutorialManager.Instance.StartTutorial(_tutorialSO);
-            InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, false);
+            TutorialManager.Instance.SetUpTutorial(_info);
 
             _tutorialMark.Off();
             _tutorialMark = null;
         }
         else
         {
-            InputManager.Instance.SetEnableInputAll(true);
             TutorialManager.Instance.StopTutorial();
 
             if (_tutorialMark == null)
@@ -105,8 +99,8 @@ public class TutorialObjectUnit : InteractableObject
                 LoadTutorialMark();
             }
         }
-        IsOn = !IsOn;
     }
+    
     public override void OnDetectedEnter()
     {
         base.OnDetectedEnter();
@@ -126,21 +120,4 @@ public class TutorialObjectUnit : InteractableObject
             _tutorialMark = null;
         }
     }
-
-#if UNITY_EDITOR
-    protected override void OnDrawGizmos()
-    {
-        base.OnDrawGizmos();
-        
-        
-        Gizmos.color = Color.red;
-        Collider collider = GetComponent<Collider>();
-        if(collider != null)
-        {
-            Vector3 center = collider.bounds.center;
-            Vector3 size = collider.bounds.size;
-            Gizmos.DrawCube(center,size);
-        }
-    }
-#endif
 }

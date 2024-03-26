@@ -48,7 +48,7 @@ namespace InteractableSystem
             Vector3 center = transform.position;
 
             var col = GetComponent<Collider>();
-
+            
             if (Offset < 0.1f)
             {
                 center += new Vector3(0,col.bounds.size.y * 0.7f,0);

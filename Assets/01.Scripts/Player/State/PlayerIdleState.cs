@@ -15,7 +15,7 @@ public class PlayerIdleState : PlayerOnGroundState
     public override void UpdateState()
     {
         base.UpdateState();
-        var movementInput = Player.InputReader.movementInput;
+        var movementInput = InputManager.Instance.InputReader.movementInput;
         if (movementInput.sqrMagnitude > 0.05f)
         {
             Controller.ChangeState(typeof(PlayerMovementState));

@@ -1,3 +1,4 @@
+using AxisConvertSystem;
 using DG.Tweening;
 using ManagingSystem;
 using Singleton;
@@ -10,6 +11,8 @@ public class GameManager : MonoSingleton<GameManager>
     
     public delegate void UnityEventListener();
     public event UnityEventListener OnStartEvent = null;
+
+    public bool InPause { get; set; }
 
     public PlayerUnit PlayerUnit
     {
@@ -40,5 +43,39 @@ public class GameManager : MonoSingleton<GameManager>
     private void Start()
     {
         OnStartEvent?.Invoke();
+    }
+
+    public void Pause()
+    {
+        if (InPause || TutorialManager.Instance.OnTutorial || StageManager.Instance.CurrentStageAxis != AxisType.None)
+        {
+            return;
+        }
+
+        InPause = true;       
+        Time.timeScale = 0;
+        InputManager.Instance.SetEnableInputAll(false);
+        UIManager.Instance.GenerateUI("PauseWindow");
+    }
+
+    public void Resume(bool stateSettingSelf = true)
+    {
+        if(!InPause)
+        {
+            return;
+        }
+
+        if (stateSettingSelf)
+        {
+            InPause = false;
+        }
+        
+        Time.timeScale = 1;
+        InputManager.Instance.SetEnableInputAll(true);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

@@ -84,10 +84,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 1
+  poolOut: 0
   _enterPoint: {x: -3, y: -1, z: -5.5}
   _exitPoint: {x: 0, y: -1, z: 5.5}
   _playerResetPoint: {x: -3, y: -0.5, z: -3}
   _sectionData: {fileID: 11400000, guid: 02306878c371648a48d518abc435a287, type: 2}
+  _setPlayerFollowCam: 1
   _chapter: 0
   _stageOrder: 3
 --- !u!65 &2769444571010531425
@@ -622,6 +624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 0
+  poolOut: 0
   compressLayer: 2
   climbableUnit: 0
   staticUnit: 1
@@ -840,6 +843,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 0
+  poolOut: 0
   compressLayer: 2
   climbableUnit: 0
   staticUnit: 1
@@ -855,7 +859,7 @@ MonoBehaviour:
   _maxHeight: 1
   _minHeight: 0.35
   _affectedObjects:
-  - InteractableObject: {fileID: 0}
+  - InteractableObject: {fileID: 7301529315881575045}
     inverseValue: 0
   _onToggleChangeEvents: []
 --- !u!4 &6172230779461328713 stripped
@@ -952,10 +956,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7006389709569472054, guid: 8d536e825b0cf47bca234020f2348540, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4061327372815110138, guid: 8d536e825b0cf47bca234020f2348540,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7301529315881575045}
+    - targetCorrespondingSourceObject: {fileID: 4061327372815110138, guid: 8d536e825b0cf47bca234020f2348540,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1600821820793836672}
   m_SourcePrefab: {fileID: 100100000, guid: 8d536e825b0cf47bca234020f2348540, type: 3}
 --- !u!4 &731713607017293671 stripped
 Transform:
@@ -963,3 +976,65 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8793225352285863999}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4781543405949964229 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4061327372815110138, guid: 8d536e825b0cf47bca234020f2348540,
+    type: 3}
+  m_PrefabInstance: {fileID: 8793225352285863999}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7301529315881575045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4781543405949964229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c86ec896980c345b59e1762c4ba35b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  poolOut: 0
+  compressLayer: 1
+  climbableUnit: 1
+  staticUnit: 0
+  activeUnit: 1
+  subUnit: 0
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  useGravity: 0
+  <Offset>k__BackingField: 0
+  _interactType: 0
+  _attribute: 0
+  _reciprocationDir: {x: 0, y: 0, z: -1}
+  _reciprocationDistance: 5.5
+  _reciprocationSpeed: 5
+--- !u!54 &1600821820793836672
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4781543405949964229}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

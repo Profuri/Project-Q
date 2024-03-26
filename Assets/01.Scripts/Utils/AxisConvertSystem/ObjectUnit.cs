@@ -162,8 +162,11 @@ namespace AxisConvertSystem
             }
 
             var layerDepth = (float)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
-            
-            basic.LocalPos.SetAxisElement(axis, subUnit ? 0f : layerDepth);
+
+            if (!subUnit)
+            {
+                basic.LocalPos.SetAxisElement(axis, layerDepth);
+            }
 
             basic.LocalScale = Quaternion.Inverse(basic.LocalRot) * basic.LocalScale;
             basic.LocalScale.SetAxisElement(axis, 1);

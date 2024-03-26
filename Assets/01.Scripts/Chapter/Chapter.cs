@@ -20,7 +20,7 @@ public class Chapter : InteractableObject
         base.UpdateUnit();
         if (_symbolTrm is not null)
         {
-            _symbolTrm.Rotate(0, _symbolRotateSpeed, 0, Space.World);
+            _symbolTrm.eulerAngles += new Vector3(0, _symbolRotateSpeed * Time.deltaTime, 0);
         }
     }
 

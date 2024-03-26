@@ -4,19 +4,17 @@ using InputControl;
 using InteractableSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class PlayerUnit : ObjectUnit
 {
-    [SerializeField] private InputReader _inputReader;
-    public InputReader InputReader => _inputReader;
-    
     [SerializeField] private PlayerData _data;
     public PlayerData Data => _data;
 
     public Transform ModelTrm { get; private set; }
     public Animator Animator { get; private set; }
     public ObjectHoldingHandler HoldingHandler { get; private set; }
-    public ObjectUnit standingUnit;
+    public ObjectUnit StandingUnit { get; set; }
     private StateController _stateController;
 
     private InteractableObject _selectedInteractableObject;
@@ -45,7 +43,7 @@ public class PlayerUnit : ObjectUnit
     {
         base.UpdateUnit();
 
-        if (standingUnit)
+        if (StandingUnit)
         {
             StandingCheck();
         }
@@ -77,32 +75,33 @@ public class PlayerUnit : ObjectUnit
 
     public override void OnPop()
     {
-        _inputReader.OnInteractionEvent += OnInteraction;
+        InputManager.Instance.InputReader.OnInteractionEvent += OnInteraction;
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
     }   
     
     public override void OnPush()
     {
-        _inputReader.OnInteractionEvent -= OnInteraction;
+        InputManager.Instance.InputReader.OnInteractionEvent -= OnInteraction;
         Animator.SetBool(_activeHash, false);
     }
 
     public void Rotate(Quaternion rot, float speed = -1)
     {
-        ModelTrm.rotation = Quaternion.Lerp(ModelTrm.rotation, rot, speed < 0 ? _data.rotationSpeed : speed);
+        ModelTrm.rotation = Quaternion.Lerp(ModelTrm.rotation, rot,
+            speed < 0 ? _data.rotationSpeed : speed);
     }
 
     private void StandingCheck()
     {
-        if (!standingUnit.Collider.bounds.Contains(Collider.bounds.center))
+        if (!StandingUnit.Collider.bounds.Contains(Collider.bounds.center))
         {
-            standingUnit.Collider.excludeLayers ^= 1 << gameObject.layer;
-            standingUnit = null;
+            StandingUnit.Collider.excludeLayers ^= 1 << gameObject.layer;
+            StandingUnit = null;
             return;
         }
         
-        standingUnit.Collider.excludeLayers |= 1 << gameObject.layer;
+        StandingUnit.Collider.excludeLayers |= 1 << gameObject.layer;
     }
     
     private bool CheckGround()

@@ -7,8 +7,8 @@ public class PlayerOnGroundState : PlayerBaseState
     public override void EnterState()
     {
         base.EnterState();
-        Player.InputReader.OnJumpEvent += JumpHandle;
-        Player.InputReader.OnAxisControlEvent += AxisControlHandle;
+        InputManager.Instance.InputReader.OnJumpEvent += JumpHandle;
+        InputManager.Instance.InputReader.OnAxisControlEvent += AxisControlHandle;
     }
 
     public override void UpdateState()
@@ -23,7 +23,7 @@ public class PlayerOnGroundState : PlayerBaseState
     public override void ExitState()
     {
         base.ExitState();
-        Player.InputReader.OnJumpEvent -= JumpHandle;
-        Player.InputReader.OnAxisControlEvent -= AxisControlHandle;
+        InputManager.Instance.InputReader.OnJumpEvent -= JumpHandle;
+        InputManager.Instance.InputReader.OnAxisControlEvent -= AxisControlHandle;
     }
 }
