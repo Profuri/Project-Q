@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ManagingSystem;
@@ -10,15 +11,15 @@ public enum QualityType
     High = 2
 }
 
-public class VideoManager : BaseManager<VideoManager>
+public class VideoManager : BaseManager<VideoManager>, IDataProvidable
 {
     public Resolution[] Resolutions { get; private set; }
     
     [Header("Full Screen")] 
-    [SerializeField] private bool _defalutFullScreen;
+    [SerializeField] private bool _defaultFullScreen;
     
     [Header("Quality")] 
-    [SerializeField] private QualityType _defalutQuality;
+    [SerializeField] private QualityType _defaultQuality;
 
     public override void Init()
     {
@@ -29,8 +30,10 @@ public class VideoManager : BaseManager<VideoManager>
     public override void StartManager()
     {
         SetResolution(Resolutions.Length - 1);
-        SetFullScreen(_defalutFullScreen);
-        SetQuality(_defalutQuality);
+        SetFullScreen(_defaultFullScreen);
+        SetQuality(_defaultQuality);
+
+        LoadToDataManager();
     }
 
     public void SetResolution(int index)
@@ -54,4 +57,26 @@ public class VideoManager : BaseManager<VideoManager>
         QualitySettings.SetQualityLevel((int)type);
     }
 
+    public void LoadToDataManager()
+    {
+        DataManager.Instance.SettingDataProvidable(this);
+    }
+
+    public Action<SaveData> GetProvideAction()
+    {
+        return (saveData) =>
+        {
+            saveData.DefaultQuality = _defaultQuality;
+            saveData.DefaultFullScreen = _defaultFullScreen;
+        };
+    }
+
+    public Action<SaveData> GetSaveAction()
+    {
+        return (saveData) =>
+        {
+            _defaultQuality = saveData.DefaultQuality;
+            _defaultFullScreen = saveData.DefaultFullScreen;
+        };
+    }
 }

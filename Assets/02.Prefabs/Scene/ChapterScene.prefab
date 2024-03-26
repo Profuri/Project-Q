@@ -7681,6 +7681,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 0
+  poolOut: 0
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
@@ -7938,6 +7939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 0
+  poolOut: 0
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
@@ -9527,6 +9529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 1
+  poolOut: 0
   _type: 1
   OnChapterClear:
     m_PersistentCalls:
@@ -9591,7 +9594,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1877993166232532222}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Section, Assembly-CSharp
         m_MethodName: ReloadSectionUnits
         m_Mode: 1
@@ -10349,6 +10352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 1
+  poolOut: 0
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
@@ -11663,9 +11667,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2757011343690498350}
-  - component: {fileID: 1877993166232532222}
   - component: {fileID: 2012385282139059170}
   - component: {fileID: 6968188770313888616}
+  - component: {fileID: 5964843229183104794}
   m_Layer: 0
   m_Name: ChapterSection
   m_TagString: Untagged
@@ -11692,23 +11696,6 @@ Transform:
   - {fileID: 625998376622883901}
   m_Father: {fileID: 7501535305367803078}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1877993166232532222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6489362838889693053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07d875256e624ccdba0bb0c3af148b9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  poolingCnt: 0
-  _enterPoint: {x: 0, y: 0, z: -5}
-  _exitPoint: {x: 0, y: 0, z: 0}
-  _playerResetPoint: {x: 0, y: 0, z: 0}
-  _sectionData: {fileID: 11400000, guid: acd7ff850ffbb48a294eb7f193a99e60, type: 2}
 --- !u!65 &2012385282139059170
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11743,6 +11730,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _boundSize: {x: 37, y: 10, z: 37}
+--- !u!114 &5964843229183104794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6489362838889693053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a21321ccb3104c5baab37c209e2112b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  poolOut: 0
+  _enterPoint: {x: 0, y: 0, z: 0}
+  _exitPoint: {x: 0, y: 0, z: 0}
+  _playerResetPoint: {x: 0, y: 0, z: 0}
+  _sectionData: {fileID: 11400000, guid: 02306878c371648a48d518abc435a287, type: 2}
+  _setPlayerFollowCam: 1
 --- !u!1 &6618887312916608735
 GameObject:
   m_ObjectHideFlags: 0
@@ -22443,6 +22449,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 0
+  poolOut: 0
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
@@ -25278,6 +25285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 0
+  poolOut: 0
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1
@@ -31789,6 +31797,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 0
+  poolOut: 0
   compressLayer: 1
   climbableUnit: 0
   staticUnit: 1

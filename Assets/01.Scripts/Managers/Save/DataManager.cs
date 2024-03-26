@@ -13,6 +13,10 @@ public class SaveData
     }
     public SerializableDictionary<ChapterType, bool> ChapterProgressDictionary;
     public bool IsShowSequence = false;
+    public bool DefaultFullScreen;
+    public QualityType DefaultQuality;
+
+    public float volume;
 }
 
 
