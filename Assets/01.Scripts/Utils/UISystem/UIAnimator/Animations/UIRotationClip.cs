@@ -8,7 +8,7 @@ public class UIRotationClip : UIAnimation
     
     public override void Init()
     {
-        targetTrm.localEulerAngles = fromEuler;
+        targetTrm.localRotation = Quaternion.Euler(fromEuler);
     }
 
     public override Tween GetTween()
