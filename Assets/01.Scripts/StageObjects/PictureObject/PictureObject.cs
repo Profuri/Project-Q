@@ -20,9 +20,8 @@ public class PictureObject : ObjectUnit
         }
     }
 
-    public override void UnitSetting(AxisType axis)
+    public override void Convert(AxisType axis)
     {
-        base.UnitSetting(axis);
         foreach (var unit in _units)
         {
             unit.ChangeAxis(axis);
@@ -32,7 +31,8 @@ public class PictureObject : ObjectUnit
         Collider.isTrigger = axis != AxisType.Y && axis != AxisType.None;
         if (prev != Collider.isTrigger)
         {
-            Dissolve(Collider.isTrigger ? 0.5f : 0f, 0.5f, false);
+            Dissolve(Collider.isTrigger ? 0.55f : 0f, 0.5f, false);
         }
+        base.Convert(axis);
     }
 }

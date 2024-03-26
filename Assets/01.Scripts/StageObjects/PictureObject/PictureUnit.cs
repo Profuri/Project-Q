@@ -24,23 +24,12 @@ public class PictureUnit : ObjectUnit
     {
         if (axis == AxisType.None)
         {
-            gameObject.SetActive(true);
-            _collider.enabled = false;
             _renderer.material = _disableMat;
-            return;
         }
-
-        SetUp(_enableAxis == axis);
-    }
-
-    private void SetUp(bool enable)
-    {
-        gameObject.SetActive(enable);
-        _collider.enabled = enable;
-
-        if (enable)
+        else if (axis == _enableAxis)
         {
             _renderer.material = _enableMat;
         }
+        Activate(_enableAxis == axis || axis == AxisType.None);
     }
 }

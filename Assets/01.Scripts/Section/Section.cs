@@ -62,7 +62,7 @@ public class Section : PoolableMono
         transform.position = CenterPosition;
         if (moveRoutine)
         {
-            Dissolve(true, 2.5f);
+            Dissolve(true, 1.5f);
             transform.position = position - Vector3.up * _sectionData.sectionYDepth;
             transform.DOMove(CenterPosition, 3f);
         }
@@ -71,8 +71,8 @@ public class Section : PoolableMono
     public void Disappear()
     {
         ReloadSectionUnits();
-        Dissolve(false, 2.5f);
-        transform.DOMove(CenterPosition - Vector3.up * _sectionData.sectionYDepth, 3f)
+        Dissolve(false, 1.5f);
+        transform.DOMove(CenterPosition - Vector3.up * _sectionData.sectionYDepth, 1.5f)
             .OnComplete(() =>
             {
                 PoolManager.Instance.Push(this);
