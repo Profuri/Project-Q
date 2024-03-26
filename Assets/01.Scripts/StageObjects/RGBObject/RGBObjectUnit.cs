@@ -18,20 +18,21 @@ public class RGBObjectUnit : InteractableObject
 {
     private static readonly int s_allMatchColor = (int)(RGBColor.RED | RGBColor.BLUE |RGBColor.GREEN);
 
-    [SerializeField] private MeshRenderer _renderer;
     [Header("Color")]
     public RGBColor originColor;
     private RGBColor _affectedColor;
 
+    [Header("Layer")]
+    [SerializeField] private LayerMask _targetLayer;
+    
+    private MeshRenderer _renderer;
+    
     public RGBColor HasColor => (originColor | _affectedColor);
     public bool MatchRGBColor => (int)HasColor == s_allMatchColor;
 
-
-    [Header("Layer")]
-    [SerializeField] private LayerMask _targetLayer;
-    private float _rayLength = 50f;
-
-
+    private static readonly int BaseColorHash = Shader.PropertyToID("_BaseColor");
+    private static readonly int EmissionColorHash = Shader.PropertyToID("_EmissionColor");
+    private static readonly int VisibleHash = Shader.PropertyToID("_VisibleProgress");
 
     public override void Init(AxisConverter converter)
     {
@@ -45,9 +46,18 @@ public class RGBObjectUnit : InteractableObject
         SettingCollider();
     }
 
-    private void SettingColor(RGBColor color)
-    {               
-        _renderer.material.color = GetColorFromRGBColor(color);
+    private void SettingColor(RGBColor rgbColor)
+    {
+        var color = GetColorFromRGBColor(rgbColor);
+        var alpha = 1f - color.a;
+        
+        _renderer.materials[0].SetColor(BaseColorHash, color);
+        _renderer.materials[0].SetColor(EmissionColorHash, color * 3f);
+
+        foreach (var material in _renderer.materials)
+        {
+            material.SetFloat(VisibleHash, alpha);
+        }
     }
 
     private void SettingCollider()
@@ -67,17 +77,17 @@ public class RGBObjectUnit : InteractableObject
         switch(color)
         {
             case RGBColor.RED:
-                return new Color(1, 0, 0, 0.3f);
+                return new Color(1, 0, 0, 0.7f);
             case RGBColor.GREEN:
-                return new Color(0,1,0,0.3f);
+                return new Color(0, 1, 0, 0.7f);
             case RGBColor.BLUE:
-                return new Color(0,0,1,0.3f);
+                return new Color(0, 0, 1, 0.7f);
             case RGBColor.RED | RGBColor.GREEN:
-                return new Color(1, 1, 0.6f);
+                return new Color(1, 1, 0, 0.85f);
             case RGBColor.GREEN | RGBColor.BLUE:
-                return new Color(0, 1, 1, 0.6f);
+                return new Color(0, 1, 1, 0.85f);
             case RGBColor.RED | RGBColor.BLUE:
-                return new Color(1, 0, 1, 0.6f);
+                return new Color(1, 0, 1, 0.85f);
             case RGBColor.RED | RGBColor.GREEN | RGBColor.BLUE:
                 return new Color(1, 1, 1, 1f);
             default:
@@ -113,16 +123,13 @@ public class RGBObjectUnit : InteractableObject
 
         List<RaycastHit> hitInfoList = new List<RaycastHit>();
 
-        var frontInfos = Physics.BoxCastAll(center, halfExtents, direction, rotation, _rayLength, _targetLayer);
-        var backInfos = Physics.BoxCastAll(center, halfExtents, -direction, rotation, _rayLength, _targetLayer);
+        var frontInfos = Physics.BoxCastAll(center, halfExtents, direction, rotation, Mathf.Infinity, _targetLayer);
+        var backInfos = Physics.BoxCastAll(center, halfExtents, -direction, rotation, Mathf.Infinity, _targetLayer);
 
         for (int i = 0; i < frontInfos.Length; i++)
             hitInfoList.Add(frontInfos[i]);
         for(int i = 0; i < backInfos.Length; i++)
             hitInfoList.Add(backInfos[i]);
-
-        
-
 
         if (hitInfoList.Count > 0)
         {
@@ -135,7 +142,6 @@ public class RGBObjectUnit : InteractableObject
                 }
             }
         }
-        Debug.Log($"HasColor: {HasColor}");
     }
 
     private void TransitionRGB(RGBColor color)
