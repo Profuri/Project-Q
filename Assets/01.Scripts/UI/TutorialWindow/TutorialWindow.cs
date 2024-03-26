@@ -1,3 +1,4 @@
+using System;
 using TinyGiantStudio.Text;
 using UnityEngine.Video;
 
@@ -16,10 +17,10 @@ public class TutorialWindow : UIComponent
         _descText = canvasTrm.Find("DescTutText").GetComponent<Modular3DText>();
     }
 
-    public override void Disappear()
+    public override void Disappear(Action callback = null)
     {
         _videoPlayer.Stop();
-        base.Disappear();
+        base.Disappear(callback);
     }
 
     public void SettingTutorial(TutorialInfo info)
