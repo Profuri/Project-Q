@@ -54,6 +54,7 @@ public class SoundManager : BaseManager<SoundManager>, IDataProvidable
     public override void StartManager()
     {
         PlayBGM("TestBGM");
+        LoadToDataManager();
     }
     
     public void PlaySFX(string clipName)
@@ -151,7 +152,7 @@ public class SoundManager : BaseManager<SoundManager>, IDataProvidable
 
     public void LoadToDataManager()
     {
-        throw new NotImplementedException();
+        DataManager.Instance.SettingDataProvidable(this);
     }
 
     public Action<SaveData> GetProvideAction()

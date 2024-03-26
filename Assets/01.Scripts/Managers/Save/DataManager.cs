@@ -13,8 +13,10 @@ public class SaveData
     }
     public SerializableDictionary<ChapterType, bool> ChapterProgressDictionary;
     public bool IsShowSequence = false;
+
     public bool DefaultFullScreen;
     public QualityType DefaultQuality;
+    public uint resolutionIndex;
 
     public float volume;
 }
@@ -44,6 +46,7 @@ public class DataManager : BaseManager<DataManager>
 
 
     private static SaveData s_saveData;
+    public static SaveData sSaveData => s_saveData;
 
     public override void Init()
     {

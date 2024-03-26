@@ -28,15 +28,6 @@ public class FractureObject : InteractableObject
         _meshFilter = GetComponent<MeshFilter>();
     }
 
-    public void OnEnable()
-    {
-        if(gameObject.name == "FractureObject")
-        {
-            Debug.Log($"{Time.time}");
-        }
-        Debug.Break();
-    }
-
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         var originalMesh = _meshFilter.mesh;
