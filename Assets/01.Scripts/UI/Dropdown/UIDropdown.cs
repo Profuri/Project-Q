@@ -38,9 +38,9 @@ public class UIDropdown : UIComponent
         _options = new List<UIDropdownOption>();
     }
 
-    public override void Appear(Transform parentTrm)
+    public override void Appear(Transform parentTrm,  Action callback = null)
     {
-        base.Appear(parentTrm);
+        base.Appear(parentTrm, callback);
         _options.Clear();
         _cursorIndex = 0;
         _optionOffset = 0;
@@ -51,7 +51,7 @@ public class UIDropdown : UIComponent
         InputManager.Instance.InputReader.OnEnterClickEvent += EnterOption;
     }
 
-    public override void Disappear()
+    public override void Disappear(Action callback = null)
     {
         InputManager.Instance.InputReader.OnUpArrowClickEvent -= CursorUp;
         InputManager.Instance.InputReader.OnDownArrowClickEvent -= CursorDown;
@@ -62,7 +62,7 @@ public class UIDropdown : UIComponent
             option.Disappear();
         }
 
-        base.Disappear();
+        base.Disappear(callback);
     }
 
     public void AddOption(string optionName, Action callback)
