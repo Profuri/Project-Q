@@ -233,7 +233,7 @@ namespace AxisConvertSystem
 
             if (!staticUnit)
             {
-                Dissolve(true, 2f, callBack);
+                Dissolve(1f, 2f, true, callBack);
                 Rigidbody.velocity = Vector3.zero;
                 PlaySpawnVFX();
             }
@@ -321,14 +321,17 @@ namespace AxisConvertSystem
             }
         }
         
-        public void Dissolve(bool on, float time, Action callBack = null)
+        public void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
         {
-            var value = on ? 0f : 1f;
+            value = Mathf.Clamp(value, 0f, 1f);
         
             foreach (var material in _materials)
             {
                 var initVal = Mathf.Abs(1f - value);
-                material.SetFloat(_dissolveProgressHash, initVal);
+                if (useDissolve)
+                {
+                    material.SetFloat(_dissolveProgressHash, initVal);
+                }
                 material.SetFloat(_visibleProgressHash, initVal);
             }
 
@@ -336,8 +339,11 @@ namespace AxisConvertSystem
 
             foreach (var material in _materials)
             {
-                seq.Join(DOTween.To(() => material.GetFloat(_dissolveProgressHash),
-                    progress => material.SetFloat(_dissolveProgressHash, progress), value, time));
+                if (useDissolve)
+                {
+                    seq.Join(DOTween.To(() => material.GetFloat(_dissolveProgressHash),
+                        progress => material.SetFloat(_dissolveProgressHash, progress), value, time));
+                }
                 seq.Join(DOTween.To(() => material.GetFloat(_visibleProgressHash),
                     progress => material.SetFloat(_visibleProgressHash, progress), value, time));
             }

@@ -1,8 +1,12 @@
 using System.Collections.Generic;
 using AxisConvertSystem;
+using UnityEngine;
 
 public class PictureObject : ObjectUnit
 {
+    [SerializeField] private Material _enableMat;
+    [SerializeField] private Material _disableMat;
+
     private List<PictureUnit> _units;
 
     public override void Awake()
@@ -12,7 +16,7 @@ public class PictureObject : ObjectUnit
         transform.GetComponentsInChildren(_units);
         foreach (var unit in _units)
         {
-            unit.Init();
+            unit.Init(_enableMat, _disableMat);
         }
     }
 
@@ -23,9 +27,12 @@ public class PictureObject : ObjectUnit
         {
             unit.ChangeAxis(axis);
         }
-        if (axis != AxisType.Y && axis != AxisType.None)
+
+        var prev = Collider.isTrigger;
+        Collider.isTrigger = axis != AxisType.Y && axis != AxisType.None;
+        if (prev != Collider.isTrigger)
         {
-            Collider.isTrigger = true;
+            Dissolve(Collider.isTrigger ? 0.5f : 0f, 0.5f, false);
         }
     }
 }
