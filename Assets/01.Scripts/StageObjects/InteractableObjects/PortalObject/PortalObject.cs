@@ -29,18 +29,18 @@ public class PortalObject : InteractableObject
         }
     }
     
-#if UNITY_EDITOR
-
-    private void OnValidate()
-    {
-        var scale = Vector3.one;
-        scale.SetAxisElement(_portalAxis, 0);
-        var pos = Vector3ExtensionMethod.GetAxisDir(_portalAxis);
-        pos.SetAxisElement(_portalAxis, pos.GetAxisElement(_portalAxis) * 0.51f);
-        
-        transform.localScale = scale;
-        transform.localPosition = pos;
-    }
-
-#endif
+// #if UNITY_EDITOR
+//
+//     private void OnValidate()
+//     {
+//         var scale = Vector3.one;
+//         scale.SetAxisElement(_portalAxis, 0);
+//         var pos = Vector3ExtensionMethod.GetAxisDir(_portalAxis);
+//         pos.SetAxisElement(_portalAxis, pos.GetAxisElement(_portalAxis) * 0.51f);
+//         
+//         transform.localScale = scale;
+//         transform.localPosition = pos;
+//     }
+//
+// #endif
 }
