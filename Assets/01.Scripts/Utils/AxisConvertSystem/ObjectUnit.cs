@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Xml.Schema;
 using DG.Tweening;
 using UnityEngine;
 
@@ -274,20 +275,29 @@ namespace AxisConvertSystem
 
             var standPos = transform.localPosition;
             standPos.y = col.bounds.max.y;
+
+            var standUnitLocalPos = info.LocalPos;
+            if (unit.subUnit)
+            {
+                var parentUnit = unit.GetParentUnit();
+                var parentInfo = parentUnit._unitInfo;
+                standUnitLocalPos += parentInfo.LocalPos;
+            }
+            
             if (Converter.AxisType == AxisType.Y)
             {
                 standPos.y *= info.LocalScale.y;
-                standPos.SetAxisElement(Converter.AxisType, standPos.y + info.LocalPos.GetAxisElement(Converter.AxisType));
+                standPos.SetAxisElement(Converter.AxisType, standPos.y + standUnitLocalPos.GetAxisElement(Converter.AxisType));
             }
             else
             {
                 if (unit is PlaneUnit)
                 {
-                    standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
+                    standPos.SetAxisElement(Converter.AxisType, standUnitLocalPos.GetAxisElement(Converter.AxisType));
                 }
                 else
                 {
-                    standPos.SetAxisElement(Converter.AxisType, info.LocalPos.GetAxisElement(Converter.AxisType));
+                    standPos.SetAxisElement(Converter.AxisType, standUnitLocalPos.GetAxisElement(Converter.AxisType));
                 }
             }
 
@@ -413,6 +423,33 @@ namespace AxisConvertSystem
                 SceneControlManager.Instance.DeleteObject(_unClimbableEffect);
                 _unClimbableEffect = null;
             }
+        }
+
+        public ObjectUnit GetParentUnit()
+        {
+            if (!subUnit)
+            {
+                return null;
+            }
+
+            var checkTrm = transform;
+            ObjectUnit parentUnit = null;
+            
+            while (checkTrm.parent != null)
+            {
+                var parent = checkTrm.parent;
+                var unit = parent.GetComponent<ObjectUnit>();
+
+                if (unit != null && !unit.subUnit)
+                {
+                    parentUnit = unit;
+                    break;
+                }
+                
+                checkTrm = parent;
+            }
+
+            return parentUnit;
         }
 
         private bool CanAppearClimbable()
