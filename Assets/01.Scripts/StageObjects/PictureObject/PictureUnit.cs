@@ -4,7 +4,6 @@ using UnityEngine;
 public class PictureUnit : ObjectUnit
 {
     [SerializeField] private AxisType _enableAxis;
-    private Collider _collider;
     private Renderer _renderer;
 
     private Material _enableMat;
@@ -14,7 +13,6 @@ public class PictureUnit : ObjectUnit
 
     public void Init(Material enableMat, Material disableMat)
     {
-        _collider = GetComponent<Collider>();
         _renderer = GetComponent<Renderer>();
 
         _enableMat = enableMat;
@@ -27,7 +25,7 @@ public class PictureUnit : ObjectUnit
         {
             return;
         }
-        
+
         if (axis == AxisType.None)
         {
             _renderer.material = _disableMat;
@@ -45,12 +43,12 @@ public class PictureUnit : ObjectUnit
     public override void UnitSetting(AxisType axis)
     {
         base.UnitSetting(axis);
-        
+
         if (!activeUnit)
         {
             return;
         }
-        
+
         Hide(!_isEnableUnit);
     }
 }

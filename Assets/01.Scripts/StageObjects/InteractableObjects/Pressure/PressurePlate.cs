@@ -31,9 +31,9 @@ public class PressurePlate : InteractableObject
     {
         base.Init(converter);
         _lastToggleState = false;
-        foreach (var changeEvent in _onToggleChangeEvents)
+        foreach (var toggleChangeEvent in _onToggleChangeEvents)
         {
-            changeEvent.Invoke(_lastToggleState);
+            toggleChangeEvent.Invoke(_lastToggleState);
         }
     }
 
