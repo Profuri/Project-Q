@@ -34,14 +34,20 @@ public class RGBObjectUnit : InteractableObject
     private static readonly int EmissionColorHash = Shader.PropertyToID("_EmissionColor");
     private static readonly int VisibleHash = Shader.PropertyToID("_VisibleProgress");
 
-    public override void Init(AxisConverter converter)
+    public override void Awake()
     {
-        base.Init(converter);
-
+        base.Awake();
         if(_renderer == null)
         {
             _renderer = GetComponentInChildren<MeshRenderer>();
         }
+        SettingColor(HasColor);
+    }
+
+    public override void Init(AxisConverter converter)
+    {
+        base.Init(converter);
+
         SettingColor(HasColor);
         SettingCollider();
     }
