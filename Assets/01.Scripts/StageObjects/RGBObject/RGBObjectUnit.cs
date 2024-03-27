@@ -171,4 +171,19 @@ public class RGBObjectUnit : InteractableObject
         SettingCollider();
         SettingColor(HasColor);
     }
+    
+#if UNITY_EDITOR
+
+    protected override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
+
+        Gizmos.color = GetColorFromRGBColor(originColor);
+
+        var col = GetComponent<Collider>();
+        var bounds = col.bounds;
+        Gizmos.DrawWireCube(bounds.center, bounds.size * 1.1f);
+    }
+
+#endif
 }
