@@ -132,18 +132,13 @@ namespace AxisConvertSystem
             }
         }
 
-        private void ApplyInfo(UnitInfo info, bool hideSetting = true)
+        private void ApplyInfo(UnitInfo info)
         {
             transform.localPosition = info.LocalPos;
             transform.localRotation = info.LocalRot;
             transform.localScale = info.LocalScale;
             Collider.SetCenter(info.ColliderCenter);
-            
-            if (hideSetting)
-            {
-                Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
-            }
-        }
+            Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f); }
         
         private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
         {
@@ -177,11 +172,11 @@ namespace AxisConvertSystem
             Collider.enabled = active;
         }
 
-        private void Hide(bool hide)
+        protected void Hide(bool hide)
         {
             IsHide = hide;
-            gameObject.SetActive(!hide);
             Collider.enabled = !hide;
+            gameObject.SetActive(!hide);
         }
 
         public void SetPosition(Vector3 pos)

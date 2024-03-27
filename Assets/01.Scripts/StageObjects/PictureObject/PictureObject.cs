@@ -9,6 +9,8 @@ public class PictureObject : ObjectUnit
 
     private List<PictureUnit> _units;
 
+    private bool _enable;
+
     public override void Awake()
     {
         base.Awake();
@@ -20,6 +22,12 @@ public class PictureObject : ObjectUnit
         }
     }
 
+    public override void Init(AxisConverter converter)
+    {
+        base.Init(converter);
+        _enable = true;
+    }
+
     public override void Convert(AxisType axis)
     {
         foreach (var unit in _units)
@@ -27,12 +35,25 @@ public class PictureObject : ObjectUnit
             unit.ChangeAxis(axis);
         }
 
-        var prev = Collider.isTrigger;
-        Collider.isTrigger = axis != AxisType.Y && axis != AxisType.None;
-        if (prev != Collider.isTrigger)
-        {
-            Dissolve(Collider.isTrigger ? 0.55f : 0f, 0.5f, false);
-        }
         base.Convert(axis);
+    }
+
+    public override void UnitSetting(AxisType axis)
+    {
+        base.UnitSetting(axis);
+
+        if (axis == AxisType.Y)
+        {
+            return;
+        }
+
+        var enable = axis == AxisType.None;
+        
+        if (_enable != enable)
+        {
+            Collider.isTrigger = !enable;
+            Dissolve(Collider.isTrigger ? 0.55f : 0f, 0.5f, false);
+            _enable = enable;
+        }
     }
 }

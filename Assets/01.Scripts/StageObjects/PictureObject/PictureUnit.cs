@@ -10,11 +10,12 @@ public class PictureUnit : ObjectUnit
     private Material _enableMat;
     private Material _disableMat;
 
+    private bool _isEnableUnit;
+
     public void Init(Material enableMat, Material disableMat)
     {
         _collider = GetComponent<Collider>();
         _renderer = GetComponent<Renderer>();
-        _collider.enabled = false;
 
         _enableMat = enableMat;
         _disableMat = disableMat;
@@ -22,6 +23,11 @@ public class PictureUnit : ObjectUnit
 
     public void ChangeAxis(AxisType axis)
     {
+        if (!activeUnit)
+        {
+            return;
+        }
+        
         if (axis == AxisType.None)
         {
             _renderer.material = _disableMat;
@@ -32,6 +38,19 @@ public class PictureUnit : ObjectUnit
             _renderer.material = _enableMat;
             MaterialResetUp();
         }
-        Activate(_enableAxis == axis || axis == AxisType.None);
+
+        _isEnableUnit = _enableAxis == axis || axis == AxisType.None;
+    }
+
+    public override void UnitSetting(AxisType axis)
+    {
+        base.UnitSetting(axis);
+        
+        if (!activeUnit)
+        {
+            return;
+        }
+        
+        Hide(!_isEnableUnit);
     }
 }
