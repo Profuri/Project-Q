@@ -43,12 +43,6 @@ public class PlayerUnit : ObjectUnit
     {
         base.UpdateUnit();
         
-        // debug
-        if (Keyboard.current.jKey.wasPressedThisFrame)
-        {
-            StageManager.Instance.StageClear(this);
-        }
-
         if (StandingUnit)
         {
             StandingCheck();
