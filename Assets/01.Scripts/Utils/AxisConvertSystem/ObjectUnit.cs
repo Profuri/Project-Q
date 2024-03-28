@@ -68,6 +68,8 @@ namespace AxisConvertSystem
                 if (useGravity)
                 {
                     Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
+                    Debug.Log("Gravity");
+                    Debug.Log($"Velocity: {Rigidbody.velocity}");
                 }
             }
         }
