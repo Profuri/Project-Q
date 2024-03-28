@@ -282,6 +282,8 @@ namespace AxisConvertSystem
                 var parentInfo = parentUnit._unitInfo;
                 standUnitLocalPos += parentInfo.LocalPos;
             }
+
+            Debug.Log($"{gameObject.name} {standUnitLocalPos}");
             
             if (Converter.AxisType == AxisType.Y)
             {
@@ -290,14 +292,7 @@ namespace AxisConvertSystem
             }
             else
             {
-                if (unit is PlaneUnit)
-                {
-                    standPos.SetAxisElement(Converter.AxisType, standUnitLocalPos.GetAxisElement(Converter.AxisType));
-                }
-                else
-                {
-                    standPos.SetAxisElement(Converter.AxisType, standUnitLocalPos.GetAxisElement(Converter.AxisType));
-                }
+                standPos.SetAxisElement(Converter.AxisType, standUnitLocalPos.GetAxisElement(Converter.AxisType));
             }
 
             _unitInfo.LocalPos = standPos;

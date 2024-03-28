@@ -99,6 +99,7 @@ public class FileDataHandler
 
         if(loadedData == null)
         {
+            Save(new SaveData());
             return new SaveData();
         }
         return loadedData;

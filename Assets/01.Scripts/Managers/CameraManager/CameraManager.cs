@@ -68,4 +68,25 @@ public class CameraManager : BaseManager<CameraManager>
     {
         ActiveVCam.ShakeCam(intensity, time);
     }
+
+    public void FixedCameraRectWithResolution(int width, int height)
+    {
+        var viewportRect = MainCam.rect;
+
+        var screenAspectRatio = (float)width / height;
+        var targetAspectRatio = (float)16 / 9;
+
+        if (screenAspectRatio < targetAspectRatio)
+        {
+            viewportRect.height = screenAspectRatio / targetAspectRatio;
+            viewportRect.y = (1f - viewportRect.height) / 2f;
+        }
+        else
+        {
+            viewportRect.width = targetAspectRatio / screenAspectRatio;
+            viewportRect.x = (1f - viewportRect.width) / 2f;
+        }
+
+        MainCam.rect = viewportRect;
+    }
 }
