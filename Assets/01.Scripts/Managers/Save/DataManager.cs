@@ -10,23 +10,27 @@ public class SaveData
     public SaveData()
     {
         ChapterProgressDictionary = new SerializableDictionary<ChapterType, bool>();
+        VolumeDictionary = new SerializableDictionary<EAUDIO_MIXER, float>();
     }
     public SerializableDictionary<ChapterType, bool> ChapterProgressDictionary;
+    public SerializableDictionary<EAUDIO_MIXER, float> VolumeDictionary;
     public bool IsShowSequence = false;
 
     public bool DefaultFullScreen;
     public QualityType DefaultQuality;
     public uint resolutionIndex;
 
-    public float volume;
 }
 
 
-public interface IDataProvidable
+public interface IProvideSave
 {
-    public void LoadToDataManager();
-    public Action<SaveData> GetProvideAction();
     public Action<SaveData> GetSaveAction();
+}
+
+public interface IProvideLoad
+{
+    public Action<SaveData> GetLoadAction();
 }
 
 
@@ -40,9 +44,10 @@ public class DataManager : BaseManager<DataManager>
     private FileDataHandler _fileDataHandler;
 
     //얘는 저장하는 이벤트가 달린 딕셔너리
-    private Dictionary<IDataProvidable, Action<SaveData>> _dataProvidableDictionary = new Dictionary<IDataProvidable, Action<SaveData>>();
+    private Dictionary<IProvideSave, Action<SaveData>> _dataSaveDictionary = new Dictionary<IProvideSave, Action<SaveData>>();
+
     //얘는 저장된 데이터를 바탕으로 게임에 설정하는 딕셔너리
-    private Dictionary<IDataProvidable, Action<SaveData>> _dataSettableDictionary = new Dictionary<IDataProvidable, Action<SaveData>>();
+    private Dictionary<IProvideLoad, Action<SaveData>> _dataLoadDictionary = new Dictionary<IProvideLoad, Action<SaveData>>();
 
 
     private static SaveData s_saveData;
@@ -66,38 +71,57 @@ public class DataManager : BaseManager<DataManager>
 
     public override void StartManager()
     {
+
     }
 
-    public void SettingDataProvidable(IDataProvidable dataProvidable)
+    public void SettingDataProvidable(IProvideSave dataProvidable,IProvideLoad dataLoadable)
     {
-        Action<SaveData> saveAction = dataProvidable.GetProvideAction();
-        Action<SaveData> loadAction = dataProvidable.GetSaveAction();
-
-        if (_dataProvidableDictionary.ContainsKey(dataProvidable) == false)
-            _dataProvidableDictionary.Add(dataProvidable, saveAction);
-        else
-            _dataProvidableDictionary[dataProvidable] = saveAction;
+        Action<SaveData> saveAction = dataProvidable?.GetSaveAction();
+        Action<SaveData> loadAction = dataLoadable?.GetLoadAction();
 
 
-        if (_dataSettableDictionary.ContainsKey(dataProvidable) == false)
-            _dataSettableDictionary.Add(dataProvidable, loadAction);
-        else
-            _dataSettableDictionary[dataProvidable] = loadAction;
+        if(saveAction != null)
+        {
+            if (_dataSaveDictionary.ContainsKey(dataProvidable) == false)
+            {
+                _dataSaveDictionary.Add(dataProvidable, saveAction);
+            }
+            else
+            {
+                _dataSaveDictionary[dataProvidable] = saveAction;
+                Debug.LogError($"Dictionary has value: {dataProvidable}");
+            }
+        }
+
+        if (loadAction != null)
+        {
+            if (_dataLoadDictionary.ContainsKey(dataLoadable) == false)
+            {
+                _dataLoadDictionary.Add(dataLoadable, loadAction);
+            }
+            else
+            {
+                _dataLoadDictionary[dataLoadable] = loadAction;
+                Debug.LogError($"Dictionary has value: {dataLoadable}");
+            }
+
+        }
     }
+
 
     [ContextMenu("Save")]
     public void SaveData()
     {
-        foreach (IDataProvidable dataProvidable in _dataProvidableDictionary.Keys)
+        foreach (IProvideSave dataProvidable in _dataSaveDictionary.Keys)
         {
-            _dataProvidableDictionary[dataProvidable]?.Invoke(s_saveData);
+            _dataSaveDictionary[dataProvidable]?.Invoke(s_saveData);
         }
         _fileDataHandler.Save(s_saveData);
     }
 
-    public void SaveData(IDataProvidable providable = null)
+    public void SaveData(IProvideSave providable = null)
     {
-        _dataProvidableDictionary[providable]?.Invoke(s_saveData);
+        _dataSaveDictionary[providable]?.Invoke(s_saveData);
         _fileDataHandler.Save(s_saveData);
     }
 
@@ -107,17 +131,17 @@ public class DataManager : BaseManager<DataManager>
     {
         s_saveData = _fileDataHandler.Load();
 
-        foreach (IDataProvidable dataProvidable in _dataProvidableDictionary.Keys.ToList())
+        foreach (IProvideLoad dataProvidable in _dataSaveDictionary.Keys.ToList())
         {
-            _dataSettableDictionary[dataProvidable]?.Invoke(s_saveData);
+            _dataLoadDictionary[dataProvidable]?.Invoke(s_saveData);
         }
     }
 
-    public void LoadData(IDataProvidable providable = null)
+    public void LoadData(IProvideLoad providable = null)
     {
         s_saveData = _fileDataHandler.Load();
 
-        _dataSettableDictionary[providable]?.Invoke(s_saveData);
+        _dataLoadDictionary[providable]?.Invoke(s_saveData);
     }
 
 }

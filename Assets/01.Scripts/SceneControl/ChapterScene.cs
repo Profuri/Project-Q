@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
 
-public class ChapterScene : Scene, IDataProvidable
+public class ChapterScene : Scene, IProvideLoad
 {
     private Dictionary<ChapterType, Chapter> _chapterDictionary;
 
@@ -47,18 +47,15 @@ public class ChapterScene : Scene, IDataProvidable
                 OnChapterClear?.Invoke(chapterType,saveData);
             }
         }
+
         if(clearCnt > 4)
         {
             OnSubChaptersClear?.Invoke();
         }
     }
 
-    public Action<SaveData> GetProvideAction()
-    {
-        return null;
-    }
 
-    public Action<SaveData> GetSaveAction()
+    public Action<SaveData> GetLoadAction()
     {
         return (saveData) =>
         {
@@ -68,6 +65,6 @@ public class ChapterScene : Scene, IDataProvidable
     
     public void LoadToDataManager()
     {
-        DataManager.Instance.SettingDataProvidable(this);
+        DataManager.Instance.SettingDataProvidable(null,this);
     }
 }

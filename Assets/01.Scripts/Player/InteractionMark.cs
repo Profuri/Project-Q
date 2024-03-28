@@ -19,11 +19,13 @@ public class InteractionMark : PoolableMono
 
     }
 
+
     public override void OnPush()
     {
         
     }
-    
+
+
     private void Update()
     {
         SynchronizeTransform();

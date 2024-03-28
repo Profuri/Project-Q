@@ -1,8 +1,22 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class VideoSettingPanel : MonoBehaviour
+public class VideoSettingPanel : WindowPanel
 {
+    [SerializeField] private UIButton3D _resolutionBtn;
+    [SerializeField] private UIButton3D _qualityBtn;
+
+    [SerializeField] private UIYesNoButton3D _fullScreenYesBtn;
+    [SerializeField] private UIYesNoButton3D _fullScreenNoBtn;
+
+    public override void Init(SettingWindow settingWindow)
+    {
+        base.Init(settingWindow);
+        DataManager.Instance.LoadData(VideoManager.Instance);
+    }
+
+
     public void GenerateResolutionDropdown(UIButton3D caller)
     {
         UIManager.Instance.Interact3DButton = false;
@@ -55,5 +69,40 @@ public class VideoSettingPanel : MonoBehaviour
         
         var mousePoint = InputManager.Instance.InputReader.mouseScreenPoint;
         dropdown.SetPosition(mousePoint);
+    }
+
+    public override void LoadPanel()
+    {
+        base.LoadPanel();
+        DataManager.Instance.LoadData(VideoManager.Instance);
+        SettingUI(DataManager.sSaveData);
+    }
+
+    private void SettingUI(SaveData saveData)
+    {
+        //Resolution
+        Resolution resolution = VideoManager.Instance.Resolutions[saveData.resolutionIndex];
+        string resolutionText = $"{resolution.width} X {resolution.height}";
+        _resolutionBtn.Text = resolutionText;
+        
+        //Qaulity
+        QualityType qualityType = saveData.DefaultQuality;
+        _qualityBtn.Text = qualityType.ToString().ToUpper();
+
+        //FullScreen
+        _fullScreenYesBtn.SettingActive(saveData.DefaultFullScreen);
+        _fullScreenNoBtn.SettingActive(!saveData.DefaultFullScreen);
+    }
+
+    public override void ReleasePanel()
+    {
+        base.ReleasePanel();
+        DataManager.Instance.LoadData(VideoManager.Instance);
+        SettingUI(DataManager.sSaveData);
+    }
+
+    public void SaveDatas()
+    {
+        DataManager.Instance.SaveData(VideoManager.Instance);
     }
 }

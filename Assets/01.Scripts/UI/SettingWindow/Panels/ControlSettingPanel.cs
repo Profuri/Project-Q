@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ControlSettingPanel : MonoBehaviour
+public class ControlSettingPanel : WindowPanel
 {
     [SerializeField] private Material _controlButtonDefaultMat;
     [SerializeField] private Material _controlButtonAccessMat;
@@ -64,5 +64,15 @@ public class ControlSettingPanel : MonoBehaviour
                 UIManager.Instance.Interact3DButton = true;
             }
         );
+    }
+
+    public override void LoadPanel()
+    {
+        base.LoadPanel();
+    }
+
+    public override void ReleasePanel()
+    {
+        base.ReleasePanel();
     }
 }

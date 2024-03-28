@@ -3,7 +3,8 @@ using System.Collections;
 using ManagingSystem;
 using UnityEngine;
 using UnityEngine.Audio;
-
+using System.Collections.Generic;
+using UnityEngine.Rendering;
 
 public enum SoundEnum
 {
@@ -19,7 +20,7 @@ public enum EAUDIO_MIXER
     SFX
 }
 
-public class SoundManager : BaseManager<SoundManager>, IDataProvidable
+public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoad
 {
     [SerializeField] private AudioClipSO _audioClipSO;
     [SerializeField] private AudioClipSO _bgmClipSO;
@@ -29,11 +30,21 @@ public class SoundManager : BaseManager<SoundManager>, IDataProvidable
     [SerializeField] private AudioMixerGroup _bgmGroup;
     [SerializeField] private AudioMixerGroup _sfxGroup;
 
-    private float _originVolume;
-    
+    [SerializeField] private float _defaultVolume = 0f;
+
     public float soundFadeOnTime;
 
     private AudioSource[] _audioSources = new AudioSource[(int)SoundEnum.END];
+
+    private Dictionary<EAUDIO_MIXER, float> _volumeDictionary = new Dictionary<EAUDIO_MIXER, float>();
+    public Dictionary<EAUDIO_MIXER, float> VolumeDictionary
+    {
+        get
+        {
+            DataManager.Instance.LoadData(this);
+            return _volumeDictionary;
+        }
+    }
 
     public override void Init()
     {
@@ -54,7 +65,8 @@ public class SoundManager : BaseManager<SoundManager>, IDataProvidable
     public override void StartManager()
     {
         PlayBGM("TestBGM");
-        LoadToDataManager();
+        DataManager.Instance.SettingDataProvidable(this, this);
+        //DataManager.Instance.LoadData(this);
     }
     
     public void PlaySFX(string clipName)
@@ -137,11 +149,9 @@ public class SoundManager : BaseManager<SoundManager>, IDataProvidable
 
     public void SettingVolume(EAUDIO_MIXER mixerType,float volume)
     {
-        _originVolume = GetOriginVolume(volume);
-        Debug.Log($"OriginVolume: {_originVolume}");
-        _masterMixer.SetFloat(mixerType.ToString(), _originVolume);
-
-        DataManager.Instance.SaveData(this);
+        float originVolume = GetOriginVolume(volume);
+        _volumeDictionary[mixerType] = volume;
+        _masterMixer.SetFloat(mixerType.ToString(), originVolume);
     }
     
 
@@ -150,16 +160,38 @@ public class SoundManager : BaseManager<SoundManager>, IDataProvidable
         return Mathf.Lerp(-40, 0, volume);
     }
 
-    public void LoadToDataManager()
-    {
-        DataManager.Instance.SettingDataProvidable(this);
-    }
-
-    public Action<SaveData> GetProvideAction()
+    public Action<SaveData> GetLoadAction()
     {
         return (saveData) =>
         {
-            saveData.volume = _originVolume;
+            if (saveData.VolumeDictionary.Count < 1)
+            {
+                foreach (EAUDIO_MIXER eMixerType in Enum.GetValues(typeof(EAUDIO_MIXER)))
+                {
+                    saveData.VolumeDictionary.Add(eMixerType, _defaultVolume);
+                }
+                return;
+            }
+
+            Debug.Log($"MasterVolume: {saveData.VolumeDictionary[EAUDIO_MIXER.MASTER]}");
+
+            foreach (var kvp in saveData.VolumeDictionary)
+            {
+                EAUDIO_MIXER eMixerType = kvp.Key;
+                float volume = kvp.Value;
+
+
+                if (_volumeDictionary.ContainsKey(eMixerType))
+                {
+                    _volumeDictionary[eMixerType] = volume;
+                }
+                else
+                {
+                    _volumeDictionary.Add(eMixerType, volume);
+                    //Debug.LogError($"{eMixerType} is not exist in :{_volumeDictionary}");
+                }
+
+            }
         };
     }
 
@@ -167,7 +199,21 @@ public class SoundManager : BaseManager<SoundManager>, IDataProvidable
     {
         return (saveData) =>
         {
-            _originVolume = saveData.volume;
+            foreach (var kvp in _volumeDictionary)
+            {
+                EAUDIO_MIXER eMixerType = kvp.Key;
+                float volume = kvp.Value;
+
+                if (saveData.VolumeDictionary.ContainsKey(eMixerType))
+                {
+                    saveData.VolumeDictionary[eMixerType] = volume;
+                }
+                else
+                {
+                    saveData.VolumeDictionary.Add(eMixerType, volume);
+                }
+
+            }
         };
     }
 }

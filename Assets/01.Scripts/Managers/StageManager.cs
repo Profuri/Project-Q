@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 
-public class StageManager : BaseManager<StageManager>, IDataProvidable
+public class StageManager : BaseManager<StageManager>, IProvideSave,IProvideLoad
 {
     public Stage CurrentStage { get; private set; }
     public Stage NextStage { get; private set; }
@@ -63,16 +63,13 @@ public class StageManager : BaseManager<StageManager>, IDataProvidable
     }
     
 
-    public Action<SaveData> GetProvideAction()
+    public Action<SaveData> GetSaveAction()
     {
         return (saveData) =>
         {
             if (_currentPlayChapterData == null) return;
             var currentChapter = _currentPlayChapterData.chapter;
             bool isClear = CurrentStage.stageOrder + 1 >= _currentPlayChapterData.stageCnt;
-
-            Debug.Log($"SaveData: {saveData}");
-            Debug.Log($"ChapterProgressDictionary: {saveData.ChapterProgressDictionary}");
 
             if (saveData.ChapterProgressDictionary.ContainsKey(currentChapter) == false)
             {
@@ -85,7 +82,7 @@ public class StageManager : BaseManager<StageManager>, IDataProvidable
         };
     }
 
-    public Action<SaveData> GetSaveAction()
+    public Action<SaveData> GetLoadAction()
     {
         return (saveData) =>
         {
@@ -95,6 +92,6 @@ public class StageManager : BaseManager<StageManager>, IDataProvidable
 
     public void LoadToDataManager()
     {
-        DataManager.Instance.SettingDataProvidable(this);
+        DataManager.Instance.SettingDataProvidable(this,this);
     }
 }

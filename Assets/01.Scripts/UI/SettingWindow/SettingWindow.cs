@@ -7,15 +7,16 @@ public class SettingWindow : UIComponent
     [SerializeField] private ControlSettingPanel _controlSettingPanel;
     [SerializeField] private VideoSettingPanel _videoSettingPanel;
     
-    private MonoBehaviour _currentPanel;
+    private WindowPanel _currentPanel;
 
     protected override void Awake()
     {
         base.Awake();
-        _mainSettingPanel.gameObject.SetActive(false);
-        _audioSettingPanel.gameObject.SetActive(false);
-        _controlSettingPanel.gameObject.SetActive(false);
-        _videoSettingPanel.gameObject.SetActive(false);
+
+        _mainSettingPanel.Init(this);
+        _audioSettingPanel.Init(this);
+        _controlSettingPanel.Init(this);
+        _videoSettingPanel.Init(this);
         ChangePanel(_mainSettingPanel);
     }
 
@@ -46,14 +47,10 @@ public class SettingWindow : UIComponent
         ChangePanel(_controlSettingPanel);
     }
 
-    private void ChangePanel(MonoBehaviour panel)
+    private void ChangePanel(WindowPanel panel)
     {
-        if (_currentPanel is not null)
-        {
-            _currentPanel.gameObject.SetActive(false);
-        }
-        
-        panel.gameObject.SetActive(true);
+        _currentPanel?.ReleasePanel();
         _currentPanel = panel;
+        _currentPanel.LoadPanel();
     }
 }

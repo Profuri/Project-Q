@@ -11,7 +11,7 @@ public enum QualityType
     High = 2
 }
 
-public class VideoManager : BaseManager<VideoManager>, IDataProvidable
+public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
 {
     public Resolution[] Resolutions { get; private set; }
     private uint _resolutionIndex;
@@ -48,29 +48,26 @@ public class VideoManager : BaseManager<VideoManager>, IDataProvidable
         var height = resolution.height;
 
         Screen.SetResolution(width, height, Screen.fullScreen);
-        DataManager.Instance.SaveData(this);
     }
 
     public void SetFullScreen(bool fullScreen)
     {
         Screen.fullScreen = fullScreen;
         _fullScreen = fullScreen;
-        DataManager.Instance.SaveData(this);
     }
 
     public void SetQuality(QualityType type)
     {
         QualitySettings.SetQualityLevel((int)type);
         _quality = type;
-        DataManager.Instance.SaveData(this);
     }
 
     public void LoadToDataManager()
     {
-        DataManager.Instance.SettingDataProvidable(this);
+        DataManager.Instance.SettingDataProvidable(this,this);
     }
 
-    public Action<SaveData> GetProvideAction()
+    public Action<SaveData> GetSaveAction()
     {
         return (saveData) =>
         {
@@ -80,13 +77,17 @@ public class VideoManager : BaseManager<VideoManager>, IDataProvidable
         };
     }
 
-    public Action<SaveData> GetSaveAction()
+    public Action<SaveData> GetLoadAction()
     {
         return (saveData) =>
         {
             _quality = saveData.DefaultQuality;
             _fullScreen = saveData.DefaultFullScreen;
             _resolutionIndex = saveData.resolutionIndex;
+
+            SetFullScreen(_fullScreen);
+            SetResolution((int)_resolutionIndex);
+            SetQuality(_quality);
         };
     }
 }

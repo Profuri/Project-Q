@@ -270,7 +270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8b2b896ad864a39a1327912d5955125, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolingCnt: 5
+  poolingCnt: 1
   poolOut: 0
   tweenData: {fileID: 11400000, guid: 2e95b74f6085d498cb4631a5acc140b5, type: 2}
   _mainSettingPanel: {fileID: 2110127873072247683}
@@ -1759,18 +1759,6 @@ MonoBehaviour:
   onSliderValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1288031902444488712}
-        m_TargetAssemblyTypeName: AudioSettingPanel, Assembly-CSharp
-        m_MethodName: SetBGMVolume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 8921025634855793330}
         m_TargetAssemblyTypeName: AudioSliderIcon, Assembly-CSharp
         m_MethodName: ChangeVolumeHandle
@@ -3816,7 +3804,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9092823658580682648}
-  m_Layer: 9
+  - component: {fileID: 8651079041369935657}
+  - component: {fileID: 6216336043027073143}
+  m_Layer: 21
   m_Name: ApplyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3840,6 +3830,57 @@ Transform:
   - {fileID: 389139384791711583}
   m_Father: {fileID: 2859763442205582239}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8651079041369935657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2247084324522035787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b35e20a762b44139fb104b5c83b4245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 1
+  poolOut: 0
+  tweenData: {fileID: 0}
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1288031902444488712}
+        m_TargetAssemblyTypeName: AudioSettingPanel, Assembly-CSharp
+        m_MethodName: SaveVolumes
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!65 &6216336043027073143
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2247084324522035787}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.7668989, z: 2.9707165}
+  m_Center: {x: -5.0363685e-14, y: -0.116550565, z: -0.0044516325}
 --- !u!1 &2314807635438525538
 GameObject:
   m_ObjectHideFlags: 0
@@ -6241,6 +6282,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 812a82d07a2b41fe92e07b297a13cc68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _resolutionBtn: {fileID: 6300575993313359024}
+  _qualityBtn: {fileID: 7937538399990562360}
+  _fullScreenYesBtn: {fileID: 6659110591783829012}
+  _fullScreenNoBtn: {fileID: 8523672566205052518}
 --- !u!1 &3633527601795251915
 GameObject:
   m_ObjectHideFlags: 0
@@ -6443,7 +6488,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4734212437494137649}
   m_Layer: 9
-  m_Name: MasterSlider
+  m_Name: MASTERSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8622,7 +8667,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2333796047085781684}
-  m_Layer: 9
+  - component: {fileID: 7880586385290075413}
+  - component: {fileID: 3906003952510472741}
+  m_Layer: 21
   m_Name: ApplyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8646,6 +8693,57 @@ Transform:
   - {fileID: 8882491900838997156}
   m_Father: {fileID: 5497168923519665719}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7880586385290075413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4867291523820585949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b35e20a762b44139fb104b5c83b4245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 1
+  poolOut: 0
+  tweenData: {fileID: 0}
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2910779900228110746}
+        m_TargetAssemblyTypeName: VideoSettingPanel, Assembly-CSharp
+        m_MethodName: SaveDatas
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!65 &3906003952510472741
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4867291523820585949}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.8363941, z: 3.1833282}
+  m_Center: {x: -5.560656e-15, y: -0.081802964, z: -0.017019391}
 --- !u!1 &4878006288092774535
 GameObject:
   m_ObjectHideFlags: 0
@@ -14783,18 +14881,6 @@ MonoBehaviour:
   onSliderValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1288031902444488712}
-        m_TargetAssemblyTypeName: AudioSettingPanel, Assembly-CSharp
-        m_MethodName: SetMasterVolume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 5055268545233235790}
         m_TargetAssemblyTypeName: AudioSliderIcon, Assembly-CSharp
         m_MethodName: ChangeVolumeHandle
@@ -15359,6 +15445,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab0d92c4eb647699883f90959ad5f67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _masterSlider: {fileID: 7412099775801978866}
+  _bgmSlider: {fileID: 6375492596455425690}
+  _sfxSlider: {fileID: 7599028630207175374}
 --- !u!1 &7916903344895472157
 GameObject:
   m_ObjectHideFlags: 0
@@ -16413,18 +16502,6 @@ MonoBehaviour:
   onSliderValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1288031902444488712}
-        m_TargetAssemblyTypeName: AudioSettingPanel, Assembly-CSharp
-        m_MethodName: SetSFXVolume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 3279329752243645105}
         m_TargetAssemblyTypeName: AudioSliderIcon, Assembly-CSharp
         m_MethodName: ChangeVolumeHandle
