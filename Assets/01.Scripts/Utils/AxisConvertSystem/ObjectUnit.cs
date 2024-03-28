@@ -256,9 +256,13 @@ namespace AxisConvertSystem
 
             if (axis == AxisType.None)
             {
-                if (CheckStandObject(out var col))
+                if (!subUnit && CheckStandObject(out var col))
                 {
                     SynchronizePositionOnStanding(col);
+                }
+                else
+                {
+                    _unitInfo.LocalPos = transform.localPosition;
                 }
             }
             else
@@ -274,7 +278,7 @@ namespace AxisConvertSystem
 
             var standPos = transform.localPosition;
             standPos.y = col.bounds.max.y;
-
+            
             var standUnitLocalPos = info.LocalPos;
             if (unit.subUnit)
             {
@@ -283,8 +287,6 @@ namespace AxisConvertSystem
                 standUnitLocalPos += parentInfo.LocalPos;
             }
 
-            Debug.Log($"{gameObject.name} {standUnitLocalPos}");
-            
             if (Converter.AxisType == AxisType.Y)
             {
                 standPos.y *= info.LocalScale.y;

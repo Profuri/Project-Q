@@ -138,8 +138,6 @@ public class UIManager : BaseManager<UIManager>
         var canvasRect = ((RectTransform)_mainCanvas2D.transform).rect;
         var adjustPos = position;
 
-        Debug.Log(adjustPos);
-
         var xDiff = adjustPos.x + rect.width - (canvasRect.width - _padding.x);
         var yDiff = adjustPos.y - rect.height - _padding.y;
 
@@ -152,8 +150,6 @@ public class UIManager : BaseManager<UIManager>
         {
             adjustPos.y -= yDiff;
         }
-
-        Debug.Log(adjustPos);
 
         return adjustPos;
     }
