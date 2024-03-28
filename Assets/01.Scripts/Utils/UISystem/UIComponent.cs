@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,13 @@ public class UIComponent : PoolableMono
     {
         ParentTrm = parentTrm;
         transform.SetParent(parentTrm);
+        transform.localRotation = quaternion.identity;
+        transform.localScale = Vector3.one;
+
+        var localPos = transform.localPosition;
+        localPos.z = 0;
+        transform.localPosition = localPos;  
+        
         if (tweenData)
         {
             tweenData.appearAnimator.Play(callback);
