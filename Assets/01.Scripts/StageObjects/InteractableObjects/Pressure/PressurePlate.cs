@@ -27,6 +27,16 @@ public class PressurePlate : InteractableObject
         _pressureObjTrm = _pressureMainTrm.Find("PressureObject");
     }
 
+    public override void Init(AxisConverter converter)
+    {
+        base.Init(converter);
+        _lastToggleState = false;
+        foreach (var toggleChangeEvent in _onToggleChangeEvents)
+        {
+            toggleChangeEvent.Invoke(_lastToggleState);
+        }
+    }
+
     public override void UpdateUnit()
     { 
         base.UpdateUnit();

@@ -42,12 +42,6 @@ public class PlayerUnit : ObjectUnit
     public override void UpdateUnit()
     {
         base.UpdateUnit();
-        
-        // debug
-        if (Keyboard.current.jKey.wasPressedThisFrame)
-        {
-            StageManager.Instance.StageClear(this);
-        }
 
         if (StandingUnit)
         {
@@ -122,7 +116,8 @@ public class PlayerUnit : ObjectUnit
             out var hit,
             ModelTrm.rotation,
             _data.groundCheckDistance,
-            _data.groundMask
+            _data.groundMask,
+            QueryTriggerInteraction.Ignore
         );
         
         return isHit && !hit.collider.isTrigger;

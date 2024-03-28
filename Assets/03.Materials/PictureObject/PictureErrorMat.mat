@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HoloRing_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: f3e7c7efad4bb42478d8d9dc026a5c6b,
+  m_Name: PictureErrorMat
+  m_Shader: {fileID: -6465566751694194690, guid: a20aec8e974bc4dfda485d1b8c71c77b,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,6 +24,26 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _EmissionMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 63bea5c2b36054179ad3fc5f180ceb72, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Sheet:
+        m_Texture: {fileID: 2800000, guid: 1e1c3d5c8dcefa84d84eb5e34bcbfcd7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture:
+        m_Texture: {fileID: 2800000, guid: 99afd3da06ae8094c9a45e654b3803ec, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -38,18 +58,26 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.3
-    - _Background: 0
-    - _Grad: 1
-    - _Push: 0.96
+    - _DissolveProgress: 0
+    - _DissolveWidth: 0.02
+    - _Height: 341
+    - _Metalic: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Rad: 0.19
-    - _Speed: -0.2
+    - _Smoothness: 0
+    - _TransitionAmount: 100
+    - _UseEmission: 0
+    - _UseNormal: 1
+    - _VisibleProgress: 0
+    - _Width: 341
+    - _time: 0.9
     m_Colors:
-    - _Color: {r: 10.680628, g: 10.680628, b: 10.680628, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1.5484668, g: 0.99712455, b: 2.3229713, a: 0}
+    - _DissolveColor: {r: 4, g: 4, b: 4, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &7025579248357220239
+--- !u!114 &8637564343920290657
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

@@ -1,32 +1,54 @@
 using AxisConvertSystem;
 using UnityEngine;
 
-public class PictureUnit : MonoBehaviour
+public class PictureUnit : ObjectUnit
 {
     [SerializeField] private AxisType _enableAxis;
-    private Collider _collider;
+    private Renderer _renderer;
 
-    public void Init()
+    private Material _enableMat;
+    private Material _disableMat;
+
+    private bool _isEnableUnit;
+
+    public void Init(Material enableMat, Material disableMat)
     {
-        _collider = GetComponent<Collider>();
-        _collider.enabled = false;
+        _renderer = GetComponent<Renderer>();
+
+        _enableMat = enableMat;
+        _disableMat = disableMat;
     }
 
     public void ChangeAxis(AxisType axis)
     {
-        if (axis == AxisType.None)
+        if (!activeUnit)
         {
-            gameObject.SetActive(true);
-            _collider.enabled = false;
             return;
         }
 
-        SetUp(_enableAxis == axis);
+        if (axis == AxisType.None)
+        {
+            _renderer.material = _disableMat;
+            MaterialResetUp();
+        }
+        else if (axis == _enableAxis)
+        {
+            _renderer.material = _enableMat;
+            MaterialResetUp();
+        }
+
+        _isEnableUnit = _enableAxis == axis || axis == AxisType.None;
     }
 
-    private void SetUp(bool enable)
+    public override void UnitSetting(AxisType axis)
     {
-        gameObject.SetActive(enable);
-        _collider.enabled = enable;
+        base.UnitSetting(axis);
+
+        if (!activeUnit)
+        {
+            return;
+        }
+
+        Hide(!_isEnableUnit);
     }
 }

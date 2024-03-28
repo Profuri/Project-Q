@@ -26,6 +26,11 @@ public class SettingWindow : UIComponent
         ChangePanel(_mainSettingPanel);
     }
 
+    public void Close()
+    {
+        Disappear();
+    }
+
     // Button Callbacks
     public void GoMain()
     {

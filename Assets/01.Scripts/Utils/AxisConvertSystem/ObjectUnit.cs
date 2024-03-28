@@ -31,13 +31,14 @@ namespace AxisConvertSystem
         private UnitInfo _unitInfo;
         private UnitInfo _convertedInfo;
 
+        private List<Renderer> _renderers;
         private List<Material> _materials;
 
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
 
         private UnClimbableEffect _unClimbableEffect;
-        
+
         public virtual void Awake()
         {
             IsHide = false;
@@ -53,19 +54,9 @@ namespace AxisConvertSystem
             DepthHandler = new UnitDepthHandler(this);
 
             _materials = new List<Material>();
-            var renderers = transform.GetComponentsInChildren<Renderer>();
-            foreach (var rdr in renderers)
-            {
-                if(!rdr.enabled)
-                {
-                    continue;
-                }
-            
-                foreach (var material in rdr.materials) 
-                {
-                    _materials.Add(material);    
-                }
-            }
+            _renderers = new List<Renderer>();
+            transform.GetComponentsInChildren<Renderer>(_renderers);
+            MaterialResetUp();
             
             Activate(activeUnit);
         }
@@ -142,18 +133,13 @@ namespace AxisConvertSystem
             }
         }
 
-        private void ApplyInfo(UnitInfo info, bool hideSetting = true)
+        private void ApplyInfo(UnitInfo info)
         {
             transform.localPosition = info.LocalPos;
             transform.localRotation = info.LocalRot;
             transform.localScale = info.LocalScale;
             Collider.SetCenter(info.ColliderCenter);
-            
-            if (hideSetting)
-            {
-                Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
-            }
-        }
+            Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f); }
         
         private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
         {
@@ -172,7 +158,7 @@ namespace AxisConvertSystem
             basic.LocalScale = Quaternion.Inverse(basic.LocalRot) * basic.LocalScale;
             basic.LocalScale.SetAxisElement(axis, 1);
             basic.LocalScale = basic.LocalRot * basic.LocalScale;
-            
+
             basic.ColliderCenter = basic.LocalRot * basic.ColliderCenter;
             basic.ColliderCenter.SetAxisElement(axis, -layerDepth);
             basic.ColliderCenter = Quaternion.Inverse(basic.LocalRot) * basic.ColliderCenter;
@@ -187,11 +173,11 @@ namespace AxisConvertSystem
             Collider.enabled = active;
         }
 
-        private void Hide(bool hide)
+        protected void Hide(bool hide)
         {
             IsHide = hide;
-            gameObject.SetActive(!hide);
             Collider.enabled = !hide;
+            gameObject.SetActive(!hide);
         }
 
         public void SetPosition(Vector3 pos)
@@ -234,7 +220,7 @@ namespace AxisConvertSystem
 
             if (!staticUnit)
             {
-                Dissolve(true, 2f, callBack);
+                Dissolve(0f, 2f, true, callBack);
                 Rigidbody.velocity = Vector3.zero;
                 PlaySpawnVFX();
             }
@@ -331,14 +317,17 @@ namespace AxisConvertSystem
             }
         }
         
-        public void Dissolve(bool on, float time, Action callBack = null)
+        public void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
         {
-            var value = on ? 0f : 1f;
+            value = Mathf.Clamp(value, 0f, 1f);
         
             foreach (var material in _materials)
             {
                 var initVal = Mathf.Abs(1f - value);
-                material.SetFloat(_dissolveProgressHash, initVal);
+                if (useDissolve)
+                {
+                    material.SetFloat(_dissolveProgressHash, initVal);
+                }
                 material.SetFloat(_visibleProgressHash, initVal);
             }
 
@@ -346,8 +335,11 @@ namespace AxisConvertSystem
 
             foreach (var material in _materials)
             {
-                seq.Join(DOTween.To(() => material.GetFloat(_dissolveProgressHash),
-                    progress => material.SetFloat(_dissolveProgressHash, progress), value, time));
+                if (useDissolve)
+                {
+                    seq.Join(DOTween.To(() => material.GetFloat(_dissolveProgressHash),
+                        progress => material.SetFloat(_dissolveProgressHash, progress), value, time));
+                }
                 seq.Join(DOTween.To(() => material.GetFloat(_visibleProgressHash),
                     progress => material.SetFloat(_visibleProgressHash, progress), value, time));
             }
@@ -456,6 +448,23 @@ namespace AxisConvertSystem
         {
             bool onLayer = (int)compressLayer < (int)CompressLayer.Obstacle;
             return !climbableUnit && onLayer && !Collider.isTrigger;
+        }
+
+        protected void MaterialResetUp()
+        {
+            _materials.Clear();
+            foreach (var rdr in _renderers)
+            {
+                if(!rdr.enabled)
+                {
+                    continue;
+                }
+
+                foreach (var material in rdr.materials) 
+                {
+                    _materials.Add(material);    
+                }
+            }
         }
     }
 }
