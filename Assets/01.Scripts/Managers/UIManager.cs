@@ -118,7 +118,7 @@ public class UIManager : BaseManager<UIManager>
         }
     }
 
-    public UIComponent GenerateUI(string key, Transform parent = null)
+    public UIComponent GenerateUI(string key, Transform parent = null, Action callback = null)
     {
         var component = SceneControlManager.Instance.AddObject(key) as UIComponent;
         
@@ -127,7 +127,7 @@ public class UIManager : BaseManager<UIManager>
             parent = component.transform is RectTransform ? _mainCanvas2D.transform : _mainCanvas3D;
         }
 
-        component.Appear(parent);
+        component.Appear(parent, callback);
         return component;
     }
 

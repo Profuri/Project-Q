@@ -1,18 +1,19 @@
+using System;
 using UnityEngine;
 
 public class PauseWindow : UIComponent
 {
      private SettingWindow _settingWindow;
 
-     public override void Appear(Transform parentTrm)
+     public override void Appear(Transform parentTrm, Action callback = null)
      {
-          base.Appear(parentTrm);
+          base.Appear(parentTrm, callback);
           InputManager.Instance.InputReader.OnPauseClickEvent += OnPauseKeyClickHandle;
      }
 
-     public override void Disappear()
+     public override void Disappear(Action callback = null)
      {
-          base.Disappear();
+          base.Disappear(callback);
           InputManager.Instance.InputReader.OnPauseClickEvent -= OnPauseKeyClickHandle;
      }
 
@@ -22,8 +23,9 @@ public class PauseWindow : UIComponent
           {
                _settingWindow.Disappear();
           }
-          GameManager.Instance.Resume();
-          Disappear();
+          
+          GameManager.Instance.Resume(false);
+          Disappear(() => GameManager.Instance.InPause = false);
      }
 
      public void GenerateSettingPopup()

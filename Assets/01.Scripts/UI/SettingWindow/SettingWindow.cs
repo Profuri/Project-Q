@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SettingWindow : UIComponent
@@ -20,9 +21,9 @@ public class SettingWindow : UIComponent
         ChangePanel(_mainSettingPanel);
     }
 
-    public override void Appear(Transform parentTrm)
+    public override void Appear(Transform parentTrm, Action callback = null)
     {
-        base.Appear(parentTrm);
+        base.Appear(parentTrm, callback);
         ChangePanel(_mainSettingPanel);
     }
 
