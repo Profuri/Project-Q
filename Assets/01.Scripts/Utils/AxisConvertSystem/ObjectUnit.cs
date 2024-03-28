@@ -293,14 +293,9 @@ namespace AxisConvertSystem
             }
             else
             {
-                if (unit is PlaneUnit or TutorialObjectUnit)
-                {
-                    standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
-                }
-                else
-                {
-                    standPos.SetAxisElement(Converter.AxisType, standUnitLocalPos.GetAxisElement(Converter.AxisType));
-                }
+                standPos.SetAxisElement(Converter.AxisType,
+                    (unit is PlaneUnit or TutorialObjectUnit ? _unitInfo.LocalPos : standUnitLocalPos)
+                    .GetAxisElement(Converter.AxisType));
             }
 
             _unitInfo.LocalPos = standPos;
