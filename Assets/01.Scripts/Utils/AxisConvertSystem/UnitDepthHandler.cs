@@ -36,9 +36,9 @@ namespace AxisConvertSystem
 
         public void DepthCheckPointSetting()
         {
-            var prevUnitActive = _owner.activeUnit;
-
-            if (!prevUnitActive)
+            var prevActive = _owner.activeUnit;
+            
+            if (!prevActive)
             {
                 _owner.Activate(true);
             }
@@ -51,7 +51,7 @@ namespace AxisConvertSystem
                 _depthCheckPoint.Add(axis, depthPoint);
             }
 
-            _owner.Activate(prevUnitActive);
+            _owner.Activate(prevActive);
         }
     }
 }
