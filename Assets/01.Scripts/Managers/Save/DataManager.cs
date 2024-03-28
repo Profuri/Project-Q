@@ -22,6 +22,8 @@ public class SaveData
     public bool DefaultFullScreen;
     public QualityType DefaultQuality;
     public uint resolutionIndex;
+
+    public string KeyBinding;
 }
 
 
@@ -54,6 +56,8 @@ public class DataManager : BaseManager<DataManager>
 
     private static SaveData s_saveData;
     public static SaveData sSaveData => s_saveData;
+
+
 
     public override void Init()
     {
@@ -94,6 +98,8 @@ public class DataManager : BaseManager<DataManager>
                 Debug.LogError($"Dictionary has value: {dataProvidable}");
             }
         }
+
+
 
         if (loadAction != null)
         {

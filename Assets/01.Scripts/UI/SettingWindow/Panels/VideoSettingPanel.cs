@@ -93,7 +93,6 @@ public class VideoSettingPanel : WindowPanel
             string resolutionText = $"{resolution.width} X {resolution.height}";
             _resolutionBtn.Text = resolutionText;
         }
-
         //Qaulity
         Debug.Log($"DefaultQuality: {saveData.DefaultQuality}");
         QualityType qualityType = saveData.DefaultQuality;

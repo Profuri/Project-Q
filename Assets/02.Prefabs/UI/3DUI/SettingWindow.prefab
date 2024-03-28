@@ -3795,6 +3795,14 @@ MonoBehaviour:
     type: 2}
   _controlButtonAccessMat: {fileID: 2100000, guid: ab8fcec45f829439e9101690234e2e4f,
     type: 2}
+  _movementBtnList:
+  - {fileID: 1781834024455521358}
+  - {fileID: 727264532010833125}
+  - {fileID: 7756972154799982581}
+  - {fileID: 6207024036890466308}
+  _jumpBtn: {fileID: 9181442579450943003}
+  _interactionBtn: {fileID: 1049331935920768313}
+  _axisControlBtn: {fileID: 7823282161462250784}
 --- !u!1 &2247084324522035787
 GameObject:
   m_ObjectHideFlags: 0
@@ -13216,7 +13224,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3876613456023420218}
-  m_Layer: 9
+  - component: {fileID: 3738613102528407686}
+  - component: {fileID: 6408431074652462680}
+  m_Layer: 21
   m_Name: ApplyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13240,6 +13250,57 @@ Transform:
   - {fileID: 5015258945573400774}
   m_Father: {fileID: 2144660473558787980}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3738613102528407686
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6703953741786213080}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.64910483, z: 3.0903733}
+  m_Center: {x: -7.469627e-14, y: -0.17544758, z: -0.0041247606}
+--- !u!114 &6408431074652462680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6703953741786213080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b35e20a762b44139fb104b5c83b4245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  poolOut: 0
+  tweenData: {fileID: 0}
+  OnClickEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2457858969233537684}
+        m_TargetAssemblyTypeName: ControlSettingPanel, Assembly-CSharp
+        m_MethodName: SaveControls
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6786190291702271989
 GameObject:
   m_ObjectHideFlags: 0
