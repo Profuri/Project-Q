@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class FractureObject : InteractableObject
 {
@@ -19,6 +20,7 @@ public class FractureObject : InteractableObject
     private MeshRenderer _meshRenderer;
     public MeshRenderer MeshRenderer => _meshRenderer;
 
+    
     public override void Awake()
     {
         base.Awake();
@@ -76,7 +78,9 @@ public class FractureObject : InteractableObject
             part.Setting(this);
             part.AddForce(part.Bounds.center * _explodeForce, transform.position);
         }
-        
+
+
+        //SceneControlManager.Instance.DeleteObject(this);
         Activate(false);
     }
 

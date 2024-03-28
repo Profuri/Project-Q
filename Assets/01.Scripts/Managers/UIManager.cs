@@ -148,7 +148,7 @@ public class UIManager : BaseManager<UIManager>
         {
             adjustPos.y -= yDiff;
         }
-        
+
         return adjustPos;
     }
 }

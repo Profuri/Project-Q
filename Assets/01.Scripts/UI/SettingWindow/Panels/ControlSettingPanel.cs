@@ -1,12 +1,19 @@
 using System;
+using System.Collections.Generic;
+using TinyGiantStudio.Text;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ControlSettingPanel : MonoBehaviour
+public class ControlSettingPanel : WindowPanel
 {
     [SerializeField] private Material _controlButtonDefaultMat;
     [SerializeField] private Material _controlButtonAccessMat;
-    
+
+    [SerializeField] private List<UIButton3D> _movementBtnList;
+    [SerializeField] private UIButton3D _jumpBtn;
+    [SerializeField] private UIButton3D _interactionBtn;
+    [SerializeField] private UIButton3D _axisControlBtn;
+
     public void ChangeMoveFrontKeyBinding(UIButton3D caller)
     {
         ChangeKeyBinding(caller, EInputCategory.Movement, InputManager.OnlyAlphabet, 1);
@@ -64,5 +71,39 @@ public class ControlSettingPanel : MonoBehaviour
                 UIManager.Instance.Interact3DButton = true;
             }
         );
+    }
+
+
+    public override void LoadPanel()
+    {
+        base.LoadPanel();
+        DataManager.Instance.LoadData(InputManager.Instance);
+        SettingUI();
+    }
+
+    public override void ReleasePanel()
+    {
+        base.ReleasePanel();
+        DataManager.Instance.LoadData(InputManager.Instance);
+    }
+
+    private void SettingUI()
+    {
+        string[] names = InputManager.Instance.GetBindingMovementName();
+
+        for(int i = 0; i < 4; i++)
+        {
+            _movementBtnList[i].Text = names[i];
+        } 
+
+        _axisControlBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.AxisControl);
+        _interactionBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.Interaction);
+        _jumpBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.Jump);
+    }
+
+
+    public void SaveControls()
+    {
+        DataManager.Instance.SaveData(InputManager.Instance);
     }
 }

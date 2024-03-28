@@ -111,11 +111,15 @@ namespace AxisConvertSystem
             }
             SynchronizePosition(axis);
             _convertedInfo = ConvertInfo(_unitInfo, axis);
+            if (gameObject.name == "FractureObject")
+            {
+                Debug.Log($"Convert");
+            }
         }
         
         public virtual void UnitSetting(AxisType axis)
         {
-            ApplyInfo(_convertedInfo);
+            ApplyInfo(_convertedInfo, activeUnit);
 
             if (IsHide)
             {
@@ -131,15 +135,24 @@ namespace AxisConvertSystem
             {
                 Rigidbody.FreezeAxisPosition(axis);
             }
+            if (gameObject.name == "FractureObject")
+            {
+                Debug.Log($"UnitSetting");
+            }
         }
 
-        private void ApplyInfo(UnitInfo info)
+        private void ApplyInfo(UnitInfo info, bool hideSetting)
         {
             transform.localPosition = info.LocalPos;
             transform.localRotation = info.LocalRot;
             transform.localScale = info.LocalScale;
             Collider.SetCenter(info.ColliderCenter);
-            Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f); }
+            
+            if (hideSetting)
+            {
+                Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
+            }
+        }
         
         private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
         {

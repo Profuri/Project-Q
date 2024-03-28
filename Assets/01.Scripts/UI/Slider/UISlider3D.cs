@@ -17,7 +17,7 @@ public class UISlider3D : UIComponent
     public float Percent { get; private set; }
 
     public UnityEvent<float> onSliderValueChanged = null;
-    
+
     protected override void Awake()
     {
         base.Awake();
@@ -44,7 +44,7 @@ public class UISlider3D : UIComponent
         var pivotScale = _progressPivot.localScale;
         pivotScale.z = Percent;
         _progressPivot.localScale = pivotScale;
-        
+
         onSliderValueChanged?.Invoke(Percent);
     }
 }

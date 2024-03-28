@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 using System.Linq;
 using System;
 using System.Text.RegularExpressions;
+using ManagingSystem;
+using static InputControl.InputControls;
 
 public enum EInputCategory
 {
@@ -16,7 +18,7 @@ public enum EInputCategory
     AxisControl,
 }
 
-public class InputManager : MonoSingleton<InputManager>
+public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoad
 {
     [field:SerializeField] public InputReader InputReader { get; private set; }
 
@@ -26,9 +28,10 @@ public class InputManager : MonoSingleton<InputManager>
     public static readonly string OnlyAlphabet = @"^[a-zA-Z]$";
     public static readonly string AlphabetOrSpace = @"^(?:[a-zA-Z]|Space)$";
 
-    private void Awake()
+    public override void StartManager()
     {
         SettingDictionary();
+        DataManager.Instance.SettingDataProvidable(this, this);
     }
 
     private void SettingDictionary()
@@ -164,6 +167,38 @@ public class InputManager : MonoSingleton<InputManager>
                 _inputDictionary[category].Disable();
             }
         }
+    }
+
+    public Action<SaveData> GetSaveAction()
+    {
+        return (saveData) =>
+        {
+            saveData.KeyBinding = InputReader.InputControls.SaveBindingOverridesAsJson();
+        };
+    }
+
+    public Action<SaveData> GetLoadAction()
+    {
+        return (saveData) =>
+        {
+            if (saveData.KeyBinding == null || saveData.KeyBinding == string.Empty) return;
+
+            InputReader.InputControls.LoadBindingOverridesFromJson(saveData.KeyBinding);
+        };
+    }
+    public string GetBindingKeyName(EInputCategory inputCategory)
+    {
+        int index = _inputDictionary[inputCategory].GetBindingIndex();
+        return _inputDictionary[inputCategory].bindings[index].ToDisplayString();
+    }
+    public string[] GetBindingMovementName()
+    {
+        string[] names = new string[4];
+        names[0] = InputReader.InputControls.Player.Movement.bindings[1].ToDisplayString();
+        names[1] = InputReader.InputControls.Player.Movement.bindings[2].ToDisplayString();
+        names[2] = InputReader.InputControls.Player.Movement.bindings[3].ToDisplayString();
+        names[3] = InputReader.InputControls.Player.Movement.bindings[4].ToDisplayString();
+        return names;
     }
 }
 

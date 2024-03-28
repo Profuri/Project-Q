@@ -58,6 +58,11 @@ public class PlayerUnit : ObjectUnit
         {
             StageManager.Instance.StageClear(this);
         }
+
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            SceneControlManager.Instance.LoadScene(SceneType.Chapter);
+        }
         #endif
     }
 
@@ -150,6 +155,7 @@ public class PlayerUnit : ObjectUnit
 
                     if (interactable != _selectedInteractableObject)
                     {
+                        _selectedInteractableObject?.OnDetectedLeave();
                         interactable.OnDetectedEnter();
                     }
                     
@@ -161,8 +167,9 @@ public class PlayerUnit : ObjectUnit
         if (_selectedInteractableObject)
         {
             _selectedInteractableObject.OnDetectedLeave();
+            _selectedInteractableObject = null;
         }
-            
+
         return null;
     }
 
