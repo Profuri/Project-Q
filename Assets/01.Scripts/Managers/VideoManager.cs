@@ -13,7 +13,7 @@ public enum QualityType
 
 public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
 {
-    public Resolution[] Resolutions { get; private set; }
+    public List<Resolution> ResolutionList { get; private set; }
     private uint _resolutionIndex;
     
     [Header("Full Screen")] 
@@ -25,14 +25,41 @@ public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
     public override void Init()
     {
         base.Init();
-        Resolutions = Screen.resolutions;
+        ResolutionList = new List<Resolution>();
+
+        foreach (Resolution resolution in Screen.resolutions)
+        {
+            // 가로세로 비율 계산
+            if(resolution.width * 9 == resolution.height * 16)
+            {
+                if (ResolutionList.Count <= 0)
+                {
+                    ResolutionList.Add(resolution);
+                    continue;
+                }
+
+                var width = resolution.width;
+                var height = resolution.height;
+                var lastWidth = ResolutionList.Last().width;
+                var lastHeight = ResolutionList.Last().height;
+
+                if (width == lastWidth && height == lastHeight)
+                {
+                    ResolutionList[ResolutionList.Count - 1] = resolution;
+                }
+                else
+                {
+                    ResolutionList.Add(resolution);
+                }
+            }
+        }
 
         LoadToDataManager();
     }
 
     public override void StartManager()
     {
-        SetResolution(Resolutions.Length - 1);
+        SetResolution(ResolutionList.Count - 1);
         SetFullScreen(_fullScreen);
         SetQuality(_quality);
 
@@ -40,10 +67,10 @@ public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
 
     public void SetResolution(int index)
     {
-        var correctIndex = Mathf.Clamp(index, 0, Resolutions.Length - 1);
+        var correctIndex = Mathf.Clamp(index, 0, ResolutionList.Count - 1);
 
         _resolutionIndex = (uint)correctIndex;
-        var resolution = Resolutions[correctIndex];
+        var resolution = ResolutionList[correctIndex];
         var width = resolution.width;
         var height = resolution.height;
 

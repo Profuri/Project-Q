@@ -11,7 +11,10 @@ public class SaveData
     {
         ChapterProgressDictionary = new SerializableDictionary<ChapterType, bool>();
         VolumeDictionary = new SerializableDictionary<EAUDIO_MIXER, float>();
+
+        resolutionIndex = (uint)Screen.resolutions.Length - 1;
     }
+
     public SerializableDictionary<ChapterType, bool> ChapterProgressDictionary;
     public SerializableDictionary<EAUDIO_MIXER, float> VolumeDictionary;
     public bool IsShowSequence = false;
@@ -19,7 +22,6 @@ public class SaveData
     public bool DefaultFullScreen;
     public QualityType DefaultQuality;
     public uint resolutionIndex;
-
 }
 
 

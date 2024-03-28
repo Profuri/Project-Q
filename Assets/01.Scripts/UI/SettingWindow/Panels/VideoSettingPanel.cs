@@ -24,9 +24,9 @@ public class VideoSettingPanel : WindowPanel
         var dropdown = UIManager.Instance.GenerateUI("DropdownPanel") as UIDropdown;
         dropdown.Title = "RESOLUTION";
 
-        for (var i = 0; i < VideoManager.Instance.Resolutions.Length; i++)
+        for (var i = 0; i < VideoManager.Instance.ResolutionList.Count; i++)
         {
-            var resolution = VideoManager.Instance.Resolutions[i];
+            var resolution = VideoManager.Instance.ResolutionList[i];
             var width = resolution.width;
             var height = resolution.height;
             var index = i;
@@ -35,6 +35,7 @@ public class VideoSettingPanel : WindowPanel
             {
                 caller.Text = $"{width}x{height}";
                 VideoManager.Instance.SetResolution(index);
+                VideoManager.Instance.SetFullScreen(Screen.fullScreen);
                 UIManager.Instance.Interact3DButton = true;
             });
         }
@@ -81,15 +82,25 @@ public class VideoSettingPanel : WindowPanel
     private void SettingUI(SaveData saveData)
     {
         //Resolution
-        Resolution resolution = VideoManager.Instance.Resolutions[saveData.resolutionIndex];
-        string resolutionText = $"{resolution.width} X {resolution.height}";
-        _resolutionBtn.Text = resolutionText;
-        
+        Resolution resolution;
+        try
+        { 
+            resolution = VideoManager.Instance.ResolutionList[(int)saveData.resolutionIndex];
+        }
+        catch
+        {
+            resolution = VideoManager.Instance.ResolutionList[VideoManager.Instance.ResolutionList.Count - 1];
+            string resolutionText = $"{resolution.width} X {resolution.height}";
+            _resolutionBtn.Text = resolutionText;
+        }
+
         //Qaulity
+        Debug.Log($"DefaultQuality: {saveData.DefaultQuality}");
         QualityType qualityType = saveData.DefaultQuality;
         _qualityBtn.Text = qualityType.ToString().ToUpper();
 
         //FullScreen
+        Debug.Log($"DefaultQuality: {saveData.DefaultFullScreen}");
         _fullScreenYesBtn.SettingActive(saveData.DefaultFullScreen);
         _fullScreenNoBtn.SettingActive(!saveData.DefaultFullScreen);
     }
