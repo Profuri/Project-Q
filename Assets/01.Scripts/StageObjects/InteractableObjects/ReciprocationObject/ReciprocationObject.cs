@@ -50,12 +50,6 @@ public class ReciprocationObject : InteractableObject
         var origin = transform.position;
         var dest = origin + _reciprocationDir * _reciprocationDistance;
 
-        if (Application.isPlaying)
-        {
-            origin = _originPos;
-            dest = _destPos;
-        }
-
         var size = transform.localScale;
 
         Gizmos.DrawLine(origin, dest);
