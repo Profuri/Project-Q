@@ -42,7 +42,7 @@ public class PlayerUnit : ObjectUnit
     public override void UpdateUnit()
     {
         base.UpdateUnit();
-        
+
         if (StandingUnit)
         {
             StandingCheck();
@@ -57,6 +57,11 @@ public class PlayerUnit : ObjectUnit
         if(Input.GetKeyDown(KeyCode.J))
         {
             StageManager.Instance.StageClear(this);
+        }
+
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            SceneControlManager.Instance.LoadScene(SceneType.Chapter);
         }
         #endif
     }
@@ -116,7 +121,8 @@ public class PlayerUnit : ObjectUnit
             out var hit,
             ModelTrm.rotation,
             _data.groundCheckDistance,
-            _data.groundMask
+            _data.groundMask,
+            QueryTriggerInteraction.Ignore
         );
         
         return isHit && !hit.collider.isTrigger;
@@ -149,6 +155,7 @@ public class PlayerUnit : ObjectUnit
 
                     if (interactable != _selectedInteractableObject)
                     {
+                        _selectedInteractableObject?.OnDetectedLeave();
                         interactable.OnDetectedEnter();
                     }
                     
@@ -160,8 +167,9 @@ public class PlayerUnit : ObjectUnit
         if (_selectedInteractableObject)
         {
             _selectedInteractableObject.OnDetectedLeave();
+            _selectedInteractableObject = null;
         }
-            
+
         return null;
     }
 

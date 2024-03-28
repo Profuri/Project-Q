@@ -14,6 +14,6 @@ public class AffectedObject
             interactValue = !interactValue;
         }
         
-        InteractableObject.OnInteraction(communicator, interactValue);
+        InteractableObject?.OnInteraction(communicator, interactValue);
     }
 }

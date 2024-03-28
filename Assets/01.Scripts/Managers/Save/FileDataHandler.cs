@@ -97,6 +97,10 @@ public class FileDataHandler
             }
         }
 
+        if(loadedData == null)
+        {
+            return new SaveData();
+        }
         return loadedData;
     }
 

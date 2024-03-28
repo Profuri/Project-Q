@@ -6,7 +6,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Codice.Client.Common.GameUI;
 using PanelEditor;
 using UnityEditor;
 using UnityEngine.UIElements;
@@ -67,9 +66,12 @@ namespace Fabgrid
                 sBuilder.Remove(panelNameStartIdx,s_uxmlNames[i].Length);
             }
 
+#if UNITY_EDITOR
             _toggleField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[0]);
             _dropDownField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[1]);
-            _inputField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[2]);    
+            _inputField = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(fieldPathArray[2]);
+#endif
+
 
             _tilemap.OnSelectedPanelChanged += LoadFieldInfo;
 

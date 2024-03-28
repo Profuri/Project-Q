@@ -4,8 +4,10 @@ using static Core.Define;
 
 public class InteractionMark : PoolableMono
 {
-    [SerializeField] private RectTransform _keyGuideUI;
+    [SerializeField] private Transform _keyGuideUI;
     private InteractableObject _agentInteractable;
+
+    [SerializeField] private float _xRot;
 
     public void Setting(InteractableObject interactable)
     {
@@ -14,30 +16,34 @@ public class InteractionMark : PoolableMono
 
     public override void OnPop()
     {
-        
+
     }
+
 
     public override void OnPush()
     {
         
     }
-    
+
+
     private void Update()
     {
         SynchronizeTransform();
-        _keyGuideUI.rotation = Quaternion.LookRotation(MainCam.transform.forward);
+        Quaternion targetRot = Quaternion.LookRotation(MainCam.transform.forward);
+        Quaternion plusRot = Quaternion.Euler(new Vector3(_xRot, 0, 0));
+
+        Quaternion result = targetRot * plusRot;
+        _keyGuideUI.rotation = result;
     }
 
     private void SynchronizeTransform()
     {
         Collider collider = _agentInteractable.Collider;
-        
-        float yOffset = _agentInteractable.Offset <= 0.1f 
-            ? collider.bounds.size.y * 0.7f : _agentInteractable.Offset;
-
-        Vector3 offset = new Vector3(0,yOffset,0);
-            
-        transform.SetParent(collider.transform);
+        Vector3 offset = _agentInteractable.Offset;
+        if(offset == Vector3.zero)
+        {
+            offset = Vector3.up * 2f;
+        }
         transform.position = collider.bounds.center + offset;
     }
 }

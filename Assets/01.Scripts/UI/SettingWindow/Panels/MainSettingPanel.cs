@@ -1,6 +1,5 @@
 using UnityEngine;
 
-public class MainSettingPanel : MonoBehaviour
+public class MainSettingPanel : WindowPanel
 {
-    
 }

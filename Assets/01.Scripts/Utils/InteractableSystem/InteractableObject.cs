@@ -10,7 +10,7 @@ namespace InteractableSystem
         public bool IsInteract { get; set; }
         public bool IsDetected { get; private set; }
 
-        [field: SerializeField] public float Offset { get; private set; } = 0f; 
+        [field: SerializeField] public Vector3 Offset { get; private set; } = Vector3.zero; 
 
         [SerializeField] private EInteractType _interactType;
         public EInteractType InteractType => _interactType;
@@ -21,6 +21,7 @@ namespace InteractableSystem
         public abstract void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param);
 
         private InteractionMark _interactionMark;
+
 
         public virtual void OnDetectedEnter()
         {
@@ -42,24 +43,26 @@ namespace InteractableSystem
                 _interactionMark = null;
             }
         }
+
+
         #if UNITY_EDITOR
         protected virtual void OnDrawGizmos()
         {
-            Vector3 center = transform.position;
+            //Vector3 center = transform.position;
 
-            var col = GetComponent<Collider>();
+            //var col = GetComponent<Collider>();
             
-            if (Offset < 0.1f)
-            {
-                center += new Vector3(0,col.bounds.size.y * 0.7f,0);
-            }
-            else
-            {
-                center += new Vector3(0, Offset, 0);
-            }
+            //if (Offset < 0.1f)
+            //{
+            //    center += new Vector3(0,col.bounds.size.y * 0.7f,0);
+            //}
+            //else
+            //{
+            //    center += new Vector3(0, Offset, 0);
+            //}
 
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(center,0.2f);
+            //Gizmos.color = Color.red;
+            //Gizmos.DrawSphere(center,0.2f);
         }
         #endif
     }

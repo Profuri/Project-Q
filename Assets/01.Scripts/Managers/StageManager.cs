@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 
-public class StageManager : BaseManager<StageManager>,IDataProvidable
+public class StageManager : BaseManager<StageManager>, IProvideSave,IProvideLoad
 {
     public Stage CurrentStage { get; private set; }
     public Stage NextStage { get; private set; }
@@ -12,20 +12,17 @@ public class StageManager : BaseManager<StageManager>,IDataProvidable
     private ChapterData _currentPlayChapterData;
 
     public AxisType CurrentStageAxis => SceneControlManager.Instance.Player.Converter.AxisType;
+    
     public override void StartManager()
     {
         CurrentStage = null;
         NextStage = null;
+        LoadToDataManager();
     }        
 
     public void StartNewChapter(ChapterData chapterData)
     {
         _currentPlayChapterData = chapterData;
-        if (chapterData.stageCnt < 1)
-        {
-            Debug.LogError($"StageCnt: {1}");
-            DataManager.Instance.SaveData(this);
-        }
         CurrentStage = SceneControlManager.Instance.AddObject(
             $"{chapterData.chapter.ToString().ToUpperFirstChar()}_Stage_0") as Stage;
         CurrentStage.Generate(Vector3.zero, false);
@@ -57,8 +54,9 @@ public class StageManager : BaseManager<StageManager>,IDataProvidable
 
         if (nextChapter >= _currentPlayChapterData.stageCnt)
         {
-            Debug.Log("this is a last stage chapter clear!!!");
+            //DataManager.Insta
             DataManager.Instance.SaveData(this);
+            SceneControlManager.Instance.LoadScene(SceneType.Chapter);
             return;
         }
         
@@ -66,10 +64,11 @@ public class StageManager : BaseManager<StageManager>,IDataProvidable
     }
     
 
-    public Action<SaveData> GetProvideAction()
+    public Action<SaveData> GetSaveAction()
     {
         return (saveData) =>
         {
+            if (_currentPlayChapterData == null) return;
             var currentChapter = _currentPlayChapterData.chapter;
             bool isClear = CurrentStage.stageOrder + 1 >= _currentPlayChapterData.stageCnt;
 
@@ -84,11 +83,16 @@ public class StageManager : BaseManager<StageManager>,IDataProvidable
         };
     }
 
-    public Action<SaveData> GetSaveAction()
+    public Action<SaveData> GetLoadAction()
     {
         return (saveData) =>
         {
             Debug.Log("ClearChapter");
         };
+    }
+
+    public void LoadToDataManager()
+    {
+        DataManager.Instance.SettingDataProvidable(this,this);
     }
 }

@@ -24,8 +24,11 @@ public class ReciprocationObject : InteractableObject
         var curPos = transform.localPosition;  
         var destPos = interactValue ? _destPos : _originPos;
 
-        var layerDepth = (float)compressLayer * Vector3ExtensionMethod.GetAxisDir(Converter.AxisType).GetAxisElement(Converter.AxisType);
-        destPos.SetAxisElement(Converter.AxisType, layerDepth);
+        if (!subUnit)
+        {
+            var layerDepth = (float)compressLayer * Vector3ExtensionMethod.GetAxisDir(Converter.AxisType).GetAxisElement(Converter.AxisType);
+            destPos.SetAxisElement(Converter.AxisType, layerDepth);
+        }
 
         if (Vector3.Distance(curPos, destPos) <= 0.01f)
         {
@@ -46,12 +49,6 @@ public class ReciprocationObject : InteractableObject
 
         var origin = transform.position;
         var dest = origin + _reciprocationDir * _reciprocationDistance;
-
-        if (Application.isPlaying)
-        {
-            origin = _originPos;
-            dest = _destPos;
-        }
 
         var size = transform.localScale;
 
