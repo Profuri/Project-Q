@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Xml.Schema;
 using DG.Tweening;
 using UnityEngine;
 
@@ -294,7 +293,14 @@ namespace AxisConvertSystem
             }
             else
             {
-                standPos.SetAxisElement(Converter.AxisType, standUnitLocalPos.GetAxisElement(Converter.AxisType));
+                if (unit is PlaneUnit or TutorialObjectUnit)
+                {
+                    standPos.SetAxisElement(Converter.AxisType, _unitInfo.LocalPos.GetAxisElement(Converter.AxisType));
+                }
+                else
+                {
+                    standPos.SetAxisElement(Converter.AxisType, standUnitLocalPos.GetAxisElement(Converter.AxisType));
+                }
             }
 
             _unitInfo.LocalPos = standPos;
