@@ -56,6 +56,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave,IProvideLoad
         {
             //DataManager.Insta
             DataManager.Instance.SaveData(this);
+            SceneControlManager.Instance.LoadScene(SceneType.Chapter);
             return;
         }
         
