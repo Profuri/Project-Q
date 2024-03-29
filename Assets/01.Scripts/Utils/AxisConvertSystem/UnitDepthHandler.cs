@@ -18,6 +18,11 @@ namespace AxisConvertSystem
             Depth = float.MaxValue;
         }
 
+        public void InitDepth()
+        {
+            Depth = float.MaxValue;
+        }
+
         public void CalcDepth(AxisType axis)
         {
             Depth = float.MaxValue;

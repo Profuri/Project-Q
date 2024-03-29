@@ -62,7 +62,7 @@ public class DataManager : BaseManager<DataManager>
     public override void Init()
     {
         base.Init();
-        _fileDataHandler = new FileDataHandler(Application.dataPath, _fileName, _isEncrypt, _isBase64);
+        _fileDataHandler = new FileDataHandler(Application.persistentDataPath, _fileName, _isEncrypt, _isBase64);
 
         SaveData saveData = _fileDataHandler.Load();
         if (saveData != null)
