@@ -21,6 +21,12 @@ public class MovingTrack : ObjectUnit
         _movingPlatform.ClampingPosition(_movingDistance / 2f);
     }
 
+    public override void UnitSetting(AxisType axis)
+    {
+        DepthHandler.InitDepth();
+        base.UnitSetting(axis);
+    }
+
 #if UNITY_EDITOR
     private void OnValidate()
     {
