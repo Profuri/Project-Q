@@ -118,9 +118,9 @@ namespace AxisConvertSystem
         
         public virtual void UnitSetting(AxisType axis)
         {
-            ApplyInfo(_convertedInfo, activeUnit);
+            ApplyInfo(_convertedInfo);
 
-            if (IsHide)
+            if (DepthHandler.Hide)
             {
                 return;
             }
@@ -136,17 +136,22 @@ namespace AxisConvertSystem
             }
         }
 
-        private void ApplyInfo(UnitInfo info, bool hideSetting)
+        public virtual void DepthSetting()
+        {
+            if (!activeUnit)
+            {
+                return;
+            }
+
+            Hide(DepthHandler.Hide);
+        }
+
+        private void ApplyInfo(UnitInfo info)
         {
             transform.localPosition = info.LocalPos;
             transform.localRotation = info.LocalRot;
             transform.localScale = info.LocalScale;
             Collider.SetCenter(info.ColliderCenter);
-            
-            if (hideSetting)
-            {
-                Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
-            }
         }
         
         private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using UnityEngine;
 
 namespace AxisConvertSystem
 {
@@ -10,12 +10,13 @@ namespace AxisConvertSystem
         private readonly Dictionary<AxisType, DepthPoint> _depthCheckPoint;
 
         public float Depth { get; private set; }
+        public bool Hide => Mathf.Abs(Depth - float.MaxValue) >= 0.01f;
 
         public UnitDepthHandler(ObjectUnit owner)
         {
             _owner = owner;
             _depthCheckPoint = new Dictionary<AxisType, DepthPoint>();
-            Depth = float.MaxValue;
+            InitDepth();
         }
 
         public void InitDepth()
@@ -25,7 +26,7 @@ namespace AxisConvertSystem
 
         public void CalcDepth(AxisType axis)
         {
-            Depth = float.MaxValue;
+            InitDepth();
             
             if (axis == AxisType.None || _owner.IsHide)
             {
@@ -42,6 +43,7 @@ namespace AxisConvertSystem
                 if (_depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis]))
                 {
                     Depth = 0f;
+                    Debug.Log(unit.name);
                     break;
                 }
             }
