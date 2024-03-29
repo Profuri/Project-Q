@@ -8,6 +8,8 @@ public class UIManager : BaseManager<UIManager>
 {
     [Header("For 2D UI")]
     [SerializeField] private Canvas _mainCanvas2D;
+    public Canvas MainCanvas2D => _mainCanvas2D;
+    
     [SerializeField] private Vector2 _padding;
     
     [Header("For 3D UI")]
@@ -133,7 +135,7 @@ public class UIManager : BaseManager<UIManager>
 
     public Vector3 AdjustUIRectPosition(Vector3 position, Rect rect)
     {
-        var canvasRect = _mainCanvas2D.pixelRect;
+        var canvasRect = ((RectTransform)_mainCanvas2D.transform).rect;
         var adjustPos = position;
 
         var xDiff = adjustPos.x + rect.width - (canvasRect.width - _padding.x);
