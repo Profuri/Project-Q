@@ -9,6 +9,8 @@ public class ReciprocationObject : InteractableObject
     [SerializeField] private float _reciprocationDistance;
     [SerializeField] private float _reciprocationSpeed;
 
+    [SerializeField] private LayerMask _checkCollisionLayer;
+
     private Vector3 _originPos;
     private Vector3 _destPos;
 
@@ -40,7 +42,29 @@ public class ReciprocationObject : InteractableObject
         var lerpPos = Vector3.Lerp(curPos, destPos, _reciprocationSpeed * Time.deltaTime);
 
         transform.localPosition = lerpPos;
+
+        //여기서 CollisionTest 해가지고 아래 끼면 재생성 되게
+        CheckCollision();
     }
+
+    private void CheckCollision()
+    {
+        Vector3 center = Collider.bounds.center;
+        Vector3 halfExtents = Collider.bounds.extents * 0.5f;
+        Quaternion quaternion = transform.rotation;
+        float maxDistance = Collider.bounds.size.y + 0.1f;
+
+        RaycastHit[] cols = Physics.BoxCastAll(center,halfExtents,Vector3.down,quaternion,maxDistance,_checkCollisionLayer);
+
+        foreach(RaycastHit hit in cols)
+        {
+            if(hit.collider.TryGetComponent(out PlayerUnit playerUnit))
+            {
+                playerUnit.ReloadUnit();
+            }
+        }
+    }
+
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
