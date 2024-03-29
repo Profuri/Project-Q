@@ -278,7 +278,7 @@ MonoBehaviour:
   poolingCnt: 5
   poolOut: 0
   compressLayer: 1
-  climbableUnit: 1
+  climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
   subUnit: 0
@@ -607,7 +607,7 @@ MonoBehaviour:
   poolingCnt: 5
   poolOut: 0
   compressLayer: 1
-  climbableUnit: 1
+  climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
   subUnit: 0
@@ -918,7 +918,7 @@ Transform:
   m_GameObject: {fileID: 2056283146130904869}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.74, y: -0.69, z: -3.88}
+  m_LocalPosition: {x: -3.15, y: -0.69, z: -3.88}
   m_LocalScale: {x: 2, y: 0.5, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1081,7 +1081,7 @@ Transform:
   m_GameObject: {fileID: 2625274284161472744}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.29, y: 3.77, z: 1.39}
+  m_LocalPosition: {x: -4.29, y: 3.31, z: 1.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1935,7 +1935,7 @@ MonoBehaviour:
   poolingCnt: 5
   poolOut: 0
   _enterPoint: {x: 0, y: -2.5, z: -5.5}
-  _exitPoint: {x: -3.37, y: -2.5, z: 1.7}
+  _exitPoint: {x: 5.5, y: -2.5, z: -2}
   _playerResetPoint: {x: 0, y: 0, z: -4}
   _sectionData: {fileID: 11400000, guid: 02306878c371648a48d518abc435a287, type: 2}
   _setPlayerFollowCam: 1
@@ -1960,8 +1960,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 10, y: 14, z: 12}
-  m_Center: {x: 0, y: 4, z: 0}
+  m_Size: {x: 11, y: 16, z: 12}
+  m_Center: {x: 0, y: 5, z: 0.21}
 --- !u!114 &1534920757877205435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1974,7 +1974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f00dd1a8a81c9c438f0aff022a89935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _boundSize: {x: 10, y: 14, z: 12}
+  _boundSize: {x: 11, y: 16, z: 12}
 --- !u!1 &4544727558874855947
 GameObject:
   m_ObjectHideFlags: 0
@@ -4429,8 +4429,8 @@ Transform:
   m_GameObject: {fileID: 8981060576642177129}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.99, y: 6.63, z: -2.46}
-  m_LocalScale: {x: 0.2, y: 1, z: 1}
+  m_LocalPosition: {x: 2.99, y: 6.63, z: 3.7}
+  m_LocalScale: {x: 0.3, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1466987645117224159}
@@ -4473,7 +4473,7 @@ MonoBehaviour:
   poolingCnt: 5
   poolOut: 0
   compressLayer: 1
-  climbableUnit: 1
+  climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
   subUnit: 0
@@ -5115,7 +5115,7 @@ PrefabInstance:
     - target: {fileID: 6407262744059891528, guid: b0786620807924a6c98e4b86a3b87d8b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.85
+      value: 3.6200001
       objectReference: {fileID: 0}
     - target: {fileID: 6407262744059891528, guid: b0786620807924a6c98e4b86a3b87d8b,
         type: 3}
@@ -5755,12 +5755,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9051760982490156419, guid: 304d04c8bbe3da1468dc7cf2e2680b0e,
         type: 3}
-      propertyPath: _affectedObjects.Array.size
+      propertyPath: _interactType
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9051760982490156419, guid: 304d04c8bbe3da1468dc7cf2e2680b0e,
         type: 3}
+      propertyPath: _affectedObjects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9051760982490156419, guid: 304d04c8bbe3da1468dc7cf2e2680b0e,
+        type: 3}
       propertyPath: _affectedObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 2861047832348016847}
+    - target: {fileID: 9051760982490156419, guid: 304d04c8bbe3da1468dc7cf2e2680b0e,
+        type: 3}
+      propertyPath: _affectedObjects.Array.data[0].InteractableObject
       value: 
       objectReference: {fileID: 2861047832348016847}
     m_RemovedComponents: []
@@ -8044,6 +8054,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 973741798813955764}
     m_Modifications:
+    - target: {fileID: 5330861601001660856, guid: f7ec77ea9682a2048863ca537a74b640,
+        type: 3}
+      propertyPath: subUnit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5330861601001660856, guid: f7ec77ea9682a2048863ca537a74b640,
         type: 3}
       propertyPath: staticUnit
