@@ -68,8 +68,6 @@ namespace AxisConvertSystem
                 if (useGravity)
                 {
                     Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
-                    Debug.Log("Gravity");
-                    Debug.Log($"Velocity: {Rigidbody.velocity}");
                 }
             }
         }
@@ -113,10 +111,6 @@ namespace AxisConvertSystem
             }
             SynchronizePosition(axis);
             _convertedInfo = ConvertInfo(_unitInfo, axis);
-            if (gameObject.name == "FractureObject")
-            {
-                Debug.Log($"Convert");
-            }
         }
         
         public virtual void UnitSetting(AxisType axis)
@@ -137,9 +131,9 @@ namespace AxisConvertSystem
             {
                 Rigidbody.FreezeAxisPosition(axis);
             }
-            if (gameObject.name == "FractureObject")
+            if(activeUnit)
             {
-                Debug.Log($"UnitSetting");
+                Rigidbody.velocity = Vector3.zero;
             }
         }
 

@@ -6,15 +6,17 @@ public class TutorialChapter : Chapter
     [SerializeField] private Transform _cpuTrm;
     [SerializeField] private float _upOffset = 3f;
 
+    private bool _isShowing = false;
+
     public override void ShowingSequence(ChapterType chapterType,SaveData saveData)
     {
+        if (_isShowing) return;
         if(chapterType == Data.chapter)
         {
-
+            _isShowing = true;
             if (saveData.IsShowSequence)
             {
                 _cpuTrm.position = new Vector3(_cpuTrm.position.x, _cpuTrm.position.y + _upOffset, _cpuTrm.position.z);
-                Debug.Log($"Position: {_cpuTrm.position}");
                 Activate(false);
                 return;
             }
