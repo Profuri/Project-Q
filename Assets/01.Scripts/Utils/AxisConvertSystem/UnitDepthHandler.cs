@@ -32,10 +32,18 @@ namespace AxisConvertSystem
                 return;
             }
 
-            if (_owner.Section.SectionUnits.Where(unit => unit != _owner).Any(
-                    unit => _depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis])))
+            foreach (var unit in _owner.Section.SectionUnits)
             {
-                Depth = 0f;
+                if (unit == _owner || unit.renderType == UnitRenderType.Transparent)
+                {
+                    continue;
+                }
+
+                if (_depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis]))
+                {
+                    Depth = 0f;
+                    break;
+                }
             }
         }
 

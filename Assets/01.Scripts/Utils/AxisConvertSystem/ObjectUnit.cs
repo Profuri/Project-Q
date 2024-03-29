@@ -11,6 +11,7 @@ namespace AxisConvertSystem
     public class ObjectUnit : PoolableMono, IProvidableFieldInfo
     {
         [HideInInspector] public CompressLayer compressLayer = CompressLayer.Default;
+        [HideInInspector] public UnitRenderType renderType = UnitRenderType.Opaque;
         [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
         [HideInInspector] public bool activeUnit = true;
