@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace AxisConvertSystem
 {
-    public class ObjectUnit : PoolableMono,IProvidableFieldInfo
+    public class ObjectUnit : PoolableMono, IProvidableFieldInfo
     {
         [HideInInspector] public CompressLayer compressLayer = CompressLayer.Default;
         [HideInInspector] public bool climbableUnit = false;
@@ -35,12 +35,15 @@ namespace AxisConvertSystem
 
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
+        private LayerMask _climbLayerMask;
 
         private UnClimbableEffect _unClimbableEffect;
 
         public virtual void Awake()
         {
             IsHide = false;
+
+            _climbLayerMask = LayerMask.GetMask("Player") | LayerMask.GetMask("Platform");
 
             Section = GetComponentInParent<Section>();
             Collider = GetComponent<Collider>();
@@ -110,10 +113,6 @@ namespace AxisConvertSystem
             }
             SynchronizePosition(axis);
             _convertedInfo = ConvertInfo(_unitInfo, axis);
-            if (gameObject.name == "FractureObject")
-            {
-                Debug.Log($"Convert");
-            }
         }
         
         public virtual void UnitSetting(AxisType axis)
@@ -127,16 +126,12 @@ namespace AxisConvertSystem
 
             if (climbableUnit)
             {
-                Collider.isTrigger = axis == AxisType.Y;
+                Collider.excludeLayers = axis == AxisType.Y ? _climbLayerMask : 0;
             }
             
             if (!staticUnit && axis != AxisType.Y)
             {
                 Rigidbody.FreezeAxisPosition(axis);
-            }
-            if (gameObject.name == "FractureObject")
-            {
-                Debug.Log($"UnitSetting");
             }
         }
 
