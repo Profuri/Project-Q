@@ -30,27 +30,24 @@ public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
         foreach (Resolution resolution in Screen.resolutions)
         {
             // 가로세로 비율 계산
-            if(resolution.width * 9 == resolution.height * 16)
+            if (ResolutionList.Count <= 0)
             {
-                if (ResolutionList.Count <= 0)
-                {
-                    ResolutionList.Add(resolution);
-                    continue;
-                }
+                ResolutionList.Add(resolution);
+                continue;
+            }
 
-                var width = resolution.width;
-                var height = resolution.height;
-                var lastWidth = ResolutionList.Last().width;
-                var lastHeight = ResolutionList.Last().height;
+            var width = resolution.width;
+            var height = resolution.height;
+            var lastWidth = ResolutionList.Last().width;
+            var lastHeight = ResolutionList.Last().height;
 
-                if (width == lastWidth && height == lastHeight)
-                {
-                    ResolutionList[ResolutionList.Count - 1] = resolution;
-                }
-                else
-                {
+            if (width == lastWidth && height == lastHeight)
+            {
+                ResolutionList[ResolutionList.Count - 1] = resolution;
+            }
+            else
+            {
                     ResolutionList.Add(resolution);
-                }
             }
         }
 
@@ -62,7 +59,6 @@ public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
         SetResolution(ResolutionList.Count - 1);
         SetFullScreen(_fullScreen);
         SetQuality(_quality);
-
     }
 
     public void SetResolution(int index)
@@ -75,6 +71,7 @@ public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
         var height = resolution.height;
 
         Screen.SetResolution(width, height, Screen.fullScreen);
+        CameraManager.Instance.FixedCameraRectWithResolution(width, height);
     }
 
     public void SetFullScreen(bool fullScreen)

@@ -20,14 +20,11 @@ public class AudioSettingPanel : WindowPanel
             {EAUDIO_MIXER.MASTER,_masterSlider },{EAUDIO_MIXER.BGM,_bgmSlider },{EAUDIO_MIXER.SFX,_sfxSlider }
         };
 
-        Debug.Log($"DictionaryCnt: {_sliderDictionary.Count}");
-
         foreach(KeyValuePair<EAUDIO_MIXER,UISlider3D> kvp in _sliderDictionary)
         {
             UISlider3D slider = kvp.Value;
             EAUDIO_MIXER mixerType = kvp.Key;
 
-            Debug.Log($"Slider: {slider}");
             slider.onSliderValueChanged.AddListener((volume) => SetVolume(mixerType,volume));
         }
     }
