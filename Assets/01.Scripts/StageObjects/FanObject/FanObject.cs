@@ -115,6 +115,7 @@ public class FanObject : InteractableObject
         {
             foreach (var unit in _affectedUnits)
             {
+                unit.StopImmediately(false);
                 unit.useGravity = true;
             }
             _affectedUnits.Clear();
