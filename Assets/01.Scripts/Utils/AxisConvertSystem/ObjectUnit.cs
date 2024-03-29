@@ -130,7 +130,7 @@ namespace AxisConvertSystem
                 Collider.isTrigger = axis == AxisType.Y;
             }
             
-            if (!staticUnit)
+            if (!staticUnit && axis != AxisType.Y)
             {
                 Rigidbody.FreezeAxisPosition(axis);
             }
