@@ -71,7 +71,7 @@ public class CameraManager : BaseManager<CameraManager>
 
     public void FixedCameraRectWithResolution(int width, int height)
     {
-        var viewportRect = MainCam.rect;
+        var viewportRect = new Rect(0, 0, 1, 1);
 
         var screenAspectRatio = (float)width / height;
         var targetAspectRatio = (float)16 / 9;
@@ -81,7 +81,7 @@ public class CameraManager : BaseManager<CameraManager>
             viewportRect.height = screenAspectRatio / targetAspectRatio;
             viewportRect.y = (1f - viewportRect.height) / 2f;
         }
-        else
+        else if(screenAspectRatio > targetAspectRatio)
         {
             viewportRect.width = targetAspectRatio / screenAspectRatio;
             viewportRect.x = (1f - viewportRect.width) / 2f;
