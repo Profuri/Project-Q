@@ -13,6 +13,7 @@ public class SaveData
         VolumeDictionary = new SerializableDictionary<EAUDIO_MIXER, float>();
 
         resolutionIndex = (uint)Screen.resolutions.Length - 1;
+        DefaultQuality = QualityType.High;
     }
 
     public SerializableDictionary<ChapterType, bool> ChapterProgressDictionary;

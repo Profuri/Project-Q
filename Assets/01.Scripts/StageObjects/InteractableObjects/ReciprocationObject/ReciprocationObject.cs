@@ -9,6 +9,8 @@ public class ReciprocationObject : InteractableObject
     [SerializeField] private float _reciprocationDistance;
     [SerializeField] private float _reciprocationSpeed;
 
+    [SerializeField] private LayerMask _checkCollisionLayer;
+
     private Vector3 _originPos;
     private Vector3 _destPos;
 
@@ -18,6 +20,12 @@ public class ReciprocationObject : InteractableObject
         _originPos = transform.localPosition;
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
     }
+
+    public override void UpdateUnit()
+    {
+        base.UpdateUnit();
+    }
+
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
@@ -40,7 +48,36 @@ public class ReciprocationObject : InteractableObject
         var lerpPos = Vector3.Lerp(curPos, destPos, _reciprocationSpeed * Time.deltaTime);
 
         transform.localPosition = lerpPos;
+
+
+        float yDiff = transform.localPosition.y - lerpPos.y;
+
+        //여기서 CollisionTest 해가지고 아래 끼면 재생성 되게
+
+        if(yDiff > 0.01f)
+        {
+            CheckCollision();
+        }
     }
+
+    private void CheckCollision()
+    {
+        Vector3 center = Collider.bounds.center;
+        Vector3 halfExtents = Collider.bounds.size * 0.5f;
+        Quaternion quaternion = transform.rotation;
+        float maxDistance = Collider.bounds.size.y + 0.1f;
+
+        RaycastHit[] cols = Physics.BoxCastAll(center,halfExtents,Vector3.down,quaternion,maxDistance,_checkCollisionLayer);
+
+        foreach(RaycastHit hit in cols)
+        {
+            if(hit.collider.TryGetComponent(out PlayerUnit playerUnit))
+            {
+                playerUnit.ReloadUnit();
+            }
+        }
+    }
+
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
@@ -55,6 +92,14 @@ public class ReciprocationObject : InteractableObject
         Gizmos.DrawLine(origin, dest);
         Gizmos.DrawWireCube(origin, size);
         Gizmos.DrawWireCube(dest, size);
+
+        Collider col = GetComponent<Collider>();
+        if(col != null)
+        {
+            Vector3 center = col.bounds.center - new Vector3(0f,0.1f,0f);
+            Gizmos.DrawCube(center, col.bounds.size);
+        }
+
     }
 #endif
 }

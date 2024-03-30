@@ -8,6 +8,8 @@ public class UIComponent : PoolableMono
     public UIComponentTweenData tweenData;
     
     public Transform ParentTrm { get; private set; }
+    
+
 
     protected virtual void Awake()
     {

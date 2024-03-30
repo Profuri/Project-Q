@@ -64,7 +64,6 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     
     public override void StartManager()
     {
-        PlayBGM("TestBGM");
         DataManager.Instance.SettingDataProvidable(this, this);
         //DataManager.Instance.LoadData(this);
     }

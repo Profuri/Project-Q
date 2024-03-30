@@ -108,6 +108,7 @@ public class UIManager : BaseManager<UIManager>
             }
             
             clickable.OnClickHandle();
+
         }
     }
 

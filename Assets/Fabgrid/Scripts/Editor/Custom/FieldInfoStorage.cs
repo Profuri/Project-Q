@@ -23,7 +23,6 @@ namespace Fabgrid
                 Debug.LogError($"Can't Find Type: {type}");
             }
         }
-
         public static void SetFieldInfo(IProvidableFieldInfo providable)
         {
             s_fieldInfoDictionary.Clear();
