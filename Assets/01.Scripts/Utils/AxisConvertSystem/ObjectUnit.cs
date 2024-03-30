@@ -191,12 +191,21 @@ namespace AxisConvertSystem
 
             if (activeUnit)
             {
+                gameObject.SetActive(true);
+                Dissolve(0f, 0.5f);
+                
                 Convert(Converter.AxisType);
                 UnitSetting(Converter.AxisType);
                 DepthSetting();
             }
+            else
+            {
+                Dissolve(active ? 0f : 1f, 0.5f, true, () => 
+                {
+                    gameObject.SetActive(false);    
+                });
+            }
             
-            Dissolve(active ? 0f : 1f, 0.5f);
         }
 
         protected virtual void Hide(bool hide)
