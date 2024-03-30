@@ -86,7 +86,6 @@ public class DataManager : BaseManager<DataManager>
         Action<SaveData> saveAction = dataProvidable?.GetSaveAction();
         Action<SaveData> loadAction = dataLoadable?.GetLoadAction();
 
-
         if(saveAction != null)
         {
             if (_dataSaveDictionary.ContainsKey(dataProvidable) == false)
@@ -96,11 +95,9 @@ public class DataManager : BaseManager<DataManager>
             else
             {
                 _dataSaveDictionary[dataProvidable] = saveAction;
-                Debug.LogError($"Dictionary has value: {dataProvidable}");
+                Debug.LogWarning($"[DataManager] Dictionary already has value: {dataProvidable}");
             }
         }
-
-
 
         if (loadAction != null)
         {
@@ -111,7 +108,7 @@ public class DataManager : BaseManager<DataManager>
             else
             {
                 _dataLoadDictionary[dataLoadable] = loadAction;
-                Debug.LogError($"Dictionary has value: {dataLoadable}");
+                Debug.LogWarning($"[DataManager] Dictionary already has value: {dataLoadable}");
             }
 
         }

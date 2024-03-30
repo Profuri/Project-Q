@@ -32,7 +32,6 @@ public class SettingWindow : UIComponent
     {
         _currentPanel?.ReleasePanel();
         Disappear();
-
     }
 
     // Button Callbacks
