@@ -25,18 +25,14 @@ public class SettingWindow : UIComponent
     {
         base.Appear(parentTrm, callback);
         ChangePanel(_mainSettingPanel);
-
-        CursorManager.SetCursorEnable(true);
-        CursorManager.SetCursorLockState(CursorLockMode.None);
+        EnableCursor();
     }
-
+    
     public void Close()
     {
         _currentPanel?.ReleasePanel();
         Disappear();
 
-        CursorManager.SetCursorEnable(false);
-        CursorManager.SetCursorLockState(CursorLockMode.Locked);
     }
 
     // Button Callbacks
@@ -65,5 +61,17 @@ public class SettingWindow : UIComponent
         _currentPanel?.ReleasePanel();
         _currentPanel = panel;
         _currentPanel.LoadPanel();
+    }
+
+    public void EnableCursor()
+    {
+        CursorManager.SetCursorEnable(true);
+        CursorManager.SetCursorLockState(CursorLockMode.None);
+    }
+
+    public void DisableCursor()
+    {
+        CursorManager.SetCursorEnable(false);
+        CursorManager.SetCursorLockState(CursorLockMode.Locked);
     }
 }
