@@ -11,6 +11,7 @@ namespace AxisConvertSystem
     public class ObjectUnit : PoolableMono, IProvidableFieldInfo
     {
         [HideInInspector] public CompressLayer compressLayer = CompressLayer.Default;
+        [HideInInspector] public UnitRenderType renderType = UnitRenderType.Opaque;
         [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
         [HideInInspector] public bool activeUnit = true;
@@ -117,9 +118,9 @@ namespace AxisConvertSystem
         
         public virtual void UnitSetting(AxisType axis)
         {
-            ApplyInfo(_convertedInfo, activeUnit);
+            ApplyInfo(_convertedInfo);
 
-            if (IsHide)
+            if (DepthHandler.Hide)
             {
                 return;
             }
@@ -135,17 +136,22 @@ namespace AxisConvertSystem
             }
         }
 
-        private void ApplyInfo(UnitInfo info, bool hideSetting)
+        public virtual void DepthSetting()
+        {
+            if (!activeUnit)
+            {
+                return;
+            }
+
+            Hide(DepthHandler.Hide);
+        }
+
+        private void ApplyInfo(UnitInfo info)
         {
             transform.localPosition = info.LocalPos;
             transform.localRotation = info.LocalRot;
             transform.localScale = info.LocalScale;
             Collider.SetCenter(info.ColliderCenter);
-            
-            if (hideSetting)
-            {
-                Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
-            }
         }
         
         private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
@@ -175,9 +181,15 @@ namespace AxisConvertSystem
 
         public virtual void Activate(bool active)
         {
+            if (activeUnit == active)
+            {
+                return;
+            }
+            
             activeUnit = active;
-            gameObject.SetActive(active);
             Collider.enabled = active;
+            
+            Dissolve(active ? 0f : 1f, 0.5f);
         }
 
         protected void Hide(bool hide)

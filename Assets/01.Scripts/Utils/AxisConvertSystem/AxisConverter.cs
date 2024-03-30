@@ -140,6 +140,10 @@ namespace AxisConvertSystem
             {
                 unit.UnitSetting(axisType);
             }
+            foreach (var unit in _section.SectionUnits)
+            {
+                unit.DepthSetting();
+            }
 
             AxisType = axisType;
         }

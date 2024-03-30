@@ -10,11 +10,11 @@ public class TutorialChapter : Chapter
     {
         if(chapterType == Data.chapter)
         {
-
             if (saveData.IsShowSequence)
             {
-                _cpuTrm.position = new Vector3(_cpuTrm.position.x, _cpuTrm.position.y + _upOffset, _cpuTrm.position.z);
-                Debug.Log($"Position: {_cpuTrm.position}");
+                _cpuTrm.position += Vector3.up *_upOffset;
+                transform.position -= Vector3.up * _upOffset;
+                
                 Activate(false);
                 return;
             }

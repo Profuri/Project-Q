@@ -13,6 +13,12 @@ public class ObstacleObject : InteractableObject
         OnInteraction(null, false);
     }
 
+    public override void UnitSetting(AxisType axis)
+    {
+        base.UnitSetting(axis);
+        OnInteraction(null, false);
+    }
+
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         var pos = Collider.bounds.center;
