@@ -10,6 +10,7 @@ public class GameManager : MonoSingleton<GameManager>
     public CoreData CoreData => _coreData;
     
     public delegate void UnityEventListener();
+    
     public event UnityEventListener OnStartEvent = null;
 
     public bool InPause { get; set; }

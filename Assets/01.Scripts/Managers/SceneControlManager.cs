@@ -14,6 +14,7 @@ public class SceneControlManager : BaseManager<SceneControlManager>
     [SerializeField] private float _loadingTime;
 
     private SceneTransitionCanvas _currentCanvas;
+
     public override void StartManager()
     {
         LoadScene(_startSceneType);
@@ -40,6 +41,7 @@ public class SceneControlManager : BaseManager<SceneControlManager>
                 _currentCanvas.PresentTransition(1.0f, 0.0f, _fadeTime, () =>
                 {
                     onLoadedCallback?.Invoke();
+                    _currentScene.onLoadScene?.Invoke();
                     PoolManager.Instance.Push(_currentCanvas);
                     _currentCanvas = null;
                 });

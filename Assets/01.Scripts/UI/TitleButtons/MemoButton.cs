@@ -9,6 +9,11 @@ public class MemoButton : InteractableObject
     
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
+        GenerateMemoWindow();
+    }
+
+    public void GenerateMemoWindow()
+    {
         if (_memoWindow is null || !_memoWindow.poolOut)
         {
             _memoWindow = UIManager.Instance.GenerateUI("MemoWindow", _titleCanvasTrm) as MemoWindow;
