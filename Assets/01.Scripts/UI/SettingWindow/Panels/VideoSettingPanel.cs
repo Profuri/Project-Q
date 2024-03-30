@@ -41,7 +41,12 @@ public class VideoSettingPanel : WindowPanel
         }
         
         var mousePoint = InputManager.Instance.InputReader.mouseScreenPoint;
-        dropdown.SetPosition(mousePoint);
+        var mousePercent = new Vector2(mousePoint.x / Screen.width, mousePoint.y / Screen.height);
+
+        var canvasRect = ((RectTransform)UIManager.Instance.MainCanvas2D.transform).rect;
+        var canvasPos = new Vector2(canvasRect.width * mousePercent.x, canvasRect.height * mousePercent.y);
+        
+        dropdown.SetPosition(canvasPos);
     }
     
     public void FullScreenSetting(bool fullScreen)

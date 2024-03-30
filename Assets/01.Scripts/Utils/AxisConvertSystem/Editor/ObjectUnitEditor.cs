@@ -46,6 +46,7 @@ namespace AxisConvertSystem.Editor
             
             GUILayout.Label("Default Unit Setting");
             VariableLoad(ref _target.compressLayer, (CompressLayer)EditorGUILayout.EnumPopup("Compress Layer", _target.compressLayer));
+            VariableLoad(ref _target.renderType, (UnitRenderType)EditorGUILayout.EnumPopup("Render Target", _target.renderType));
             VariableLoad(ref _target.staticUnit, EditorGUILayout.Toggle("Static Unit", _target.staticUnit));
             VariableLoad(ref _target.climbableUnit, EditorGUILayout.Toggle("Climbable Unit", _target.climbableUnit));
             VariableLoad(ref _target.activeUnit, EditorGUILayout.Toggle("Active Unit", _target.activeUnit));

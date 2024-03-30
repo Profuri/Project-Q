@@ -3,15 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Xml.Schema;
 using DG.Tweening;
 using UnityEngine;
 
 namespace AxisConvertSystem
 {
-    public class ObjectUnit : PoolableMono,IProvidableFieldInfo
+    public class ObjectUnit : PoolableMono, IProvidableFieldInfo
     {
         [HideInInspector] public CompressLayer compressLayer = CompressLayer.Default;
+        [HideInInspector] public UnitRenderType renderType = UnitRenderType.Opaque;
         [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
         [HideInInspector] public bool activeUnit = true;
@@ -36,12 +36,15 @@ namespace AxisConvertSystem
 
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
+        private LayerMask _climbLayerMask;
 
         private UnClimbableEffect _unClimbableEffect;
 
         public virtual void Awake()
         {
             IsHide = false;
+
+            _climbLayerMask = LayerMask.GetMask("Player") | LayerMask.GetMask("Platform");
 
             Section = GetComponentInParent<Section>();
             Collider = GetComponent<Collider>();
@@ -115,35 +118,40 @@ namespace AxisConvertSystem
         
         public virtual void UnitSetting(AxisType axis)
         {
-            ApplyInfo(_convertedInfo, activeUnit);
+            ApplyInfo(_convertedInfo);
 
-            if (IsHide)
+            if (DepthHandler.Hide)
             {
                 return;
             }
 
             if (climbableUnit)
             {
-                Collider.isTrigger = axis == AxisType.Y;
+                Collider.excludeLayers = axis == AxisType.Y ? _climbLayerMask : 0;
             }
             
-            if (!staticUnit)
+            if (!staticUnit && axis != AxisType.Y)
             {
                 Rigidbody.FreezeAxisPosition(axis);
             }
         }
 
-        private void ApplyInfo(UnitInfo info, bool hideSetting)
+        public virtual void DepthSetting()
+        {
+            if (!activeUnit)
+            {
+                return;
+            }
+
+            Hide(DepthHandler.Hide);
+        }
+
+        private void ApplyInfo(UnitInfo info)
         {
             transform.localPosition = info.LocalPos;
             transform.localRotation = info.LocalRot;
             transform.localScale = info.LocalScale;
             Collider.SetCenter(info.ColliderCenter);
-            
-            if (hideSetting)
-            {
-                Hide(Math.Abs(DepthHandler.Depth - float.MaxValue) >= 0.01f);
-            }
         }
         
         private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
@@ -173,9 +181,15 @@ namespace AxisConvertSystem
 
         public virtual void Activate(bool active)
         {
+            if (activeUnit == active)
+            {
+                return;
+            }
+            
             activeUnit = active;
-            gameObject.SetActive(active);
             Collider.enabled = active;
+            
+            Dissolve(active ? 0f : 1f, 0.5f);
         }
 
         protected void Hide(bool hide)
@@ -248,9 +262,13 @@ namespace AxisConvertSystem
 
             if (axis == AxisType.None)
             {
-                if (CheckStandObject(out var col))
+                if (!subUnit && CheckStandObject(out var col))
                 {
                     SynchronizePositionOnStanding(col);
+                }
+                else
+                {
+                    _unitInfo.LocalPos = transform.localPosition;
                 }
             }
             else
@@ -266,7 +284,7 @@ namespace AxisConvertSystem
 
             var standPos = transform.localPosition;
             standPos.y = col.bounds.max.y;
-
+            
             var standUnitLocalPos = info.LocalPos;
             if (unit.subUnit)
             {
@@ -274,7 +292,7 @@ namespace AxisConvertSystem
                 var parentInfo = parentUnit._unitInfo;
                 standUnitLocalPos += parentInfo.LocalPos;
             }
-            
+
             if (Converter.AxisType == AxisType.Y)
             {
                 standPos.y *= info.LocalScale.y;
@@ -282,14 +300,9 @@ namespace AxisConvertSystem
             }
             else
             {
-                if (unit is PlaneUnit)
-                {
-                    standPos.SetAxisElement(Converter.AxisType, standUnitLocalPos.GetAxisElement(Converter.AxisType));
-                }
-                else
-                {
-                    standPos.SetAxisElement(Converter.AxisType, standUnitLocalPos.GetAxisElement(Converter.AxisType));
-                }
+                standPos.SetAxisElement(Converter.AxisType,
+                    (unit is PlaneUnit or TutorialObjectUnit ? _unitInfo.LocalPos : standUnitLocalPos)
+                    .GetAxisElement(Converter.AxisType));
             }
 
             _unitInfo.LocalPos = standPos;
