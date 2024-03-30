@@ -215,8 +215,7 @@ GameObject:
   - component: {fileID: 6755510101772228636}
   - component: {fileID: 7041642057818713983}
   - component: {fileID: 7856407372285298661}
-  - component: {fileID: 406441414484410968}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LaserLauncherObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,7 +268,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 59331445b98fd4be69155d453dd82a06, type: 2}
+  - {fileID: 2100000, guid: 88824f48a6f6c484d9a28ff0d1b11426, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -429,10 +428,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 5
+  poolOut: 0
   compressLayer: 1
+  renderType: 0
   climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
+  subUnit: 0
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
@@ -445,21 +447,3 @@ MonoBehaviour:
   _isBreath: 0
   _refreshDelay: 1
   _launchTime: 3
---- !u!114 &406441414484410968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8722439006986682453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 5
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []

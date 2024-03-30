@@ -2,8 +2,6 @@ using AxisConvertSystem;
 using InteractableSystem;
 using UnityEngine;
 
-
-[RequireComponent(typeof(BoxCollider))]    
 public class TutorialObjectUnit : InteractableObject
 {
     [Header("Tutorial System")] 
@@ -15,7 +13,6 @@ public class TutorialObjectUnit : InteractableObject
     public override void Init(AxisConverter converter)
     {
         base.Init(converter);
-
         gameObject.layer = LayerMask.NameToLayer("Interactable");
     }
 
@@ -36,19 +33,6 @@ public class TutorialObjectUnit : InteractableObject
         }
     }
 
-    public override void Convert(AxisType axis)
-    {
-        if(axis != AxisType.None)
-        {
-            gameObject.layer = LayerMask.NameToLayer("Default");
-        }
-        else
-        {
-            gameObject.layer = LayerMask.NameToLayer("Interactable");
-        }
-        base.Convert(axis);
-    }
-
     public override void UnitSetting(AxisType axis)
     {
         base.UnitSetting(axis);
@@ -60,6 +44,11 @@ public class TutorialObjectUnit : InteractableObject
                 _tutorialMark.Off();
                 _tutorialMark = null;
             }
+            Dissolve(1, 0.5f);
+        }
+        else
+        {
+            Dissolve(0, 0.5f);
         }
     }
 

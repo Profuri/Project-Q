@@ -36,7 +36,9 @@ public class Chapter : InteractableObject
             () =>
             { 
                 StageManager.Instance.StartNewChapter(Data);
-                SceneControlManager.Instance.Player.SetPosition(StageManager.Instance.CurrentStage.PlayerResetPoint);
+                var playerPos = StageManager.Instance.CurrentStage.CenterPosition +
+                                StageManager.Instance.CurrentStage.PlayerResetPoint;
+                SceneControlManager.Instance.Player.SetPosition(playerPos);
                 SceneControlManager.Instance.Player.Dissolve(0f, 0.5f);
             },
             () =>

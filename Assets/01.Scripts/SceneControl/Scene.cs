@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Scene : PoolableMono
 {
@@ -8,6 +9,9 @@ public class Scene : PoolableMono
     
     public PlayerUnit Player { get; private set; }
     private List<PoolableMono> _objects;
+
+    public UnityEvent onLoadScene = null;
+    public UnityEvent onDestroyScene = null;
 
     private void Awake()
     {
@@ -35,6 +39,8 @@ public class Scene : PoolableMono
             DeleteObject(_objects.First());
         }
         _objects.Clear();
+        
+        onDestroyScene?.Invoke();
     }
 
     public PoolableMono AddObject(string id)

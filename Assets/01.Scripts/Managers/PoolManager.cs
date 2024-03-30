@@ -9,7 +9,7 @@ public class PoolManager : BaseManager<PoolManager>
     private readonly Dictionary<string, Pool> _pools = new Dictionary<string, Pool>();
 
     [SerializeField] private List<PoolingList> _poolingLists;
-    
+
     public override void StartManager()
     {
         foreach (var pair in _poolingLists.SelectMany(poolingList => poolingList.poolingItems))
