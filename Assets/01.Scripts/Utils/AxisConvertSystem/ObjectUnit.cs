@@ -188,6 +188,13 @@ namespace AxisConvertSystem
             
             activeUnit = active;
             Collider.enabled = active;
+
+            if (activeUnit)
+            {
+                Convert(Converter.AxisType);
+                UnitSetting(Converter.AxisType);
+                DepthSetting();
+            }
             
             Dissolve(active ? 0f : 1f, 0.5f);
         }
