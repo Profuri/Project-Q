@@ -52,7 +52,7 @@ public class ReciprocationObject : InteractableObject
 
         float yDiff = transform.localPosition.y - lerpPos.y;
 
-        //¿©±â¼­ CollisionTest ÇØ°¡Áö°í ¾Æ·¡ ³¢¸é Àç»ý¼º µÇ°Ô
+        //ï¿½ï¿½ï¿½â¼­ CollisionTest ï¿½Ø°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç°ï¿½
 
         if(yDiff > 0.01f)
         {
@@ -83,23 +83,16 @@ public class ReciprocationObject : InteractableObject
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.white;
+        var col = GetComponent<Collider>();
 
         var origin = transform.position;
         var dest = origin + _reciprocationDir * _reciprocationDistance;
 
-        var size = transform.localScale;
+        var size = col.bounds.size;
 
         Gizmos.DrawLine(origin, dest);
         Gizmos.DrawWireCube(origin, size);
         Gizmos.DrawWireCube(dest, size);
-
-        Collider col = GetComponent<Collider>();
-        if(col != null)
-        {
-            Vector3 center = col.bounds.center - new Vector3(0f,0.1f,0f);
-            Gizmos.DrawCube(center, col.bounds.size);
-        }
-
     }
 #endif
 }

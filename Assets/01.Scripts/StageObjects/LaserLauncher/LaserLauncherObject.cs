@@ -150,9 +150,10 @@ public class LaserLauncherObject : ObjectUnit
         {
             Gizmos.color = Color.red;
             var col = GetComponent<Collider>();
+            var forward = transform.forward;
 
-            var origin = col.bounds.center + _shotPointTrm.localPosition;
-            var dest = origin + transform.forward * _laserDistance;
+            var origin = col.bounds.center + forward * _shotPointTrm.localPosition.z;
+            var dest = origin + forward * _laserDistance;
             
             Gizmos.DrawLine(origin, dest);
         }
