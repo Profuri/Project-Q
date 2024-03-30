@@ -73,8 +73,14 @@ public class FanObject : InteractableObject
                 ReleaseFan();
             }
         }
+        else
+        {
+            var prev = _enabled;
+            ReleaseFan();
+            _enabled = prev;
+        }
     }
-
+    
     private void EnableFan()
     {
         _enabled = true;
