@@ -22,6 +22,9 @@ public class StageManager : BaseManager<StageManager>, IProvideSave,IProvideLoad
 
     public void StartNewChapter(ChapterData chapterData)
     {
+        CursorManager.SetCursorEnable(false);
+        CursorManager.SetCursorLockState(CursorLockMode.Locked);
+
         _currentPlayChapterData = chapterData;
         CurrentStage = SceneControlManager.Instance.AddObject(
             $"{chapterData.chapter.ToString().ToUpperFirstChar()}_Stage_0") as Stage;

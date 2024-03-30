@@ -131,10 +131,6 @@ namespace AxisConvertSystem
             {
                 Rigidbody.FreezeAxisPosition(axis);
             }
-            if(activeUnit)
-            {
-                Rigidbody.velocity = Vector3.zero;
-            }
         }
 
         private void ApplyInfo(UnitInfo info, bool hideSetting)

@@ -21,6 +21,13 @@ public class ReciprocationObject : InteractableObject
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
     }
 
+    public override void UpdateUnit()
+    {
+        base.UpdateUnit();
+        CheckCollision();
+    }
+
+
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         var curPos = transform.localPosition;  
@@ -44,13 +51,12 @@ public class ReciprocationObject : InteractableObject
         transform.localPosition = lerpPos;
 
         //여기서 CollisionTest 해가지고 아래 끼면 재생성 되게
-        CheckCollision();
     }
 
     private void CheckCollision()
     {
         Vector3 center = Collider.bounds.center;
-        Vector3 halfExtents = Collider.bounds.extents * 0.5f;
+        Vector3 halfExtents = Collider.bounds.extents* 0.8f;
         Quaternion quaternion = transform.rotation;
         float maxDistance = Collider.bounds.size.y + 0.1f;
 
@@ -79,6 +85,14 @@ public class ReciprocationObject : InteractableObject
         Gizmos.DrawLine(origin, dest);
         Gizmos.DrawWireCube(origin, size);
         Gizmos.DrawWireCube(dest, size);
+
+        Collider col = GetComponent<Collider>();
+        if(col != null)
+        {
+            Vector3 center = col.bounds.center - new Vector3(0f,col.bounds.size.y,0f);
+            Gizmos.DrawCube(center, col.bounds.size);
+        }
+
     }
 #endif
 }
