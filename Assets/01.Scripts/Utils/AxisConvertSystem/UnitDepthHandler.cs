@@ -43,7 +43,6 @@ namespace AxisConvertSystem
                 if (_depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis]))
                 {
                     Depth = 0f;
-                    Debug.Log(unit.name);
                     break;
                 }
             }

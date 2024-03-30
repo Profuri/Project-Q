@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5935017601611130483}
   - component: {fileID: 9058303059745029841}
   - component: {fileID: 8562268506322149888}
-  m_Layer: 15
+  m_Layer: 8
   m_Name: LaserReflectPlate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,14 +98,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 0
+  poolOut: 0
   compressLayer: 1
+  renderType: 0
   climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
+  subUnit: 1
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
   useGravity: 1
+  <Offset>k__BackingField: {x: 0, y: 0, z: 0}
   _interactType: 2
   _attribute: 2
 --- !u!65 &8562268506322149888
@@ -142,8 +146,7 @@ GameObject:
   - component: {fileID: 4623207318644392269}
   - component: {fileID: 3933355370811993332}
   - component: {fileID: 3730230079011277858}
-  - component: {fileID: 4742208029708727348}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: LaserReflectObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -250,29 +253,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 5
+  poolOut: 0
   compressLayer: 1
+  renderType: 0
   climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
+  subUnit: 0
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
   useGravity: 1
---- !u!114 &4742208029708727348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7210121946188389689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 5
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
