@@ -181,9 +181,15 @@ namespace AxisConvertSystem
 
         public virtual void Activate(bool active)
         {
+            if (activeUnit == active)
+            {
+                return;
+            }
+            
             activeUnit = active;
-            gameObject.SetActive(active);
             Collider.enabled = active;
+            
+            Dissolve(active ? 0f : 1f, 0.5f);
         }
 
         protected void Hide(bool hide)
