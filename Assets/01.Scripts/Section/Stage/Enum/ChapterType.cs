@@ -1,10 +1,10 @@
 public enum ChapterType
 {
-    MAINBOARD = 0,
-    GPU = 1,
-    COOLER = 2,
-    STORAGE = 3,
-    POWER = 4,
-    CPU = 5,
-    CNT = 6,
+    Tutorial = 0,
+    Gpu = 1,
+    Cooler = 2,
+    Storage = 3,
+    Power = 4,
+    Cpu = 5,
+    Cnt = 6,
 }

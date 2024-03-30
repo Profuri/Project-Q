@@ -12,6 +12,7 @@ public class PlayerAxisControlState : PlayerBaseState
     public override void EnterState()
     {
         base.EnterState();
+        Player.StopImmediately(true);
 
         if (!Player.Converter.Convertable)
         {

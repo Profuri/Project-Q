@@ -12,16 +12,16 @@ public class MemoWindow : UIComponent
 
     }
 
-    public void Close()
-    {
-        Disappear();
-    }
-
     public override void Disappear(Action callback = null)
     {
         base.Disappear(callback);
 
         CursorManager.SetCursorEnable(false);
         CursorManager.SetCursorLockState(CursorLockMode.Locked);
+    }
+
+    public void Close()
+    {
+        Disappear();
     }
 }

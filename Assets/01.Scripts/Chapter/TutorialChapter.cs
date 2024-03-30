@@ -10,13 +10,19 @@ public class TutorialChapter : Chapter
 
     public override void ShowingSequence(ChapterType chapterType,SaveData saveData)
     {
-        if (_isShowing) return;
+        if (_isShowing)
+        {
+            return;
+        }
+
         if(chapterType == Data.chapter)
         {
             _isShowing = true;
             if (saveData.IsShowSequence)
             {
-                _cpuTrm.position = new Vector3(_cpuTrm.position.x, _cpuTrm.position.y + _upOffset, _cpuTrm.position.z);
+                _cpuTrm.position += Vector3.up *_upOffset;
+                transform.position -= Vector3.up * _upOffset;
+                
                 Activate(false);
                 return;
             }

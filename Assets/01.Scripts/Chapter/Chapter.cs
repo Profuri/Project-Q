@@ -2,7 +2,6 @@ using InteractableSystem;
 using UnityEngine.Events;
 using AxisConvertSystem;
 using UnityEngine;
-using System.Collections.Generic;
 using DG.Tweening;
 
 public class Chapter : InteractableObject
@@ -33,10 +32,20 @@ public class Chapter : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        SceneControlManager.Instance.LoadScene(SceneType.Stage, () =>
-        {
-            StageManager.Instance.StartNewChapter(Data);
-        });
+        SceneControlManager.Instance.LoadScene(SceneType.Stage, 
+            () =>
+            { 
+                StageManager.Instance.StartNewChapter(Data);
+                SceneControlManager.Instance.Player.SetPosition(StageManager.Instance.CurrentStage.PlayerResetPoint);
+                SceneControlManager.Instance.Player.Dissolve(0f, 0.5f);
+            },
+            () =>
+            {
+                var chapterInfoPanel = UIManager.Instance.GenerateUI("ChapterInfoPanel") as ChapterInfoPanel;
+                chapterInfoPanel.SetPosition(new Vector3(0, 0));
+                chapterInfoPanel.SetUp(Data.chapter);
+            }
+        );
     }
 
 
@@ -49,7 +58,7 @@ public class Chapter : InteractableObject
             return;
         }
 
-        if (chapterType == ChapterType.MAINBOARD)
+        if (chapterType == ChapterType.Tutorial)
         {
             Vector3 targetPos = transform.position;
 

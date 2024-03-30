@@ -57,10 +57,7 @@ public class ChapterScene : Scene, IProvideLoad
 
     public Action<SaveData> GetLoadAction()
     {
-        return (saveData) =>
-        {
-            LoadChapterEvents(saveData);
-        };
+        return LoadChapterEvents;
     }
     
     public void LoadToDataManager()
