@@ -1,3 +1,4 @@
+using AxisConvertSystem;
 using UnityEngine;
 
 public class PlayerJumpState : PlayerOnAirState
@@ -9,6 +10,12 @@ public class PlayerJumpState : PlayerOnAirState
     public override void EnterState()
     {
         base.EnterState();
+        if (Player.Converter.AxisType == AxisType.Y)
+        {
+            Controller.ChangeState(typeof(PlayerIdleState));
+            return;
+        }
+        
         Player.SetVelocity(Vector3.up * Player.Data.jumpPower, false);
     }
 

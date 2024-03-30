@@ -80,7 +80,29 @@ public class FanObject : InteractableObject
             _enabled = prev;
         }
     }
-    
+
+    protected override void Hide(bool hide)
+    {
+        if (!hide)
+        {
+            if (_enabled)
+            {
+                EnableFan();
+            }
+            else
+            {
+                ReleaseFan();
+            }
+        }
+        else
+        {
+            var prev = _enabled;
+            ReleaseFan();
+            _enabled = prev;
+        }
+        base.Hide(hide);
+    }
+
     private void EnableFan()
     {
         _enabled = true;
