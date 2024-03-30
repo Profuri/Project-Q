@@ -2,7 +2,6 @@ using InteractableSystem;
 using UnityEngine.Events;
 using AxisConvertSystem;
 using UnityEngine;
-using System.Collections.Generic;
 using DG.Tweening;
 
 public class Chapter : InteractableObject
@@ -33,10 +32,14 @@ public class Chapter : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        SceneControlManager.Instance.LoadScene(SceneType.Stage, () =>
-        {
-            StageManager.Instance.StartNewChapter(Data);
-        });
+        SceneControlManager.Instance.LoadScene(SceneType.Stage, 
+            () =>
+            { 
+                StageManager.Instance.StartNewChapter(Data);
+                SceneControlManager.Instance.Player.SetPosition(StageManager.Instance.CurrentStage.PlayerResetPoint);
+                SceneControlManager.Instance.Player.Dissolve(0f, 0.5f);
+            }
+        );
     }
 
 
