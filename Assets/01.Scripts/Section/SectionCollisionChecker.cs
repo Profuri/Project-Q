@@ -20,6 +20,7 @@ public class SectionCollisionChecker : MonoBehaviour
     {
         if(!_section.Active && other.TryGetComponent<PlayerUnit>(out var player))
         {
+            Debug.Log(other.name);
             _section.OnEnter(player);
         }
     }

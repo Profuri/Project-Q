@@ -20,7 +20,7 @@ public class Section : PoolableMono
     private List<BridgeObject> _bridgeObjects;
     public List<ObjectUnit> SectionUnits { get; private set; }
 
-    public bool Active { get; private set; }
+    public bool Active { get; set; }
     public bool Lock { get; set; }
     public Vector3 CenterPosition { get; private set; }
 
