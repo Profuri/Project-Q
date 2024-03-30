@@ -19,6 +19,11 @@ public class Stage : Section
         }
     }
 
+    public virtual void ReloadStage(PlayerUnit player)
+    {
+        
+    }
+
 #if UNITY_EDITOR
     private void OnValidate()
     {

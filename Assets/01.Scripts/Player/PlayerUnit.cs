@@ -31,6 +31,7 @@ public class PlayerUnit : ObjectUnit
         Animator = ModelTrm.GetComponent<Animator>();
         HoldingHandler = GetComponent<ObjectHoldingHandler>();
         
+
         _stateController = new StateController(this);
         _stateController.RegisterState(new PlayerIdleState(_stateController, true, "Idle"));
         _stateController.RegisterState(new PlayerMovementState(_stateController, true, "Movement"));
@@ -58,11 +59,6 @@ public class PlayerUnit : ObjectUnit
         {
             StageManager.Instance.StageClear(this);
         }
-
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            SceneControlManager.Instance.LoadScene(SceneType.Chapter);
-        }
         #endif
     }
 
@@ -76,18 +72,28 @@ public class PlayerUnit : ObjectUnit
         InputManagerHelper.OnDeadPlayer();
 
         Converter.ConvertDimension(AxisType.None);
+        Animator.SetBool(_activeHash, true);
+        _stateController.ChangeState(typeof(PlayerIdleState));
     }
 
     public override void OnPop()
     {
         InputManager.Instance.InputReader.OnInteractionEvent += OnInteraction;
+        InputManager.Instance.InputReader.OnReloadClickEvent += RestartStage;
+
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
-    }   
+    }
+    
+    private void RestartStage()
+    {
+        StageManager.Instance.RestartStage(this);
+    }
     
     public override void OnPush()
     {
         InputManager.Instance.InputReader.OnInteractionEvent -= OnInteraction;
+        InputManager.Instance.InputReader.OnReloadClickEvent -= RestartStage;
         Animator.SetBool(_activeHash, false);
     }
 

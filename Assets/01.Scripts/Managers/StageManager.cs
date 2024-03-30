@@ -3,7 +3,6 @@ using AxisConvertSystem;
 using UnityEngine;
 using System;
 
-
 public class StageManager : BaseManager<StageManager>, IProvideSave,IProvideLoad
 {
     public Stage CurrentStage { get; private set; }
@@ -36,6 +35,24 @@ public class StageManager : BaseManager<StageManager>, IProvideSave,IProvideLoad
         NextStage = SceneControlManager.Instance.AddObject(
             $"{chapter.ToString().ToUpperFirstChar()}_Stage_{stage.ToString()}") as Stage;
         CurrentStage.ConnectOtherSection(NextStage);
+    }
+
+    public void RestartStage(PlayerUnit player)
+    {
+        if(CurrentStage != null)
+        {
+            string stageName = CurrentStage.gameObject.name;
+            Vector3 currentPos = CurrentStage.CenterPosition;
+
+            SceneControlManager.Instance.DeleteObject(player);
+            CurrentStage.Disappear(() =>
+            {
+                CurrentStage = SceneControlManager.Instance.AddObject(stageName) as Stage;
+                //위치 설정
+                CurrentStage.Generate(currentPos, true);
+                SceneControlManager.Instance.AddObject(player.name);
+            });
+        }
     }
 
     public void ChangeToNextStage()

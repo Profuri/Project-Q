@@ -82,7 +82,7 @@ namespace AxisConvertSystem
                 }
             }
         }
-
+        
         public virtual void Init(AxisConverter converter)
         {
             Converter ??= converter;

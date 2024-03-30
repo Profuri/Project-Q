@@ -73,6 +73,15 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf275e9e-5ea1-40de-b5f6-2cd982452ecf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +181,17 @@ namespace InputControl
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""419e203e-9386-499e-a366-8a2099ac6a6b"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -332,6 +352,7 @@ namespace InputControl
             m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
             m_Player_AxisControl = m_Player.FindAction("AxisControl", throwIfNotFound: true);
             m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
+            m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_LeftClick = m_UI.FindAction("LeftClick", throwIfNotFound: true);
@@ -406,6 +427,7 @@ namespace InputControl
         private readonly InputAction m_Player_Interaction;
         private readonly InputAction m_Player_AxisControl;
         private readonly InputAction m_Player_Click;
+        private readonly InputAction m_Player_Reload;
         public struct PlayerActions
         {
             private @InputControls m_Wrapper;
@@ -415,6 +437,7 @@ namespace InputControl
             public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
             public InputAction @AxisControl => m_Wrapper.m_Player_AxisControl;
             public InputAction @Click => m_Wrapper.m_Player_Click;
+            public InputAction @Reload => m_Wrapper.m_Player_Reload;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -439,6 +462,9 @@ namespace InputControl
                 @Click.started += instance.OnClick;
                 @Click.performed += instance.OnClick;
                 @Click.canceled += instance.OnClick;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -458,6 +484,9 @@ namespace InputControl
                 @Click.started -= instance.OnClick;
                 @Click.performed -= instance.OnClick;
                 @Click.canceled -= instance.OnClick;
+                @Reload.started -= instance.OnReload;
+                @Reload.performed -= instance.OnReload;
+                @Reload.canceled -= instance.OnReload;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -577,6 +606,7 @@ namespace InputControl
             void OnInteraction(InputAction.CallbackContext context);
             void OnAxisControl(InputAction.CallbackContext context);
             void OnClick(InputAction.CallbackContext context);
+            void OnReload(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

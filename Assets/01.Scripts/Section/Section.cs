@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using AxisConvertSystem;
@@ -60,6 +61,7 @@ public class Section : PoolableMono
         ReloadSectionUnits();
         CenterPosition = position;
         transform.position = CenterPosition;
+
         if (moveRoutine)
         {
             Dissolve(true, 1.5f);
@@ -68,20 +70,24 @@ public class Section : PoolableMono
         }
     }
 
-    public void Disappear()
+    public void Disappear(Action Callback = null)
     {
         ReloadSectionUnits();
         Dissolve(false, 1.5f);
         transform.DOMove(CenterPosition - Vector3.up * _sectionData.sectionYDepth, 1.5f)
             .OnComplete(() =>
             {
-                PoolManager.Instance.Push(this);
+                SceneControlManager.Instance.DeleteObject(this);
+                //PoolManager.Instance.Push(this);
                 Active = false;
+                Callback?.Invoke();
             });
     }
 
     public void ReloadSectionUnits()
     {
+        //이거 플레이어 두번 들어감
+        //player two
         SectionUnits.Clear();
         transform.GetComponentsInChildren(SectionUnits);
     }
