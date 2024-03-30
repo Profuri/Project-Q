@@ -31,6 +31,8 @@ public class Scene : PoolableMono
 
     public override void OnPush()
     {
+        PoolManager.Instance.Push(Player);
+        
         InputManager.Instance.InputReader.ClearPlayerInputEvent();
         InputManager.Instance.InputReader.OnPauseClickEvent -= GameManager.Instance.Pause;
         

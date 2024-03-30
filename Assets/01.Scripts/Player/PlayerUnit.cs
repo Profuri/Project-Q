@@ -68,14 +68,14 @@ public class PlayerUnit : ObjectUnit
 
     public override void ReloadUnit(Action callBack = null)
     {
+        Converter.ConvertDimension(AxisType.None);
+        
         base.ReloadUnit(() =>
         {
             InputManagerHelper.OnRevivePlayer();
         });
         
         InputManagerHelper.OnDeadPlayer();
-
-        Converter.ConvertDimension(AxisType.None);
     }
 
     public override void OnPop()

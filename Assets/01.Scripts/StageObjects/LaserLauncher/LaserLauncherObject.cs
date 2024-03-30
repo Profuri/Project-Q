@@ -84,7 +84,7 @@ public class LaserLauncherObject : ObjectUnit
     {
         var cnt = _laserInfos.Count * 2;
         _laserRenderer.positionCount = cnt;
-        AddLaser(new LaserInfo{ origin = Collider.bounds.center + _shotPointTrm.localPosition, dir = transform.forward });
+        AddLaser(new LaserInfo{ origin = Collider.bounds.center + transform.forward * _shotPointTrm.localPosition.z, dir = transform.forward });
 
         for (var i = 0; i < cnt; i += 2)
         {
