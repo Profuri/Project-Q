@@ -1084,7 +1084,6 @@ GameObject:
   - component: {fileID: 9175441998783862170}
   - component: {fileID: 1342921954841687948}
   - component: {fileID: 4104141954182528526}
-  - component: {fileID: 7419751851654689521}
   m_Layer: 6
   m_Name: PictureObject (1)
   m_TagString: Untagged
@@ -1147,7 +1146,7 @@ MonoBehaviour:
   compressLayer: 1
   renderType: 0
   climbableUnit: 0
-  staticUnit: 0
+  staticUnit: 1
   activeUnit: 1
   subUnit: 0
   canStandMask:
@@ -1156,33 +1155,6 @@ MonoBehaviour:
   useGravity: 0
   _enableMat: {fileID: 2100000, guid: 88824f48a6f6c484d9a28ff0d1b11426, type: 2}
   _disableMat: {fileID: 2100000, guid: d9c9010cea91349f693e6dff9648b43e, type: 2}
---- !u!54 &7419751851654689521
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5405853094994501387}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &6635949003668158854
 GameObject:
   m_ObjectHideFlags: 0
@@ -4039,6 +4011,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.203
       objectReference: {fileID: 0}
+    - target: {fileID: 4019931829415813475, guid: 8552d6d7045c344b188b2882b307142a,
+        type: 3}
+      propertyPath: staticUnit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4915695829619687526, guid: 8552d6d7045c344b188b2882b307142a,
         type: 3}
       propertyPath: m_Name
@@ -4114,7 +4091,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7621565086546701724, guid: 8552d6d7045c344b188b2882b307142a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8099946091270130423, guid: 8552d6d7045c344b188b2882b307142a,
