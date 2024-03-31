@@ -40,9 +40,9 @@ public class PictureUnit : ObjectUnit
         _isEnableUnit = _enableAxis == axis || axis == AxisType.None;
     }
 
-    public override void UnitSetting(AxisType axis)
+    public override void DepthSetting()
     {
-        base.UnitSetting(axis);
+        base.DepthSetting();
 
         if (!activeUnit)
         {
