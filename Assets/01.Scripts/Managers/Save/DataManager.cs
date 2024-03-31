@@ -88,29 +88,12 @@ public class DataManager : BaseManager<DataManager>
 
         if(saveAction != null)
         {
-            if (_dataSaveDictionary.ContainsKey(dataProvidable) == false)
-            {
-                _dataSaveDictionary.Add(dataProvidable, saveAction);
-            }
-            else
-            {
-                _dataSaveDictionary[dataProvidable] = saveAction;
-                Debug.LogWarning($"[DataManager] Dictionary already has value: {dataProvidable}");
-            }
+            _dataSaveDictionary[dataProvidable] = saveAction;
         }
 
         if (loadAction != null)
         {
-            if (_dataLoadDictionary.ContainsKey(dataLoadable) == false)
-            {
-                _dataLoadDictionary.Add(dataLoadable, loadAction);
-            }
-            else
-            {
-                _dataLoadDictionary[dataLoadable] = loadAction;
-                Debug.LogWarning($"[DataManager] Dictionary already has value: {dataLoadable}");
-            }
-
+            _dataLoadDictionary[dataLoadable] = loadAction;
         }
     }
 

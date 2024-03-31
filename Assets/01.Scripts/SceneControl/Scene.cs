@@ -21,7 +21,7 @@ public class Scene : PoolableMono
     public override void OnPop()
     {
         Player = AddObject("Player") as PlayerUnit;
-        Player.transform.position = Vector3.zero;
+        Player.transform.localPosition = Vector3.zero;
 
         if (_type != SceneType.Title)
         {
@@ -31,6 +31,8 @@ public class Scene : PoolableMono
 
     public override void OnPush()
     {
+        PoolManager.Instance.Push(Player);
+        
         InputManager.Instance.InputReader.ClearPlayerInputEvent();
         InputManager.Instance.InputReader.OnPauseClickEvent -= GameManager.Instance.Pause;
         

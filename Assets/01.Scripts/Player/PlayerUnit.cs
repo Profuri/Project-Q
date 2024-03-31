@@ -1,10 +1,7 @@
 using System;
 using AxisConvertSystem;
-using InputControl;
 using InteractableSystem;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class PlayerUnit : ObjectUnit
 {
@@ -52,30 +49,25 @@ public class PlayerUnit : ObjectUnit
 
         _selectedInteractableObject = FindInteractable();
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         //Test code
         if(Input.GetKeyDown(KeyCode.J))
         {
             StageManager.Instance.StageClear(this);
         }
-
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            SceneControlManager.Instance.LoadScene(SceneType.Chapter);
-        }
-        #endif
+#endif
     }
 
     public override void ReloadUnit(Action callBack = null)
     {
+        Converter.ConvertDimension(AxisType.None);
+        
         base.ReloadUnit(() =>
         {
             InputManagerHelper.OnRevivePlayer();
         });
         
         InputManagerHelper.OnDeadPlayer();
-
-        Converter.ConvertDimension(AxisType.None);
     }
 
     public override void OnPop()
