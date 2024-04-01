@@ -81,7 +81,6 @@ namespace AxisConvertSystem
             {
                 if (transform.position.y <= GameManager.Instance.CoreData.destroyedDepth)
                 {
-                    Debug.Break();
                     ReloadUnit();
                 }
             }
@@ -304,7 +303,6 @@ namespace AxisConvertSystem
 
             var standPos = transform.localPosition;
             standPos.y = col.bounds.max.y;
-
             
             var standUnitLocalPos = info.LocalPos;
             if (unit.subUnit)
