@@ -3,15 +3,17 @@ using AxisConvertSystem;
 using UnityEngine;
 using System;
 
-
-public class StageManager : BaseManager<StageManager>, IProvideSave,IProvideLoad
+public class StageManager : BaseManager<StageManager>, IProvideSave 
 {
     public Stage CurrentStage { get; private set; }
     public Stage NextStage { get; private set; }
 
+    public bool IsClear { get; private set; }
+
     private ChapterData _currentPlayChapterData;
 
     public AxisType CurrentStageAxis => SceneControlManager.Instance.Player.Converter.AxisType;
+   
     
     public override void StartManager()
     {
@@ -22,13 +24,14 @@ public class StageManager : BaseManager<StageManager>, IProvideSave,IProvideLoad
 
     public void StartNewChapter(ChapterData chapterData)
     {
+        IsClear = false;
         CursorManager.SetCursorEnable(false);
         CursorManager.SetCursorLockState(CursorLockMode.Locked);
 
         _currentPlayChapterData = chapterData;
         CurrentStage = SceneControlManager.Instance.AddObject(
             $"{chapterData.chapter.ToString().ToUpperFirstChar()}_Stage_0") as Stage;
-        CurrentStage.Generate(Vector3.zero, false);
+        CurrentStage.Generate(Vector3.zero, false, 1.5f);
     }
 
     public void GenerateNextStage(ChapterType chapter, int stage)
@@ -38,6 +41,30 @@ public class StageManager : BaseManager<StageManager>, IProvideSave,IProvideLoad
         CurrentStage.ConnectOtherSection(NextStage);
     }
 
+    public void RestartStage(PlayerUnit player)
+    {
+        if(CurrentStage != null && !IsClear)
+        {
+            string stageName = CurrentStage.gameObject.name;
+            string playerName = player.gameObject.name;
+            Vector3 currentPos = CurrentStage.CenterPosition;
+
+            player.useGravity = false;
+
+            const float dissolveTime = 0.80623f;
+            player.Dissolve(1f, dissolveTime);
+
+
+            CurrentStage.Disappear(dissolveTime, () =>
+            {
+                CurrentStage = SceneControlManager.Instance.AddObject(stageName) as Stage;
+                CurrentStage.Generate(currentPos, true, dissolveTime, null);
+                player.SetSection(CurrentStage);
+                player.useGravity = true;
+                player.ReloadUnit(dissolveTime);
+            });
+        }
+    }
     public void ChangeToNextStage()
     {
         if (CurrentStage is not null)
@@ -46,18 +73,19 @@ public class StageManager : BaseManager<StageManager>, IProvideSave,IProvideLoad
             CurrentStage.RemoveBridge();
         }
 
+        IsClear = false;
         CurrentStage = NextStage;
     }
 
     public void StageClear(PlayerUnit player)
     {
+        IsClear = true;
         CurrentStage.Lock = false;
         player.Converter.SetConvertable(false);
         var nextChapter = CurrentStage.stageOrder + 1;
 
         if (nextChapter >= _currentPlayChapterData.stageCnt)
         {
-            //DataManager.Insta
             DataManager.Instance.SaveData(this);
             SceneControlManager.Instance.LoadScene(SceneType.Chapter);
             return;
@@ -86,16 +114,8 @@ public class StageManager : BaseManager<StageManager>, IProvideSave,IProvideLoad
         };
     }
 
-    public Action<SaveData> GetLoadAction()
-    {
-        return (saveData) =>
-        {
-            Debug.Log("ClearChapter");
-        };
-    }
-
     public void LoadToDataManager()
     {
-        DataManager.Instance.SettingDataProvidable(this,this);
+        DataManager.Instance.SettingDataProvidable(this,null);
     }
 }

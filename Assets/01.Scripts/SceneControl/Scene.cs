@@ -58,6 +58,12 @@ public class Scene : PoolableMono
         _objects.Remove(obj);
     }
 
+    public void SafeDeleteObject(PoolableMono obj)
+    {
+        Destroy(obj.gameObject);
+        _objects.Remove(obj);
+    }
+
 #if UNITY_EDITOR
 
     private void OnValidate()

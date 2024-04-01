@@ -81,11 +81,12 @@ namespace AxisConvertSystem
             {
                 if (transform.position.y <= GameManager.Instance.CoreData.destroyedDepth)
                 {
+                    Debug.Break();
                     ReloadUnit();
                 }
             }
         }
-
+        
         public virtual void Init(AxisConverter converter)
         {
             Converter ??= converter;
@@ -96,6 +97,7 @@ namespace AxisConvertSystem
             OriginUnitInfo.ColliderCenter = Collider.GetLocalCenter();
             
             _unitInfo = OriginUnitInfo;
+
             
             DepthHandler.DepthCheckPointSetting();
         }
@@ -205,7 +207,6 @@ namespace AxisConvertSystem
                     gameObject.SetActive(false);    
                 });
             }
-            
         }
 
         protected virtual void Hide(bool hide)
@@ -245,7 +246,7 @@ namespace AxisConvertSystem
             Rigidbody.velocity = withYAxis ? Vector3.zero : new Vector3(0, Rigidbody.velocity.y, 0);
         }
 
-        public virtual void ReloadUnit(Action callBack = null)
+        public virtual void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
         {
             _unitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
@@ -255,7 +256,7 @@ namespace AxisConvertSystem
 
             if (!staticUnit)
             {
-                Dissolve(0f, 2f, true, callBack);
+                Dissolve(0f, dissolveTime, true, callBack);
                 Rigidbody.velocity = Vector3.zero;
                 PlaySpawnVFX();
             }

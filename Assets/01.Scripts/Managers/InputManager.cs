@@ -16,6 +16,7 @@ public enum EInputCategory
     Interaction,
     Click,
     AxisControl,
+    Reload,
 }
 
 public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoad
@@ -43,6 +44,7 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
             { EInputCategory.Interaction,       InputReader.InputControls.Player.Interaction },
             { EInputCategory.Click,             InputReader.InputControls.Player.Click },
             { EInputCategory.AxisControl,       InputReader.InputControls.Player.AxisControl },
+            {EInputCategory.Reload,             InputReader.InputControls.Player.Reload },
         };
     }
 
@@ -101,12 +103,6 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
     }
     
     
-    /// <summary>
-    /// if in categories => enable not categories => !enable
-    /// </summary>
-    /// <param name="categories"></param>
-    /// <param name="enable"></param>
-
     public void SetEnableInputWithout(EInputCategory[] categories, bool enable)
     {
         foreach (EInputCategory category in Enum.GetValues(typeof(EInputCategory)))
