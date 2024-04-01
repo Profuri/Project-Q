@@ -1,10 +1,7 @@
 using System;
 using AxisConvertSystem;
-using InputControl;
 using InteractableSystem;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class PlayerUnit : ObjectUnit
 {
@@ -55,7 +52,7 @@ public class PlayerUnit : ObjectUnit
 
         _selectedInteractableObject = FindInteractable();
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         //Test code
         if(Input.GetKeyDown(KeyCode.J))
         {
@@ -66,7 +63,9 @@ public class PlayerUnit : ObjectUnit
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
     {
-        base.ReloadUnit(2f, () =>
+        Converter.ConvertDimension(AxisType.None);
+        
+        base.ReloadUnit(() =>
         {
             callBack?.Invoke();
             InputManagerHelper.OnRevivePlayer();
@@ -108,14 +107,13 @@ public class PlayerUnit : ObjectUnit
 
     private void StandingCheck()
     {
+        StandingUnit.Collider.excludeLayers |= 1 << gameObject.layer;
+        
         if (!StandingUnit.Collider.bounds.Contains(Collider.bounds.center))
         {
             StandingUnit.Collider.excludeLayers ^= 1 << gameObject.layer;
             StandingUnit = null;
-            return;
         }
-        
-        StandingUnit.Collider.excludeLayers |= 1 << gameObject.layer;
     }
     
     private bool CheckGround()

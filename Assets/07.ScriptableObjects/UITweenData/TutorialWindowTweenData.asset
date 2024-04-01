@@ -17,6 +17,24 @@ MonoBehaviour:
   targetTrmPath: 
   joinPrevAnimation: 1
   dissolve: 0
+--- !u!114 &-8551663290330720008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6c902545fb43e0ab385629a8002f3c, type: 3}
+  m_Name: UIScalingClip
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  ease: 0
+  targetTrmPath: Canvas/DescTutText
+  joinPrevAnimation: 1
+  fromScale: {x: 1, y: 0, z: 1}
+  toScale: {x: 1, y: 1, z: 1}
 --- !u!114 &-8137053440318994203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35,6 +53,24 @@ MonoBehaviour:
   joinPrevAnimation: 0
   fromPosition: {x: -7.5, y: 0.5, z: 0}
   toPosition: {x: -7.5, y: 0.75, z: 0}
+--- !u!114 &-1366870749832615453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6c902545fb43e0ab385629a8002f3c, type: 3}
+  m_Name: UIScalingClip
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  ease: 0
+  targetTrmPath: Canvas/DescTutText
+  joinPrevAnimation: 1
+  fromScale: {x: 1, y: 1, z: 1}
+  toScale: {x: 1, y: 0, z: 1}
 --- !u!114 &-891798633337849729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,9 +105,49 @@ MonoBehaviour:
     - {fileID: -8137053440318994203}
     - {fileID: -9202293200791972196}
     - {fileID: 7400919644582647677}
+    - {fileID: 1633202497383762626}
+    - {fileID: -8551663290330720008}
   disappearAnimator:
     clips:
     - {fileID: -891798633337849729}
+    - {fileID: 4792643994166910671}
+    - {fileID: -1366870749832615453}
+--- !u!114 &1633202497383762626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6c902545fb43e0ab385629a8002f3c, type: 3}
+  m_Name: UIScalingClip
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  ease: 0
+  targetTrmPath: Canvas/MainTutText
+  joinPrevAnimation: 1
+  fromScale: {x: 1, y: 0, z: 1}
+  toScale: {x: 1, y: 1, z: 1}
+--- !u!114 &4792643994166910671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6c902545fb43e0ab385629a8002f3c, type: 3}
+  m_Name: UIScalingClip
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  ease: 0
+  targetTrmPath: Canvas/MainTutText
+  joinPrevAnimation: 1
+  fromScale: {x: 1, y: 1, z: 1}
+  toScale: {x: 1, y: 0, z: 1}
 --- !u!114 &7400919644582647677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,5 +164,5 @@ MonoBehaviour:
   ease: 15
   targetTrmPath: 
   joinPrevAnimation: 1
-  fromEuler: {x: 0, y: 0, z: 0}
-  toEuler: {x: -110, y: 195, z: -215}
+  fromEuler: {x: -90, y: -160, z: 115}
+  toEuler: {x: -100, y: -130, z: 115}

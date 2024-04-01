@@ -1,20 +1,20 @@
 using System;
-using TinyGiantStudio.Text;
+using TMPro;
 using UnityEngine.Video;
 
 public class TutorialWindow : UIComponent
 {
     private VideoPlayer _videoPlayer;
-    private Modular3DText _mainText;
-    private Modular3DText _descText;
+    private TextMeshPro _mainText;
+    private TextMeshPro _descText;
 
     protected override void Awake()
     {
         base.Awake();
         var canvasTrm = transform.Find("Canvas");
         _videoPlayer = canvasTrm.Find("VideoPanel/Player").GetComponent<VideoPlayer>();
-        _mainText = canvasTrm.Find("MainTutText").GetComponent<Modular3DText>();
-        _descText = canvasTrm.Find("DescTutText").GetComponent<Modular3DText>();
+        _mainText = canvasTrm.Find("MainTutText").GetComponent<TextMeshPro>();
+        _descText = canvasTrm.Find("DescTutText").GetComponent<TextMeshPro>();
     }
 
     public override void Disappear(Action callback = null)
@@ -26,8 +26,8 @@ public class TutorialWindow : UIComponent
     public void SettingTutorial(TutorialInfo info)
     {
         _videoPlayer.clip = info.clip;
-        _mainText.Text = info.mainText;
-        _descText.Text = info.descText;
+        _mainText.text = info.mainText;
+        _descText.text = info.descText;
     }
 
     public void PlayTutorial()

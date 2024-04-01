@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Scene : PoolableMono
 {
@@ -8,6 +9,9 @@ public class Scene : PoolableMono
     
     public PlayerUnit Player { get; private set; }
     private List<PoolableMono> _objects;
+
+    public UnityEvent onLoadScene = null;
+    public UnityEvent onDestroyScene = null;
 
     private void Awake()
     {
@@ -17,7 +21,7 @@ public class Scene : PoolableMono
     public override void OnPop()
     {
         Player = AddObject("Player") as PlayerUnit;
-        Player.transform.position = Vector3.zero;
+        Player.transform.localPosition = Vector3.zero;
 
         if (_type != SceneType.Title)
         {
@@ -27,6 +31,8 @@ public class Scene : PoolableMono
 
     public override void OnPush()
     {
+        PoolManager.Instance.Push(Player);
+        
         InputManager.Instance.InputReader.ClearPlayerInputEvent();
         InputManager.Instance.InputReader.OnPauseClickEvent -= GameManager.Instance.Pause;
         
@@ -35,6 +41,8 @@ public class Scene : PoolableMono
             DeleteObject(_objects.First());
         }
         _objects.Clear();
+        
+        onDestroyScene?.Invoke();
     }
 
     public PoolableMono AddObject(string id)

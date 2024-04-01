@@ -191,11 +191,25 @@ namespace AxisConvertSystem
             activeUnit = active;
             Collider.enabled = active;
 
-            
-            Dissolve(active ? 0f : 1f, 0.5f);
+            if (activeUnit)
+            {
+                gameObject.SetActive(true);
+                Dissolve(0f, 0.5f);
+                
+                Convert(Converter.AxisType);
+                UnitSetting(Converter.AxisType);
+                DepthSetting();
+            }
+            else
+            {
+                Dissolve(active ? 0f : 1f, 0.5f, true, () => 
+                {
+                    gameObject.SetActive(false);    
+                });
+            }
         }
 
-        protected void Hide(bool hide)
+        protected virtual void Hide(bool hide)
         {
             IsHide = hide;
             Collider.enabled = !hide;

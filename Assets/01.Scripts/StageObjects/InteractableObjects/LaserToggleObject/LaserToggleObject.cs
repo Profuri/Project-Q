@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using InteractableSystem;
@@ -7,9 +6,8 @@ using UnityEngine;
 
 public class LaserToggleObject : InteractableObject
 {
-    [SerializeField] private List<InteractableObject> _affectedObjects;
-
-    [SerializeField] private float _affectedDelay;
+    [SerializeField] private List<AffectedObject> _affectedObjects;
+    [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
 
     private Light _pointLight;
 
@@ -19,38 +17,26 @@ public class LaserToggleObject : InteractableObject
 
     private int _interactableIndex;
 
-    private Coroutine _runningRoutine;
-
     public override void Awake()
     {
         base.Awake();
         
         _pointLight = transform.Find("Point Light").GetComponent<Light>();
-        _runningRoutine = null;
         Toggled(false);
+        AffectedToggleChange();
     }
 
     public override void UpdateUnit()
     {
         base.UpdateUnit();
+        AffectedObject();
         
         if(_isToggle)
         {
-            for (var i = 0; i < _affectedObjects.Count && i <= _interactableIndex; i++)
-            {
-                _affectedObjects[i].OnInteraction(null, _isToggle);
-            }
-            
             if (_lastToggleTime + ToggleCancelDelay <= Time.time)
             {
                 Toggled(false);
-            }
-        }
-        else
-        {
-            if (_affectedObjects.Count != 0)
-            {
-                _affectedObjects[_interactableIndex].OnInteraction(null, _isToggle);
+                AffectedToggleChange();
             }
         }
     }
@@ -59,23 +45,6 @@ public class LaserToggleObject : InteractableObject
     {
         _isToggle = value;
         _pointLight.enabled = value;
-
-        if (_runningRoutine is not null)
-        {
-            StopCoroutine(_runningRoutine);
-        }
-        _runningRoutine = StartCoroutine(InteractRoutine(value));
-    }
-
-    private IEnumerator InteractRoutine(bool value)
-    {
-        _interactableIndex = value ? 0 : _affectedObjects.Count - 1;
-        var dest = value ? _affectedObjects.Count - 1 : 0;
-        while (Mathf.Abs(_interactableIndex - dest) != 0)
-        {
-            yield return new WaitForSeconds(_affectedDelay);
-            _interactableIndex += value ? 1 : -1;
-        }
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
@@ -84,12 +53,30 @@ public class LaserToggleObject : InteractableObject
         if (!_isToggle)
         {
             Toggled(true);
+            AffectedToggleChange();
+        }
+    }
+
+    private void AffectedObject()
+    {
+        foreach (var affectedObj in _affectedObjects)
+        {
+            affectedObj?.Invoke(this, _isToggle);
+        }
+    }
+
+    private void AffectedToggleChange()
+    {
+        foreach (var toggleChangeEvent in _onToggleChangeEvents)
+        {
+            toggleChangeEvent?.Invoke(_isToggle);
         }
     }
     
 #if UNITY_EDITOR
-    private void OnDrawGizmos()
+    protected override void OnDrawGizmos()
     {
+        base.OnDrawGizmos();
         if (_affectedObjects.Count == 0)
         {
             return;
@@ -98,7 +85,7 @@ public class LaserToggleObject : InteractableObject
         Gizmos.color = Color.black;
         foreach (var obj in _affectedObjects)
         {
-            Gizmos.DrawLine(transform.position, obj.transform.position);
+            Gizmos.DrawLine(transform.position, obj.InteractableObject.transform.position);
         }
     }
 #endif

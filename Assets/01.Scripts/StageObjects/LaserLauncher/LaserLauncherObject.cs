@@ -17,7 +17,6 @@ public class LaserLauncherObject : ObjectUnit
     
     [SerializeField] private float _refreshDelay;
     [SerializeField] private float _launchTime;
-    // [SerializeField] private float _activeDelay;
 
     private LineRenderer _laserRenderer;
     private Queue<LaserInfo> _laserInfos;
@@ -81,44 +80,11 @@ public class LaserLauncherObject : ObjectUnit
         _laserRenderer.enabled = false;
     }
 
-    #region 이전 코드
-
-    // private IEnumerator LaserEnableRoutine()
-    // {
-    //     _isActiveLaser = false;
-    //     _laserRenderer.enabled = true;
-    //     _laserInfos.Clear();
-    //     _laserInfos.Add(new LaserInfo{ origin = _shotPointTrm.LocalPos, dir = transform.forward });
-    //     
-    //     var percent = 0f;
-    //     var currentTime = 0f;
-    //     var dest = ObstacleCheck(out var hit) ? hit.point : _shotPointTrm.LocalPos + transform.forward * _laserDistance;
-    //     var index = 1;
-    //
-    //     while (percent <= 1f)
-    //     {
-    //         currentTime += Time.deltaTime;
-    //         percent = currentTime / _activeDelay;
-    //         var lerpPos = Vector3.Lerp(_laserRenderer.GetPosition(index), dest, percent);
-    //         _laserRenderer.SetPosition(index, lerpPos);
-    //         yield return null;
-    //     }
-    //
-    //     _isActiveLaser = true;
-    // }
-    //
-    // private IEnumerator LaserDisableRoutine()
-    // {
-    //     yield return null;
-    // }
-
-    #endregion
-
     private void Launch()
     {
         var cnt = _laserInfos.Count * 2;
         _laserRenderer.positionCount = cnt;
-        AddLaser(new LaserInfo{ origin = _shotPointTrm.position, dir = transform.forward });
+        AddLaser(new LaserInfo{ origin = Collider.bounds.center + transform.forward * _shotPointTrm.localPosition.z, dir = transform.forward });
 
         for (var i = 0; i < cnt; i += 2)
         {
@@ -176,4 +142,21 @@ public class LaserLauncherObject : ObjectUnit
     {
         _laserInfos.Enqueue(info);
     }
+    
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (_shotPointTrm)
+        {
+            Gizmos.color = Color.red;
+            var col = GetComponent<Collider>();
+            var forward = transform.forward;
+
+            var origin = col.bounds.center + forward * _shotPointTrm.localPosition.z;
+            var dest = origin + forward * _laserDistance;
+            
+            Gizmos.DrawLine(origin, dest);
+        }
+    }
+#endif
 }

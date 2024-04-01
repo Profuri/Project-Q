@@ -86,34 +86,14 @@ public class DataManager : BaseManager<DataManager>
         Action<SaveData> saveAction = dataProvidable?.GetSaveAction();
         Action<SaveData> loadAction = dataLoadable?.GetLoadAction();
 
-
         if(saveAction != null)
         {
-            if (_dataSaveDictionary.ContainsKey(dataProvidable) == false)
-            {
-                _dataSaveDictionary.Add(dataProvidable, saveAction);
-            }
-            else
-            {
-                _dataSaveDictionary[dataProvidable] = saveAction;
-                Debug.LogError($"Dictionary has value: {dataProvidable}");
-            }
+            _dataSaveDictionary[dataProvidable] = saveAction;
         }
-
-
 
         if (loadAction != null)
         {
-            if (_dataLoadDictionary.ContainsKey(dataLoadable) == false)
-            {
-                _dataLoadDictionary.Add(dataLoadable, loadAction);
-            }
-            else
-            {
-                _dataLoadDictionary[dataLoadable] = loadAction;
-                Debug.LogError($"Dictionary has value: {dataLoadable}");
-            }
-
+            _dataLoadDictionary[dataLoadable] = loadAction;
         }
     }
 
