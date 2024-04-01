@@ -81,6 +81,7 @@ namespace AxisConvertSystem
             {
                 if (transform.position.y <= GameManager.Instance.CoreData.destroyedDepth)
                 {
+                    Debug.Break();
                     ReloadUnit();
                 }
             }
