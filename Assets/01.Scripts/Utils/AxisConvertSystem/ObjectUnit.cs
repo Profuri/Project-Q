@@ -29,7 +29,7 @@ namespace AxisConvertSystem
 
         protected UnitInfo OriginUnitInfo;
         private UnitInfo _unitInfo;
-        private UnitInfo _convertedInfo;
+        protected UnitInfo _convertedInfo;
 
         private List<Renderer> _renderers;
         private List<Material> _materials;
