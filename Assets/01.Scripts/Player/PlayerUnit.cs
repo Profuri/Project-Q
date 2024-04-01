@@ -63,7 +63,7 @@ public class PlayerUnit : ObjectUnit
     {
         Converter.ConvertDimension(AxisType.None);
         
-        base.ReloadUnit(() =>
+        base.ReloadUnit(dissolveTime, () =>
         {
             callBack?.Invoke();
             InputManagerHelper.OnRevivePlayer();
