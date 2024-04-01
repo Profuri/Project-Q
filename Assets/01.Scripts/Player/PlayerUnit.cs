@@ -49,13 +49,11 @@ public class PlayerUnit : ObjectUnit
 
         _selectedInteractableObject = FindInteractable();
 
-#if UNITY_EDITOR
         //Test code
         if(Input.GetKeyDown(KeyCode.J))
         {
             StageManager.Instance.StageClear(this);
         }
-#endif
     }
 
     public override void ReloadUnit(Action callBack = null)
