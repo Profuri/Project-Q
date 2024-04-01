@@ -91,14 +91,13 @@ public class PlayerUnit : ObjectUnit
 
     private void StandingCheck()
     {
+        StandingUnit.Collider.excludeLayers |= 1 << gameObject.layer;
+        
         if (!StandingUnit.Collider.bounds.Contains(Collider.bounds.center))
         {
             StandingUnit.Collider.excludeLayers ^= 1 << gameObject.layer;
             StandingUnit = null;
-            return;
         }
-        
-        StandingUnit.Collider.excludeLayers |= 1 << gameObject.layer;
     }
     
     private bool CheckGround()
