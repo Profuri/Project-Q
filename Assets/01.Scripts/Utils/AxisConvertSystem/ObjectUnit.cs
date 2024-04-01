@@ -279,13 +279,16 @@ namespace AxisConvertSystem
 
             if (axis == AxisType.None)
             {
-                if (!subUnit && CheckStandObject(out var col))
+                if (CheckStandObject(out var col))
                 {
-                    SynchronizePositionOnStanding(col);
-                }
-                else
-                {
-                    _unitInfo.LocalPos = transform.localPosition;
+                    if (!subUnit)
+                    {
+                        SynchronizePositionOnStanding(col);
+                    }
+                    else
+                    {
+                        _unitInfo.LocalPos = transform.localPosition;
+                    }
                 }
             }
             else
@@ -301,15 +304,16 @@ namespace AxisConvertSystem
 
             var standPos = transform.localPosition;
             standPos.y = col.bounds.max.y;
+
             
             var standUnitLocalPos = info.LocalPos;
             if (unit.subUnit)
             {
                 var parentUnit = unit.GetParentUnit();
-                var parentInfo = parentUnit._unitInfo;
-                standUnitLocalPos += parentInfo.LocalPos;
+                info = parentUnit._unitInfo;
+                standUnitLocalPos += info.LocalPos;
             }
-
+            
             if (Converter.AxisType == AxisType.Y)
             {
                 standPos.y *= info.LocalScale.y;

@@ -52,20 +52,18 @@ public class PlayerUnit : ObjectUnit
 
         _selectedInteractableObject = FindInteractable();
 
-#if UNITY_EDITOR
         //Test code
         if(Input.GetKeyDown(KeyCode.J))
         {
             StageManager.Instance.StageClear(this);
         }
-        #endif
     }
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
     {
         Converter.ConvertDimension(AxisType.None);
         
-        base.ReloadUnit(() =>
+        base.ReloadUnit(dissolveTime, () =>
         {
             callBack?.Invoke();
             InputManagerHelper.OnRevivePlayer();
@@ -89,6 +87,14 @@ public class PlayerUnit : ObjectUnit
     
     private void RestartStage()
     {
+        if (Converter.AxisType != AxisType.None)
+        {
+            Converter.ConvertDimension(AxisType.None, () =>
+            {
+                StageManager.Instance.RestartStage(this);
+            });
+            return;
+        }
         StageManager.Instance.RestartStage(this);
     }
     
@@ -165,7 +171,6 @@ public class PlayerUnit : ObjectUnit
                         _selectedInteractableObject?.OnDetectedLeave();
                         interactable.OnDetectedEnter();
                     }
-                    
                     return interactable;
                 }
             }
