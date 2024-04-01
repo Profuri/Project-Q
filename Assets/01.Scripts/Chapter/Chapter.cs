@@ -32,6 +32,11 @@ public class Chapter : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
+        if (Data.stageCnt <= 0)
+        {
+            return;
+        }
+        
         SceneControlManager.Instance.LoadScene(SceneType.Stage, 
             () =>
             { 
