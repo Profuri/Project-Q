@@ -14,6 +14,7 @@ public class PlayerUnit : ObjectUnit
     public ObjectUnit StandingUnit { get; set; }
     private StateController _stateController;
 
+
     private InteractableObject _selectedInteractableObject;
     
     public bool OnGround => CheckGround();
@@ -22,12 +23,14 @@ public class PlayerUnit : ObjectUnit
     public override void Awake()
     {
         base.Awake();
+
         Converter = GetComponent<AxisConverter>();
         Converter.Player = this;
         ModelTrm = transform.Find("Model");
         Animator = ModelTrm.GetComponent<Animator>();
         HoldingHandler = GetComponent<ObjectHoldingHandler>();
         
+
         _stateController = new StateController(this);
         _stateController.RegisterState(new PlayerIdleState(_stateController, true, "Idle"));
         _stateController.RegisterState(new PlayerMovementState(_stateController, true, "Movement"));
@@ -55,31 +58,44 @@ public class PlayerUnit : ObjectUnit
         {
             StageManager.Instance.StageClear(this);
         }
-#endif
+        #endif
     }
 
-    public override void ReloadUnit(Action callBack = null)
+    public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
     {
         Converter.ConvertDimension(AxisType.None);
         
         base.ReloadUnit(() =>
         {
+            callBack?.Invoke();
             InputManagerHelper.OnRevivePlayer();
         });
         
         InputManagerHelper.OnDeadPlayer();
+
+        Converter.ConvertDimension(AxisType.None);
+        Animator.SetBool(_activeHash, true);
+        _stateController.ChangeState(typeof(PlayerIdleState));
     }
 
     public override void OnPop()
     {
         InputManager.Instance.InputReader.OnInteractionEvent += OnInteraction;
+        InputManager.Instance.InputReader.OnReloadClickEvent += RestartStage;
+
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
-    }   
+    }
+    
+    private void RestartStage()
+    {
+        StageManager.Instance.RestartStage(this);
+    }
     
     public override void OnPush()
     {
         InputManager.Instance.InputReader.OnInteractionEvent -= OnInteraction;
+        InputManager.Instance.InputReader.OnReloadClickEvent -= RestartStage;
         Animator.SetBool(_activeHash, false);
     }
 
@@ -168,9 +184,9 @@ public class PlayerUnit : ObjectUnit
     {
         transform.SetParent(section.transform);
         Section = section;
-        section.SectionUnits.Add(this);
-        
+        section.ReloadSectionUnits();
         Converter.Init(section);
+
         OriginUnitInfo.LocalPos = section.PlayerResetPoint;
     }
 

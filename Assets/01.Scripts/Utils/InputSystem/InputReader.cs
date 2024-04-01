@@ -24,6 +24,7 @@ namespace InputControl
         public event InputEventListener OnDownArrowClickEvent = null;
         public event InputEventListener OnEnterClickEvent = null;
         public event InputEventListener OnPauseClickEvent = null;
+        public event InputEventListener OnReloadClickEvent = null;
         [HideInInspector] public Vector2 mouseScreenPoint;
 
         private InputControls _inputControls;
@@ -140,6 +141,14 @@ namespace InputControl
             if (context.performed)
             {
                 OnPauseClickEvent?.Invoke();
+            }
+        }
+
+        public void OnReload(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+            {
+                OnReloadClickEvent?.Invoke();
             }
         }
     }
