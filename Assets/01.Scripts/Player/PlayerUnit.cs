@@ -87,7 +87,7 @@ public class PlayerUnit : ObjectUnit
     
     private void RestartStage()
     {
-        if(Converter.AxisType != AxisType.None )
+        if (Converter.AxisType != AxisType.None)
         {
             Converter.ConvertDimension(AxisType.None, () =>
             {
