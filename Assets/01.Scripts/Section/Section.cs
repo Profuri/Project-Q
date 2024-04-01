@@ -21,7 +21,7 @@ public class Section : PoolableMono
     private List<BridgeObject> _bridgeObjects;
     public List<ObjectUnit> SectionUnits { get; private set; }
 
-    public bool Active { get; private set; }
+    public bool Active { get; protected set; }
     public bool Lock { get; set; }
     public Vector3 CenterPosition { get; private set; }
 
@@ -31,7 +31,6 @@ public class Section : PoolableMono
         Lock = false;
         _bridgeObjects = new List<BridgeObject>();
         SectionUnits = new List<ObjectUnit>();
-        ReloadSectionUnits();
     }
 
     private void FixedUpdate()
@@ -56,7 +55,7 @@ public class Section : PoolableMono
         }
     }
 
-    public void Generate(Vector3 position, bool moveRoutine = true)
+    public void Generate(Vector3 position, bool moveRoutine = true, float dissolveTime = 1.5f, Action Callback = null)
     {
         ReloadSectionUnits();
         CenterPosition = position;
@@ -64,29 +63,30 @@ public class Section : PoolableMono
 
         if (moveRoutine)
         {
-            Dissolve(true, 1.5f);
+            Dissolve(true, dissolveTime);
             transform.position = position - Vector3.up * _sectionData.sectionYDepth;
-            transform.DOMove(CenterPosition, 3f);
+            Sequence seq = DOTween.Sequence();
+            seq.Append(transform.DOMove(CenterPosition, 3f));
+            seq.AppendCallback(() => Callback?.Invoke());
         }
     }
 
-    public void Disappear(Action Callback = null)
+    public virtual void Disappear(float dissolveTime = 1.5f, Action Callback = null)
     {
         ReloadSectionUnits();
-        Dissolve(false, 1.5f);
+        Dissolve(false, dissolveTime);
         transform.DOMove(CenterPosition - Vector3.up * _sectionData.sectionYDepth, 1.5f)
             .OnComplete(() =>
             {
-                SceneControlManager.Instance.DeleteObject(this);
-                //PoolManager.Instance.Push(this);
                 Active = false;
                 Callback?.Invoke();
+                SceneControlManager.Instance.DeleteObject(this);
             });
     }
 
     public void ReloadSectionUnits()
     {
-        //ÀÌ°Å ÇÃ·¹ÀÌ¾î µÎ¹ø µé¾î°¨
+        //ï¿½Ì°ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Î¹ï¿½ ï¿½ï¿½î°¨
         //player two
         SectionUnits.Clear();
         transform.GetComponentsInChildren(SectionUnits);
@@ -176,7 +176,7 @@ public class Section : PoolableMono
         _bridgeObjects.Clear();
     }
 
-    private void Dissolve(bool on, float time)
+    protected void Dissolve(bool on, float time)
     {
         foreach (var unit in SectionUnits)
         {
@@ -188,11 +188,13 @@ public class Section : PoolableMono
     {
         Active = false;
         Lock = false;
+        ReloadSectionUnits();
     }
 
     public override void OnPush()
     {
         Active = false;
+        SectionUnits.Clear();
     }
 
 #if UNITY_EDITOR

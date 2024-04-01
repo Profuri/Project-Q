@@ -17,6 +17,7 @@ public class PlayerUnit : ObjectUnit
     public ObjectUnit StandingUnit { get; set; }
     private StateController _stateController;
 
+
     private InteractableObject _selectedInteractableObject;
     
     public bool OnGround => CheckGround();
@@ -25,6 +26,7 @@ public class PlayerUnit : ObjectUnit
     public override void Awake()
     {
         base.Awake();
+
         Converter = GetComponent<AxisConverter>();
         Converter.Player = this;
         ModelTrm = transform.Find("Model");
@@ -62,10 +64,11 @@ public class PlayerUnit : ObjectUnit
         #endif
     }
 
-    public override void ReloadUnit(Action callBack = null)
+    public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
     {
-        base.ReloadUnit(() =>
+        base.ReloadUnit(2f, () =>
         {
+            callBack?.Invoke();
             InputManagerHelper.OnRevivePlayer();
         });
         
@@ -183,9 +186,9 @@ public class PlayerUnit : ObjectUnit
     {
         transform.SetParent(section.transform);
         Section = section;
-        section.SectionUnits.Add(this);
-        
+        section.ReloadSectionUnits();
         Converter.Init(section);
+
         OriginUnitInfo.LocalPos = section.PlayerResetPoint;
     }
 

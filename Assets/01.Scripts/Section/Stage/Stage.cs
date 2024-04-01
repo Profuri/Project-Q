@@ -1,5 +1,7 @@
 using UnityEngine;
 using AxisConvertSystem;
+using System;
+using DG.Tweening;
 
 public class Stage : Section
 {
@@ -19,9 +21,17 @@ public class Stage : Section
         }
     }
 
-    public virtual void ReloadStage(PlayerUnit player)
+    public override void Disappear(float dissolveTime = 1.5f, Action Callback = null)
     {
-        
+        ReloadSectionUnits();
+        Dissolve(false, dissolveTime);
+        transform.DOMove(CenterPosition - Vector3.up * SectionData.sectionYDepth, dissolveTime)
+            .OnComplete(() =>
+            {
+                Active = false;
+                Callback?.Invoke();
+                SceneControlManager.Instance.SafeDeleteObject(this);
+            });
     }
 
 #if UNITY_EDITOR

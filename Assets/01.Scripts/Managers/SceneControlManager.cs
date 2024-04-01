@@ -66,4 +66,14 @@ public class SceneControlManager : BaseManager<SceneControlManager>
         }
         _currentScene.DeleteObject(obj);
     }
+
+    public void SafeDeleteObject(PoolableMono obj)
+    {
+        if (_currentScene is null)
+        {
+            Debug.LogError("[SceneControlManager] currentScene doesnt loaded.");
+            return;
+        }
+        _currentScene.SafeDeleteObject(obj);
+    }
 }
