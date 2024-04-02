@@ -19,6 +19,18 @@ public class MovingPlatform : ObjectUnit
         FreezeInvalidAxisMove();
     }
 
+    public override void Convert(AxisType axis)
+    {
+        base.Convert(axis);
+        if(axis == _track.MovingAxis)
+        {
+            _convertedInfo.ColliderCenter.SetAxisElement(
+                _track.MovingAxis,
+                _convertedInfo.ColliderCenter.GetAxisElement(_track.MovingAxis) - transform.localPosition.GetAxisElement(_track.MovingAxis)
+            );
+        }
+    }
+
     public override void UnitSetting(AxisType axis)
     {
         base.UnitSetting(axis);

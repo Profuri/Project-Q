@@ -35,7 +35,12 @@ namespace AxisConvertSystem
 
             foreach (var unit in _owner.Section.SectionUnits)
             {
-                if (unit == _owner || unit.renderType == UnitRenderType.Transparent)
+                var isOwner = unit == _owner;
+                var isTransparent = unit.renderType == UnitRenderType.Transparent;
+                var isParentUnit = _owner.subUnit && unit.GetParentUnit() == _owner;
+                var isDynamic = !unit.staticUnit;
+                
+                if (isOwner || isTransparent || isParentUnit || isDynamic)
                 {
                     continue;
                 }

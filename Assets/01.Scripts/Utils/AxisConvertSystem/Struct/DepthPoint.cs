@@ -10,7 +10,7 @@ namespace AxisConvertSystem
         public float Z;
 
         public bool IsTrigger;
-        
+
         public bool Block(DepthPoint other)
         {
             if (other.IsTrigger)
