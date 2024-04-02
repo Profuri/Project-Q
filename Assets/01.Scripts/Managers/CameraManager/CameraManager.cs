@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using ManagingSystem;
 using UnityEngine;
@@ -37,6 +38,15 @@ public class CameraManager : BaseManager<CameraManager>
             _vCamControllers.Add(camType, camController);
         }
     }
+
+    public void InitCamera()
+    {
+        _vCamControllers.Values.ToList().ForEach(camController =>
+        {
+            camController.ResetCamera();
+        });
+    }
+
 
     public void ChangeVCamController(VirtualCamType type)
     {

@@ -12,7 +12,7 @@ namespace InputControl
         // Player Input Actions
         public event InputEventListener OnJumpEvent = null;
         public event InputEventListener OnInteractionEvent = null;
-        public event InputEventListener<bool> OnAxisControlEvent = null;
+        public event InputEventListener OnAxisControlEvent = null;
         public event InputEventListener OnClickEvent = null;
         [HideInInspector] public Vector3 movementInput;
         
@@ -30,6 +30,8 @@ namespace InputControl
         private InputControls _inputControls;
         public InputControls InputControls => _inputControls;
 
+        //bool originValue
+        private bool _isControlling;
         private void OnEnable()
         {
             if (_inputControls == null)
@@ -41,6 +43,7 @@ namespace InputControl
             
             _inputControls.Player.Enable();
             _inputControls.UI.Enable();
+            _isControlling = false;
         }
 
         public void ClearPlayerInputEvent()
@@ -76,13 +79,9 @@ namespace InputControl
 
         public void OnAxisControl(InputAction.CallbackContext context)
         {
-            if (context.started)
+            if (context.performed)
             {
-                OnAxisControlEvent?.Invoke(true);   
-            }
-            else if(context.canceled)
-            {
-                OnAxisControlEvent?.Invoke(false);
+                OnAxisControlEvent?.Invoke();
             }
         }
 

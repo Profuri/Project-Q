@@ -165,7 +165,7 @@ namespace InputControl
                 {
                     ""name"": """",
                     ""id"": ""649b2138-67b1-4eaa-a07b-d3ce13883325"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",

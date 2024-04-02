@@ -323,7 +323,7 @@ namespace Fabgrid
 
                 tile.category = category;
             }
-
+            
             tilemap.tiles.Add(tile);
         }
 
