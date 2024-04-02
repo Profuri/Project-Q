@@ -18,7 +18,7 @@ public class PictureObject : ObjectUnit
         transform.GetComponentsInChildren(_units);
         foreach (var unit in _units)
         {
-            unit.Init(_enableMat, _disableMat);
+            unit.SetPictureUnit(this, _enableMat, _disableMat);
         }
     }
 

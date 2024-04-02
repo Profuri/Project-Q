@@ -24,9 +24,9 @@ public class MovingPlatform : ObjectUnit
         base.Convert(axis);
         if(axis == _track.MovingAxis)
         {
-            _convertedInfo.ColliderCenter.SetAxisElement(
+            ConvertedInfo.ColliderCenter.SetAxisElement(
                 _track.MovingAxis,
-                _convertedInfo.ColliderCenter.GetAxisElement(_track.MovingAxis) - transform.localPosition.GetAxisElement(_track.MovingAxis)
+                ConvertedInfo.ColliderCenter.GetAxisElement(_track.MovingAxis) - transform.localPosition.GetAxisElement(_track.MovingAxis)
             );
         }
     }

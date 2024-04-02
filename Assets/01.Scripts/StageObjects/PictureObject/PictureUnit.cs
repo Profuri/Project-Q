@@ -4,6 +4,9 @@ using UnityEngine;
 public class PictureUnit : ObjectUnit
 {
     [SerializeField] private AxisType _enableAxis;
+
+    private PictureObject _owner;
+    
     private Renderer _renderer;
 
     private Material _enableMat;
@@ -11,8 +14,10 @@ public class PictureUnit : ObjectUnit
 
     private bool _isEnableUnit;
 
-    public void Init(Material enableMat, Material disableMat)
+    public void SetPictureUnit(PictureObject owner, Material enableMat, Material disableMat)
     {
+        _owner = owner;
+        
         _renderer = GetComponent<Renderer>();
 
         _enableMat = enableMat;
@@ -26,29 +31,34 @@ public class PictureUnit : ObjectUnit
             return;
         }
 
+        _isEnableUnit = false;
+
         if (axis == AxisType.None)
         {
+            _isEnableUnit = true;
             _renderer.material = _disableMat;
             MaterialResetUp();
         }
         else if (axis == _enableAxis)
         {
+            _isEnableUnit = true;
             _renderer.material = _enableMat;
             MaterialResetUp();
         }
+    }
 
-        _isEnableUnit = _enableAxis == axis || axis == AxisType.None;
+    public override void UnitSetting(AxisType axis)
+    {
+        if (_isEnableUnit)
+        {
+            ConvertedInfo.LocalPos.SetAxisElement(axis, 0f);
+        }
+        
+        base.UnitSetting(axis);
     }
 
     public override void DepthSetting()
     {
-        base.DepthSetting();
-
-        if (!activeUnit)
-        {
-            return;
-        }
-
         Hide(!_isEnableUnit);
     }
 }

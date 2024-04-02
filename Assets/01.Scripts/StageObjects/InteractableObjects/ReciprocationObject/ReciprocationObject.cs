@@ -20,13 +20,7 @@ public class ReciprocationObject : InteractableObject
         _originPos = transform.localPosition;
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
     }
-
-    public override void UpdateUnit()
-    {
-        base.UpdateUnit();
-    }
-
-
+    
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         var curPos = transform.localPosition;  

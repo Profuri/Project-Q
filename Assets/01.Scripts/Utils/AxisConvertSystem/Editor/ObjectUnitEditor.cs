@@ -58,7 +58,10 @@ namespace AxisConvertSystem.Editor
                 GUILayout.Label("For Dynamic Unit");
                     
                 VariableLoad(ref _target.canStandMask, GetLayerMaskField());
-                VariableLoad(ref _target.checkOffset, EditorGUILayout.Slider("Check Offset", _target.checkOffset, 0f, 1f));
+                if (_target.canStandMask != 0)
+                {
+                    VariableLoad(ref _target.checkOffset, EditorGUILayout.Slider("Check Offset", _target.checkOffset, 0f, 1f));
+                }
                 VariableLoad(ref _target.useGravity, EditorGUILayout.Toggle("Use Gravity", _target.useGravity));
             }
         }

@@ -21,6 +21,10 @@ namespace AxisConvertSystem
         [HideInInspector] public float checkOffset = 0.2f; 
         [HideInInspector] public bool useGravity = true;
 
+        protected UnitInfo OriginUnitInfo;
+        private UnitInfo _unitInfo;
+        protected UnitInfo ConvertedInfo;
+
         public AxisConverter Converter { get; protected set; }
         public Collider Collider { get; private set; }
         public Rigidbody Rigidbody { get; private set; }
@@ -29,19 +33,15 @@ namespace AxisConvertSystem
         public bool IsHide { get; private set; }
         public bool OnGround => CheckStandObject(out var tmp, true);
 
-        protected UnitInfo OriginUnitInfo;
-        private UnitInfo _unitInfo;
-        protected UnitInfo _convertedInfo;
-
         private List<Renderer> _renderers;
         private List<Material> _materials;
 
-        private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
-        private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
         private LayerMask _climbLayerMask;
-
         private UnClimbableEffect _unClimbableEffect;
 
+        private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
+        private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
+        
         public virtual void Awake()
         {
             IsHide = false;
@@ -106,7 +106,7 @@ namespace AxisConvertSystem
         {
             if (!activeUnit)
             {
-                _convertedInfo = OriginUnitInfo;
+                ConvertedInfo = OriginUnitInfo;
                 return;
             }
 
@@ -115,12 +115,12 @@ namespace AxisConvertSystem
                 DepthHandler.DepthCheckPointSetting();
             }
             SynchronizePosition(axis);
-            _convertedInfo = ConvertInfo(_unitInfo, axis);
+            ConvertedInfo = ConvertInfo(_unitInfo, axis);
         }
         
         public virtual void UnitSetting(AxisType axis)
         {
-            ApplyInfo(_convertedInfo);
+            ApplyInfo(ConvertedInfo);
 
             if (DepthHandler.Hide)
             {
@@ -250,7 +250,7 @@ namespace AxisConvertSystem
         {
             _unitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
-            _convertedInfo = ConvertInfo(_unitInfo, Converter.AxisType);
+            ConvertedInfo = ConvertInfo(_unitInfo, Converter.AxisType);
             UnitSetting(Converter.AxisType);
             Physics.SyncTransforms();
 
