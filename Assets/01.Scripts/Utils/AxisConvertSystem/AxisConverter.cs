@@ -75,7 +75,7 @@ namespace AxisConvertSystem
         {
             Player.CheckStandObject(out var hit);
 
-            if (!(axis == AxisType.Y && frontCol is null && hit.GetComponent<Collider>() == backCol))
+            if (!(axis == AxisType.Y && frontCol is null && hit == backCol))
             {
                 CancelChangeAxis(axis, frontCol, backCol);
                 _cancelConvert = true;

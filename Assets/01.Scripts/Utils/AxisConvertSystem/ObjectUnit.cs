@@ -10,7 +10,7 @@ namespace AxisConvertSystem
 {
     public class ObjectUnit : PoolableMono, IProvidableFieldInfo
     {
-        [HideInInspector] public CompressLayer compressLayer = CompressLayer.Default;
+        [HideInInspector] public CompressLayer compressLayer = CompressLayer.Platform;
         [HideInInspector] public UnitRenderType renderType = UnitRenderType.Opaque;
         [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
@@ -18,6 +18,7 @@ namespace AxisConvertSystem
         [HideInInspector] public bool subUnit = false;
         
         [HideInInspector] public LayerMask canStandMask;
+        [HideInInspector] public float checkOffset = 0.2f; 
         [HideInInspector] public bool useGravity = true;
 
         public AxisConverter Converter { get; protected set; }
@@ -26,6 +27,7 @@ namespace AxisConvertSystem
         public UnitDepthHandler DepthHandler { get; private set; }
         public Section Section { get; protected set; }
         public bool IsHide { get; private set; }
+        public bool OnGround => CheckStandObject(out var tmp, true);
 
         protected UnitInfo OriginUnitInfo;
         private UnitInfo _unitInfo;
@@ -68,7 +70,7 @@ namespace AxisConvertSystem
         {
             if (!staticUnit)
             {
-                if (useGravity)
+                if (useGravity && !OnGround)
                 {
                     Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
                 }
@@ -97,7 +99,6 @@ namespace AxisConvertSystem
             
             _unitInfo = OriginUnitInfo;
 
-            
             DepthHandler.DepthCheckPointSetting();
         }
 
@@ -155,14 +156,14 @@ namespace AxisConvertSystem
             Collider.SetCenter(info.ColliderCenter);
         }
         
-        private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
+        protected virtual UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
         {
             if (axis == AxisType.None)
             {
                 return basic;
             }
 
-            var layerDepth = (float)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
+            var layerDepth = (int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
 
             if (!subUnit)
             {
@@ -327,19 +328,20 @@ namespace AxisConvertSystem
             _unitInfo.LocalPos = standPos;
         }
 
-        public bool CheckStandObject(out Collider col)
+        public bool CheckStandObject(out Collider col, bool ignoreTriggered = false)
         {
             var origin = Collider.bounds.center;
+            var triggerInteraction = ignoreTriggered ? QueryTriggerInteraction.Ignore : QueryTriggerInteraction.Collide;
             
             if (Converter.AxisType == AxisType.Y)
             {
                 var cols = new Collider[10];
-                Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask);
+                Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
                 col = cols[0];
 
                 if (col is null)
                 {
-                    Physics.OverlapBoxNonAlloc(origin - Vector3.up, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask);
+                    Physics.OverlapBoxNonAlloc(origin - Vector3.up, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
                     col = cols[0];
                 }
                 
@@ -348,7 +350,9 @@ namespace AxisConvertSystem
             else
             {
                 var dir = Vector3.down;
-                var isHit = Physics.Raycast(origin, dir, out var hit, Mathf.Infinity, canStandMask);
+                var distance = Collider.bounds.size.y / 2f + checkOffset;
+                
+                var isHit = Physics.Raycast(origin, dir, out var hit, distance, canStandMask, triggerInteraction);
                 col = isHit ? hit.collider : null;
                 return isHit;
             }

@@ -8,10 +8,6 @@ public class PlayerData : ScriptableObject
     public float jumpPower;
     [Range(0.1f, 1f)] public float rotationSpeed;
     
-    [Header("Ground Check Data")]
-    public LayerMask groundMask;
-    public float groundCheckDistance;
-    
     [Header("Interactable Data")]
     public LayerMask interactableMask;
     public float interactableRadius;
