@@ -22,10 +22,13 @@ public class MovingPlatform : ObjectUnit
     public override void Convert(AxisType axis)
     {
         base.Convert(axis);
-        _convertedInfo.ColliderCenter.SetAxisElement(
-            _track.MovingAxis,
-            _convertedInfo.ColliderCenter.GetAxisElement(_track.MovingAxis) - transform.localPosition.GetAxisElement(_track.MovingAxis)
-        );
+        if(axis == _track.MovingAxis)
+        {
+            _convertedInfo.ColliderCenter.SetAxisElement(
+                _track.MovingAxis,
+                _convertedInfo.ColliderCenter.GetAxisElement(_track.MovingAxis) - transform.localPosition.GetAxisElement(_track.MovingAxis)
+            );
+        }
     }
 
     public override void UnitSetting(AxisType axis)
