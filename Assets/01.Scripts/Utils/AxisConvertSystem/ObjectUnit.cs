@@ -68,13 +68,17 @@ namespace AxisConvertSystem
 
         public virtual void FixedUpdateUnit()
         {
-            if (!staticUnit)
+            if (staticUnit || !useGravity)
             {
-                if (useGravity && !OnGround)
-                {
-                    Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
-                }
+                return;
             }
+
+            if (Converter.AxisType == AxisType.Y && OnGround)
+            {
+                return;
+            }
+            
+            Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
         }
 
         public virtual void UpdateUnit()
