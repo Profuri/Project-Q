@@ -113,7 +113,7 @@ public class Section : PoolableMono
     {
         var dir = (_exitPoint - other._enterPoint).normalized;
 
-        if (dir.x > dir.z)
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.z))
         {
             dir = new Vector3(Mathf.Sign(dir.x), 0, 0);
         }
@@ -122,11 +122,11 @@ public class Section : PoolableMono
             dir = new Vector3(0, 0, Mathf.Sign(dir.z));
         }
         
-        var exitPoint = CenterPosition + _exitPoint;
-        var enterPoint = exitPoint + (dir * _sectionData.sectionIntervalDistance);
-        var nextStageCenter = enterPoint - other._enterPoint.normalized * other._enterPoint.magnitude;
+        var currentExitPoint = CenterPosition + _exitPoint;
+        var nextEnterPoint = currentExitPoint + dir * _sectionData.sectionIntervalDistance;
+        var nextStageCenter = nextEnterPoint - other._enterPoint.normalized * other._enterPoint.magnitude;
         
-        GenerateBridge(exitPoint, enterPoint);
+        GenerateBridge(currentExitPoint, nextEnterPoint);
         other.Generate(nextStageCenter);
     }
     
