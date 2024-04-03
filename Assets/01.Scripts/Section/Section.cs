@@ -156,6 +156,7 @@ public class Section : PoolableMono
             var bridgePos = startPoint + (bridgeDir * (i * bridgeSize) - bridgeDir * (bridgeSize / 2f));
             
             bridge.SetWidth(_sectionData.bridgeWidth);
+            bridge.SetColliderSize(_sectionData.bridgeIntervalDistance);
             bridge.Generate(bridgePos, bridgeRotation, this);
             _bridgeObjects.Add(bridge);
 
