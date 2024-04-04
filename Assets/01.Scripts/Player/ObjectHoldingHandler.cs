@@ -5,7 +5,7 @@ public class ObjectHoldingHandler : MonoBehaviour
 {
     private PlayerUnit _player;
     private Transform _holdingPoint;
-    private HoldableObject _heldObject;
+    private ObjectUnit _heldObject;
 
     private readonly int _animationHoldHash = Animator.StringToHash("IsHold");
 
@@ -26,11 +26,11 @@ public class ObjectHoldingHandler : MonoBehaviour
         }
     }
 
-    public void Attach(HoldableObject obj)
+    public void Attach(IHoldable obj)
     {
         _player.Animator.SetBool(_animationHoldHash, true);
         
-        _heldObject = obj;
+        _heldObject = obj.GetObjectUnit();
         _heldObject.useGravity = false;
         _heldObject.StopImmediately(true);
     }
