@@ -41,7 +41,7 @@ public class BridgeObject : PoolableMono
     public void SetColliderSize(float intervalDistance)
     {
         var colSize = _collider.size;
-        colSize.z = 1f + intervalDistance;
+        colSize.z = 1f + intervalDistance * 2f;
         _collider.size = colSize;
     }
     
