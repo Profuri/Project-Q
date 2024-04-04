@@ -1,5 +1,6 @@
 using System.Collections;
 using Cinemachine;
+using DG.Tweening;
 using UnityEngine;
 
 namespace VirtualCam
@@ -7,11 +8,11 @@ namespace VirtualCam
     [RequireComponent(typeof(CinemachineVirtualCameraBase))]
     public class VirtualCamComponent : MonoBehaviour, IVirtualCam
     {
-        private CinemachineVirtualCameraBase _virtualCam;
+        private CinemachineVirtualCamera _virtualCam;
 
         private void Awake()
         {
-            _virtualCam = GetComponent<CinemachineVirtualCameraBase>();
+            _virtualCam = GetComponent<CinemachineVirtualCamera>();
         }
 
         public void EnterCam()
@@ -36,23 +37,17 @@ namespace VirtualCam
 
         public void ApplyOffset(Vector3 offset, float time)
         {
-            CoroutineManager.Instance.PlayCoroutine(OffsetRoutine(offset, time));
+            CoroutineManager.Instance.StartCoroutine(OffsetChangeRoutine(offset, time));
         }
 
         public void ShakeCam(float intensity, float time)
         {
-            CoroutineManager.Instance.PlayCoroutine(ShakeSequence(intensity, time));
+            CoroutineManager.Instance.StartCoroutine(ShakeSequence(intensity, time));
         }
 
         public void SetAxisXValue(float value)
         {
-            if (_virtualCam is not CinemachineVirtualCamera vCam)
-            {
-                Debug.LogError("[VirtualCamCompo] This cam is cant have y value. return 0");
-                return;
-            }
-            
-            var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
+            var pov = _virtualCam.GetCinemachineComponent<CinemachinePOV>();
 
             if (pov is null)
             {
@@ -66,25 +61,13 @@ namespace VirtualCam
 
         public float GetAxisXValue()
         {
-            if (_virtualCam is not CinemachineVirtualCamera vCam)
-            {
-                Debug.LogError("[VirtualCamCompo] This cam is cant have y value. return 0");
-                return 0f;
-            }
-            
-            var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
+            var pov = _virtualCam.GetCinemachineComponent<CinemachinePOV>();
             return pov is null ? -(360 - transform.localEulerAngles.y) : pov.m_HorizontalAxis.Value;
         }
         
         public void SetAxisYValue(float value)
         {
-            if (_virtualCam is not CinemachineVirtualCamera vCam)
-            {
-                Debug.LogError("[VirtualCamCompo] This cam is cant have y value. return 0");
-                return;
-            }
-            
-            var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
+            var pov = _virtualCam.GetCinemachineComponent<CinemachinePOV>();
             
             if (pov is null)
             {
@@ -98,19 +81,8 @@ namespace VirtualCam
 
         public float GetAxisYValue()
         {
-            if (_virtualCam is not CinemachineVirtualCamera vCam)
-            {
-                Debug.LogError("[VirtualCamCompo] This cam is cant have y value. return 0");
-                return 0f;
-            }
-            
-            var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
+            var pov = _virtualCam.GetCinemachineComponent<CinemachinePOV>();
             return pov is null ? transform.localEulerAngles.x : pov.m_VerticalAxis.Value;
-        }
-
-        private IEnumerator OffsetRoutine(Vector3 offset, float time)
-        {
-            yield return null;
         }
 
         private IEnumerator ShakeSequence(float intensity, float time)
@@ -121,10 +93,7 @@ namespace VirtualCam
 
         private IEnumerator ShakeRoutine(float intensity, float time)
         {
-            if (_virtualCam is not CinemachineVirtualCamera virtualCamera) 
-                yield break;
-            
-            var origin = virtualCamera.m_Lens.OrthographicSize;
+            var origin = _virtualCam.m_Lens.OrthographicSize;
 
             var currentTime = 0f;
             var percent = 0f;
@@ -133,9 +102,29 @@ namespace VirtualCam
             {
                 currentTime += Time.deltaTime;
                 percent = CameraManager.Instance.CamShakeCurve.Evaluate(currentTime / time);
-                virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(origin, origin + intensity, percent);
+                _virtualCam.m_Lens.OrthographicSize = Mathf.Lerp(origin, origin + intensity, percent);
                 yield return null;
             }
+        }
+
+        private IEnumerator OffsetChangeRoutine(Vector3 targetOffset, float time)
+        {
+            var currentTime = 0f;
+            var percent = 0f;
+            
+            var framingTransposer = _virtualCam.GetCinemachineComponent<CinemachineFramingTransposer>();
+            var originOffset = framingTransposer.m_TrackedObjectOffset;
+
+            while (percent < 1f)
+            {
+                currentTime += Time.deltaTime;
+                percent = currentTime / time;
+                var offset = Vector3.Lerp(originOffset, targetOffset, percent);
+                framingTransposer.m_TrackedObjectOffset = offset;
+                yield return null;
+            }
+            
+            framingTransposer.m_TrackedObjectOffset = targetOffset;
         }
     }
 }

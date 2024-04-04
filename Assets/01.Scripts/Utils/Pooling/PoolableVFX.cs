@@ -23,7 +23,7 @@ public class PoolableVFX : PoolableMono
     
     public void Play()
     {
-        CoroutineManager.Instance.PlayCoroutine(PlayRoutine());
+        CoroutineManager.Instance.StartCoroutine(PlayRoutine());
     }
 
     private IEnumerator PlayRoutine()

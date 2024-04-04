@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class CoroutineManager : BaseManager<CoroutineManager>
 {
-    private Dictionary<int, Coroutine> _coroutineDiction;
+    private Dictionary<string, Coroutine> _coroutineDiction;
 
     public override void Init()
     {
         base.Init();
-        _coroutineDiction = new Dictionary<int, Coroutine>();
+        _coroutineDiction = new Dictionary<string, Coroutine>();
     }
 
     public override void StartManager()
@@ -18,22 +18,35 @@ public class CoroutineManager : BaseManager<CoroutineManager>
         _coroutineDiction.Clear();
     }
 
-    public void PlayCoroutine(IEnumerator routine)
+    public new void StartCoroutine(IEnumerator routine)
     {
-        var hash = routine.GetHashCode();
+        var routineName = routine.ToString();
         
-        if (_coroutineDiction.ContainsKey(hash) && _coroutineDiction[hash] is not null)
+        if (_coroutineDiction.ContainsKey(routineName) && _coroutineDiction[routineName] is not null)
         {
-            StopCoroutine(_coroutineDiction[hash]);
-            _coroutineDiction[hash] = null;
+            StopCoroutine(routineName);
         }
         
-        StartCoroutine(CoroutinePlayRoutine(hash, routine));
+        base.StartCoroutine(CoroutinePlayRoutine(routineName, routine));
     }
 
-    private IEnumerator CoroutinePlayRoutine(int hash, IEnumerator routine)
+    public new void StopCoroutine(IEnumerator routine)
     {
-        yield return StartCoroutine(routine);
-        _coroutineDiction[hash] = null;
+        var routineName = routine.ToString();
+        base.StopCoroutine(_coroutineDiction[routineName]);
+        _coroutineDiction[routineName] = null;
+    }
+
+    public new void StopCoroutine(string routineName)
+    {
+        base.StopCoroutine(_coroutineDiction[routineName]);
+        _coroutineDiction[routineName] = null;
+    }
+
+    private IEnumerator CoroutinePlayRoutine(string routineName, IEnumerator routine)
+    {
+        _coroutineDiction[routineName] = base.StartCoroutine(routine);
+        yield return _coroutineDiction[routineName];
+        _coroutineDiction[routineName] = null;
     }
 }
