@@ -25,7 +25,7 @@ public class Scene : PoolableMono
 
         if (_type != SceneType.Title)
         {
-            InputManager.Instance.InputReader.OnPauseClickEvent += GameManager.Instance.Pause;    
+            InputManager.Instance.UIInputReader.OnPauseClickEvent += GameManager.Instance.Pause;    
         }
     }
 
@@ -33,8 +33,7 @@ public class Scene : PoolableMono
     {
         PoolManager.Instance.Push(Player);
         
-        InputManager.Instance.InputReader.ClearPlayerInputEvent();
-        InputManager.Instance.InputReader.OnPauseClickEvent -= GameManager.Instance.Pause;
+        InputManager.Instance.UIInputReader.OnPauseClickEvent -= GameManager.Instance.Pause;
         
         while (_objects.Count > 0)
         {

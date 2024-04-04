@@ -11,7 +11,7 @@ public class PlayerMovementState : PlayerOnGroundState
     {
         base.UpdateState();
 
-        var movementInput = InputManager.Instance.InputReader.movementInput;
+        var movementInput = InputManager.Instance.PlayerInputReader.movementInput;
         var dir = Quaternion.Euler(0, CameraManager.Instance.ActiveVCam.transform.eulerAngles.y, 0) * movementInput;
         if (Player.Converter.AxisType != AxisType.None)
         {

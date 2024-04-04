@@ -8,13 +8,13 @@ public class PauseWindow : UIComponent
      public override void Appear(Transform parentTrm, Action callback = null)
      {
           base.Appear(parentTrm, callback);
-          InputManager.Instance.InputReader.OnPauseClickEvent += OnPauseKeyClickHandle;
+          InputManager.Instance.UIInputReader.OnPauseClickEvent += OnPauseKeyClickHandle;
      }
 
      public override void Disappear(Action callback = null)
      {
           base.Disappear(callback);
-          InputManager.Instance.InputReader.OnPauseClickEvent -= OnPauseKeyClickHandle;
+          InputManager.Instance.UIInputReader.OnPauseClickEvent -= OnPauseKeyClickHandle;
      }
 
      public void Resume()

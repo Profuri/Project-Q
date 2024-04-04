@@ -75,11 +75,17 @@ public class PlayerUnit : ObjectUnit
 
     public override void OnPop()
     {
-        InputManager.Instance.InputReader.OnInteractionEvent += OnInteraction;
-        InputManager.Instance.InputReader.OnReloadClickEvent += RestartStage;
+        InputManager.Instance.PlayerInputReader.OnInteractionEvent += OnInteraction;
+        InputManager.Instance.PlayerInputReader.OnReloadClickEvent += RestartStage;
 
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
+    }
+    
+    public override void OnPush()
+    {
+        InputManager.Instance.PlayerInputReader.ClearInputEvent();
+        Animator.SetBool(_activeHash, false);
     }
     
     private void RestartStage()
@@ -93,13 +99,6 @@ public class PlayerUnit : ObjectUnit
             return;
         }
         StageManager.Instance.RestartStage(this);
-    }
-    
-    public override void OnPush()
-    {
-        InputManager.Instance.InputReader.OnInteractionEvent -= OnInteraction;
-        InputManager.Instance.InputReader.OnReloadClickEvent -= RestartStage;
-        Animator.SetBool(_activeHash, false);
     }
 
     public void Rotate(Quaternion rot, float speed = -1)

@@ -40,7 +40,7 @@ public class VideoSettingPanel : WindowPanel
             });
         }
         
-        var mousePoint = InputManager.Instance.InputReader.mouseScreenPoint;
+        var mousePoint = InputManager.Instance.UIInputReader.mouseScreenPoint;
         var mousePercent = new Vector2(mousePoint.x / Screen.width, mousePoint.y / Screen.height);
 
         var canvasRect = ((RectTransform)UIManager.Instance.MainCanvas2D.transform).rect;
@@ -73,7 +73,7 @@ public class VideoSettingPanel : WindowPanel
             });
         }
         
-        var mousePoint = InputManager.Instance.InputReader.mouseScreenPoint;
+        var mousePoint = InputManager.Instance.UIInputReader.mouseScreenPoint;
         dropdown.SetPosition(mousePoint);
     }
 

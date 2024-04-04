@@ -86,7 +86,7 @@ namespace InputControl
             ],
             ""bindings"": [
                 {
-                    ""name"": ""WASD"",
+                    ""name"": ""Up/Down/Left/Right"",
                     ""id"": ""90d27824-50b1-4343-b340-62a50b643bf3"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -324,6 +324,78 @@ namespace InputControl
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Camera"",
+            ""id"": ""c8e89bbc-2487-4e83-8006-4d5c4de9f563"",
+            ""actions"": [
+                {
+                    ""name"": ""ChangeOffset"",
+                    ""type"": ""Value"",
+                    ""id"": ""dae39338-1f64-4ecf-8525-8bee6996737b"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""Up/Down/Left/Right"",
+                    ""id"": ""c4e2fd78-5d57-46f9-a71e-120e3a9eae16"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeOffset"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""9620ffa7-9431-492c-bdde-5a1335feea82"",
+                    ""path"": ""<Keyboard>/u"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ChangeOffset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""a483d6a3-de53-466e-9bdc-c978b99f1312"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ChangeOffset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""5ab2a918-919e-48c4-9d19-94e44130c336"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ChangeOffset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""0e7375b6-e391-493a-92e5-e45d5a3c9088"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ChangeOffset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -361,6 +433,9 @@ namespace InputControl
             m_UI_DownArrow = m_UI.FindAction("DownArrow", throwIfNotFound: true);
             m_UI_Enter = m_UI.FindAction("Enter", throwIfNotFound: true);
             m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
+            // Camera
+            m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
+            m_Camera_ChangeOffset = m_Camera.FindAction("ChangeOffset", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -590,6 +665,52 @@ namespace InputControl
             }
         }
         public UIActions @UI => new UIActions(this);
+
+        // Camera
+        private readonly InputActionMap m_Camera;
+        private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
+        private readonly InputAction m_Camera_ChangeOffset;
+        public struct CameraActions
+        {
+            private @InputControls m_Wrapper;
+            public CameraActions(@InputControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @ChangeOffset => m_Wrapper.m_Camera_ChangeOffset;
+            public InputActionMap Get() { return m_Wrapper.m_Camera; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(CameraActions set) { return set.Get(); }
+            public void AddCallbacks(ICameraActions instance)
+            {
+                if (instance == null || m_Wrapper.m_CameraActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_CameraActionsCallbackInterfaces.Add(instance);
+                @ChangeOffset.started += instance.OnChangeOffset;
+                @ChangeOffset.performed += instance.OnChangeOffset;
+                @ChangeOffset.canceled += instance.OnChangeOffset;
+            }
+
+            private void UnregisterCallbacks(ICameraActions instance)
+            {
+                @ChangeOffset.started -= instance.OnChangeOffset;
+                @ChangeOffset.performed -= instance.OnChangeOffset;
+                @ChangeOffset.canceled -= instance.OnChangeOffset;
+            }
+
+            public void RemoveCallbacks(ICameraActions instance)
+            {
+                if (m_Wrapper.m_CameraActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(ICameraActions instance)
+            {
+                foreach (var item in m_Wrapper.m_CameraActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_CameraActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public CameraActions @Camera => new CameraActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -616,6 +737,10 @@ namespace InputControl
             void OnDownArrow(InputAction.CallbackContext context);
             void OnEnter(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
+        }
+        public interface ICameraActions
+        {
+            void OnChangeOffset(InputAction.CallbackContext context);
         }
     }
 }

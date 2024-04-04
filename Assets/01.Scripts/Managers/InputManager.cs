@@ -1,5 +1,4 @@
 using InputControl;
-using Singleton;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,7 +6,6 @@ using System.Linq;
 using System;
 using System.Text.RegularExpressions;
 using ManagingSystem;
-using static InputControl.InputControls;
 
 public enum EInputCategory
 {
@@ -21,7 +19,9 @@ public enum EInputCategory
 
 public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoad
 {
-    [field:SerializeField] public InputReader InputReader { get; private set; }
+    [field:SerializeField] public PlayerInputReader PlayerInputReader { get; private set; }
+    [field:SerializeField] public UIInputReader UIInputReader { get; private set; }
+    [field:SerializeField] public CameraInputReader CameraInputReader { get; private set; }
 
     private Dictionary<EInputCategory, InputAction> _inputDictionary;
 
@@ -39,12 +39,12 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
     {
         _inputDictionary = new Dictionary<EInputCategory, InputAction>
         {
-            { EInputCategory.Movement,          InputReader.InputControls.Player.Movement },
-            { EInputCategory.Jump,              InputReader.InputControls.Player.Jump },
-            { EInputCategory.Interaction,       InputReader.InputControls.Player.Interaction },
-            { EInputCategory.Click,             InputReader.InputControls.Player.Click },
-            { EInputCategory.AxisControl,       InputReader.InputControls.Player.AxisControl },
-            {EInputCategory.Reload,             InputReader.InputControls.Player.Reload },
+            { EInputCategory.Movement,          PlayerInputReader.Actions.Movement },
+            { EInputCategory.Jump,              PlayerInputReader.Actions.Jump },
+            { EInputCategory.Interaction,       PlayerInputReader.Actions.Interaction },
+            { EInputCategory.Click,             PlayerInputReader.Actions.Click },
+            { EInputCategory.AxisControl,       PlayerInputReader.Actions.AxisControl },
+            { EInputCategory.Reload,            PlayerInputReader.Actions.Reload },
         };
     }
 
@@ -55,7 +55,7 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
         Action<InputActionRebindingExtensions.RebindingOperation> onCancel,
         Action<InputActionRebindingExtensions.RebindingOperation> onComplete)
     {
-        InputReader.InputControls.Player.Disable();
+        PlayerInputReader.Actions.Disable();
         _inputDictionary[category].PerformInteractiveRebinding(bindingIndex)
             .WithControlsExcluding("Mouse")
             .WithCancelingThrough("<keyboard>/Backspace")
@@ -70,13 +70,13 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
                 
                 onComplete?.Invoke(operation);
                 operation.Dispose();
-                InputReader.InputControls.Player.Enable();
+                PlayerInputReader.Actions.Enable();
             })
             .OnCancel(operation =>
             {
                 onCancel?.Invoke(operation);
                 operation.Dispose();
-                InputReader.InputControls.Player.Enable();
+                PlayerInputReader.Actions.Enable();
             })
             .Start();
     }
@@ -169,7 +169,7 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
     {
         return (saveData) =>
         {
-            saveData.KeyBinding = InputReader.InputControls.SaveBindingOverridesAsJson();
+            saveData.KeyBinding = PlayerInputReader.InputControls.SaveBindingOverridesAsJson();
         };
     }
 
@@ -177,9 +177,9 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
     {
         return (saveData) =>
         {
-            if (saveData.KeyBinding == null || saveData.KeyBinding == string.Empty) return;
+            if (string.IsNullOrEmpty(saveData.KeyBinding)) return;
 
-            InputReader.InputControls.LoadBindingOverridesFromJson(saveData.KeyBinding);
+            PlayerInputReader.InputControls.LoadBindingOverridesFromJson(saveData.KeyBinding);
         };
     }
     public string GetBindingKeyName(EInputCategory inputCategory)
@@ -190,10 +190,10 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
     public string[] GetBindingMovementName()
     {
         string[] names = new string[4];
-        names[0] = InputReader.InputControls.Player.Movement.bindings[1].ToDisplayString();
-        names[1] = InputReader.InputControls.Player.Movement.bindings[2].ToDisplayString();
-        names[2] = InputReader.InputControls.Player.Movement.bindings[3].ToDisplayString();
-        names[3] = InputReader.InputControls.Player.Movement.bindings[4].ToDisplayString();
+        names[0] = PlayerInputReader.Actions.Movement.bindings[1].ToDisplayString();
+        names[1] = PlayerInputReader.Actions.Movement.bindings[2].ToDisplayString();
+        names[2] = PlayerInputReader.Actions.Movement.bindings[3].ToDisplayString();
+        names[3] = PlayerInputReader.Actions.Movement.bindings[4].ToDisplayString();
         return names;
     }
 }

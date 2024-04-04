@@ -46,16 +46,16 @@ public class UIDropdown : UIComponent
         _optionOffset = 0;
         _maxShowOptionCount = 0;
         UpdateCursorPos();
-        InputManager.Instance.InputReader.OnUpArrowClickEvent += CursorUp;
-        InputManager.Instance.InputReader.OnDownArrowClickEvent += CursorDown;
-        InputManager.Instance.InputReader.OnEnterClickEvent += EnterOption;
+        InputManager.Instance.UIInputReader.OnUpArrowClickEvent += CursorUp;
+        InputManager.Instance.UIInputReader.OnDownArrowClickEvent += CursorDown;
+        InputManager.Instance.UIInputReader.OnEnterClickEvent += EnterOption;
     }
 
     public override void Disappear(Action callback = null)
     {
-        InputManager.Instance.InputReader.OnUpArrowClickEvent -= CursorUp;
-        InputManager.Instance.InputReader.OnDownArrowClickEvent -= CursorDown;
-        InputManager.Instance.InputReader.OnEnterClickEvent -= EnterOption;
+        InputManager.Instance.UIInputReader.OnUpArrowClickEvent -= CursorUp;
+        InputManager.Instance.UIInputReader.OnDownArrowClickEvent -= CursorDown;
+        InputManager.Instance.UIInputReader.OnEnterClickEvent -= EnterOption;
         
         foreach (var option in _options)
         {
