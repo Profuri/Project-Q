@@ -73,5 +73,6 @@ public class UIComponent : PoolableMono
 
     public override void OnPush()
     {
+        //Disappear();
     }
 }

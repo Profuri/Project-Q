@@ -25,6 +25,8 @@ public class SceneControlManager : BaseManager<SceneControlManager>
         if (_currentCanvas != null) return;
 
         _currentCanvas = PoolManager.Instance.Pop("SceneTransitionCanvas") as SceneTransitionCanvas;
+        CursorManager.ClearUIHash();
+        CursorManager.ReloadCursor();
         CameraManager.Instance.InitCamera();
 
         _currentCanvas.PresentTransition(0.0f, 1.0f, _fadeTime, () =>

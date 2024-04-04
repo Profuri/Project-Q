@@ -39,6 +39,11 @@ public class Pool
 
     public void Push(PoolableMono obj)
     {
+        if (!obj.poolOut)
+        {
+            return;
+        }
+
         obj.OnPush();
         obj.poolOut = false;
         obj.transform.SetParent(_parent);
