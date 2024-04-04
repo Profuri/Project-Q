@@ -5,11 +5,9 @@ using UnityEngine.VFX;
 public class PoolableVFX : PoolableMono
 {
     private VisualEffect _visualEffect;
-    private Coroutine _runningCoroutine;
 
     private void Awake()
     {
-        _runningCoroutine = null;
         _visualEffect = GetComponent<VisualEffect>();
     }
 
@@ -25,11 +23,7 @@ public class PoolableVFX : PoolableMono
     
     public void Play()
     {
-        if (_runningCoroutine is not null)
-        {
-            StopCoroutine(_runningCoroutine);
-        }
-        _runningCoroutine = StartCoroutine(PlayRoutine());
+        CoroutineManager.Instance.PlayCoroutine(PlayRoutine());
     }
 
     private IEnumerator PlayRoutine()

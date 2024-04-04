@@ -18,6 +18,11 @@ public class CameraManager : BaseManager<CameraManager>
     public AnimationCurve CamShakeCurve => _camShakeCurve;
     [SerializeField] private float _transitionTime;
 
+    [Header("Offset Setting")] 
+    [SerializeField] private float _offset;
+    [SerializeField] private float _turnBackOffsetDelay;
+    [SerializeField] private float _offsetApplyDelay;
+
     public override void StartManager()
     {
         _vCamControllers = new Dictionary<VirtualCamType, VirtualCamController>();
@@ -36,6 +41,18 @@ public class CameraManager : BaseManager<CameraManager>
             camController.Init();
             _vCamControllers.Add(camType, camController);
         }
+    }
+
+    public void ApplyInitOffset()
+    {
+        ActiveVCam.ApplyOffset(Vector3.zero, _turnBackOffsetDelay);
+    }
+
+    public void ApplyCamOffset(Vector3 dir)
+    {
+        var adjustDir = Quaternion.Euler(0, ActiveVCam.transform.eulerAngles.y, 0) * dir;
+        var offset = adjustDir * _offset;
+        ActiveVCam.ApplyOffset(offset, _offsetApplyDelay);
     }
 
     public void ChangeVCamController(VirtualCamType type)

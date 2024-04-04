@@ -9,8 +9,6 @@ namespace VirtualCam
     {
         private CinemachineVirtualCameraBase _virtualCam;
 
-        private Coroutine _runningRoutine = null;
-
         private void Awake()
         {
             _virtualCam = GetComponent<CinemachineVirtualCameraBase>();
@@ -36,14 +34,14 @@ namespace VirtualCam
             _virtualCam.LookAt = lookAtTarget;
         }
 
+        public void ApplyOffset(Vector3 offset, float time)
+        {
+            CoroutineManager.Instance.PlayCoroutine(OffsetRoutine(offset, time));
+        }
+
         public void ShakeCam(float intensity, float time)
         {
-            if (_runningRoutine != null)
-            {
-                StopCoroutine(_runningRoutine);
-                _runningRoutine = null;
-            }
-            _runningRoutine = StartCoroutine(ShakeSequence(intensity, time));
+            CoroutineManager.Instance.PlayCoroutine(ShakeSequence(intensity, time));
         }
 
         public void SetAxisXValue(float value)
@@ -110,11 +108,15 @@ namespace VirtualCam
             return pov is null ? transform.localEulerAngles.x : pov.m_VerticalAxis.Value;
         }
 
+        private IEnumerator OffsetRoutine(Vector3 offset, float time)
+        {
+            yield return null;
+        }
+
         private IEnumerator ShakeSequence(float intensity, float time)
         {
             yield return StartCoroutine(ShakeRoutine(intensity, time / 2f));
             yield return StartCoroutine(ShakeRoutine(-intensity, time / 2f));
-            _runningRoutine = null;
         }
 
         private IEnumerator ShakeRoutine(float intensity, float time)
