@@ -81,6 +81,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     {
         IsClear = true;
         CurrentStage.Lock = false;
+        player.Converter.ConvertDimension(AxisType.None);
         player.Converter.SetConvertable(false);
         var nextChapter = CurrentStage.stageOrder + 1;
 

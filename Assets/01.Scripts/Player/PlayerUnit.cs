@@ -50,7 +50,7 @@ public class PlayerUnit : ObjectUnit
         _selectedInteractableObject = FindInteractable();
 
         //Test code
-        if(Input.GetKeyDown(KeyCode.J))
+        if(Input.GetKeyDown(KeyCode.C))
         {
             StageManager.Instance.StageClear(this);
         }
@@ -77,6 +77,8 @@ public class PlayerUnit : ObjectUnit
     {
         InputManager.Instance.PlayerInputReader.OnInteractionEvent += OnInteraction;
         InputManager.Instance.PlayerInputReader.OnReloadClickEvent += RestartStage;
+        // 리펙토링 하자
+        InputManager.Instance.CameraInputReader.OnChangeOffsetEvent += ChangeCameraOffset;
 
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
@@ -85,7 +87,21 @@ public class PlayerUnit : ObjectUnit
     public override void OnPush()
     {
         InputManager.Instance.PlayerInputReader.ClearInputEvent();
+        // 리펙토링
+        InputManager.Instance.CameraInputReader.ClearInputEvent();
         Animator.SetBool(_activeHash, false);
+    }
+
+    private void ChangeCameraOffset(Vector2 offset)
+    {
+        if (Mathf.Abs(offset.sqrMagnitude) <= 0)
+        {
+            CameraManager.Instance.ApplyInitOffset();    
+        }
+        else
+        {
+            CameraManager.Instance.ApplyCamOffset(offset);
+        }
     }
     
     private void RestartStage()

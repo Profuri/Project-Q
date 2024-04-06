@@ -114,11 +114,14 @@ namespace VirtualCam
             
             var framingTransposer = _virtualCam.GetCinemachineComponent<CinemachineFramingTransposer>();
             var originOffset = framingTransposer.m_TrackedObjectOffset;
+            var distance = Vector3.Distance(originOffset, targetOffset);
 
+            time *= distance / CameraManager.Instance.OffsetAmount;
+            
             while (percent < 1f)
             {
                 currentTime += Time.deltaTime;
-                percent = currentTime / time;
+                percent = CameraManager.Instance.CamOffsetCurve.Evaluate(currentTime / time);
                 var offset = Vector3.Lerp(originOffset, targetOffset, percent);
                 framingTransposer.m_TrackedObjectOffset = offset;
                 yield return null;

@@ -19,7 +19,10 @@ public class CameraManager : BaseManager<CameraManager>
     [SerializeField] private float _transitionTime;
 
     [Header("Offset Setting")] 
-    [SerializeField] private float _offset;
+    [SerializeField] private AnimationCurve _camOffsetCurve;
+    public AnimationCurve CamOffsetCurve => _camShakeCurve;
+    [SerializeField] private float _offsetAmount;
+    public float OffsetAmount => _offsetAmount;
     [SerializeField] private float _turnBackOffsetDelay;
     [SerializeField] private float _offsetApplyDelay;
 
@@ -51,7 +54,7 @@ public class CameraManager : BaseManager<CameraManager>
     public void ApplyCamOffset(Vector3 dir)
     {
         var adjustDir = Quaternion.Euler(0, ActiveVCam.transform.eulerAngles.y, 0) * dir;
-        var offset = adjustDir * _offset;
+        var offset = adjustDir * _offsetAmount;
         ActiveVCam.ApplyOffset(offset, _offsetApplyDelay);
     }
 

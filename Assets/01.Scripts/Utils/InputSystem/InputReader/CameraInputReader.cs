@@ -6,7 +6,7 @@ namespace InputControl
     [CreateAssetMenu(menuName = "SO/InputReader/Camera")]
     public class CameraInputReader : InputReader, InputControls.ICameraActions
     {
-        public event InputEventListener<Vector2> ChangeOffsetEvent = null;
+        public event InputEventListener<Vector2> OnChangeOffsetEvent = null;
         
         public InputControls.CameraActions Actions { get; private set; }
 
@@ -22,13 +22,20 @@ namespace InputControl
 
         public void OnChangeOffset(InputAction.CallbackContext context)
         {
-            var offset = context.ReadValue<Vector2>();
-            ChangeOffsetEvent?.Invoke(offset);
+            if (context.performed)
+            {
+                var offset = context.ReadValue<Vector2>();
+                OnChangeOffsetEvent?.Invoke(offset);
+            }
+            else if (context.canceled)
+            {
+                OnChangeOffsetEvent?.Invoke(Vector3.zero);
+            }
         }
         
         public override void ClearInputEvent()
         {
-            ChangeOffsetEvent = null;
+            OnChangeOffsetEvent = null;
         }
     }
 }
