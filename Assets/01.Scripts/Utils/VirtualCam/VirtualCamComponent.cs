@@ -37,12 +37,12 @@ namespace VirtualCam
 
         public void ApplyOffset(Vector3 offset, float time)
         {
-            CoroutineManager.Instance.StartCoroutine(OffsetChangeRoutine(offset, time));
+            CoroutineManager.Instance.StartCoroutine(GetInstanceID(), OffsetChangeRoutine(offset, time));
         }
 
         public void ShakeCam(float intensity, float time)
         {
-            CoroutineManager.Instance.StartCoroutine(ShakeSequence(intensity, time));
+            CoroutineManager.Instance.StartCoroutine(GetInstanceID(), ShakeSequence(intensity, time));
         }
 
         public void SetAxisXValue(float value)
