@@ -22,12 +22,17 @@ public class CoroutineManager : BaseManager<CoroutineManager>
     {
         var routineName = routine.ToString();
 
-        if (!_coroutineDiction.ContainsKey(ownerInstanceId))
+        var alreadyIncludeInstance = _coroutineDiction.ContainsKey(ownerInstanceId);
+        
+        if (!alreadyIncludeInstance)
         {
             _coroutineDiction[ownerInstanceId] = new Dictionary<string, Coroutine>();
         }
         
-        if (_coroutineDiction[ownerInstanceId].ContainsKey(routineName) && _coroutineDiction[ownerInstanceId][routineName] is not null)
+        var includeRoutine = _coroutineDiction[ownerInstanceId].ContainsKey(routineName);
+        var isPlayRoutine = _coroutineDiction[ownerInstanceId][routineName] is not null;
+        
+        if (includeRoutine && isPlayRoutine)
         {
             StopSafeCoroutine(ownerInstanceId, routine);
         }
