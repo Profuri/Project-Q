@@ -18,35 +18,35 @@ public class CoroutineManager : BaseManager<CoroutineManager>
         _coroutineDiction.Clear();
     }
 
-    public void StartCoroutine(int owner, IEnumerator routine)
+    public void StartSafeCoroutine(int ownerInstanceId, IEnumerator routine)
     {
         var routineName = routine.ToString();
 
-        if (!_coroutineDiction.ContainsKey(owner))
+        if (!_coroutineDiction.ContainsKey(ownerInstanceId))
         {
-            _coroutineDiction[owner] = new Dictionary<string, Coroutine>();
+            _coroutineDiction[ownerInstanceId] = new Dictionary<string, Coroutine>();
         }
         
-        if (_coroutineDiction[owner].ContainsKey(routineName) && _coroutineDiction[owner][routineName] is not null)
+        if (_coroutineDiction[ownerInstanceId].ContainsKey(routineName) && _coroutineDiction[ownerInstanceId][routineName] is not null)
         {
-            StopCoroutine(owner, routine);
+            StopSafeCoroutine(ownerInstanceId, routine);
         }
         
-        base.StartCoroutine(CoroutinePlayRoutine(owner, routine));
+        base.StartCoroutine(CoroutinePlayRoutine(ownerInstanceId, routine));
     }
 
-    public void StopCoroutine(int owner, IEnumerator routine)
+    public void StopSafeCoroutine(int ownerInstanceId, IEnumerator routine)
     {
         var routineName = routine.ToString();
-        base.StopCoroutine(_coroutineDiction[owner][routineName]);
-        _coroutineDiction[owner][routineName] = null;
+        base.StopCoroutine(_coroutineDiction[ownerInstanceId][routineName]);
+        _coroutineDiction[ownerInstanceId][routineName] = null;
     }
 
-    private IEnumerator CoroutinePlayRoutine(int owner, IEnumerator routine)
+    private IEnumerator CoroutinePlayRoutine(int ownerInstanceId, IEnumerator routine)
     {
         var routineName = routine.ToString();
-        _coroutineDiction[owner][routineName] = base.StartCoroutine(routine);
-        yield return _coroutineDiction[owner][routineName];
-        StopCoroutine(owner, routine);
+        _coroutineDiction[ownerInstanceId][routineName] = base.StartCoroutine(routine);
+        yield return _coroutineDiction[ownerInstanceId][routineName];
+        StopSafeCoroutine(ownerInstanceId, routine);
     }
 }

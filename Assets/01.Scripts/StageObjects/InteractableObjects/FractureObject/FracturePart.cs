@@ -59,7 +59,7 @@ public class FracturePart : PoolableMono
         var meshCollider = gameObject.AddComponent<MeshCollider>();
         meshCollider.convex = true;
         
-        CoroutineManager.Instance.StartCoroutine(this.GetInstanceID(), LifeRoutine());
+        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), LifeRoutine());
     }
 
     public void AddTriangle(int submesh, Vector3 vert1, Vector3 vert2, Vector3 vert3, Vector3 normal1, Vector3 normal2, Vector3 normal3, Vector2 uv1, Vector2 uv2, Vector2 uv3)
