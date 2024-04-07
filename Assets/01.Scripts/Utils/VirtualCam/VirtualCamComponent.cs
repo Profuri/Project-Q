@@ -1,6 +1,5 @@
 using System.Collections;
 using Cinemachine;
-using DG.Tweening;
 using UnityEngine;
 
 namespace VirtualCam
@@ -9,10 +8,12 @@ namespace VirtualCam
     public class VirtualCamComponent : MonoBehaviour, IVirtualCam
     {
         private CinemachineVirtualCamera _virtualCam;
+        private float _originOrthoSize;
 
         private void Awake()
         {
             _virtualCam = GetComponent<CinemachineVirtualCamera>();
+            _originOrthoSize = _virtualCam.m_Lens.OrthographicSize;
         }
 
         public void EnterCam()
@@ -35,9 +36,10 @@ namespace VirtualCam
             _virtualCam.LookAt = lookAtTarget;
         }
 
-        public void ApplyOffset(Vector3 offset, float time)
+        public void Zoom(float zoomScale, float timer)
         {
-            CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), OffsetChangeRoutine(offset, time));
+            var targetCamSize = _originOrthoSize * zoomScale;
+            CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), OrthoSizeChangeRoutine(targetCamSize, timer, CameraManager.Instance.ZoomControlCurve));
         }
 
         public void ShakeCam(float intensity, float time)
@@ -87,47 +89,31 @@ namespace VirtualCam
 
         private IEnumerator ShakeSequence(float intensity, float time)
         {
-            yield return StartCoroutine(ShakeRoutine(intensity, time / 2f));
-            yield return StartCoroutine(ShakeRoutine(-intensity, time / 2f));
+            yield return StartCoroutine(OrthoSizeChangeRoutine(_originOrthoSize + intensity, time / 2f, CameraManager.Instance.CamShakeCurve));
+            yield return StartCoroutine(OrthoSizeChangeRoutine(_originOrthoSize, time / 2f, CameraManager.Instance.CamShakeCurve));
         }
 
-        private IEnumerator ShakeRoutine(float intensity, float time)
+        private IEnumerator OrthoSizeChangeRoutine(float targetSize, float timer, AnimationCurve customCurve = null)
         {
             var origin = _virtualCam.m_Lens.OrthographicSize;
 
-            var currentTime = 0f;
+            var time = 0f;
             var percent = 0f;
 
             while (percent < 1f)
             {
-                currentTime += Time.deltaTime;
-                percent = CameraManager.Instance.CamShakeCurve.Evaluate(currentTime / time);
-                _virtualCam.m_Lens.OrthographicSize = Mathf.Lerp(origin, origin + intensity, percent);
+                time += Time.deltaTime;
+                percent = time / timer;
+
+                if (customCurve is not null)
+                {
+                    percent = customCurve.Evaluate(percent);
+                }
+
+                _virtualCam.m_Lens.OrthographicSize = Mathf.Lerp(origin, targetSize, percent);
+                
                 yield return null;
             }
-        }
-
-        private IEnumerator OffsetChangeRoutine(Vector3 targetOffset, float time)
-        {
-            var currentTime = 0f;
-            var percent = 0f;
-            
-            var framingTransposer = _virtualCam.GetCinemachineComponent<CinemachineFramingTransposer>();
-            var originOffset = framingTransposer.m_TrackedObjectOffset;
-            var distance = Vector3.Distance(originOffset, targetOffset);
-
-            time *= distance / CameraManager.Instance.OffsetAmount;
-            
-            while (percent < 1f)
-            {
-                currentTime += Time.deltaTime;
-                percent = CameraManager.Instance.CamOffsetCurve.Evaluate(currentTime / time);
-                var offset = Vector3.Lerp(originOffset, targetOffset, percent);
-                framingTransposer.m_TrackedObjectOffset = offset;
-                yield return null;
-            }
-            
-            framingTransposer.m_TrackedObjectOffset = targetOffset;
         }
     }
 }

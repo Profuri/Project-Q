@@ -2,6 +2,7 @@ using System;
 using AxisConvertSystem;
 using InteractableSystem;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerUnit : ObjectUnit
 {
@@ -77,9 +78,10 @@ public class PlayerUnit : ObjectUnit
     {
         InputManager.Instance.PlayerInputReader.OnInteractionEvent += OnInteraction;
         InputManager.Instance.PlayerInputReader.OnReloadClickEvent += RestartStage;
-        // 리펙토링 하자
-        InputManager.Instance.CameraInputReader.OnChangeOffsetEvent += ChangeCameraOffset;
 
+        InputManager.Instance.CameraInputReader.OnZoomOutEvent += CameraManager.Instance.ZoomOutCamera;
+        InputManager.Instance.CameraInputReader.OnZoomInEvent += CameraManager.Instance.ZoomInCamera;
+        
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
     }
@@ -87,23 +89,10 @@ public class PlayerUnit : ObjectUnit
     public override void OnPush()
     {
         InputManager.Instance.PlayerInputReader.ClearInputEvent();
-        // 리펙토링
         InputManager.Instance.CameraInputReader.ClearInputEvent();
         Animator.SetBool(_activeHash, false);
     }
 
-    private void ChangeCameraOffset(Vector2 offset)
-    {
-        if (Mathf.Abs(offset.sqrMagnitude) <= 0)
-        {
-            CameraManager.Instance.ApplyInitOffset();    
-        }
-        else
-        {
-            CameraManager.Instance.ApplyCamOffset(offset);
-        }
-    }
-    
     private void RestartStage()
     {
         if (Converter.AxisType != AxisType.None)

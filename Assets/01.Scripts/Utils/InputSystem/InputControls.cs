@@ -330,70 +330,26 @@ namespace InputControl
             ""id"": ""c8e89bbc-2487-4e83-8006-4d5c4de9f563"",
             ""actions"": [
                 {
-                    ""name"": ""ChangeOffset"",
-                    ""type"": ""Value"",
-                    ""id"": ""dae39338-1f64-4ecf-8525-8bee6996737b"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""name"": ""ZoomControl"",
+                    ""type"": ""Button"",
+                    ""id"": ""3da71c75-677c-4e78-aee1-f779698c0978"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
-                    ""name"": ""Up/Down/Left/Right"",
-                    ""id"": ""c4e2fd78-5d57-46f9-a71e-120e3a9eae16"",
-                    ""path"": ""2DVector"",
+                    ""name"": """",
+                    ""id"": ""02392352-4d58-48dc-ab3f-d4e26cd57e8a"",
+                    ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeOffset"",
-                    ""isComposite"": true,
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ZoomControl"",
+                    ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""9620ffa7-9431-492c-bdde-5a1335feea82"",
-                    ""path"": ""<Keyboard>/u"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""ChangeOffset"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""a483d6a3-de53-466e-9bdc-c978b99f1312"",
-                    ""path"": ""<Keyboard>/j"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""ChangeOffset"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""5ab2a918-919e-48c4-9d19-94e44130c336"",
-                    ""path"": ""<Keyboard>/h"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""ChangeOffset"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""0e7375b6-e391-493a-92e5-e45d5a3c9088"",
-                    ""path"": ""<Keyboard>/k"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""ChangeOffset"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -435,7 +391,7 @@ namespace InputControl
             m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
             // Camera
             m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
-            m_Camera_ChangeOffset = m_Camera.FindAction("ChangeOffset", throwIfNotFound: true);
+            m_Camera_ZoomControl = m_Camera.FindAction("ZoomControl", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -669,12 +625,12 @@ namespace InputControl
         // Camera
         private readonly InputActionMap m_Camera;
         private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
-        private readonly InputAction m_Camera_ChangeOffset;
+        private readonly InputAction m_Camera_ZoomControl;
         public struct CameraActions
         {
             private @InputControls m_Wrapper;
             public CameraActions(@InputControls wrapper) { m_Wrapper = wrapper; }
-            public InputAction @ChangeOffset => m_Wrapper.m_Camera_ChangeOffset;
+            public InputAction @ZoomControl => m_Wrapper.m_Camera_ZoomControl;
             public InputActionMap Get() { return m_Wrapper.m_Camera; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -684,16 +640,16 @@ namespace InputControl
             {
                 if (instance == null || m_Wrapper.m_CameraActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_CameraActionsCallbackInterfaces.Add(instance);
-                @ChangeOffset.started += instance.OnChangeOffset;
-                @ChangeOffset.performed += instance.OnChangeOffset;
-                @ChangeOffset.canceled += instance.OnChangeOffset;
+                @ZoomControl.started += instance.OnZoomControl;
+                @ZoomControl.performed += instance.OnZoomControl;
+                @ZoomControl.canceled += instance.OnZoomControl;
             }
 
             private void UnregisterCallbacks(ICameraActions instance)
             {
-                @ChangeOffset.started -= instance.OnChangeOffset;
-                @ChangeOffset.performed -= instance.OnChangeOffset;
-                @ChangeOffset.canceled -= instance.OnChangeOffset;
+                @ZoomControl.started -= instance.OnZoomControl;
+                @ZoomControl.performed -= instance.OnZoomControl;
+                @ZoomControl.canceled -= instance.OnZoomControl;
             }
 
             public void RemoveCallbacks(ICameraActions instance)
@@ -740,7 +696,7 @@ namespace InputControl
         }
         public interface ICameraActions
         {
-            void OnChangeOffset(InputAction.CallbackContext context);
+            void OnZoomControl(InputAction.CallbackContext context);
         }
     }
 }

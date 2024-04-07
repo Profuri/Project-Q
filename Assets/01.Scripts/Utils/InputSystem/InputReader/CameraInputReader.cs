@@ -6,7 +6,8 @@ namespace InputControl
     [CreateAssetMenu(menuName = "SO/InputReader/Camera")]
     public class CameraInputReader : InputReader, InputControls.ICameraActions
     {
-        public event InputEventListener<Vector2> OnChangeOffsetEvent = null;
+        public InputEventListener OnZoomOutEvent = null;
+        public InputEventListener OnZoomInEvent = null;
         
         public InputControls.CameraActions Actions { get; private set; }
 
@@ -20,22 +21,22 @@ namespace InputControl
             Actions.Enable();
         }
 
-        public void OnChangeOffset(InputAction.CallbackContext context)
+        public void OnZoomControl(InputAction.CallbackContext context)
         {
             if (context.performed)
             {
-                var offset = context.ReadValue<Vector2>();
-                OnChangeOffsetEvent?.Invoke(offset);
+                OnZoomOutEvent?.Invoke();
             }
             else if (context.canceled)
             {
-                OnChangeOffsetEvent?.Invoke(Vector3.zero);
+                OnZoomInEvent?.Invoke();
             }
         }
-        
+
         public override void ClearInputEvent()
         {
-            OnChangeOffsetEvent = null;
+            OnZoomOutEvent = null;
+            OnZoomInEvent = null;
         }
     }
 }

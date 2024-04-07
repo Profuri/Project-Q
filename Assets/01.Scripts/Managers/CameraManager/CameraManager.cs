@@ -14,18 +14,14 @@ public class CameraManager : BaseManager<CameraManager>
     public Camera MainCam { get; private set; }
 
     [Header("Transition Setting")]
-    [SerializeField] private AnimationCurve _camShakeCurve;
-    public AnimationCurve CamShakeCurve => _camShakeCurve;
     [SerializeField] private float _transitionTime;
+    [field:SerializeField] public AnimationCurve CamShakeCurve { get; private set; }
 
-    [Header("Offset Setting")] 
-    [SerializeField] private AnimationCurve _camOffsetCurve;
-    public AnimationCurve CamOffsetCurve => _camShakeCurve;
-    [SerializeField] private float _offsetAmount;
-    public float OffsetAmount => _offsetAmount;
-    [SerializeField] private float _turnBackOffsetDelay;
-    [SerializeField] private float _offsetApplyDelay;
-
+    [Header("Zoom Control Setting")] 
+    [SerializeField] private float _zoomOutScale = 1f;
+    [SerializeField] private float _zoomControlTimer;
+    [field:SerializeField] public AnimationCurve ZoomControlCurve { get; private set; }
+    
     public override void StartManager()
     {
         _vCamControllers = new Dictionary<VirtualCamType, VirtualCamController>();
@@ -44,18 +40,6 @@ public class CameraManager : BaseManager<CameraManager>
             camController.Init();
             _vCamControllers.Add(camType, camController);
         }
-    }
-
-    public void ApplyInitOffset()
-    {
-        ActiveVCam.ApplyOffset(Vector3.zero, _turnBackOffsetDelay);
-    }
-
-    public void ApplyCamOffset(Vector3 dir)
-    {
-        var adjustDir = Quaternion.Euler(0, ActiveVCam.transform.eulerAngles.y, 0) * dir;
-        var offset = adjustDir * _offsetAmount;
-        ActiveVCam.ApplyOffset(offset, _offsetApplyDelay);
     }
 
     public void ChangeVCamController(VirtualCamType type)
@@ -82,6 +66,16 @@ public class CameraManager : BaseManager<CameraManager>
         yield return new WaitForSeconds(time);
             
         callBack?.Invoke();
+    }
+
+    public void ZoomOutCamera()
+    {
+        ActiveVCam.Zoom(_zoomOutScale, _zoomControlTimer);
+    }
+
+    public void ZoomInCamera()
+    {
+        ActiveVCam.Zoom(1f, _zoomControlTimer);
     }
 
     public void ShakeCam(float intensity, float time)
