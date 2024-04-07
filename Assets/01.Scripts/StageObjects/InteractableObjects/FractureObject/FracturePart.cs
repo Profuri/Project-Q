@@ -114,8 +114,6 @@ public class FracturePart : PoolableMono
             currentTime += Time.deltaTime;
             percent = currentTime / duration;
 
-            Debug.Log(percent);
-        
             var color = _meshRenderer.material.GetColor(BaseColorHash);
             color.a = 1f * originAlpha - percent * originAlpha;
             _meshRenderer.material.SetColor(BaseColorHash, color);
