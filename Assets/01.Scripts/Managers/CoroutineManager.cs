@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class CoroutineManager : BaseManager<CoroutineManager>
 {
-    private Dictionary<string, Coroutine> _coroutineDiction;
+    private Dictionary<int, Dictionary<string, Coroutine>> _coroutineDiction;
 
     public override void Init()
     {
         base.Init();
-        _coroutineDiction = new Dictionary<string, Coroutine>();
+        _coroutineDiction = new Dictionary<int, Dictionary<string, Coroutine>>();
     }
 
     public override void StartManager()
@@ -18,35 +18,35 @@ public class CoroutineManager : BaseManager<CoroutineManager>
         _coroutineDiction.Clear();
     }
 
-    public new void StartCoroutine(IEnumerator routine)
+    public void StartCoroutine(int owner, IEnumerator routine)
     {
         var routineName = routine.ToString();
-        
-        if (_coroutineDiction.ContainsKey(routineName) && _coroutineDiction[routineName] is not null)
+
+        if (!_coroutineDiction.ContainsKey(owner))
         {
-            StopCoroutine(routineName);
+            _coroutineDiction[owner] = new Dictionary<string, Coroutine>();
         }
         
-        base.StartCoroutine(CoroutinePlayRoutine(routineName, routine));
+        if (_coroutineDiction[owner].ContainsKey(routineName) && _coroutineDiction[owner][routineName] is not null)
+        {
+            StopCoroutine(owner, routine);
+        }
+        
+        base.StartCoroutine(CoroutinePlayRoutine(owner, routine));
     }
 
-    public new void StopCoroutine(IEnumerator routine)
+    public void StopCoroutine(int owner, IEnumerator routine)
     {
         var routineName = routine.ToString();
-        base.StopCoroutine(_coroutineDiction[routineName]);
-        _coroutineDiction[routineName] = null;
+        base.StopCoroutine(_coroutineDiction[owner][routineName]);
+        _coroutineDiction[owner][routineName] = null;
     }
 
-    public new void StopCoroutine(string routineName)
+    private IEnumerator CoroutinePlayRoutine(int owner, IEnumerator routine)
     {
-        base.StopCoroutine(_coroutineDiction[routineName]);
-        _coroutineDiction[routineName] = null;
-    }
-
-    private IEnumerator CoroutinePlayRoutine(string routineName, IEnumerator routine)
-    {
-        _coroutineDiction[routineName] = base.StartCoroutine(routine);
-        yield return _coroutineDiction[routineName];
-        _coroutineDiction[routineName] = null;
+        var routineName = routine.ToString();
+        _coroutineDiction[owner][routineName] = base.StartCoroutine(routine);
+        yield return _coroutineDiction[owner][routineName];
+        StopCoroutine(owner, routine);
     }
 }
