@@ -12,6 +12,8 @@ public class PlayerAxisControlState : PlayerBaseState
     public override void EnterState()
     {
         base.EnterState();
+        _isControllingAxis = true;
+
         Player.StopImmediately(true);
 
         if (!Player.Converter.Convertable)
@@ -46,7 +48,7 @@ public class PlayerAxisControlState : PlayerBaseState
     public override void ExitState()
     {
         base.ExitState();
-
+        _isControllingAxis = false;
         InputManager.Instance.InputReader.OnAxisControlEvent -= AxisControlHandle;
         InputManager.Instance.InputReader.OnClickEvent -= SelectAxisHandle;
         VolumeManager.Instance.SetAxisControlVolume(false, 0.2f);
@@ -85,8 +87,9 @@ public class PlayerAxisControlState : PlayerBaseState
         
         // block input
         InputManager.Instance.SetEnableInputAll(false);
-
         Player.Converter.ConvertDimension(_controllingAxis,() => 
             InputManagerHelper.OnCancelingAxis());
+
+        _isControllingAxis = false;
     }
 }

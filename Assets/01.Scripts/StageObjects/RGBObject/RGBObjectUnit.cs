@@ -16,7 +16,7 @@ public enum RGBColor
 
 public class RGBObjectUnit : InteractableObject
 {
-    private static readonly int s_allMatchColor = (int)(RGBColor.RED | RGBColor.BLUE |RGBColor.GREEN);
+    private static readonly int s_allMatchColor = (int)(RGBColor.RED | RGBColor.BLUE | RGBColor.GREEN);
 
     [Header("Color")]
     public RGBColor originColor;

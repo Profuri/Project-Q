@@ -25,13 +25,19 @@ public class SettingWindow : UIComponent
     {
         base.Appear(parentTrm, callback);
         ChangePanel(_mainSettingPanel);
-        EnableCursor();
+        CursorManager.RegisterUI(this);
     }
-    
+
     public void Close()
     {
         _currentPanel?.ReleasePanel();
         Disappear();
+    }
+
+    public override void Disappear(Action callback = null)
+    {
+        base.Disappear(callback);
+        CursorManager.UnRegisterUI(this);
     }
 
     // Button Callbacks
@@ -60,17 +66,5 @@ public class SettingWindow : UIComponent
         _currentPanel?.ReleasePanel();
         _currentPanel = panel;
         _currentPanel.LoadPanel();
-    }
-
-    public void EnableCursor()
-    {
-        CursorManager.SetCursorEnable(true);
-        CursorManager.SetCursorLockState(CursorLockMode.None);
-    }
-
-    public void DisableCursor()
-    {
-        CursorManager.SetCursorEnable(false);
-        CursorManager.SetCursorLockState(CursorLockMode.Locked);
     }
 }

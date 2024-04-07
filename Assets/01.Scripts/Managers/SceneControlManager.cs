@@ -25,6 +25,10 @@ public class SceneControlManager : BaseManager<SceneControlManager>
         if (_currentCanvas != null) return;
 
         _currentCanvas = PoolManager.Instance.Pop("SceneTransitionCanvas") as SceneTransitionCanvas;
+        CursorManager.ClearUIHash();
+        CursorManager.ReloadCursor();
+        CameraManager.Instance.InitCamera();
+
         _currentCanvas.PresentTransition(0.0f, 1.0f, _fadeTime, () =>
         {
             if (_currentScene is not null)
@@ -33,6 +37,7 @@ public class SceneControlManager : BaseManager<SceneControlManager>
             }
 
             _currentScene = PoolManager.Instance.Pop($"{type}Scene") as Scene;
+
             onSceneCreate?.Invoke();
 
             //위에 함수가 전부다 정상 작동 했을 경우 밑에 있는 것을 실행시켜주어야 함
@@ -44,6 +49,7 @@ public class SceneControlManager : BaseManager<SceneControlManager>
                     _currentScene.onLoadScene?.Invoke();
                     PoolManager.Instance.Push(_currentCanvas);
                     _currentCanvas = null;
+
                 });
             });
         });

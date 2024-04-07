@@ -2,17 +2,28 @@ using System;
 using System.Collections.Generic;
 using AxisConvertSystem;
 using VirtualCam;
+using UnityEngine;
+
 
 public class SectionCamController : VirtualCamController
 {
+    private Vector3 _originPos;
     private readonly Dictionary<AxisType, VirtualCamComponent> _virtualCamDiction =
         new Dictionary<AxisType, VirtualCamComponent>();
 
     private VirtualCamComponent _axisControlCam;
+    [SerializeField] private VirtualCamComponent _normalCam;
 
     public override void Init()
     {
         base.Init();
+
+        if(_normalCam == null)
+        {
+            Debug.LogError($"Please setting normal cam in inspector !!");
+            return;
+        }
+
         _virtualCamDiction.Clear();
         foreach (var vCam in _virtualCams)
         {
@@ -26,7 +37,8 @@ public class SectionCamController : VirtualCamController
             {
                 _virtualCamDiction.Add(cam.AxisType, vCam);
             }
-        }   
+        }
+        _originPos = _normalCam.transform.position;
     }
 
     public void SetAxisControlCam(bool value, Action callBack = null)
@@ -63,5 +75,13 @@ public class SectionCamController : VirtualCamController
         {
             _virtualCamDiction[axis].SetFollowTarget(playerTrm);
         }
+    }
+
+    public override void ResetCamera()
+    {
+        _normalCam.enabled = false;
+        _normalCam.transform.position = _originPos;
+        _normalCam.enabled = true;
+        ChangeCameraAxis(AxisType.None);
     }
 }

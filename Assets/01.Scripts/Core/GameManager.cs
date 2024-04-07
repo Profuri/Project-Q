@@ -57,9 +57,6 @@ public class GameManager : MonoSingleton<GameManager>
         Time.timeScale = 0;
         InputManager.Instance.SetEnableInputAll(false);
         UIManager.Instance.GenerateUI("PauseWindow");
-
-        CursorManager.SetCursorEnable(true);
-        CursorManager.SetCursorLockState(CursorLockMode.None);
     }
 
     public void Resume(bool stateSettingSelf = true)
@@ -76,10 +73,6 @@ public class GameManager : MonoSingleton<GameManager>
         
         Time.timeScale = 1;
         InputManager.Instance.SetEnableInputAll(true);
-
-
-        CursorManager.SetCursorEnable(false);
-        CursorManager.SetCursorLockState(CursorLockMode.Locked);
     }
 
     public void QuitGame()

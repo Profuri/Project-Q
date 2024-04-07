@@ -7,17 +7,14 @@ public class MemoWindow : UIComponent
     {
         base.Appear(parentTrm, callback);
 
-        CursorManager.SetCursorEnable(true);
-        CursorManager.SetCursorLockState(CursorLockMode.None);
-
+        CursorManager.RegisterUI(this);
     }
 
     public override void Disappear(Action callback = null)
     {
         base.Disappear(callback);
 
-        CursorManager.SetCursorEnable(false);
-        CursorManager.SetCursorLockState(CursorLockMode.Locked);
+        CursorManager.UnRegisterUI(this);
     }
 
     public void Close()
