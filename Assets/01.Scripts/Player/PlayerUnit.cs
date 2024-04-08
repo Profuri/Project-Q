@@ -155,6 +155,10 @@ public class PlayerUnit : ObjectUnit
         {
             if (cols[i].TryGetComponent<InteractableObject>(out var interactable))
             {
+                if(interactable is LaserReflectObject)
+                {
+                    //Debug.Break();
+                }
                 if(interactable.InteractType == EInteractType.INPUT_RECEIVE)
                 {
                     var dir = (cols[i].bounds.center - Collider.bounds.center).normalized;

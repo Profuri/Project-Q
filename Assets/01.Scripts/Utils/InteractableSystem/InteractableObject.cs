@@ -19,7 +19,6 @@ namespace InteractableSystem
         public EInteractableAttribute Attribute => _attribute;
 
         public abstract void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param);
-
         private InteractionMark _interactionMark;
 
 
@@ -33,6 +32,7 @@ namespace InteractableSystem
                 _interactionMark.Setting(this);
             }
         }
+
         
         public virtual void OnDetectedLeave()
         {
