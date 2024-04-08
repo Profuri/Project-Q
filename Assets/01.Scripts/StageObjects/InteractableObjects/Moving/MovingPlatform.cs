@@ -31,9 +31,9 @@ public class MovingPlatform : ObjectUnit
         }
     }
 
-    public override void UnitSetting(AxisType axis)
+    public override void ApplyUnitInfo(AxisType axis)
     {
-        base.UnitSetting(axis);
+        base.ApplyUnitInfo(axis);
         FreezeInvalidAxisMove();
     }
 

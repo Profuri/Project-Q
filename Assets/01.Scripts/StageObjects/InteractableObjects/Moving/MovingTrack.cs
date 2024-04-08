@@ -21,10 +21,10 @@ public class MovingTrack : ObjectUnit
         _movingPlatform.ClampingPosition(_movingDistance / 2f);
     }
 
-    public override void UnitSetting(AxisType axis)
+    public override void ApplyUnitInfo(AxisType axis)
     {
         DepthHandler.InitDepth();
-        base.UnitSetting(axis);
+        base.ApplyUnitInfo(axis);
     }
 
 #if UNITY_EDITOR

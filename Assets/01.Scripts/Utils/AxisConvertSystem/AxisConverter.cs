@@ -138,11 +138,11 @@ namespace AxisConvertSystem
             }
             foreach (var unit in _section.SectionUnits)
             {
-                unit.UnitSetting(axisType);
+                unit.ApplyUnitInfo(axisType);
             }
             foreach (var unit in _section.SectionUnits)
             {
-                unit.DepthSetting();
+                unit.ApplyDepth();
             }
 
             AxisType = axisType;

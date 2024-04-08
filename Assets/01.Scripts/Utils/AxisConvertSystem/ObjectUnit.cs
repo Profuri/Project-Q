@@ -122,7 +122,7 @@ namespace AxisConvertSystem
             ConvertedInfo = ConvertInfo(_unitInfo, axis);
         }
         
-        public virtual void UnitSetting(AxisType axis)
+        public virtual void ApplyUnitInfo(AxisType axis)
         {
             ApplyInfo(ConvertedInfo);
 
@@ -142,7 +142,7 @@ namespace AxisConvertSystem
             }
         }
 
-        public virtual void DepthSetting()
+        public virtual void ApplyDepth()
         {
             if (!activeUnit)
             {
@@ -201,8 +201,8 @@ namespace AxisConvertSystem
                 Dissolve(0f, 0.5f);
                 
                 Convert(Converter.AxisType);
-                UnitSetting(Converter.AxisType);
-                DepthSetting();
+                ApplyUnitInfo(Converter.AxisType);
+                ApplyDepth();
             }
             else
             {
@@ -255,7 +255,7 @@ namespace AxisConvertSystem
             _unitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
             ConvertedInfo = ConvertInfo(_unitInfo, Converter.AxisType);
-            UnitSetting(Converter.AxisType);
+            ApplyUnitInfo(Converter.AxisType);
             Physics.SyncTransforms();
 
             if (!staticUnit)

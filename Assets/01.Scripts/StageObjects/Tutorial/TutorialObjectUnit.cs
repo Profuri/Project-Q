@@ -33,9 +33,9 @@ public class TutorialObjectUnit : InteractableObject
         }
     }
 
-    public override void UnitSetting(AxisType axis)
+    public override void ApplyUnitInfo(AxisType axis)
     {
-        base.UnitSetting(axis);
+        base.ApplyUnitInfo(axis);
 
         if(axis != AxisType.None)
         {

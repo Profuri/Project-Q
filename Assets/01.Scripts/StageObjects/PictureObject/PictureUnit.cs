@@ -47,17 +47,17 @@ public class PictureUnit : ObjectUnit
         }
     }
 
-    public override void UnitSetting(AxisType axis)
+    public override void ApplyUnitInfo(AxisType axis)
     {
         if (_isEnableUnit)
         {
             ConvertedInfo.LocalPos.SetAxisElement(axis, 0f);
         }
         
-        base.UnitSetting(axis);
+        base.ApplyUnitInfo(axis);
     }
 
-    public override void DepthSetting()
+    public override void ApplyDepth()
     {
         Hide(!_isEnableUnit);
     }
