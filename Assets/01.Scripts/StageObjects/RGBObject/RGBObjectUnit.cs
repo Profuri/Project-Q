@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AxisConvertSystem;
 using InteractableSystem;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 [Flags]
@@ -60,22 +61,29 @@ public class RGBObjectUnit : InteractableObject
         _renderer.materials[0].SetColor(BaseColorHash, color);
         _renderer.materials[0].SetColor(EmissionColorHash, color * 3f);
 
+
         foreach (var material in _renderer.materials)
         {
             material.SetFloat(VisibleHash, alpha);
         }
     }
 
-    private void SettingCollider()
+    protected void SettingCollider()
     {
+        int layer;
         if(MatchRGBColor)
         {
-            Collider.excludeLayers = 0;
+            layer = 0;
+            if(Rigidbody != null)
+                Rigidbody.isKinematic = true;
         }
         else
         {
-            Collider.excludeLayers = LayerMask.GetMask("Player");
+            layer = LayerMask.GetMask("Player");
+            if(Rigidbody != null)
+                Rigidbody.isKinematic = false;
         }
+        Collider.excludeLayers = layer;
     }
 
     private Color GetColorFromRGBColor(RGBColor color)
@@ -168,10 +176,14 @@ public class RGBObjectUnit : InteractableObject
             FindRGBUnit(axis);
         }
 
-        SettingCollider();
         SettingColor(HasColor);
     }
-    
+
+    public override void UnitSetting(AxisType axis)
+    {
+        base.UnitSetting(axis);
+        SettingCollider();
+    }
 #if UNITY_EDITOR
 
     protected override void OnDrawGizmos()

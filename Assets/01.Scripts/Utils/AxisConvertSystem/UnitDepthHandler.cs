@@ -39,8 +39,9 @@ namespace AxisConvertSystem
                 var isTransparent = unit.renderType == UnitRenderType.Transparent;
                 var isParentUnit = _owner.subUnit && unit.GetParentUnit() == _owner;
                 var isDynamic = !unit.staticUnit;
+                var excludeLayer = (unit.Collider.excludeLayers & _owner.gameObject.layer) == 1;
                 
-                if (isOwner || isTransparent || isParentUnit || isDynamic)
+                if (isOwner || isTransparent || isParentUnit || isDynamic || excludeLayer)
                 {
                     continue;
                 }
