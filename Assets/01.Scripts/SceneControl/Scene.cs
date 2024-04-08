@@ -10,6 +10,8 @@ public class Scene : PoolableMono
     public PlayerUnit Player { get; private set; }
     private List<PoolableMono> _objects;
 
+    public Section initSection;
+
     public UnityEvent onLoadScene = null;
     public UnityEvent onDestroyScene = null;
 
@@ -57,7 +59,7 @@ public class Scene : PoolableMono
         }
         
         Player = AddObject("Player") as PlayerUnit;
-        Player.transform.localPosition = Vector3.zero;
+        Player.transform.localPosition = initSection.PlayerResetPoint;
     }
 
     public PoolableMono AddObject(string id)
