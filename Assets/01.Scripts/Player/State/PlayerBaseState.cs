@@ -1,5 +1,8 @@
+using UnityEngine;
 public abstract class PlayerBaseState : State
 {
+    protected static bool _isControllingAxis = false;
+
     public PlayerBaseState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
     }
@@ -9,22 +12,23 @@ public abstract class PlayerBaseState : State
         Controller.ChangeState(typeof(PlayerJumpState));
     }
 
-    protected void AxisControlHandle(bool toggle)
+    protected void AxisControlHandle()
     {
         if (!Player.Converter.Convertable)
         {
             return;
         }
-        
-        if (toggle)
-        {
-            Player.Converter.ShowClimbableEffect();
-            Controller.ChangeState(typeof(PlayerAxisControlState));
-        }
-        else
+
+        if (_isControllingAxis)
         {
             Player.Converter.UnShowClimbableEffect();
             Controller.ChangeState(typeof(PlayerIdleState));
+
+        }
+        else
+        {
+            Player.Converter.ShowClimbableEffect();
+            Controller.ChangeState(typeof(PlayerAxisControlState));
         }
     }
 }

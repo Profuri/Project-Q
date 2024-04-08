@@ -24,6 +24,10 @@ public class SceneControlManager : BaseManager<SceneControlManager>
         if (_currentCanvas != null) return;
 
         _currentCanvas = PoolManager.Instance.Pop("SceneTransitionCanvas") as SceneTransitionCanvas;
+        CursorManager.ClearUIHash();
+        CursorManager.ReloadCursor();
+        CameraManager.Instance.InitCamera();
+
         _currentCanvas.PresentTransition(0.0f, 1.0f, _fadeTime, () =>
         {
             if (CurrentScene is not null)
@@ -32,6 +36,7 @@ public class SceneControlManager : BaseManager<SceneControlManager>
             }
 
             CurrentScene = PoolManager.Instance.Pop($"{type}Scene") as Scene;
+            
             onSceneCreate?.Invoke();
             CurrentScene.onLoadScene?.Invoke();
             
@@ -45,6 +50,7 @@ public class SceneControlManager : BaseManager<SceneControlManager>
                     onLoadedCallback?.Invoke();
                     PoolManager.Instance.Push(_currentCanvas);
                     _currentCanvas = null;
+
                 });
             });
         });

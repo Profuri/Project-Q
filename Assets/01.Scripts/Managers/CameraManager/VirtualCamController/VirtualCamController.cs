@@ -16,6 +16,7 @@ public abstract class VirtualCamController : MonoBehaviour
         CurrentSelectedCam = null;
     }
 
+    public abstract void ResetCamera();
     public virtual void SetCurrentCam(Action callBack = null)
     {
         CameraManager.Instance.ChangeCamera(CurrentSelectedCam, callBack);
