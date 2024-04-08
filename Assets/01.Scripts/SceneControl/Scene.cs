@@ -37,6 +37,7 @@ public class Scene : PoolableMono
     public override void OnPush()
     {
         PoolManager.Instance.Push(Player);
+        Player = null;
         
         InputManager.Instance.CameraInputReader.OnZoomOutEvent -= CameraManager.Instance.ZoomOutCamera;
         InputManager.Instance.CameraInputReader.OnZoomInEvent -= CameraManager.Instance.ZoomInCamera;
