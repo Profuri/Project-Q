@@ -8,7 +8,7 @@ namespace InputControl
     {
         public event InputEventListener OnJumpEvent = null;
         public event InputEventListener OnInteractionEvent = null;
-        public event InputEventListener<bool> OnAxisControlEvent = null;
+        public event InputEventListener OnAxisControlEvent = null;
         public event InputEventListener OnReloadClickEvent = null;
         public event InputEventListener OnClickEvent = null;
         [HideInInspector] public Vector3 movementInput;
@@ -49,13 +49,9 @@ namespace InputControl
 
         public void OnAxisControl(InputAction.CallbackContext context)
         {
-            if (context.started)
+            if (context.performed)
             {
-                OnAxisControlEvent?.Invoke(true);   
-            }
-            else if(context.canceled)
-            {
-                OnAxisControlEvent?.Invoke(false);
+                OnAxisControlEvent?.Invoke();   
             }
         }
         
