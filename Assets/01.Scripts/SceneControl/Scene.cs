@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -60,6 +61,13 @@ public class Scene : PoolableMono
         
         Player = AddObject("Player") as PlayerUnit;
         Player.transform.localPosition = initSection.PlayerResetPoint;
+
+        Player.ModelTrm.localPosition += Vector3.up * 5;
+        Player.ModelTrm.DOMoveY(0, 0.5f).SetEase(Ease.InBack)
+        .OnComplete(() =>
+        {
+            Debug.Log("complete");
+        });
     }
 
     public PoolableMono AddObject(string id)
