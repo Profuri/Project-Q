@@ -20,11 +20,13 @@ public class Scene : PoolableMono
 
     public override void OnPop()
     {
-        Player = AddObject("Player") as PlayerUnit;
-        Player.transform.localPosition = Vector3.zero;
-
         if (_type != SceneType.Title)
         {
+            if (_type == SceneType.Stage)
+            {
+                InputManager.Instance.CameraInputReader.OnZoomOutEvent += CameraManager.Instance.ZoomOutCamera;
+                InputManager.Instance.CameraInputReader.OnZoomInEvent += CameraManager.Instance.ZoomInCamera;
+            }
             InputManager.Instance.UIInputReader.OnPauseClickEvent += GameManager.Instance.Pause;    
         }
     }
@@ -33,6 +35,8 @@ public class Scene : PoolableMono
     {
         PoolManager.Instance.Push(Player);
         
+        InputManager.Instance.CameraInputReader.OnZoomOutEvent -= CameraManager.Instance.ZoomOutCamera;
+        InputManager.Instance.CameraInputReader.OnZoomInEvent -= CameraManager.Instance.ZoomInCamera;
         InputManager.Instance.UIInputReader.OnPauseClickEvent -= GameManager.Instance.Pause;
         
         while (_objects.Count > 0)
@@ -42,6 +46,18 @@ public class Scene : PoolableMono
         _objects.Clear();
         
         onDestroyScene?.Invoke();
+    }
+
+    public void CreatePlayer()
+    {
+        if (Player is not null)
+        {
+            Debug.LogError("[Scene] Already create player.");
+            return;
+        }
+        
+        Player = AddObject("Player") as PlayerUnit;
+        Player.transform.localPosition = Vector3.zero;
     }
 
     public PoolableMono AddObject(string id)

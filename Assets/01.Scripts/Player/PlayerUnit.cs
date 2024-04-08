@@ -78,10 +78,6 @@ public class PlayerUnit : ObjectUnit
     {
         InputManager.Instance.PlayerInputReader.OnInteractionEvent += OnInteraction;
         InputManager.Instance.PlayerInputReader.OnReloadClickEvent += RestartStage;
-
-        InputManager.Instance.CameraInputReader.OnZoomOutEvent += CameraManager.Instance.ZoomOutCamera;
-        InputManager.Instance.CameraInputReader.OnZoomInEvent += CameraManager.Instance.ZoomInCamera;
-        
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
     }
@@ -89,7 +85,6 @@ public class PlayerUnit : ObjectUnit
     public override void OnPush()
     {
         InputManager.Instance.PlayerInputReader.ClearInputEvent();
-        InputManager.Instance.CameraInputReader.ClearInputEvent();
         Animator.SetBool(_activeHash, false);
     }
 

@@ -10,15 +10,12 @@ public class SettingWindow : UIComponent
     
     private WindowPanel _currentPanel;
 
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
-
         _mainSettingPanel.Init(this);
         _audioSettingPanel.Init(this);
         _controlSettingPanel.Init(this);
         _videoSettingPanel.Init(this);
-        ChangePanel(_mainSettingPanel);
     }
 
     public override void Appear(Transform parentTrm, Action callback = null)
