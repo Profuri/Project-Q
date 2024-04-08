@@ -61,17 +61,9 @@ public class TogglePlate : InteractableObject
     }
 
 #if UNITY_EDITOR
-    private void OnDrawGizmos()
+    protected override void OnDrawGizmos()
     {
-        if (_pressureObjTrm)
-        {
-            Gizmos.color = Color.yellow;
-            var checkPos = _pressureObjTrm.position
-                + Vector3.up
-                * (_pressureObjTrm.localScale.y * _pressureMainTrm.localScale.y / 2 + _pressureObjTrm.localScale.y / 2);
-            var checkSize = _pressureObjTrm.localScale;
-            Gizmos.DrawWireCube(checkPos, checkSize);
-        }
+        base.OnDrawGizmos();
 
         if (_affectedObjects.Count != 0)
         {

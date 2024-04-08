@@ -1,7 +1,18 @@
 using AxisConvertSystem;
+using UnityEngine;
 
 public class PlaneUnit : ObjectUnit
 {
-    public override void Convert(AxisType axis) { }
-    public override void UnitSetting(AxisType axis) { }
+    public override void Awake()
+    {
+        base.Awake();
+        compressLayer = CompressLayer.Plane;
+    }
+
+    protected override UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
+    {
+        var info = base.ConvertInfo(basic, axis);
+        info.ColliderCenter = Vector3.zero;
+        return info;
+    }
 }

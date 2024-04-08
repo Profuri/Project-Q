@@ -13,9 +13,9 @@ public class ObstacleObject : InteractableObject
         OnInteraction(null, false);
     }
 
-    public override void UnitSetting(AxisType axis)
+    public override void ApplyUnitInfo(AxisType axis)
     {
-        base.UnitSetting(axis);
+        base.ApplyUnitInfo(axis);
         OnInteraction(null, false);
     }
 

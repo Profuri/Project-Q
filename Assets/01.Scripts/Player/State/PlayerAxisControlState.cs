@@ -26,8 +26,8 @@ public class PlayerAxisControlState : PlayerBaseState
 
         if (Player.Converter.AxisType == AxisType.None)
         {
-            InputManager.Instance.InputReader.OnAxisControlEvent += AxisControlHandle;
-            InputManager.Instance.InputReader.OnClickEvent += SelectAxisHandle;
+            InputManager.Instance.PlayerInputReader.OnAxisControlEvent += AxisControlHandle;
+            InputManager.Instance.PlayerInputReader.OnClickEvent += SelectAxisHandle;
             
             VolumeManager.Instance.SetAxisControlVolume(true, 0.2f);
             ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(true);
@@ -48,9 +48,11 @@ public class PlayerAxisControlState : PlayerBaseState
     public override void ExitState()
     {
         base.ExitState();
+
         _isControllingAxis = false;
-        InputManager.Instance.InputReader.OnAxisControlEvent -= AxisControlHandle;
-        InputManager.Instance.InputReader.OnClickEvent -= SelectAxisHandle;
+        InputManager.Instance.PlayerInputReader.OnAxisControlEvent -= AxisControlHandle;
+        InputManager.Instance.PlayerInputReader.OnClickEvent -= SelectAxisHandle;
+        
         VolumeManager.Instance.SetAxisControlVolume(false, 0.2f);
         LightManager.Instance.SetAxisLight(AxisType.None);
         ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(false);

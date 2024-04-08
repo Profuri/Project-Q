@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,6 +10,8 @@ public class Scene : PoolableMono
     
     public PlayerUnit Player { get; private set; }
     private List<PoolableMono> _objects;
+
+    public Section initSection;
 
     public UnityEvent onLoadScene = null;
     public UnityEvent onDestroyScene = null;
@@ -20,21 +23,25 @@ public class Scene : PoolableMono
 
     public override void OnPop()
     {
-        Player = AddObject("Player") as PlayerUnit;
-        Player.transform.localPosition = Vector3.zero;
-
         if (_type != SceneType.Title)
         {
-            InputManager.Instance.InputReader.OnPauseClickEvent += GameManager.Instance.Pause;    
+            if (_type == SceneType.Stage)
+            {
+                InputManager.Instance.CameraInputReader.OnZoomOutEvent += CameraManager.Instance.ZoomOutCamera;
+                InputManager.Instance.CameraInputReader.OnZoomInEvent += CameraManager.Instance.ZoomInCamera;
+            }
+            InputManager.Instance.UIInputReader.OnPauseClickEvent += GameManager.Instance.Pause;    
         }
     }
 
     public override void OnPush()
     {
         PoolManager.Instance.Push(Player);
+        Player = null;
         
-        InputManager.Instance.InputReader.ClearPlayerInputEvent();
-        InputManager.Instance.InputReader.OnPauseClickEvent -= GameManager.Instance.Pause;
+        InputManager.Instance.CameraInputReader.OnZoomOutEvent -= CameraManager.Instance.ZoomOutCamera;
+        InputManager.Instance.CameraInputReader.OnZoomInEvent -= CameraManager.Instance.ZoomInCamera;
+        InputManager.Instance.UIInputReader.OnPauseClickEvent -= GameManager.Instance.Pause;
         
         while (_objects.Count > 0)
         {
@@ -43,6 +50,27 @@ public class Scene : PoolableMono
         _objects.Clear();
         
         onDestroyScene?.Invoke();
+    }
+
+    public void CreatePlayer()
+    {
+        if (Player is not null)
+        {
+            Debug.LogError("[Scene] Already create player.");
+            return;
+        }
+        
+        Player = AddObject("Player") as PlayerUnit;
+        Player.transform.localPosition = initSection.PlayerResetPoint;
+
+        Player.ModelTrm.localPosition += Vector3.up * 5;
+        Player.ModelTrm.DOMoveY(0, 0.5f).SetEase(Ease.InBack)
+        .OnComplete(() =>
+        {
+            var landParticle = SceneControlManager.Instance.AddObject("PlayerLandParticle") as PoolableParticle;
+            landParticle.SetPositionAndRotation(Player.transform.position, Quaternion.identity);
+            landParticle.Play();
+        });
     }
 
     public PoolableMono AddObject(string id)

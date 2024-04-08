@@ -10,7 +10,7 @@ namespace AxisConvertSystem
 {
     public class ObjectUnit : PoolableMono, IProvidableFieldInfo
     {
-        [HideInInspector] public CompressLayer compressLayer = CompressLayer.Default;
+        [HideInInspector] public CompressLayer compressLayer = CompressLayer.Platform;
         [HideInInspector] public UnitRenderType renderType = UnitRenderType.Opaque;
         [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
@@ -18,7 +18,12 @@ namespace AxisConvertSystem
         [HideInInspector] public bool subUnit = false;
         
         [HideInInspector] public LayerMask canStandMask;
+        [HideInInspector] public float checkOffset = 0.2f; 
         [HideInInspector] public bool useGravity = true;
+
+        protected UnitInfo OriginUnitInfo;
+        private UnitInfo _unitInfo;
+        protected UnitInfo ConvertedInfo;
 
         public AxisConverter Converter { get; protected set; }
         public Collider Collider { get; private set; }
@@ -26,20 +31,17 @@ namespace AxisConvertSystem
         public UnitDepthHandler DepthHandler { get; private set; }
         public Section Section { get; protected set; }
         public bool IsHide { get; private set; }
-
-        protected UnitInfo OriginUnitInfo;
-        private UnitInfo _unitInfo;
-        protected UnitInfo _convertedInfo;
+        public bool OnGround => CheckStandObject(out var tmp, true);
 
         private List<Renderer> _renderers;
         private List<Material> _materials;
 
-        private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
-        private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
         private LayerMask _climbLayerMask;
-
         private UnClimbableEffect _unClimbableEffect;
 
+        private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
+        private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
+        
         public virtual void Awake()
         {
             IsHide = false;
@@ -66,13 +68,17 @@ namespace AxisConvertSystem
 
         public virtual void FixedUpdateUnit()
         {
-            if (!staticUnit)
+            if (staticUnit || !useGravity)
             {
-                if (useGravity)
-                {
-                    Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
-                }
+                return;
             }
+
+            if (Converter.AxisType == AxisType.Y && OnGround)
+            {
+                return;
+            }
+            
+            Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
         }
 
         public virtual void UpdateUnit()
@@ -97,7 +103,6 @@ namespace AxisConvertSystem
             
             _unitInfo = OriginUnitInfo;
 
-            
             DepthHandler.DepthCheckPointSetting();
         }
 
@@ -105,7 +110,7 @@ namespace AxisConvertSystem
         {
             if (!activeUnit)
             {
-                _convertedInfo = OriginUnitInfo;
+                ConvertedInfo = OriginUnitInfo;
                 return;
             }
 
@@ -114,12 +119,12 @@ namespace AxisConvertSystem
                 DepthHandler.DepthCheckPointSetting();
             }
             SynchronizePosition(axis);
-            _convertedInfo = ConvertInfo(_unitInfo, axis);
+            ConvertedInfo = ConvertInfo(_unitInfo, axis);
         }
         
-        public virtual void UnitSetting(AxisType axis)
+        public virtual void ApplyUnitInfo(AxisType axis)
         {
-            ApplyInfo(_convertedInfo);
+            ApplyInfo(ConvertedInfo);
 
             if (DepthHandler.Hide)
             {
@@ -137,7 +142,7 @@ namespace AxisConvertSystem
             }
         }
 
-        public virtual void DepthSetting()
+        public virtual void ApplyDepth()
         {
             if (!activeUnit)
             {
@@ -155,14 +160,14 @@ namespace AxisConvertSystem
             Collider.SetCenter(info.ColliderCenter);
         }
         
-        private UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
+        protected virtual UnitInfo ConvertInfo(UnitInfo basic, AxisType axis)
         {
             if (axis == AxisType.None)
             {
                 return basic;
             }
 
-            var layerDepth = (float)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
+            var layerDepth = (int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
 
             if (!subUnit)
             {
@@ -196,8 +201,8 @@ namespace AxisConvertSystem
                 Dissolve(0f, 0.5f);
                 
                 Convert(Converter.AxisType);
-                UnitSetting(Converter.AxisType);
-                DepthSetting();
+                ApplyUnitInfo(Converter.AxisType);
+                ApplyDepth();
             }
             else
             {
@@ -251,8 +256,8 @@ namespace AxisConvertSystem
         {
             _unitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
-            _convertedInfo = ConvertInfo(_unitInfo, Converter.AxisType);
-            UnitSetting(Converter.AxisType);
+            ConvertedInfo = ConvertInfo(_unitInfo, Converter.AxisType);
+            ApplyUnitInfo(Converter.AxisType);
             Physics.SyncTransforms();
 
             if (!staticUnit)
@@ -329,19 +334,20 @@ namespace AxisConvertSystem
             _unitInfo.LocalPos = standPos;
         }
 
-        public bool CheckStandObject(out Collider col)
+        public bool CheckStandObject(out Collider col, bool ignoreTriggered = false)
         {
             var origin = Collider.bounds.center;
+            var triggerInteraction = ignoreTriggered ? QueryTriggerInteraction.Ignore : QueryTriggerInteraction.Collide;
             
             if (Converter.AxisType == AxisType.Y)
             {
                 var cols = new Collider[10];
-                Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask);
+                Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
                 col = cols[0];
 
                 if (col is null)
                 {
-                    Physics.OverlapBoxNonAlloc(origin - Vector3.up, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask);
+                    Physics.OverlapBoxNonAlloc(origin - Vector3.up, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
                     col = cols[0];
                 }
                 
@@ -350,7 +356,9 @@ namespace AxisConvertSystem
             else
             {
                 var dir = Vector3.down;
-                var isHit = Physics.Raycast(origin, dir, out var hit, Mathf.Infinity, canStandMask);
+                var distance = Collider.bounds.size.y / 2f + checkOffset;
+                
+                var isHit = Physics.Raycast(origin, dir, out var hit, distance, canStandMask, triggerInteraction);
                 col = isHit ? hit.collider : null;
                 return isHit;
             }

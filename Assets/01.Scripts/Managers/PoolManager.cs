@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ManagingSystem;
@@ -17,7 +16,7 @@ public class PoolManager : BaseManager<PoolManager>
             CreatePool(pair.prefab, transform, pair.cnt);
         }
     }
-        
+
     private void CreatePool(PoolableMono prefab, Transform parent, int cnt)
     {
         if (_pools.ContainsKey(prefab.name))

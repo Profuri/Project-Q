@@ -23,7 +23,7 @@ public class UISliderHolder3D : UIButton3D, IClickUpHandler
 
     private float GetHolderValue()
     {
-        var screenMousePoint = InputManager.Instance.InputReader.mouseScreenPoint;
+        var screenMousePoint = InputManager.Instance.UIInputReader.mouseScreenPoint;
         var ray = CameraManager.Instance.MainCam.ScreenPointToRay(screenMousePoint);
 
         var isHit = Physics.Raycast(ray, out var hit, Mathf.Infinity, _sliderLineMask);

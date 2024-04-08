@@ -18,7 +18,7 @@ public class PictureObject : ObjectUnit
         transform.GetComponentsInChildren(_units);
         foreach (var unit in _units)
         {
-            unit.Init(_enableMat, _disableMat);
+            unit.SetPictureUnit(this, _enableMat, _disableMat);
         }
     }
 
@@ -38,9 +38,9 @@ public class PictureObject : ObjectUnit
         base.Convert(axis);
     }
 
-    public override void UnitSetting(AxisType axis)
+    public override void ApplyUnitInfo(AxisType axis)
     {
-        base.UnitSetting(axis);
+        base.ApplyUnitInfo(axis);
 
         if (axis == AxisType.Y)
         {

@@ -44,7 +44,6 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         if(CurrentStage != null && !IsClear)
         {
             string stageName = CurrentStage.gameObject.name;
-            string playerName = player.gameObject.name;
             Vector3 currentPos = CurrentStage.CenterPosition;
 
             player.useGravity = false;
@@ -52,11 +51,10 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             const float dissolveTime = 0.80623f;
             player.Dissolve(1f, dissolveTime);
 
-
             CurrentStage.Disappear(dissolveTime, () =>
             {
                 CurrentStage = SceneControlManager.Instance.AddObject(stageName) as Stage;
-                CurrentStage.Generate(currentPos, true, dissolveTime, null);
+                CurrentStage.Generate(currentPos, true, dissolveTime);
                 player.SetSection(CurrentStage);
                 player.useGravity = true;
                 player.ReloadUnit(dissolveTime);
@@ -79,6 +77,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     {
         IsClear = true;
         CurrentStage.Lock = false;
+        player.Converter.ConvertDimension(AxisType.None);
         player.Converter.SetConvertable(false);
         var nextChapter = CurrentStage.stageOrder + 1;
 

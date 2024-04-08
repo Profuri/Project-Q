@@ -13,9 +13,9 @@ public class GlassObjectUnit : ObjectUnit,IProvidableFieldInfo
         _visualTrm = transform.Find("InnerObject");
     }
 
-    public override void UnitSetting(AxisType axis)
+    public override void ApplyUnitInfo(AxisType axis)
     {
-        base.UnitSetting(axis);
+        base.ApplyUnitInfo(axis);
         
         gameObject.SetActive(axis == _activeAxisType | axis == AxisType.None);
 

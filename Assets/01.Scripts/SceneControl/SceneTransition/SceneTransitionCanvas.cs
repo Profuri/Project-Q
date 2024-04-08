@@ -7,8 +7,6 @@ using DG.Tweening;
 public class SceneTransitionCanvas : PoolableMono
 {
     [SerializeField] private Image _image;
-    private Coroutine _transitionCor;
-    private Coroutine _delayCor;
 
     public override void OnPop()
     {
@@ -20,7 +18,6 @@ public class SceneTransitionCanvas : PoolableMono
 
     }
 
-
     /// <summary>
     /// width is circle size, if width is up, circle is bigger;
     /// </summary>
@@ -30,23 +27,13 @@ public class SceneTransitionCanvas : PoolableMono
     /// <param name="Callback"></param>
     public void PresentTransition(float startValue, float endValue, float time, Action Callback = null)
     {
-        if(_transitionCor != null)
-        {
-            StopCoroutine(_transitionCor);
-            _transitionCor = null;
-        }
-        _transitionCor = StartCoroutine(TransitionCoroutine(startValue, endValue, time, Callback));
+        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), TransitionCoroutine(startValue, endValue, time, Callback));
 
     }
 
     public void PauseTransition(float time, Action Callback)
     {
-        if(_delayCor != null)
-        {
-            StopCoroutine(_delayCor);
-            _delayCor = null;
-        }
-        _delayCor = StartCoroutine(DelayCoroutine(time, Callback));
+        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), DelayCoroutine(time, Callback));
     }
 
     private IEnumerator DelayCoroutine(float time, Action Callback)
