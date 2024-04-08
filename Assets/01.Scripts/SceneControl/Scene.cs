@@ -66,7 +66,9 @@ public class Scene : PoolableMono
         Player.ModelTrm.DOMoveY(0, 0.5f).SetEase(Ease.InBack)
         .OnComplete(() =>
         {
-            Debug.Log("complete");
+            var landParticle = SceneControlManager.Instance.AddObject("PlayerLandParticle") as PoolableParticle;
+            landParticle.SetPositionAndRotation(Player.transform.position, Quaternion.identity);
+            landParticle.Play();
         });
     }
 
