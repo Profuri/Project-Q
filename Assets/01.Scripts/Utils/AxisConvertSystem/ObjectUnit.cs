@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using DG.Tweening;
 using UnityEngine;
+using DG.Tweening.Core.Easing;
 
 namespace AxisConvertSystem
 {
@@ -136,6 +137,7 @@ namespace AxisConvertSystem
                 Rigidbody.FreezeAxisPosition(axis);
             }
         }
+
 
         public virtual void DepthSetting()
         {

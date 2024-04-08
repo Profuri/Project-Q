@@ -9,6 +9,8 @@ public class Chapter : InteractableObject
     [field:SerializeField] public ChapterData Data {get; private set; }
     [SerializeField] private float _symbolRotateSpeed;
 
+    [SerializeField] private bool _canInteract = true;
+
     public UnityEvent OnShowSequence;
 
     protected static float s_sequenceTime = 5f;
@@ -32,11 +34,11 @@ public class Chapter : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        if (Data.stageCnt <= 0)
+        if (Data.stageCnt <= 0 || !_canInteract)
         {
             return;
         }
-        
+
         SceneControlManager.Instance.LoadScene(SceneType.Stage, 
             () =>
             { 
@@ -83,5 +85,10 @@ public class Chapter : InteractableObject
 
             OnShowSequence?.Invoke();
         }
+    }
+
+    public void ChangeInteract(bool canInteract)
+    {
+        _canInteract = canInteract;
     }
 }

@@ -70,11 +70,11 @@ public class RGBObjectUnit : InteractableObject
     {
         if(MatchRGBColor)
         {
-            Collider.isTrigger = false;
+            Collider.excludeLayers = 0;
         }
         else
         {
-            Collider.isTrigger = true;
+            Collider.excludeLayers = LayerMask.GetMask("Player");
         }
     }
 

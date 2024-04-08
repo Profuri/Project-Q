@@ -9,8 +9,6 @@ public class UIComponent : PoolableMono
     
     public Transform ParentTrm { get; private set; }
     
-
-
     protected virtual void Awake()
     {
         if (tweenData)
@@ -33,7 +31,7 @@ public class UIComponent : PoolableMono
         
         if (tweenData)
         {
-            tweenData.appearAnimator.Play(callback);
+            tweenData.appearAnimator?.Play(callback);
         }
     }
 
