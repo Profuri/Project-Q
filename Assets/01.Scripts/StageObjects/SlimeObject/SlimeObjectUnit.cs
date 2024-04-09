@@ -27,9 +27,9 @@ public class SlimeObjectUnit : ObjectUnit
         }
     }
 
-    public override void UnitSetting(AxisType axis)
+    public override void ApplyUnitInfo(AxisType axis)
     {
-        base.UnitSetting(axis);
+        base.ApplyUnitInfo(axis);
         
         if(_affectedUnits.Count > 0)
         {

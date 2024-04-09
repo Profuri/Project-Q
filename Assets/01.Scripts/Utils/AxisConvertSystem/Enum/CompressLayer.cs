@@ -2,7 +2,8 @@ namespace AxisConvertSystem
 {
     public enum CompressLayer
     {
-        Default = 1,
+        Plane = -1,
+        Platform = 1,
         InteractableObject,
         Obstacle,
         Goal,

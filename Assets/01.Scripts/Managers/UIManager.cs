@@ -47,8 +47,8 @@ public class UIManager : BaseManager<UIManager>
 
     public override void StartManager()
     {
-        InputManager.Instance.InputReader.OnLeftClickEvent += OnUIClickHandle;
-        InputManager.Instance.InputReader.OnLeftClickUpEvent += OnUIClickUpHandle;
+        InputManager.Instance.UIInputReader.OnLeftClickEvent += OnUIClickHandle;
+        InputManager.Instance.UIInputReader.OnLeftClickUpEvent += OnUIClickUpHandle;
         Interact3DButton = true;
     }
 
@@ -67,7 +67,7 @@ public class UIManager : BaseManager<UIManager>
             return;
         }
         
-        var mouseScreenPoint = InputManager.Instance.InputReader.mouseScreenPoint;
+        var mouseScreenPoint = InputManager.Instance.UIInputReader.mouseScreenPoint;
         var ray = CameraManager.Instance.MainCam.ScreenPointToRay(mouseScreenPoint);
         var isHit = Physics.Raycast(ray, out var hit, Mathf.Infinity, _clickableMask);
 

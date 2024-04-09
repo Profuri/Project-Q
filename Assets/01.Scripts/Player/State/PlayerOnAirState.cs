@@ -10,7 +10,7 @@ public class PlayerOnAirState : PlayerBaseState
     public override void EnterState()
     {
         base.EnterState();
-        InputManager.Instance.InputReader.OnAxisControlEvent += AxisControlHandle;
+        InputManager.Instance.PlayerInputReader.OnAxisControlEvent += AxisControlHandle;
     }
 
     public override void UpdateState()
@@ -21,7 +21,7 @@ public class PlayerOnAirState : PlayerBaseState
             return;
         }
         
-        var movementInput = InputManager.Instance.InputReader.movementInput;
+        var movementInput = InputManager.Instance.PlayerInputReader.movementInput;
         
         var dir = Quaternion.Euler(0, CameraManager.Instance.ActiveVCam.transform.eulerAngles.y, 0) * movementInput;
         if (Player.Converter.AxisType != AxisType.None)
@@ -39,6 +39,6 @@ public class PlayerOnAirState : PlayerBaseState
     public override void ExitState()
     {
         base.ExitState();
-        InputManager.Instance.InputReader.OnAxisControlEvent -= AxisControlHandle;
+        InputManager.Instance.PlayerInputReader.OnAxisControlEvent -= AxisControlHandle;
     }
 }

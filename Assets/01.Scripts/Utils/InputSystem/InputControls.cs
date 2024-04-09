@@ -86,7 +86,7 @@ namespace InputControl
             ],
             ""bindings"": [
                 {
-                    ""name"": ""WASD"",
+                    ""name"": ""Up/Down/Left/Right"",
                     ""id"": ""90d27824-50b1-4343-b340-62a50b643bf3"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -324,6 +324,34 @@ namespace InputControl
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Camera"",
+            ""id"": ""c8e89bbc-2487-4e83-8006-4d5c4de9f563"",
+            ""actions"": [
+                {
+                    ""name"": ""ZoomControl"",
+                    ""type"": ""Button"",
+                    ""id"": ""3da71c75-677c-4e78-aee1-f779698c0978"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""02392352-4d58-48dc-ab3f-d4e26cd57e8a"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ZoomControl"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -361,6 +389,9 @@ namespace InputControl
             m_UI_DownArrow = m_UI.FindAction("DownArrow", throwIfNotFound: true);
             m_UI_Enter = m_UI.FindAction("Enter", throwIfNotFound: true);
             m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
+            // Camera
+            m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
+            m_Camera_ZoomControl = m_Camera.FindAction("ZoomControl", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -590,6 +621,52 @@ namespace InputControl
             }
         }
         public UIActions @UI => new UIActions(this);
+
+        // Camera
+        private readonly InputActionMap m_Camera;
+        private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
+        private readonly InputAction m_Camera_ZoomControl;
+        public struct CameraActions
+        {
+            private @InputControls m_Wrapper;
+            public CameraActions(@InputControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @ZoomControl => m_Wrapper.m_Camera_ZoomControl;
+            public InputActionMap Get() { return m_Wrapper.m_Camera; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(CameraActions set) { return set.Get(); }
+            public void AddCallbacks(ICameraActions instance)
+            {
+                if (instance == null || m_Wrapper.m_CameraActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_CameraActionsCallbackInterfaces.Add(instance);
+                @ZoomControl.started += instance.OnZoomControl;
+                @ZoomControl.performed += instance.OnZoomControl;
+                @ZoomControl.canceled += instance.OnZoomControl;
+            }
+
+            private void UnregisterCallbacks(ICameraActions instance)
+            {
+                @ZoomControl.started -= instance.OnZoomControl;
+                @ZoomControl.performed -= instance.OnZoomControl;
+                @ZoomControl.canceled -= instance.OnZoomControl;
+            }
+
+            public void RemoveCallbacks(ICameraActions instance)
+            {
+                if (m_Wrapper.m_CameraActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(ICameraActions instance)
+            {
+                foreach (var item in m_Wrapper.m_CameraActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_CameraActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public CameraActions @Camera => new CameraActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -616,6 +693,10 @@ namespace InputControl
             void OnDownArrow(InputAction.CallbackContext context);
             void OnEnter(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
+        }
+        public interface ICameraActions
+        {
+            void OnZoomControl(InputAction.CallbackContext context);
         }
     }
 }

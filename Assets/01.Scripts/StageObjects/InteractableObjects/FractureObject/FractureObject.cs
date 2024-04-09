@@ -19,7 +19,6 @@ public class FractureObject : InteractableObject
 
     private MeshRenderer _meshRenderer;
     public MeshRenderer MeshRenderer => _meshRenderer;
-
     
     public override void Awake()
     {
@@ -79,8 +78,6 @@ public class FractureObject : InteractableObject
             part.AddForce(part.Bounds.center * _explodeForce, transform.position);
         }
 
-
-        //SceneControlManager.Instance.DeleteObject(this);
         Activate(false);
     }
 

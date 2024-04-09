@@ -7,13 +7,13 @@ namespace VirtualCam
     [RequireComponent(typeof(CinemachineVirtualCameraBase))]
     public class VirtualCamComponent : MonoBehaviour, IVirtualCam
     {
-        private CinemachineVirtualCameraBase _virtualCam;
-
-        private Coroutine _runningRoutine = null;
+        private CinemachineVirtualCamera _virtualCam;
+        private float _originOrthoSize;
 
         private void Awake()
         {
-            _virtualCam = GetComponent<CinemachineVirtualCameraBase>();
+            _virtualCam = GetComponent<CinemachineVirtualCamera>();
+            _originOrthoSize = _virtualCam.m_Lens.OrthographicSize;
         }
 
         public void EnterCam()
@@ -36,25 +36,20 @@ namespace VirtualCam
             _virtualCam.LookAt = lookAtTarget;
         }
 
+        public void Zoom(float zoomScale, float timer)
+        {
+            var targetCamSize = _originOrthoSize * zoomScale;
+            CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), OrthoSizeChangeRoutine(targetCamSize, timer, CameraManager.Instance.ZoomControlCurve));
+        }
+
         public void ShakeCam(float intensity, float time)
         {
-            if (_runningRoutine != null)
-            {
-                StopCoroutine(_runningRoutine);
-                _runningRoutine = null;
-            }
-            _runningRoutine = StartCoroutine(ShakeSequence(intensity, time));
+            CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), ShakeSequence(intensity, time));
         }
 
         public void SetAxisXValue(float value)
         {
-            if (_virtualCam is not CinemachineVirtualCamera vCam)
-            {
-                Debug.LogError("[VirtualCamCompo] This cam is cant have y value. return 0");
-                return;
-            }
-            
-            var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
+            var pov = _virtualCam.GetCinemachineComponent<CinemachinePOV>();
 
             if (pov is null)
             {
@@ -68,25 +63,13 @@ namespace VirtualCam
 
         public float GetAxisXValue()
         {
-            if (_virtualCam is not CinemachineVirtualCamera vCam)
-            {
-                Debug.LogError("[VirtualCamCompo] This cam is cant have y value. return 0");
-                return 0f;
-            }
-            
-            var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
+            var pov = _virtualCam.GetCinemachineComponent<CinemachinePOV>();
             return pov is null ? -(360 - transform.localEulerAngles.y) : pov.m_HorizontalAxis.Value;
         }
         
         public void SetAxisYValue(float value)
         {
-            if (_virtualCam is not CinemachineVirtualCamera vCam)
-            {
-                Debug.LogError("[VirtualCamCompo] This cam is cant have y value. return 0");
-                return;
-            }
-            
-            var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
+            var pov = _virtualCam.GetCinemachineComponent<CinemachinePOV>();
             
             if (pov is null)
             {
@@ -100,38 +83,35 @@ namespace VirtualCam
 
         public float GetAxisYValue()
         {
-            if (_virtualCam is not CinemachineVirtualCamera vCam)
-            {
-                Debug.LogError("[VirtualCamCompo] This cam is cant have y value. return 0");
-                return 0f;
-            }
-            
-            var pov = vCam.GetCinemachineComponent<CinemachinePOV>();
+            var pov = _virtualCam.GetCinemachineComponent<CinemachinePOV>();
             return pov is null ? transform.localEulerAngles.x : pov.m_VerticalAxis.Value;
         }
 
         private IEnumerator ShakeSequence(float intensity, float time)
         {
-            yield return StartCoroutine(ShakeRoutine(intensity, time / 2f));
-            yield return StartCoroutine(ShakeRoutine(-intensity, time / 2f));
-            _runningRoutine = null;
+            yield return StartCoroutine(OrthoSizeChangeRoutine(_originOrthoSize + intensity, time / 2f, CameraManager.Instance.CamShakeCurve));
+            yield return StartCoroutine(OrthoSizeChangeRoutine(_originOrthoSize, time / 2f, CameraManager.Instance.CamShakeCurve));
         }
 
-        private IEnumerator ShakeRoutine(float intensity, float time)
+        private IEnumerator OrthoSizeChangeRoutine(float targetSize, float timer, AnimationCurve customCurve = null)
         {
-            if (_virtualCam is not CinemachineVirtualCamera virtualCamera) 
-                yield break;
-            
-            var origin = virtualCamera.m_Lens.OrthographicSize;
+            var origin = _virtualCam.m_Lens.OrthographicSize;
 
-            var currentTime = 0f;
+            var time = 0f;
             var percent = 0f;
 
             while (percent < 1f)
             {
-                currentTime += Time.deltaTime;
-                percent = CameraManager.Instance.CamShakeCurve.Evaluate(currentTime / time);
-                virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(origin, origin + intensity, percent);
+                time += Time.deltaTime;
+                percent = time / timer;
+
+                if (customCurve is not null)
+                {
+                    percent = customCurve.Evaluate(percent);
+                }
+
+                _virtualCam.m_Lens.OrthographicSize = Mathf.Lerp(origin, targetSize, percent);
+                
                 yield return null;
             }
         }

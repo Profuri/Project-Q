@@ -2,6 +2,7 @@ using System;
 using AxisConvertSystem;
 using InteractableSystem;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerUnit : ObjectUnit
 {
@@ -14,10 +15,8 @@ public class PlayerUnit : ObjectUnit
     public ObjectUnit StandingUnit { get; set; }
     private StateController _stateController;
 
-
     private InteractableObject _selectedInteractableObject;
     
-    public bool OnGround => CheckGround();
     private readonly int _activeHash = Animator.StringToHash("Active");
     
     public override void Awake()
@@ -29,7 +28,6 @@ public class PlayerUnit : ObjectUnit
         ModelTrm = transform.Find("Model");
         Animator = ModelTrm.GetComponent<Animator>();
         HoldingHandler = GetComponent<ObjectHoldingHandler>();
-        
 
         _stateController = new StateController(this);
         _stateController.RegisterState(new PlayerIdleState(_stateController, true, "Idle"));
@@ -53,7 +51,7 @@ public class PlayerUnit : ObjectUnit
         _selectedInteractableObject = FindInteractable();
 
         //Test code
-        if(Input.GetKeyDown(KeyCode.J))
+        if(Input.GetKeyDown(KeyCode.C))
         {
             StageManager.Instance.StageClear(this);
         }
@@ -78,13 +76,18 @@ public class PlayerUnit : ObjectUnit
 
     public override void OnPop()
     {
-        InputManager.Instance.InputReader.OnInteractionEvent += OnInteraction;
-        InputManager.Instance.InputReader.OnReloadClickEvent += RestartStage;
-
+        InputManager.Instance.PlayerInputReader.OnInteractionEvent += OnInteraction;
+        InputManager.Instance.PlayerInputReader.OnReloadClickEvent += RestartStage;
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
     }
     
+    public override void OnPush()
+    {
+        InputManager.Instance.PlayerInputReader.ClearInputEvent();
+        Animator.SetBool(_activeHash, false);
+    }
+
     private void RestartStage()
     {
         if (Converter.AxisType != AxisType.None)
@@ -96,13 +99,6 @@ public class PlayerUnit : ObjectUnit
             return;
         }
         StageManager.Instance.RestartStage(this);
-    }
-    
-    public override void OnPush()
-    {
-        InputManager.Instance.InputReader.OnInteractionEvent -= OnInteraction;
-        InputManager.Instance.InputReader.OnReloadClickEvent -= RestartStage;
-        Animator.SetBool(_activeHash, false);
     }
 
     public void Rotate(Quaternion rot, float speed = -1)
@@ -121,26 +117,7 @@ public class PlayerUnit : ObjectUnit
             StandingUnit = null;
         }
     }
-    
-    private bool CheckGround()
-    {
-        var size = Collider.bounds.size * 0.8f;
-        var center = Collider.bounds.center;
-        size.y = 0.1f;
-        var isHit = Physics.BoxCast(
-            center,
-            size,
-            -transform.up,
-            out var hit,
-            ModelTrm.rotation,
-            _data.groundCheckDistance,
-            _data.groundMask,
-            QueryTriggerInteraction.Ignore
-        );
-        
-        return isHit && !hit.collider.isTrigger;
-    }
-    
+
     private InteractableObject FindInteractable()
     {
         if (HoldingHandler.IsHold)
@@ -163,7 +140,7 @@ public class PlayerUnit : ObjectUnit
                 {
                     var dir = (cols[i].bounds.center - Collider.bounds.center).normalized;
                     var isHit = Physics.Raycast(Collider.bounds.center - dir, dir, out var hit, Mathf.Infinity,
-                        _data.groundMask);
+                        canStandMask);
 
                     if (isHit && cols[i] != hit.collider)
                     {

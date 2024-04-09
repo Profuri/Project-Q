@@ -6,11 +6,15 @@ public class BridgeObject : PoolableMono
 {
     private Section _section;
     private List<Material> _materials;
+
+    private BoxCollider _collider;
         
     private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
 
     private void Awake()
     {
+        _collider = GetComponent<BoxCollider>();
+        
         _materials = new List<Material>();
         var renderers = transform.GetComponentsInChildren<Renderer>();
         foreach (var renderer in renderers)
@@ -25,8 +29,6 @@ public class BridgeObject : PoolableMono
                 _materials.Add(material);    
             }
         }
-        
-        DOTween.Init(true, true, LogBehaviour.Verbose). SetCapacity(2000, 100);
     }
 
     public void SetWidth(float width)
@@ -34,6 +36,13 @@ public class BridgeObject : PoolableMono
         var scale = transform.localScale;
         scale.z = width;
         transform.localScale = scale;
+    }
+
+    public void SetColliderSize(float intervalDistance)
+    {
+        var colSize = _collider.size;
+        colSize.z = 1f + intervalDistance * 2f;
+        _collider.size = colSize;
     }
     
     public void Generate(Vector3 position, Quaternion rotation, Section section)

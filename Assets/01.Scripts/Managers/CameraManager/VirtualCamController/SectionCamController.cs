@@ -12,17 +12,10 @@ public class SectionCamController : VirtualCamController
         new Dictionary<AxisType, VirtualCamComponent>();
 
     private VirtualCamComponent _axisControlCam;
-    [SerializeField] private VirtualCamComponent _normalCam;
 
     public override void Init()
     {
         base.Init();
-
-        if(_normalCam == null)
-        {
-            Debug.LogError($"Please setting normal cam in inspector !!");
-            return;
-        }
 
         _virtualCamDiction.Clear();
         foreach (var vCam in _virtualCams)
@@ -38,7 +31,8 @@ public class SectionCamController : VirtualCamController
                 _virtualCamDiction.Add(cam.AxisType, vCam);
             }
         }
-        _originPos = _normalCam.transform.position;
+        
+        _originPos = _virtualCamDiction[AxisType.None].transform.position;
     }
 
     public void SetAxisControlCam(bool value, Action callBack = null)
@@ -79,9 +73,9 @@ public class SectionCamController : VirtualCamController
 
     public override void ResetCamera()
     {
-        _normalCam.enabled = false;
-        _normalCam.transform.position = _originPos;
-        _normalCam.enabled = true;
+        _virtualCamDiction[AxisType.None].enabled = false;
+        _virtualCamDiction[AxisType.None].transform.position = _originPos;
+        _virtualCamDiction[AxisType.None].enabled = true;
         ChangeCameraAxis(AxisType.None);
     }
 }
