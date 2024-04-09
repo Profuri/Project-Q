@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using TinyGiantStudio.Text;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class ControlSettingPanel : WindowPanel
 {

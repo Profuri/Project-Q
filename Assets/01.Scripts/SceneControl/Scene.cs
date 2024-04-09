@@ -64,7 +64,7 @@ public class Scene : PoolableMono
         Player.transform.localPosition = initSection.PlayerResetPoint;
 
         Player.ModelTrm.localPosition += Vector3.up * 5;
-        Player.ModelTrm.DOMoveY(0, 0.5f).SetEase(Ease.InBack)
+        Player.ModelTrm.DOLocalMove(Vector3.zero, 0.5f).SetEase(Ease.InBack)
         .OnComplete(() =>
         {
             var landParticle = SceneControlManager.Instance.AddObject("PlayerLandParticle") as PoolableParticle;
