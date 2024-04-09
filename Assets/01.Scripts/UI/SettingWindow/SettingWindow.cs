@@ -16,6 +16,7 @@ public class SettingWindow : UIComponent
         _audioSettingPanel.Init(this);
         _controlSettingPanel.Init(this);
         _videoSettingPanel.Init(this);
+        ChangePanel(_mainSettingPanel);
     }
 
     public override void Appear(Transform parentTrm, Action callback = null)
