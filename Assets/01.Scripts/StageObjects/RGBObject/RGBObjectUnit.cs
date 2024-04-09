@@ -179,9 +179,9 @@ public class RGBObjectUnit : InteractableObject
         SettingColor(HasColor);
     }
 
-    public override void UnitSetting(AxisType axis)
+    public override void ApplyUnitInfo(AxisType axis)
     {
-        base.UnitSetting(axis);
+        base.ApplyUnitInfo(axis);
         SettingCollider();
     }
 #if UNITY_EDITOR

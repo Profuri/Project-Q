@@ -21,9 +21,9 @@ public class RGBHodlingUnit : RGBObjectUnit, IHoldable
         }
     }
 
-    public override void UnitSetting(AxisType axis)
+    public override void ApplyUnitInfo(AxisType axis)
     {
-        base.UnitSetting(axis);
+        base.ApplyUnitInfo(axis);
     }
     public ObjectUnit GetObjectUnit() => this;
 }
