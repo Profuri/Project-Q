@@ -8,6 +8,7 @@ public class UIComponent : PoolableMono
     public UIComponentTweenData tweenData;
     
     public Transform ParentTrm { get; private set; }
+    public bool IsTweening { get; private set; }
     
     protected virtual void Awake()
     {
@@ -31,6 +32,8 @@ public class UIComponent : PoolableMono
         
         if (tweenData)
         {
+            IsTweening = true;
+            callback += () => IsTweening = false;
             tweenData.appearAnimator?.Play(callback);
         }
     }
@@ -39,9 +42,11 @@ public class UIComponent : PoolableMono
     {
         if (tweenData)
         {
+            IsTweening = true;
             tweenData.disappearAnimator.Play(() =>
             {
                 callback?.Invoke();
+                IsTweening = false;
                 PoolManager.Instance.Push(this);
             });
         }

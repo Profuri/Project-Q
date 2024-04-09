@@ -76,7 +76,7 @@ public class TutorialObjectUnit : InteractableObject
         {
             TutorialManager.Instance.SetUpTutorial(_info);
 
-            _tutorialMark.Off();
+            _tutorialMark?.Off();
             _tutorialMark = null;
         }
         else

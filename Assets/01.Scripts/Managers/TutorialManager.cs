@@ -8,7 +8,7 @@ public class TutorialManager : MonoSingleton<TutorialManager>
 
     public void SetUpTutorial(TutorialInfo info)
     {
-        if (OnTutorial)
+        if (OnTutorial || (_tutorialWindow != null && _tutorialWindow.IsTweening))
         {
             return;
         }
@@ -23,7 +23,7 @@ public class TutorialManager : MonoSingleton<TutorialManager>
 
     public void StopTutorial()
     {
-        if (!OnTutorial)
+        if (!OnTutorial ||( _tutorialWindow != null && _tutorialWindow.IsTweening))
         {
             return;
         }
