@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
-using UnityEngine;
 
 public class ChapterScene : Scene, IProvideLoad
 {
@@ -10,21 +8,23 @@ public class ChapterScene : Scene, IProvideLoad
 
     public UnityEvent<ChapterType,SaveData> OnChapterClear;
     public UnityEvent OnSubChaptersClear;
-    
-    public override void OnPop()
+
+    protected override void Awake()
     {
-        base.OnPop();
+        base.Awake();
         _chapterDictionary = new Dictionary<ChapterType, Chapter>();
-
         var chapters = GetComponentsInChildren<Chapter>();
-
         foreach( var chapter in chapters )
         {
             ChapterType chapterType = chapter.Data.chapter;
             _chapterDictionary.Add(chapterType,chapter);
         }
         LoadToDataManager();
+    }
 
+    public override void OnPop()
+    {
+        base.OnPop();
         DataManager.Instance.LoadData(this);
     }
 
@@ -32,7 +32,6 @@ public class ChapterScene : Scene, IProvideLoad
     {
         if (saveData == null)
             return;
-
         
         Dictionary<ChapterType,bool> dictionary = saveData.ChapterProgressDictionary;
 

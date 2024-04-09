@@ -16,7 +16,7 @@ public class Scene : PoolableMono
     public UnityEvent onLoadScene = null;
     public UnityEvent onDestroyScene = null;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _objects = new List<PoolableMono>();
     }
