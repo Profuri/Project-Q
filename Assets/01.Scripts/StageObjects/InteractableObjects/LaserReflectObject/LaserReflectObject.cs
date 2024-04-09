@@ -1,10 +1,15 @@
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
+using DG.Tweening;
+using TMPro.Examples;
+using System.Collections;
+using System;
 
 public class LaserReflectObject : InteractableObject
 {
-    [SerializeField] private float _rotateSpeed;
+    private static float _rotateValue = 45f;
+    private Coroutine _rotateSequence;
     
     public override void Awake()
     {
@@ -14,7 +19,13 @@ public class LaserReflectObject : InteractableObject
     {
         if(communicator is PlayerUnit)
         {
-            RotateTransform();
+            if(_rotateSequence == null)
+            {
+                _rotateSequence = StartCoroutine(RotateSequence(1f,_rotateValue,() =>
+                {
+                    _rotateSequence = null;
+                }));
+            }
             return;
         }
 
@@ -25,13 +36,24 @@ public class LaserReflectObject : InteractableObject
         var lastDir = (Vector3)param[2];
 
         var dir = Vector3.Reflect(lastDir, normal).normalized;
-        
+
         laserObject.AddLaser(new LaserInfo { origin = point, dir = dir });
     }
 
-    private Quaternion RotateTransform()
+    private IEnumerator RotateSequence(float rotateTime,float rotateValue,Action Callback = null)
     {
-        transform.Rotate(transform.up * _rotateSpeed * Time.deltaTime);
-        return this.transform.rotation;
+        float timer = 0f;
+        float percent = timer / rotateTime;
+        Quaternion originRotation = transform.rotation;
+        Quaternion targetRotation = originRotation * Quaternion.Euler(transform.up * rotateValue);
+        while (percent < 1f)
+        {
+            timer += Time.deltaTime;
+            percent = timer / rotateTime;
+
+            transform.rotation = Quaternion.Lerp(originRotation, targetRotation, percent);
+            yield return null;
+        }
+        Callback?.Invoke();
     }
 }
