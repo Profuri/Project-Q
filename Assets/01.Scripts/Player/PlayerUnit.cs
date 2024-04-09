@@ -132,10 +132,6 @@ public class PlayerUnit : ObjectUnit
         {
             if (cols[i].TryGetComponent<InteractableObject>(out var interactable))
             {
-                if(interactable is LaserReflectObject)
-                {
-                    //Debug.Break();
-                }
                 if(interactable.InteractType == EInteractType.INPUT_RECEIVE)
                 {
                     var dir = (cols[i].bounds.center - Collider.bounds.center).normalized;
@@ -149,8 +145,8 @@ public class PlayerUnit : ObjectUnit
 
                     if (interactable != _selectedInteractableObject)
                     {
-                        _selectedInteractableObject?.OnDetectedLeave();
-                        interactable.OnDetectedEnter();
+                        _selectedInteractableObject?.OnDetectedLeave(this);
+                        interactable.OnDetectedEnter(this);
                     }
                     return interactable;
                 }
@@ -159,7 +155,7 @@ public class PlayerUnit : ObjectUnit
         
         if (_selectedInteractableObject)
         {
-            _selectedInteractableObject.OnDetectedLeave();
+            _selectedInteractableObject.OnDetectedLeave(this);
             _selectedInteractableObject = null;
         }
 
