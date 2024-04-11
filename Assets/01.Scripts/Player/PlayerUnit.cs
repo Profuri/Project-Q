@@ -55,6 +55,10 @@ public class PlayerUnit : ObjectUnit
         {
             StageManager.Instance.StageClear(this);
         }
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            StoryManager.Instance.ShowMessage("리그오브레전드레이븐",Vector3.zero);
+        }
     }
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
