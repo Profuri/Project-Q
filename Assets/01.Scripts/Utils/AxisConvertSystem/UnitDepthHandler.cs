@@ -19,6 +19,19 @@ namespace AxisConvertSystem
             InitDepth();
         }
 
+        public float GetDepth()
+        {
+            var axis = _owner.Converter.AxisType;
+
+            if (axis == AxisType.None)
+            {
+                return 0;
+            }
+
+            var depthPoint = _depthCheckPoint[axis];
+            return depthPoint.Z;
+        }
+
         public void InitDepth()
         {
             Depth = float.MaxValue;
@@ -48,6 +61,7 @@ namespace AxisConvertSystem
 
                 if (_depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis]))
                 {
+                    unit.HidedUnits.Add(_owner);
                     Depth = 0f;
                     break;
                 }

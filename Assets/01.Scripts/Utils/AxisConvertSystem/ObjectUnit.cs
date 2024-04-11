@@ -32,7 +32,9 @@ namespace AxisConvertSystem
         public UnitDepthHandler DepthHandler { get; private set; }
         public Section Section { get; protected set; }
         public bool IsHide { get; private set; }
-        public bool OnGround => CheckStandObject(out var tmp, true);
+        public bool OnGround => CheckStandObject(out var temp, true);
+        
+        public List<ObjectUnit> HidedUnits { get; private set; }
 
         private List<Renderer> _renderers;
         private List<Material> _materials;
@@ -58,6 +60,8 @@ namespace AxisConvertSystem
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
             DepthHandler = new UnitDepthHandler(this);
+
+            HidedUnits = new List<ObjectUnit>();
 
             _materials = new List<Material>();
             _renderers = new List<Renderer>();
@@ -115,10 +119,11 @@ namespace AxisConvertSystem
                 return;
             }
 
-            if (!staticUnit)
+            if (!staticUnit && axis != AxisType.None)
             {
                 DepthHandler.DepthCheckPointSetting();
             }
+            
             SynchronizePosition(axis);
             ConvertedInfo = ConvertInfo(_unitInfo, axis);
         }
@@ -244,8 +249,6 @@ namespace AxisConvertSystem
             Rigidbody.velocity = velocity;
         }
 
-
-
         public void StopImmediately(bool withYAxis)
         {
             if (staticUnit || Rigidbody.isKinematic)
@@ -300,16 +303,20 @@ namespace AxisConvertSystem
                         _unitInfo.LocalPos = transform.localPosition;
                     }
                 }
+                HidedUnits.Clear();
             }
             else
             {
+                HidedUnits.Clear();
                 RewriteUnitInfo();
             }
         }
 
         private void SynchronizePositionOnStanding(Collider col)
         {
-            var unit = col.transform.GetComponent<ObjectUnit>();
+            var standUnit = col.transform.GetComponent<ObjectUnit>();
+            var unit = FlippingStandUnit(standUnit);
+            
             var info = unit._unitInfo;
 
             var standPos = transform.localPosition;
@@ -336,6 +343,40 @@ namespace AxisConvertSystem
             }
 
             _unitInfo.LocalPos = standPos;
+        }
+
+        private ObjectUnit FlippingStandUnit(ObjectUnit standUnit)
+        {
+            if (standUnit.HidedUnits.Count <= 0)
+            {
+                return standUnit;
+            }
+        
+            var axis = Converter.AxisType;
+            var depth = DepthHandler.GetDepth();
+
+            var frontDepth = standUnit.DepthHandler.GetDepth();
+            var boundsSize = (standUnit._unitInfo.LocalRot * standUnit._unitInfo.LocalScale).GetAxisElement(axis);
+
+            // is in back unit
+            if (depth > frontDepth || depth < frontDepth - boundsSize)
+            {
+                return standUnit;
+            }
+
+            // find back unit
+            var backUnit = standUnit;
+            foreach (var hidedUnit in standUnit.HidedUnits)
+            {
+                var hideUnitDepth = hidedUnit.DepthHandler.GetDepth();
+
+                if (backUnit.DepthHandler.GetDepth() >= hideUnitDepth)
+                {
+                    backUnit = hidedUnit;
+                }
+            }
+
+            return backUnit;
         }
 
         public bool CheckStandObject(out Collider col, bool ignoreTriggered = false)

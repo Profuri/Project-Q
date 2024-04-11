@@ -14,6 +14,7 @@ public enum EInputCategory
     Interaction,
     Click,
     AxisControl,
+    ZoomOut,
     Reload,
 }
 
@@ -25,9 +26,7 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
 
     private Dictionary<EInputCategory, InputAction> _inputDictionary;
 
-    public static readonly string AnyKey = @"^.*$";
-    public static readonly string OnlyAlphabet = @"^[a-zA-Z]$";
-    public static readonly string AlphabetOrSpace = @"^(?:[a-zA-Z]|Space)$";
+    private const string InputBindableKeys = @"^(?:[a-zA-Z]|Space|Tap)$";
 
     public override void StartManager()
     {
@@ -45,12 +44,12 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
             { EInputCategory.Click,             PlayerInputReader.Actions.Click },
             { EInputCategory.AxisControl,       PlayerInputReader.Actions.AxisControl },
             { EInputCategory.Reload,            PlayerInputReader.Actions.Reload },
+            { EInputCategory.ZoomOut,           CameraInputReader.Actions.ZoomControl },
         };
     }
 
     public void ChangeKeyBinding(
         EInputCategory category,
-        string bidingPattern,
         int bindingIndex,
         Action<InputActionRebindingExtensions.RebindingOperation> onCancel,
         Action<InputActionRebindingExtensions.RebindingOperation> onComplete)
@@ -62,7 +61,7 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
             .OnComplete(operation =>
             {
                 var keyString = operation.action.bindings[bindingIndex].ToDisplayString();
-                if (InvalidBindingKey(keyString, bidingPattern))
+                if (InvalidBindingKey(keyString, InputBindableKeys))
                 {
                     operation.Cancel();
                     return;

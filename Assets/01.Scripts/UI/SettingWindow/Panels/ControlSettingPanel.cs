@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using TinyGiantStudio.Text;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class ControlSettingPanel : WindowPanel
 {
@@ -12,51 +9,57 @@ public class ControlSettingPanel : WindowPanel
     [SerializeField] private List<UIButton3D> _movementBtnList;
     [SerializeField] private UIButton3D _jumpBtn;
     [SerializeField] private UIButton3D _interactionBtn;
-    [SerializeField] private UIButton3D _axisControlBtn;
+    [SerializeField] private UIButton3D _zoomOutBtn;
+    [SerializeField] private UIButton3D _stageResetBtn;
 
     public void ChangeMoveFrontKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.Movement, InputManager.OnlyAlphabet, 1);
+        ChangeKeyBinding(caller, EInputCategory.Movement, 1);
     }
     
     public void ChangeMoveBackwardKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.Movement, InputManager.OnlyAlphabet, 2);
+        ChangeKeyBinding(caller, EInputCategory.Movement, 2);
     }
     
     public void ChangeMoveLeftKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.Movement, InputManager.OnlyAlphabet, 3);
+        ChangeKeyBinding(caller, EInputCategory.Movement, 3);
     }
     
     public void ChangeMoveRightKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.Movement, InputManager.OnlyAlphabet, 4);   
+        ChangeKeyBinding(caller, EInputCategory.Movement, 4);   
     }
     
     public void ChangeJumpKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.Jump, InputManager.AlphabetOrSpace);
+        ChangeKeyBinding(caller, EInputCategory.Jump);
     }
     
     public void ChangeInteractionKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.Interaction, InputManager.OnlyAlphabet);
+        ChangeKeyBinding(caller, EInputCategory.Interaction);
     }
     
-    public void ChangeAxisControlKeyBinding(UIButton3D caller)
+    public void ChangeZoomOutKeyBinding(UIButton3D caller)
     {
-        ChangeKeyBinding(caller, EInputCategory.AxisControl, InputManager.OnlyAlphabet);
+        ChangeKeyBinding(caller, EInputCategory.ZoomOut);
     }
     
-    private void ChangeKeyBinding(UIButton3D caller, EInputCategory category, string bidingPattern, int bindingIndex = 0)
+    public void ChangeStageResetKeyBinding(UIButton3D caller)
+    {
+        ChangeKeyBinding(caller, EInputCategory.Reload);
+    }
+    
+    private void ChangeKeyBinding(UIButton3D caller, EInputCategory category, int bindingIndex = 0)
     {
         UIManager.Instance.Interact3DButton = false;
         
         var backgroundRenderer = caller.transform.Find("BackGroundPlane").GetComponent<Renderer>();
         backgroundRenderer.material = _controlButtonAccessMat;
         
-        InputManager.Instance.ChangeKeyBinding(category, bidingPattern, bindingIndex, 
+        InputManager.Instance.ChangeKeyBinding(category, bindingIndex, 
             // On Cancel
             operation =>
             {
@@ -89,14 +92,14 @@ public class ControlSettingPanel : WindowPanel
 
     private void SettingUI()
     {
-        string[] names = InputManager.Instance.GetBindingMovementName();
-
-        for(int i = 0; i < 4; i++)
+        var movementKeynames = InputManager.Instance.GetBindingMovementName();
+        for(var i = 0; i < 4; i++)
         {
-            _movementBtnList[i].Text = names[i];
+            _movementBtnList[i].Text = movementKeynames[i];
         } 
 
-        _axisControlBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.AxisControl);
+        _zoomOutBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.ZoomOut);
+        _stageResetBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.Reload);
         _interactionBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.Interaction);
         _jumpBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.Jump);
     }
