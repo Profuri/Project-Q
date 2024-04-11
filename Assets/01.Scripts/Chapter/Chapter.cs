@@ -17,10 +17,13 @@ public class Chapter : InteractableObject
 
     private Transform _symbolTrm;
 
+    private ParticleSystem _dustParticle;
+
     public override void Awake()
     {
         base.Awake();
         _symbolTrm = transform.Find("Symbol");
+        _dustParticle = transform.Find("ChapterDustParticle")?.GetComponent<ParticleSystem>();
     }
 
     public override void UpdateUnit()
@@ -54,7 +57,16 @@ public class Chapter : InteractableObject
         );
     }
 
+    public void PlayDustParticle()
+    {
+        _dustParticle.Play();
+    }
 
+    public void StopDustParticle()
+    {
+        _dustParticle.Stop();
+    }
+    
     public virtual void ShowingSequence(ChapterType chapterType,SaveData saveData)
     {
         gameObject.SetActive(true);
