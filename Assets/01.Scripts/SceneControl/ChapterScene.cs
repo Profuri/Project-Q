@@ -9,8 +9,6 @@ public class ChapterScene : Scene, IProvideLoad
     public UnityEvent<ChapterType,SaveData> OnChapterClear;
     public UnityEvent<bool> OnSubChaptersClear;
     
-    public override void OnPop()
-
     protected override void Awake()
     {
         base.Awake();
