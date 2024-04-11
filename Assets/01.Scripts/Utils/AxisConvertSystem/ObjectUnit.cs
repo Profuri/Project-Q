@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using DG.Tweening;
 using UnityEngine;
+using DG.Tweening.Core.Easing;
 
 namespace AxisConvertSystem
 {
@@ -147,6 +148,7 @@ namespace AxisConvertSystem
             }
         }
 
+
         public virtual void ApplyDepth()
         {
             if (!activeUnit)
@@ -179,13 +181,15 @@ namespace AxisConvertSystem
                 basic.LocalPos.SetAxisElement(axis, layerDepth);
             }
 
-            basic.LocalScale = Quaternion.Inverse(basic.LocalRot) * basic.LocalScale;
-            basic.LocalScale.SetAxisElement(axis, 1);
+
             basic.LocalScale = basic.LocalRot * basic.LocalScale;
+            basic.LocalScale.SetAxisElement(axis, 1);
+            basic.LocalScale = Quaternion.Inverse(basic.LocalRot) * basic.LocalScale;
 
             basic.ColliderCenter = basic.LocalRot * basic.ColliderCenter;
             basic.ColliderCenter.SetAxisElement(axis, -layerDepth);
             basic.ColliderCenter = Quaternion.Inverse(basic.LocalRot) * basic.ColliderCenter;
+
 
             return basic;
         }

@@ -5,16 +5,14 @@ using UnityEngine;
 
 public class RGBHodlingUnit : RGBObjectUnit, IHoldable
 {
-    public override void Convert(AxisType axis)
-    {
-         base.Convert(axis);
-    }
-
-
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         if (communicator is PlayerUnit playerUnit)
         {
+            if(MatchRGBColor)
+            {
+                return;
+            }
             playerUnit.HoldingHandler.Attach(this);
         }
         else
@@ -23,5 +21,9 @@ public class RGBHodlingUnit : RGBObjectUnit, IHoldable
         }
     }
 
+    public override void ApplyUnitInfo(AxisType axis)
+    {
+        base.ApplyUnitInfo(axis);
+    }
     public ObjectUnit GetObjectUnit() => this;
 }

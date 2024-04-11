@@ -81,6 +81,12 @@ public class DataManager : BaseManager<DataManager>
 
     }
 
+    [ContextMenu("ResetData")]
+    public void ResetData()
+    {
+        _fileDataHandler.DeleteSaveData();
+    }
+
     public void SettingDataProvidable(IProvideSave dataProvidable,IProvideLoad dataLoadable)
     {
         Action<SaveData> saveAction = dataProvidable?.GetSaveAction();

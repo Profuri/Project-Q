@@ -54,6 +54,8 @@ public class PressurePlate : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
+        base.OnInteraction(communicator, interactValue, param);
+
         foreach (var obj in _affectedObjects)
         {
             obj?.Invoke(null, interactValue);
