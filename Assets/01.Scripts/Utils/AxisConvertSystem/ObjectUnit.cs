@@ -184,7 +184,7 @@ namespace AxisConvertSystem
 
             basic.LocalScale = basic.LocalRot * basic.LocalScale;
             basic.LocalScale.SetAxisElement(axis, 1);
-            basic.LocalScale = Quaternion.Inverse(basic.LocalRot) * basic.LocalScale;
+            basic.LocalScale = (Quaternion.Inverse(basic.LocalRot) * basic.LocalScale).Abs();
 
             basic.ColliderCenter = basic.LocalRot * basic.ColliderCenter;
             basic.ColliderCenter.SetAxisElement(axis, -layerDepth);
