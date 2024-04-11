@@ -18,12 +18,22 @@ namespace InteractableSystem
         [SerializeField] private EInteractableAttribute _attribute;
         public EInteractableAttribute Attribute => _attribute;
 
-        public abstract void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param);
-
+        public virtual void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param) => _communicator = communicator;
         private InteractionMark _interactionMark;
 
+        protected ObjectUnit _communicator;
 
-        public virtual void OnDetectedEnter()
+        protected virtual void OnDisable()
+        {
+            if (_communicator != null && _communicator is PlayerUnit playerUnit)
+            {
+                playerUnit.HoldingHandler.Detach();
+                OnDetectedLeave();
+                _communicator = null;
+            }
+        }
+
+        public virtual void OnDetectedEnter(ObjectUnit communicator = null)
         {
             IsDetected = true;
 
@@ -33,10 +43,12 @@ namespace InteractableSystem
                 _interactionMark.Setting(this);
             }
         }
+
         
-        public virtual void OnDetectedLeave()
+        public virtual void OnDetectedLeave(ObjectUnit communicator = null)
         {
             IsDetected = false;
+
             if (_interactionMark != null)
             {
                 SceneControlManager.Instance.DeleteObject(_interactionMark);

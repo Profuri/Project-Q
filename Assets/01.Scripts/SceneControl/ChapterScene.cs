@@ -7,7 +7,9 @@ public class ChapterScene : Scene, IProvideLoad
     private Dictionary<ChapterType, Chapter> _chapterDictionary;
 
     public UnityEvent<ChapterType,SaveData> OnChapterClear;
-    public UnityEvent OnSubChaptersClear;
+    public UnityEvent<bool> OnSubChaptersClear;
+    
+    public override void OnPop()
 
     protected override void Awake()
     {
@@ -49,7 +51,7 @@ public class ChapterScene : Scene, IProvideLoad
 
         if(clearCnt > 4)
         {
-            OnSubChaptersClear?.Invoke();
+            OnSubChaptersClear?.Invoke(true);
         }
     }
 

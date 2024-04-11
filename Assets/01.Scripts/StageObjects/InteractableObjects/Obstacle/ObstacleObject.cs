@@ -21,6 +21,7 @@ public class ObstacleObject : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
+        base.OnInteraction(communicator,interactValue,param);
         var pos = Collider.bounds.center;
         var checkSize = Collider.bounds.size;
         var rotation = transform.rotation;

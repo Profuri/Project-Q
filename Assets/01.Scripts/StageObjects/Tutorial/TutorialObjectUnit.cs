@@ -76,7 +76,7 @@ public class TutorialObjectUnit : InteractableObject
         {
             TutorialManager.Instance.SetUpTutorial(_info);
 
-            _tutorialMark.Off();
+            _tutorialMark?.Off();
             _tutorialMark = null;
         }
         else
@@ -90,7 +90,7 @@ public class TutorialObjectUnit : InteractableObject
         }
     }
     
-    public override void OnDetectedEnter()
+    public override void OnDetectedEnter(ObjectUnit communicator = null)
     {
         base.OnDetectedEnter();
         if (_tutorialMark == null)
@@ -99,7 +99,7 @@ public class TutorialObjectUnit : InteractableObject
         }
     }
 
-    public override void OnDetectedLeave()
+    public override void OnDetectedLeave(ObjectUnit communicator = null)
     {
         base.OnDetectedLeave();
 
