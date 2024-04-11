@@ -22,8 +22,8 @@ namespace AxisConvertSystem
         [HideInInspector] public float checkOffset = 0.2f; 
         [HideInInspector] public bool useGravity = true;
 
-        protected UnitInfo OriginUnitInfo;
-        private UnitInfo _unitInfo;
+        protected UnitInfo OriginUnitInfo; 
+        protected UnitInfo UnitInfo;
         protected UnitInfo ConvertedInfo;
 
         public AxisConverter Converter { get; protected set; }
@@ -106,7 +106,7 @@ namespace AxisConvertSystem
             OriginUnitInfo.LocalScale = transform.localScale;
             OriginUnitInfo.ColliderCenter = Collider.GetLocalCenter();
             
-            _unitInfo = OriginUnitInfo;
+            UnitInfo = OriginUnitInfo;
 
             DepthHandler.DepthCheckPointSetting();
         }
@@ -125,7 +125,7 @@ namespace AxisConvertSystem
             }
             
             SynchronizePosition(axis);
-            ConvertedInfo = ConvertInfo(_unitInfo, axis);
+            ConvertedInfo = ConvertInfo(UnitInfo, axis);
         }
         
         public virtual void ApplyUnitInfo(AxisType axis)
@@ -261,9 +261,9 @@ namespace AxisConvertSystem
 
         public virtual void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
         {
-            _unitInfo = OriginUnitInfo;
+            UnitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
-            ConvertedInfo = ConvertInfo(_unitInfo, Converter.AxisType);
+            ConvertedInfo = ConvertInfo(UnitInfo, Converter.AxisType);
             ApplyUnitInfo(Converter.AxisType);
             Physics.SyncTransforms();
 
@@ -277,10 +277,10 @@ namespace AxisConvertSystem
         
         public void RewriteUnitInfo()
         {
-            _unitInfo.LocalPos = transform.localPosition;
-            _unitInfo.LocalRot = transform.localRotation;
-            _unitInfo.LocalScale = transform.localScale;
-            _unitInfo.ColliderCenter = Collider.GetLocalCenter();
+            UnitInfo.LocalPos = transform.localPosition;
+            UnitInfo.LocalRot = transform.localRotation;
+            UnitInfo.LocalScale = transform.localScale;
+            UnitInfo.ColliderCenter = Collider.GetLocalCenter();
         }
 
         private void SynchronizePosition(AxisType axis)
@@ -300,7 +300,7 @@ namespace AxisConvertSystem
                     }
                     else
                     {
-                        _unitInfo.LocalPos = transform.localPosition;
+                        UnitInfo.LocalPos = transform.localPosition;
                     }
                 }
                 HidedUnits.Clear();
@@ -317,7 +317,7 @@ namespace AxisConvertSystem
             var standUnit = col.transform.GetComponent<ObjectUnit>();
             var unit = FlippingStandUnit(standUnit);
             
-            var info = unit._unitInfo;
+            var info = unit.UnitInfo;
 
             var standPos = transform.localPosition;
             standPos.y = col.bounds.max.y;
@@ -326,7 +326,7 @@ namespace AxisConvertSystem
             if (unit.subUnit)
             {
                 var parentUnit = unit.GetParentUnit();
-                info = parentUnit._unitInfo;
+                info = parentUnit.UnitInfo;
                 standUnitLocalPos += info.LocalPos;
             }
             
@@ -338,11 +338,11 @@ namespace AxisConvertSystem
             else
             {
                 standPos.SetAxisElement(Converter.AxisType,
-                    (unit is PlaneUnit or TutorialObjectUnit ? _unitInfo.LocalPos : standUnitLocalPos)
+                    (unit is PlaneUnit or TutorialObjectUnit ? UnitInfo.LocalPos : standUnitLocalPos)
                     .GetAxisElement(Converter.AxisType));
             }
 
-            _unitInfo.LocalPos = standPos;
+            UnitInfo.LocalPos = standPos;
         }
 
         private ObjectUnit FlippingStandUnit(ObjectUnit standUnit)
@@ -356,7 +356,7 @@ namespace AxisConvertSystem
             var depth = DepthHandler.GetDepth();
 
             var frontDepth = standUnit.DepthHandler.GetDepth();
-            var boundsSize = (standUnit._unitInfo.LocalRot * standUnit._unitInfo.LocalScale).GetAxisElement(axis);
+            var boundsSize = (standUnit.UnitInfo.LocalRot * standUnit.UnitInfo.LocalScale).GetAxisElement(axis);
 
             // is in back unit
             if (depth > frontDepth || depth < frontDepth - boundsSize)
