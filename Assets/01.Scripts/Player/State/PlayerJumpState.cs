@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerJumpState : PlayerOnAirState
 {
+    public bool IsFalling => Player.Rigidbody.velocity.y < 0f;
     public PlayerJumpState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
     }
@@ -23,9 +24,12 @@ public class PlayerJumpState : PlayerOnAirState
     {
         base.UpdateState();
 
-        if (Player.Rigidbody.velocity.y < 0f)
+        if (IsFalling)
         {
-            Controller.ChangeState(typeof(PlayerFallState));
+            if(Player.CoyoteHelper.AddCoyote(IsFalling.GetHashCode(),10f))
+            {
+                Controller.ChangeState(typeof(PlayerFallState));
+            }
         }
     }
 }

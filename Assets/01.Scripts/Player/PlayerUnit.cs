@@ -13,6 +13,8 @@ public class PlayerUnit : ObjectUnit
     public Animator Animator { get; private set; }
     public ObjectHoldingHandler HoldingHandler { get; private set; }
     public ObjectUnit StandingUnit { get; set; }
+    public CoyoteHelper CoyoteHelper { get; private set; }
+
     private StateController _stateController;
 
     private InteractableObject _selectedInteractableObject;
@@ -28,6 +30,9 @@ public class PlayerUnit : ObjectUnit
         ModelTrm = transform.Find("Model");
         Animator = ModelTrm.GetComponent<Animator>();
         HoldingHandler = GetComponent<ObjectHoldingHandler>();
+
+
+        CoyoteHelper = new CoyoteHelper(this);
 
         _stateController = new StateController(this);
         _stateController.RegisterState(new PlayerIdleState(_stateController, true, "Idle"));
