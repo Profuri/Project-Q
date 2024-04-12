@@ -1,4 +1,5 @@
 using Cinemachine;
+using UnityEngine;
 using UnityEngine.Playables;
 
 public class CameraShakeMixerBehaviour : PlayableBehaviour
@@ -23,9 +24,12 @@ public class CameraShakeMixerBehaviour : PlayableBehaviour
         var intensity = 0f;
         var frequency = 0f;
 
+        var totalWeight = 0f;
+
         for (var i = 0; i < inputCount; i++)
         {
             var inputWeight = playable.GetInputWeight(i);
+            totalWeight += inputWeight;
 
             if (inputWeight > 0f)
             {
@@ -37,7 +41,7 @@ public class CameraShakeMixerBehaviour : PlayableBehaviour
             }
         }
 
-        _bindingVirtualCamPerlin.m_AmplitudeGain = intensity;
-        _bindingVirtualCamPerlin.m_FrequencyGain = frequency;
+        _bindingVirtualCamPerlin.m_AmplitudeGain = intensity * totalWeight;
+        _bindingVirtualCamPerlin.m_FrequencyGain = frequency * totalWeight;
     }
 }
