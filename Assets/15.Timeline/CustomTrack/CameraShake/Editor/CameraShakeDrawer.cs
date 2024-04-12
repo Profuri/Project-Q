@@ -12,10 +12,10 @@ public class CameraShakeDrawer : PropertyDrawer
 
     public override void OnGUI (Rect position, SerializedProperty property, GUIContent label)
     {
-        SerializedProperty intensityProp = property.FindPropertyRelative("intensity");
-        SerializedProperty frequencyProp = property.FindPropertyRelative("frequency");
+        var intensityProp = property.FindPropertyRelative("intensity");
+        var frequencyProp = property.FindPropertyRelative("frequency");
 
-        Rect singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+        var singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
         EditorGUI.PropertyField(singleFieldRect, intensityProp);
         
         singleFieldRect.y += EditorGUIUtility.singleLineHeight;
