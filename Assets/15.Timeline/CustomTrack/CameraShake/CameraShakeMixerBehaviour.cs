@@ -17,7 +17,7 @@ public class CameraShakeMixerBehaviour : PlayableBehaviour
         {
             return;
         }
-        
+
         _bindingVirtualCamPerlin = _bindingVirtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 
         var inputCount = playable.GetInputCount();
