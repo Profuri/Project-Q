@@ -12439,6 +12439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77982e23738c9454a982307451418ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _destroyPracTime: 0.1
+  _destroyTime: 0.55
   _appearTime: 1
 --- !u!114 &4856172949718693503
 MonoBehaviour:
@@ -12455,12 +12457,27 @@ MonoBehaviour:
   m_Events:
     m_Signals:
     - {fileID: 11400000, guid: 222b50c034e344d748e5fb67316337ec, type: 2}
+    - {fileID: 11400000, guid: 1b00fa686d6f343ef8ab4b24465b787a, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1844963652424117278}
           m_TargetAssemblyTypeName: BarrialEffectController, Assembly-CSharp
           m_MethodName: Appear
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1844963652424117278}
+          m_TargetAssemblyTypeName: BarrialEffectController, Assembly-CSharp
+          m_MethodName: Destroy
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -30850,7 +30867,7 @@ PlayableDirector:
   m_GameObject: {fileID: 5126065563432854547}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 06daf5583dedb4ba9bedf10268c08285, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: a155a0717cf29480da0a308536eec911, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -30927,6 +30944,16 @@ PlayableDirector:
   - key: {fileID: -2896432572984766018, guid: 5d747d23ac44241448c08b3b432bb520, type: 2}
     value: {fileID: 2482109195738586039}
   - key: {fileID: -2567845443152662573, guid: 5d747d23ac44241448c08b3b432bb520, type: 2}
+    value: {fileID: 2482109195738586039}
+  - key: {fileID: 6131020343299607491, guid: a155a0717cf29480da0a308536eec911, type: 2}
+    value: {fileID: 4120278456733787030}
+  - key: {fileID: -4953239798795210984, guid: a155a0717cf29480da0a308536eec911, type: 2}
+    value: {fileID: 4856172949718693503}
+  - key: {fileID: 8951984190982816394, guid: a155a0717cf29480da0a308536eec911, type: 2}
+    value: {fileID: 7792113083804554729}
+  - key: {fileID: -6807763580058895487, guid: a155a0717cf29480da0a308536eec911, type: 2}
+    value: {fileID: 2482109195738586039}
+  - key: {fileID: 703235300625122988, guid: a155a0717cf29480da0a308536eec911, type: 2}
     value: {fileID: 2482109195738586039}
   m_ExposedReferences:
     m_References:
@@ -32706,8 +32733,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
   m_PivotOffset: {x: 0, y: 0, z: 0}
-  m_AmplitudeGain: 5
-  m_FrequencyGain: 3
+  m_AmplitudeGain: 0
+  m_FrequencyGain: 0
   mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &6019586761294885531
 GameObject:
@@ -40076,6 +40103,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7562560411879578593, guid: 1385a6f7a644240018334c429f2f90d2,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8154685475276641299, guid: 1385a6f7a644240018334c429f2f90d2,
         type: 3}
       propertyPath: m_Name
@@ -40089,6 +40121,12 @@ PrefabInstance:
 --- !u!4 &1805765809196337994 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2152693543253706050, guid: 1385a6f7a644240018334c429f2f90d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 346980790998633992}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7792113083804554729 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7562560411879578593, guid: 1385a6f7a644240018334c429f2f90d2,
     type: 3}
   m_PrefabInstance: {fileID: 346980790998633992}
   m_PrefabAsset: {fileID: 0}
@@ -42080,6 +42118,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5627988324956218238}
     m_Modifications:
+    - target: {fileID: 3138384416654754018, guid: fe9f2e328691949f2932d451bd6d24d1,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4052121552352203261, guid: fe9f2e328691949f2932d451bd6d24d1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -42143,6 +42186,12 @@ PrefabInstance:
 --- !u!4 &3071432439914279561 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4052121552352203261, guid: fe9f2e328691949f2932d451bd6d24d1,
+    type: 3}
+  m_PrefabInstance: {fileID: 1343177229422289780}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4120278456733787030 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3138384416654754018, guid: fe9f2e328691949f2932d451bd6d24d1,
     type: 3}
   m_PrefabInstance: {fileID: 1343177229422289780}
   m_PrefabAsset: {fileID: 0}

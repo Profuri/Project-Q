@@ -10,6 +10,9 @@ public class BarrialEffectController : MonoBehaviour
     private readonly int _thresholdHash = Shader.PropertyToID("_Threshold");
     private readonly int _opacityHash = Shader.PropertyToID("_Opacity");
 
+    [SerializeField] private float _destroyPracTime;
+    [SerializeField] private float _destroyTime;
+    
     [SerializeField] private float _appearTime;
 
     private void Awake()
@@ -26,16 +29,43 @@ public class BarrialEffectController : MonoBehaviour
         {
             return;
         }
-        
-        DOTween.To(
+
+        var seq = DOTween.Sequence();
+        seq.Join(DOTween.To(
             () => _material.GetFloat(_thresholdHash),
             threshold => _material.SetFloat(_thresholdHash, threshold),
             _originThreshold, _appearTime
-        );
-        DOTween.To(
+        ));
+        seq.Join(DOTween.To(
             () => _material.GetFloat(_opacityHash),
             opacity => _material.SetFloat(_opacityHash, opacity),
             1f, _appearTime
-        );
+        ));
+    }
+
+    public void Destroy()
+    {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+        
+        var seq = DOTween.Sequence();
+        seq.Join(DOTween.To(
+            () => _material.GetFloat(_thresholdHash),
+            threshold => _material.SetFloat(_thresholdHash, threshold),
+            0, _destroyPracTime
+        ));
+        seq.Append(DOTween.To(
+            () => _material.GetFloat(_thresholdHash),
+            threshold => _material.SetFloat(_thresholdHash, threshold),
+            1f, _destroyTime
+        ));
+        seq.Join(DOTween.To(
+            () => _material.GetFloat(_opacityHash),
+            opacity => _material.SetFloat(_opacityHash, opacity),
+            0f, _destroyTime
+        ));
+        
     }
 }
