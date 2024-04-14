@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Time: 7.4
   m_Retroactive: 0
   m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: 7f08283d9e51f4b7c8d7183d6a6968c5, type: 2}
+  m_Asset: {fileID: 0}
 --- !u!114 &-6884361480890724652
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Time: 5.516666666666667
   m_Retroactive: 0
   m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: 65538f600a33f472988cbf8bdcc9f0f1, type: 2}
+  m_Asset: {fileID: 0}
 --- !u!74 &-6514875302508415391
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -204,7 +204,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 13.533334
+        time: 14.833333
         value: 0
         inSlope: Infinity
         outSlope: Infinity
@@ -243,7 +243,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 13.533334
+    m_StopTime: 14.833333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -273,7 +273,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 13.533334
+        time: 14.833333
         value: 0
         inSlope: Infinity
         outSlope: Infinity
@@ -682,6 +682,21 @@ MonoBehaviour:
   m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
   m_ApplyOffsets: 0
+--- !u!114 &-5452062646173382238
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919d73aa84e704465883e28e3a94fab2, type: 3}
+  m_Name: OrthoSizeChangerClip
+  m_EditorClassIdentifier: 
+  template:
+    originSize: 8
+    targetSize: 15
 --- !u!114 &-5101193858288001726
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1348,7 +1363,76 @@ MonoBehaviour:
     m_Duration: 7.2
     m_TimeScale: 1
     m_ParentTrack: {fileID: -1531804454211180844}
-    m_EaseInDuration: 1.5
+    m_EaseInDuration: 3
+    m_EaseOutDuration: 1
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 1
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: CameraShakeClip
+  - m_Version: 1
+    m_Start: 8.75
+    m_ClipIn: 0
+    m_Asset: {fileID: -1073713993859954815}
+    m_Duration: 2.5
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -1531804454211180844}
+    m_EaseInDuration: 0.5666666666666664
     m_EaseOutDuration: 1
     m_BlendInDuration: -1
     m_BlendOutDuration: -1
@@ -1587,6 +1671,21 @@ AnimationClip:
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
   m_Events: []
+--- !u!114 &-1073713993859954815
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a6c8a97976d54aa4b78f8f09623e711, type: 3}
+  m_Name: CameraShakeClip
+  m_EditorClassIdentifier: 
+  template:
+    intensity: 0.25
+    frequency: 1
 --- !u!114 &-679130935013704506
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1735,7 +1834,7 @@ MonoBehaviour:
   m_Time: 5.266666666666667
   m_Retroactive: 0
   m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: 925f5878789994ac6b8325e3e6cafc8c, type: 2}
+  m_Asset: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1777,7 +1876,7 @@ MonoBehaviour:
   m_Time: 3.55
   m_Retroactive: 0
   m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: 568f8e9b3980047d5a0043909d8ab93c, type: 2}
+  m_Asset: {fileID: 0}
 --- !u!114 &1384593079313984905
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1793,7 +1892,7 @@ MonoBehaviour:
   m_Time: 4.066666666666666
   m_Retroactive: 0
   m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: 51b66d99f8ef64be9b72d8a557738d92, type: 2}
+  m_Asset: {fileID: 0}
 --- !u!114 &1395573459627137678
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1966,6 +2065,7 @@ MonoBehaviour:
   m_Children:
   - {fileID: 3217505509406083885}
   - {fileID: -1531804454211180844}
+  - {fileID: 7494835712641340699}
   m_Clips: []
   m_Markers:
     m_Objects: []
@@ -2050,7 +2150,7 @@ MonoBehaviour:
   m_Time: 4.75
   m_Retroactive: 0
   m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: 40ce6c04fcaff41ba8aad33ce81be6d1, type: 2}
+  m_Asset: {fileID: 0}
 --- !u!114 &3321172955384022131
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2482,7 +2582,7 @@ MonoBehaviour:
   m_Time: 6.3
   m_Retroactive: 0
   m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: 05f60eb0d619d43b3bb6f910b845f299, type: 2}
+  m_Asset: {fileID: 0}
 --- !u!114 &5283125379425264060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2733,6 +2833,98 @@ MonoBehaviour:
     m_DisplayName: DissolveObjectClip
   m_Markers:
     m_Objects: []
+--- !u!114 &7494835712641340699
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 418a2773df9014fb594484ee97113cd9, type: 3}
+  m_Name: Ortho Size Changer Track
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 3019817594774648688}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 0
+    m_ClipIn: 0
+    m_Asset: {fileID: -5452062646173382238}
+    m_Duration: 7.933333333333334
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 7494835712641340699}
+    m_EaseInDuration: 7.933333
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 1
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: OrthoSizeChangerClip
+  m_Markers:
+    m_Objects: []
 --- !u!114 &8246312531079780135
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2801,4 +2993,4 @@ MonoBehaviour:
   m_Time: 2.3
   m_Retroactive: 0
   m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: 60308aa31889d4ea295bbc32de655d9f, type: 2}
+  m_Asset: {fileID: 0}

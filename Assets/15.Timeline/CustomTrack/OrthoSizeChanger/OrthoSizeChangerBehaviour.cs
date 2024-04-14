@@ -6,5 +6,6 @@ using UnityEngine.Timeline;
 [Serializable]
 public class OrthoSizeChangerBehaviour : PlayableBehaviour
 {
+    public float originSize;
     public float targetSize;
 }

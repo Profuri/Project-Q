@@ -33,7 +33,7 @@ public class CameraShakeMixerBehaviour : PlayableBehaviour
 
             if (inputWeight > 0f)
             {
-                var inputPlayable = (ScriptPlayable<CameraShakeBehaviour>)playable.GetInput(0);
+                var inputPlayable = (ScriptPlayable<CameraShakeBehaviour>)playable.GetInput(i);
                 var input = inputPlayable.GetBehaviour();
 
                 intensity += input.intensity;
