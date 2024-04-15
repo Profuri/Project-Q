@@ -2,8 +2,6 @@ using System;
 using AxisConvertSystem;
 using InteractableSystem;
 using UnityEngine;
-using UnityEngine.InputSystem;
-
 public class PlayerUnit : ObjectUnit
 {
     [SerializeField] private PlayerData _data;
@@ -13,13 +11,33 @@ public class PlayerUnit : ObjectUnit
     public Animator Animator { get; private set; }
     public ObjectHoldingHandler HoldingHandler { get; private set; }
     public ObjectUnit StandingUnit { get; set; }
-    public CoyoteHelper CoyoteHelper { get; private set; }
+
 
     private StateController _stateController;
 
     private InteractableObject _selectedInteractableObject;
     
     private readonly int _activeHash = Animator.StringToHash("Active");
+    private float _coyoteTime = 0f;
+    public bool IsCoyote
+    {
+        get
+        {
+            if(_coyoteTime < 0.01f)
+            {
+                _coyoteTime = Time.time;
+            }
+
+            bool isCoyote = Time.time - _coyoteTime < Data.coyoteTime;
+
+            if(!isCoyote)
+            {
+                _coyoteTime = 0.0f;
+            }
+
+            return isCoyote;
+        }
+    }
     
     public override void Awake()
     {
@@ -31,8 +49,6 @@ public class PlayerUnit : ObjectUnit
         Animator = ModelTrm.GetComponent<Animator>();
         HoldingHandler = GetComponent<ObjectHoldingHandler>();
 
-
-        CoyoteHelper = new CoyoteHelper(this);
 
         _stateController = new StateController(this);
         _stateController.RegisterState(new PlayerIdleState(_stateController, true, "Idle"));
@@ -55,7 +71,6 @@ public class PlayerUnit : ObjectUnit
 
         _selectedInteractableObject = FindInteractable();
 
-        //Test code
         if(Input.GetKeyDown(KeyCode.C))
         {
             StageManager.Instance.StageClear(this);

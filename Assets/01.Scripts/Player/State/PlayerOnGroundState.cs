@@ -13,6 +13,7 @@ public class PlayerOnGroundState : PlayerBaseState
 
     public override void UpdateState()
     {
+        if(Player.IsCoyote) return;
         if (!Player.OnGround)
         {
             Controller.ChangeState(typeof(PlayerFallState));

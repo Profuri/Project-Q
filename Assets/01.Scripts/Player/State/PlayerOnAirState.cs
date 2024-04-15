@@ -5,8 +5,8 @@ public class PlayerOnAirState : PlayerBaseState
 {
     public PlayerOnAirState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
+        
     }
-
     public override void EnterState()
     {
         base.EnterState();
@@ -35,7 +35,7 @@ public class PlayerOnAirState : PlayerBaseState
         }
         Player.SetVelocity(dir * Player.Data.walkSpeed);
     }
-
+    
     public override void ExitState()
     {
         base.ExitState();
