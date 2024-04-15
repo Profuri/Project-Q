@@ -18,6 +18,7 @@ public class PlayerUnit : ObjectUnit
     private InteractableObject _selectedInteractableObject;
     
     private readonly int _activeHash = Animator.StringToHash("Active");
+
     private float _coyoteTime = 0f;
     public bool IsCoyote
     {

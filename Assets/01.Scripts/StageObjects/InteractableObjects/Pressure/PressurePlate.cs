@@ -11,6 +11,7 @@ public class PressurePlate : InteractableObject
     [SerializeField] private float _maxHeight;
     [SerializeField] private float _minHeight;
 
+
     [SerializeField] private List<AffectedObject> _affectedObjects;
     [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
 
@@ -40,6 +41,7 @@ public class PressurePlate : InteractableObject
     public override void UpdateUnit()
     { 
         base.UpdateUnit();
+
         var curToggleState = CheckPressed();
         if (_lastToggleState != curToggleState)
         {

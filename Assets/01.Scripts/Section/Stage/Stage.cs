@@ -10,6 +10,32 @@ public class Stage : Section
     [SerializeField] private int _stageOrder;
     public int stageOrder => _stageOrder;
 
+    public bool IsClear { get; set; }
+    public bool IsConverting => !SceneControlManager.Instance.Player.Converter.Convertable;
+
+
+    protected override void FixedUpdate()
+    {
+        if (Active && !IsConverting)
+        {
+            foreach (var unit in SectionUnits)
+            {
+                unit.FixedUpdateUnit();
+            }
+        }
+    }
+
+    protected override void Update()
+    {
+        if (Active && !IsConverting)
+        {
+            foreach (var unit in SectionUnits)
+            {
+                unit.UpdateUnit();
+            }
+        }
+    }
+
     public override void OnEnter(PlayerUnit player)
     {
         base.OnEnter(player);
