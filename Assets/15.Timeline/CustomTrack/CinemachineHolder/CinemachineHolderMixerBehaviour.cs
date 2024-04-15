@@ -1,4 +1,5 @@
 using Cinemachine;
+using UnityEngine;
 using UnityEngine.Playables;
 
 public class CinemachineHolderMixerBehaviour : PlayableBehaviour
@@ -19,6 +20,12 @@ public class CinemachineHolderMixerBehaviour : PlayableBehaviour
 
         if (bindingVirtualCam == null)
         {
+            return;
+        }
+
+        if (playable.GetGraph().GetRootPlayable(0).GetDuration() <= playable.GetTime())
+        {
+            bindingVirtualCam.m_Priority = 0;
             return;
         }
 

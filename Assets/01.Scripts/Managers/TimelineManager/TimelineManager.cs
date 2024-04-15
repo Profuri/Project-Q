@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
+using System.Linq;
 using ManagingSystem;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 public class TimelineManager : BaseManager<TimelineManager>
 {
@@ -20,7 +22,7 @@ public class TimelineManager : BaseManager<TimelineManager>
                 return false;
             }
 
-            return _currentDirector.time < _currentDirector.duration;
+            return _currentDirector.time <= _currentDirector.duration;
         }
     }
     

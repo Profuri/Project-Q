@@ -13,8 +13,6 @@ public class Chapter : InteractableObject
 
     public UnityEvent OnShowSequence;
 
-    protected static float s_sequenceTime = 5f;
-
     private Transform _symbolTrm;
 
     public override void Awake()
@@ -54,33 +52,10 @@ public class Chapter : InteractableObject
         );
     }
 
-    public virtual void ShowingSequence(ChapterType chapterType,SaveData saveData)
+    public virtual void ShowingSequence(ChapterType chapterType, SaveData saveData)
     {
         gameObject.SetActive(true);
-
-        if (saveData.IsShowSequence)
-        {
-            return;
-        }
-
-        if (chapterType == ChapterType.Tutorial)
-        {
-            Vector3 targetPos = transform.position;
-
-            transform.position = targetPos - Vector3.up * 3f;
-            Sequence sequence = DOTween.Sequence();
-            sequence.Append(transform.DOMove(targetPos,s_sequenceTime));
-            sequence.AppendCallback(() =>
-            {
-                if (saveData.IsShowSequence == false)
-                {
-                    saveData.IsShowSequence = true;
-                    DataManager.Instance.SaveData();
-                }
-            });
-
-            OnShowSequence?.Invoke();
-        }
+        OnShowSequence?.Invoke();
     }
 
     public void ChangeInteract(bool canInteract)

@@ -90,7 +90,7 @@ public class VideoSettingPanel : WindowPanel
         Resolution resolution;
         try
         { 
-            resolution = VideoManager.Instance.ResolutionList[(int)saveData.resolutionIndex];
+            resolution = VideoManager.Instance.ResolutionList[(int)saveData.ResolutionIndex];
         }
         catch
         {
