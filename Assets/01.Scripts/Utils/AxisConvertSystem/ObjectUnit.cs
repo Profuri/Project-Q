@@ -271,7 +271,7 @@ namespace AxisConvertSystem
             {
                 Dissolve(0f, dissolveTime, true, callBack);
                 Rigidbody.velocity = Vector3.zero;
-                PlaySpawnVFX();
+                //PlaySpawnVFX();
             }
         }
         
@@ -439,7 +439,7 @@ namespace AxisConvertSystem
             seq.OnComplete(() => callBack?.Invoke());
         }
 
-        private void PlaySpawnVFX()
+        protected void PlaySpawnVFX()
         {
             var spawnVFX = PoolManager.Instance.Pop("SpawnVFX") as PoolableVFX;
             var bounds = Collider.bounds;

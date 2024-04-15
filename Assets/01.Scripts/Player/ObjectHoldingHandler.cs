@@ -40,9 +40,12 @@ public class ObjectHoldingHandler : MonoBehaviour
     {
         _player.Animator.SetBool(_animationHoldHash, false);
         
-        _heldObject.StopImmediately(true);
-        _heldObject.useGravity = true;
-        _heldObject = null;
+        if(_heldObject != null)
+        {
+            _heldObject.StopImmediately(true);
+            _heldObject.useGravity = true;
+            _heldObject = null;
+        }
     }
 
     private void HoldingPointMovement()

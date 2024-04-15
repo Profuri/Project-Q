@@ -84,6 +84,7 @@ public class PlayerUnit : ObjectUnit
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
     {
         Converter.ConvertDimension(AxisType.None);
+
         
         base.ReloadUnit(dissolveTime, () =>
         {
@@ -92,6 +93,7 @@ public class PlayerUnit : ObjectUnit
         });
         
         InputManagerHelper.OnDeadPlayer();
+        PlaySpawnVFX();
 
         Converter.ConvertDimension(AxisType.None);
         Animator.SetBool(_activeHash, true);
@@ -216,6 +218,7 @@ public class PlayerUnit : ObjectUnit
         
         _selectedInteractableObject.OnInteraction(this, true);
     }
+
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
