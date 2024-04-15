@@ -48,6 +48,15 @@ public class LaserLauncherObject : ObjectUnit
     public override void UpdateUnit()
     {
         base.UpdateUnit();
+
+
+        bool isClear = StageManager.Instance.IsClear;
+        Debug.Log($"IsClear: {isClear}");
+        if(isClear)
+        {
+            DisableLaser();
+            return;
+        }
         if (_isActiveLaser)
         {
             Launch();
@@ -73,7 +82,8 @@ public class LaserLauncherObject : ObjectUnit
         _isActiveLaser = true;
         _laserRenderer.enabled = true;
     }
-
+    
+        
     private void DisableLaser()
     {
         _isActiveLaser = false;
