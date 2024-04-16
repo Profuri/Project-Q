@@ -51,7 +51,6 @@ public class CameraManager : BaseManager<CameraManager>
         });
     }
 
-
     public void ChangeVCamController(VirtualCamType type)
     {
         CurrentCamController = _vCamControllers[type];
