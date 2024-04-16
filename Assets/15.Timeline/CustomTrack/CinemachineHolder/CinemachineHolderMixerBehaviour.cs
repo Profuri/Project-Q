@@ -16,8 +16,7 @@ public class CinemachineHolderMixerBehaviour : PlayableBehaviour
             var inputWeight = playable.GetInputWeight(i);
             totalWeight += inputWeight;
         }
-
-
+        
         if (_bidingCam == null)
         {
             _bidingCam = playerData as CinemachineVirtualCamera;

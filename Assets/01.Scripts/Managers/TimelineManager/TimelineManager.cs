@@ -1,68 +1,66 @@
 using System;
 using System.Collections;
-using System.Linq;
+using System.Collections.Generic;
 using ManagingSystem;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.Timeline;
+
+public class TimelineQueueInfo
+{
+    public readonly PlayableDirector Director;
+    public readonly TimelineType AssetType;
+    public readonly bool SkipOnStart;
+    public readonly Action Callback;
+
+    public TimelineQueueInfo(PlayableDirector director, TimelineType assetType, bool skipOnStart, Action callback)
+    {
+        Director = director;
+        AssetType = assetType;
+        SkipOnStart = skipOnStart;
+        Callback = callback;
+    }
+}
 
 public class TimelineManager : BaseManager<TimelineManager>
 {
     [SerializeField] private TimelineClipSetList _timelineClipSetList;
     [SerializeField] private float _skipOffset;
 
+    private Queue<TimelineQueueInfo> _timelineQueue;
     private PlayableDirector _currentDirector;
 
     public bool IsPlay
     {
         get
         {
-            if (_currentDirector == null)
+            if (_currentDirector is null || !_currentDirector.playableGraph.IsValid())
             {
-                Debug.LogError("[TimelineManager] The clip in play does not exist");
                 return false;
             }
 
-            return _currentDirector.time <= _currentDirector.duration;
+            return _currentDirector.playableGraph.GetRootPlayable(0).GetTime() <= _currentDirector.duration;
         }
     }
-    
+
+    public override void Init()
+    {
+        base.Init();
+        _timelineQueue = new Queue<TimelineQueueInfo>();
+    }
+
     public override void StartManager()
     {
         _currentDirector = null;
     }
 
-    public void ShowTimeline(PlayableDirector director, TimelineType type, Action onComplete = null)
+    public void ShowTimeline(PlayableDirector director, TimelineType type, bool skipOnStart = false, Action onComplete = null)
     {
-        _currentDirector = director;
-        _currentDirector.playableAsset = _timelineClipSetList.GetAsset(type);
+        _timelineQueue.Enqueue(new TimelineQueueInfo(director, type, skipOnStart, onComplete));
 
-        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), PlayRoutine(onComplete));
-    }
-
-    public void CancelSkip()
-    {
-        if (_currentDirector == null)
+        if (!IsPlay)
         {
-            Debug.LogError("[TimelineManager] The clip in play does not exist");
-            return;
+            PlayNextQueue();
         }
-        
-        SetDirectorSpeed(1f);
-    }
-    
-    [ContextMenu("Skip")]
-    public void Skip()
-    {
-        if (_currentDirector == null)
-        {
-            Debug.LogError("[TimelineManager] The clip in play does not exist");
-            return;
-        }
-
-        _currentDirector.time = _currentDirector.playableGraph.GetRootPlayable(0).GetDuration() - _skipOffset;
-
-        // SetDirectorSpeed(2f);
     }
 
     private void SetDirectorSpeed(float speed)
@@ -70,13 +68,36 @@ public class TimelineManager : BaseManager<TimelineManager>
         _currentDirector.playableGraph.GetRootPlayable(0).SetSpeed(speed);
     }
 
+    private void PlayNextQueue()
+    {
+        if (_timelineQueue.Count <= 0)
+        {
+            return;
+        }
+        
+        var info = _timelineQueue.Dequeue();
+        
+        _currentDirector = info.Director;
+        _currentDirector.playableAsset = _timelineClipSetList.GetAsset(info.AssetType);
+        
+        // 이거 문제
+        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), PlayRoutine(info.Callback));
+
+        if (info.SkipOnStart)
+        {
+            _currentDirector.playableGraph.GetRootPlayable(0).SetTime(_currentDirector.duration - _skipOffset);
+        }
+    }
+
     private IEnumerator PlayRoutine(Action onComplete)
     {
-        // InputManager.Instance.SetEnableInputAll(false);
         _currentDirector.Play();
         yield return new WaitUntil(() => !IsPlay);
+        _currentDirector.Stop();
         _currentDirector = null;
-        // InputManager.Instance.SetEnableInputAll(true);
+
         onComplete?.Invoke();
+
+        PlayNextQueue();
     }
 }

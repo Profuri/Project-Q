@@ -33,10 +33,10 @@ public class ChapterScene : Scene, IProvideLoad
         DataManager.Instance.LoadData(this);
     }
     
-    private void ShowChapterClearTimeline(ChapterType clearChapter, Action onComplete = null)
+    private void ShowChapterClearTimeline(ChapterType clearChapter, bool skipOnStart = false, Action onComplete = null)
     {
         var type = (TimelineType)Enum.Parse(typeof(TimelineType), $"{clearChapter.ToString()}Clear");
-        TimelineManager.Instance.ShowTimeline(_timelineDirector, type, onComplete);
+        TimelineManager.Instance.ShowTimeline(_timelineDirector, type, skipOnStart, onComplete);
     }
 
     private void LoadChapterEvents(SaveData saveData)
@@ -45,39 +45,35 @@ public class ChapterScene : Scene, IProvideLoad
             return;
         
         var clearDictionary = saveData.ChapterClearDictionary;
-
         var clearCnt = 0;
-        foreach(var keyValuePair in clearDictionary)
+        
+        foreach(var (chapterType, isClear) in clearDictionary)
         {
-            var chapterType = keyValuePair.Key;
-
-            if (keyValuePair.Value)
+            if (!isClear)
             {
-                clearCnt++;
-                if (!saveData.ChapterTimelineDictionary[chapterType])
-                {
-                    saveData.ChapterTimelineDictionary[chapterType] = true;
-                    OnChapterClear?.Invoke(chapterType,saveData);
-                    
-                    var cnt = clearCnt;
-                    
-                    ShowChapterClearTimeline(chapterType, () =>
-                    {
-                        if(cnt > 4)
-                        {
-                            TimelineManager.Instance.ShowTimeline(_timelineDirector, TimelineType.AllChapterClear);
-                            OnSubChaptersClear?.Invoke(true);
-                            DataManager.Instance.SaveData();
-                        }
-                    });
-                    
-                    DataManager.Instance.SaveData();
-                    return;
-                }
+                continue;
             }
+            
+            clearCnt++;
+            OnChapterClear?.Invoke(chapterType,saveData);
+
+            var alreadyShowCutScene = saveData.ChapterTimelineDictionary[chapterType]; 
+                
+            if (!alreadyShowCutScene)
+            {
+                saveData.ChapterTimelineDictionary[chapterType] = true;
+                DataManager.Instance.SaveData();
+            }
+
+            ShowChapterClearTimeline(chapterType, alreadyShowCutScene);
         }
-        
-        
+
+        if (clearCnt > 4)
+        {
+            TimelineManager.Instance.ShowTimeline(_timelineDirector, TimelineType.AllChapterClear);
+            OnSubChaptersClear?.Invoke(true);
+            DataManager.Instance.SaveData();
+        }
     }
 
     public Action<SaveData> GetLoadAction()
