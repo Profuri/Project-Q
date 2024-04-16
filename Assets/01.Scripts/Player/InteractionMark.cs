@@ -13,6 +13,7 @@ public class InteractionMark : PoolableMono
     {
         _agentInteractable = interactable;
         SynchronizeTransform();
+        SynchronizeRotation();
     }
 
     public override void OnPop()
@@ -27,13 +28,16 @@ public class InteractionMark : PoolableMono
     private void Update()
     {
         SynchronizeTransform();
+        SynchronizeRotation();
+    }
+    private void SynchronizeRotation()
+    {
         Quaternion targetRot = Quaternion.LookRotation(MainCam.transform.forward);
         Quaternion plusRot = Quaternion.Euler(new Vector3(_xRot, 0, 0));
 
         Quaternion result = targetRot * plusRot;
         _keyGuideUI.rotation = result;
     }
-
     private void SynchronizeTransform()
     {
         Collider collider = _agentInteractable.Collider;

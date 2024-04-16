@@ -51,7 +51,6 @@ public class PressurePlate : InteractableObject
             {
                 toggleChangeEvent.Invoke(curToggleState);
             }
-            Debug.Log($"CurToggleState: {curToggleState}");
         }
         _lastToggleState = curToggleState;
         OnInteraction(null, _lastToggleState);
