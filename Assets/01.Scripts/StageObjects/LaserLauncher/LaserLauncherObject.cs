@@ -51,7 +51,6 @@ public class LaserLauncherObject : ObjectUnit
 
 
         bool isClear = StageManager.Instance.IsClear;
-        Debug.Log($"IsClear: {isClear}");
         if(isClear)
         {
             DisableLaser();
