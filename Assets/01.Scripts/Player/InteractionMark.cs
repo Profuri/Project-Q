@@ -12,6 +12,7 @@ public class InteractionMark : PoolableMono
     public void Setting(InteractableObject interactable)
     {
         _agentInteractable = interactable;
+        SynchronizeTransform();
     }
 
     public override void OnPop()
@@ -19,13 +20,10 @@ public class InteractionMark : PoolableMono
 
     }
 
-
     public override void OnPush()
     {
         
     }
-
-
     private void Update()
     {
         SynchronizeTransform();
