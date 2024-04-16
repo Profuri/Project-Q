@@ -12355,6 +12355,7 @@ GameObject:
   - component: {fileID: 500202143881860883}
   - component: {fileID: 1844963652424117278}
   - component: {fileID: 4856172949718693503}
+  - component: {fileID: 5842611469068972108}
   m_Layer: 0
   m_Name: Border
   m_TagString: Untagged
@@ -12487,6 +12488,27 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!135 &5842611469068972108
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998383074701988506}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: -0.000000014901161, y: 0, z: 0.000000029802322}
 --- !u!1 &1005041212581104389
 GameObject:
   m_ObjectHideFlags: 0
@@ -30771,7 +30793,19 @@ MonoBehaviour:
         m_CallState: 2
   onAllChapterClear:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5842611469068972108}
+        m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!320 &6525654810929114957
 PlayableDirector:
   m_ObjectHideFlags: 0
