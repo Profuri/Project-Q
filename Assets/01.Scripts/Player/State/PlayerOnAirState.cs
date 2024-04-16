@@ -34,6 +34,7 @@ public class PlayerOnAirState : PlayerBaseState
             Player.Rotate(Quaternion.LookRotation(dir), Player.Converter.AxisType is AxisType.None or AxisType.Y ? Player.Data.rotationSpeed : 1f);
         }
         Player.SetVelocity(dir * Player.Data.walkSpeed);
+
     }
     
     public override void ExitState()

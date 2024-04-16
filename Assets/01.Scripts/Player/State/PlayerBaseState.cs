@@ -11,6 +11,7 @@ public abstract class PlayerBaseState : State
     {
         Controller.ChangeState(typeof(PlayerJumpState));
     }
+    
     protected void AxisControlHandle()
     {
         if (!Player.Converter.Convertable)

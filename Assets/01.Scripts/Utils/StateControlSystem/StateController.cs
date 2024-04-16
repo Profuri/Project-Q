@@ -20,6 +20,7 @@ public class StateController
     {
         if (CurrentState is not null)
         {
+            Debug.Log($"CurrentState: {CurrentState}");
             CurrentState.UpdateState();
         }
     }

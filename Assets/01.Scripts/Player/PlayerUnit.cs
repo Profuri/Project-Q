@@ -24,21 +24,29 @@ public class PlayerUnit : ObjectUnit
     {
         get
         {
-            if(_coyoteTime < 0.01f)
-            {
-                _coyoteTime = Time.time;
-            }
-
             bool isCoyote = Time.time - _coyoteTime < Data.coyoteTime;
-
-            if(!isCoyote)
-            {
-                _coyoteTime = 0.0f;
-            }
-
             return isCoyote;
         }
     }
+
+    public bool CanJump
+    {
+        get
+        {
+            return OnGround || IsCoyote;
+        }
+    }
+
+    public void StartCoyoteTime()
+    {
+        _coyoteTime = Time.time;
+    }   
+    
+    public void ResetCoyoteTime()
+    {
+        _coyoteTime = float.MinValue;
+    }
+
     
     public override void Awake()
     {

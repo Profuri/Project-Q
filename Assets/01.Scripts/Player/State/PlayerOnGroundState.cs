@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class PlayerOnGroundState : PlayerBaseState
 {
     public PlayerOnGroundState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
@@ -13,7 +15,7 @@ public class PlayerOnGroundState : PlayerBaseState
 
     public override void UpdateState()
     {
-        if(Player.IsCoyote) return;
+        Player.StartCoyoteTime();
         if (!Player.OnGround)
         {
             Controller.ChangeState(typeof(PlayerFallState));
