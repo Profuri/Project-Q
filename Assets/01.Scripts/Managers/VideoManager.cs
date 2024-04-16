@@ -97,7 +97,7 @@ public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
         {
             saveData.DefaultQuality = _quality;
             saveData.DefaultFullScreen = _fullScreen;
-            saveData.resolutionIndex = _resolutionIndex;
+            saveData.ResolutionIndex = _resolutionIndex;
         };
     }
 
@@ -107,7 +107,7 @@ public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
         {
             _quality = saveData.DefaultQuality;
             _fullScreen = saveData.DefaultFullScreen;
-            _resolutionIndex = saveData.resolutionIndex;
+            _resolutionIndex = saveData.ResolutionIndex;
 
             SetFullScreen(_fullScreen);
             SetResolution((int)_resolutionIndex);
