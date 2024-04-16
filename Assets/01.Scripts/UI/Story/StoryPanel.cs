@@ -22,8 +22,6 @@ public class StoryPanel : UIComponent
 
         _textAnimator = messageTrm.GetComponent<TextAnimator_TMP>();
         _typeWriter = messageTrm.GetComponent<TypewriterByCharacter>();
-
-        Debug.Log($"TypeWriter: {_typeWriter}");
     }
 
     public void AppearMessage(string message)

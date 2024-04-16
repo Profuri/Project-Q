@@ -202,7 +202,6 @@ namespace AxisConvertSystem
                 return;
             }
 
-            Debug.Log($"ObjName{this.gameObject.name}: {active}");
             activeUnit = active;
             Collider.enabled = active;
 
