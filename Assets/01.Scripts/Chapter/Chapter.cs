@@ -1,17 +1,17 @@
 using InteractableSystem;
 using UnityEngine.Events;
 using AxisConvertSystem;
+using Unity.VisualScripting;
 using UnityEngine;
-using DG.Tweening;
 
 public class Chapter : InteractableObject
 {
     [field:SerializeField] public ChapterData Data {get; private set; }
+    
     [SerializeField] private float _symbolRotateSpeed;
-
     [SerializeField] private bool _canInteract = true;
 
-    public UnityEvent OnShowSequence;
+    public UnityEvent onPopEvent = null;
 
     private Transform _symbolTrm;
 
@@ -55,11 +55,16 @@ public class Chapter : InteractableObject
     public virtual void ShowingSequence(ChapterType chapterType, SaveData saveData)
     {
         gameObject.SetActive(true);
-        OnShowSequence?.Invoke();
     }
 
     public void ChangeInteract(bool canInteract)
     {
         _canInteract = canInteract;
+    }
+
+    public override void OnPop()
+    {
+        base.OnPop();
+        onPopEvent?.Invoke();
     }
 }

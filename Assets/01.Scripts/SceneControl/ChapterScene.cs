@@ -60,18 +60,24 @@ public class ChapterScene : Scene, IProvideLoad
                     OnChapterClear?.Invoke(chapterType,saveData);
                     
                     var cnt = clearCnt;
+                    
                     ShowChapterClearTimeline(chapterType, () =>
                     {
                         if(cnt > 4)
                         {
                             TimelineManager.Instance.ShowTimeline(_timelineDirector, TimelineType.AllChapterClear);
                             OnSubChaptersClear?.Invoke(true);
+                            DataManager.Instance.SaveData();
                         }
                     });
+                    
+                    DataManager.Instance.SaveData();
+                    return;
                 }
             }
         }
-
+        
+        
     }
 
     public Action<SaveData> GetLoadAction()

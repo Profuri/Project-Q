@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff49c4781644d8bb5546062a492f07, type: 3}
   m_Name: DissolveObjectClip
   m_EditorClassIdentifier: 
+  template:
+    start: 11.11667
+    end: 12.11667
+    startWeight: 1
+    endWeight: 0
 --- !u!114 &-8953031306235840218
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -141,6 +146,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff49c4781644d8bb5546062a492f07, type: 3}
   m_Name: DissolveObjectClip
   m_EditorClassIdentifier: 
+  template:
+    start: 11.11667
+    end: 12.11667
+    startWeight: 1
+    endWeight: 0
 --- !u!114 &-7692532676555340005
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -157,6 +167,18 @@ MonoBehaviour:
   m_Retroactive: 0
   m_EmitOnce: 0
   m_Asset: {fileID: 0}
+--- !u!114 &-7225657233092515934
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 619af4275a1464ebaaac186c3beb42a0, type: 3}
+  m_Name: ParticlePlayClip
+  m_EditorClassIdentifier: 
 --- !u!114 &-6884361480890724652
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -577,6 +599,10 @@ MonoBehaviour:
   template:
     originSize: 8
     targetSize: 15
+    start: 0
+    end: 0
+    startWeight: 0
+    endWeight: 1
 --- !u!114 &-5101193858288001726
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1853,7 +1879,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 11.116666666666667
+    m_Start: 11.11667
     m_ClipIn: 0
     m_Asset: {fileID: 3722459499343014797}
     m_Duration: 1
@@ -2002,6 +2028,98 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 619af4275a1464ebaaac186c3beb42a0, type: 3}
   m_Name: ParticlePlayClip
   m_EditorClassIdentifier: 
+--- !u!114 &3392292875559244943
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6599962a81914e8b8011842cea1098e, type: 3}
+  m_Name: Particle Play Track
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 3886145629875915799}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 8.716666666666667
+    m_ClipIn: 0
+    m_Asset: {fileID: -7225657233092515934}
+    m_Duration: 1.1999999999999993
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 3392292875559244943}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0
+    m_BlendOutDuration: 0
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: ParticlePlayClip
+  m_Markers:
+    m_Objects: []
 --- !u!114 &3722459499343014797
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2014,6 +2132,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff49c4781644d8bb5546062a492f07, type: 3}
   m_Name: DissolveObjectClip
   m_EditorClassIdentifier: 
+  template:
+    start: 11.11667
+    end: 12.11667
+    startWeight: 1
+    endWeight: 0
 --- !u!114 &3886145629875915799
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2036,6 +2159,7 @@ MonoBehaviour:
   m_Children:
   - {fileID: 8383952565347838621}
   - {fileID: -5466705229756315727}
+  - {fileID: 3392292875559244943}
   - {fileID: -2520539675338930340}
   m_Clips: []
   m_Markers:
@@ -2880,6 +3004,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ff49c4781644d8bb5546062a492f07, type: 3}
   m_Name: DissolveObjectClip
   m_EditorClassIdentifier: 
+  template:
+    start: 11.11667
+    end: 12.11667
+    startWeight: 1
+    endWeight: 0
 --- !u!114 &8383952565347838621
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -38,7 +38,27 @@ public class OrthoSizeChangerMixerBehaviour : PlayableBehaviour
 
         if (totalWeight <= 0f)
         {
-            return;
+            var playableInput = (ScriptPlayable<OrthoSizeChangerBehaviour>)playable.GetInput(0);
+            var input = playableInput.GetBehaviour();
+
+            var start = input.start;
+            var end = input.end;
+            var startWeight = input.startWeight;
+            var endWeight = input.endWeight;
+
+            var trackTime = playable.GetTime();
+
+            originSize = input.originSize;
+            targetSize = input.targetSize;
+            
+            if (trackTime <= start)
+            {
+                totalWeight = startWeight;
+            }
+            else if (trackTime >= end)
+            {
+                totalWeight = endWeight;    
+            }
         }
 
         var size = Mathf.Lerp(originSize, targetSize, totalWeight);

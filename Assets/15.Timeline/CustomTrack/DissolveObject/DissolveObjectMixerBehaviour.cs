@@ -1,17 +1,21 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Playables;
 
 public class DissolveObjectMixerBehaviour : PlayableBehaviour
 {
+    private GameObject _bidingObject;
     private List<Material> _bidingMaterials;
-
-    private bool _isFirstFrame = true;
 
     private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
     private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
+
+    public override void OnGraphStart(Playable playable)
+    {
+        _bidingMaterials = null;
+        base.OnGraphStart(playable);
+    }
 
     // NOTE: This function is called at runtime and edit time.  Keep that in mind when setting the values of properties.
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
@@ -28,17 +32,37 @@ public class DissolveObjectMixerBehaviour : PlayableBehaviour
             return;
         }
         
-        if (_isFirstFrame)
+        if (_bidingObject == null)
         {
-            MaterialListSetting(playerData as GameObject);
-            _isFirstFrame = false;
+            _bidingObject = playerData as GameObject;
+            if (_bidingObject == null)
+            {
+                return;
+            }
         }
 
         var weight = playable.GetInputWeight(0);
 
-        if (weight == 0f)
+        if (weight <= 0)
         {
-            _isFirstFrame = true;
+            var playableInput = (ScriptPlayable<DissolveObjectBehaviour>)playable.GetInput(0);
+            var input = playableInput.GetBehaviour();
+
+            var start = input.start;
+            var end = input.end;
+            var startWeight = input.startWeight;
+            var endWeight = input.endWeight;
+
+            var trackTime = playable.GetTime();
+
+            if (trackTime <= start)
+            {
+                SetMaterialValue(startWeight);
+            }
+            else if (trackTime >= end)
+            {
+                SetMaterialValue(endWeight);    
+            }
         }
         else
         {
@@ -46,14 +70,19 @@ public class DissolveObjectMixerBehaviour : PlayableBehaviour
         }
     }
 
-    private void MaterialListSetting(GameObject bidingObject)
+    private void MaterialListSetting()
     {
-        var renderer = bidingObject.GetComponentsInChildren<Renderer>();
+        _bidingMaterials = new List<Material>();
+        var renderer = _bidingObject.GetComponentsInChildren<Renderer>();
         _bidingMaterials = renderer.SelectMany(rdr => rdr.materials).ToList();
     }
 
     private void SetMaterialValue(float progress)
     {
+        if (_bidingMaterials == null)
+        {
+            MaterialListSetting();
+        }
         foreach (var material in _bidingMaterials)
         {
             material.SetFloat(_dissolveProgressHash, progress);

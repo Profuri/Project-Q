@@ -9,6 +9,7 @@ using UnityEngine.Timeline;
 public class TimelineManager : BaseManager<TimelineManager>
 {
     [SerializeField] private TimelineClipSetList _timelineClipSetList;
+    [SerializeField] private float _skipOffset;
 
     private PlayableDirector _currentDirector;
 
@@ -49,7 +50,8 @@ public class TimelineManager : BaseManager<TimelineManager>
         
         SetDirectorSpeed(1f);
     }
-
+    
+    [ContextMenu("Skip")]
     public void Skip()
     {
         if (_currentDirector == null)
@@ -57,8 +59,10 @@ public class TimelineManager : BaseManager<TimelineManager>
             Debug.LogError("[TimelineManager] The clip in play does not exist");
             return;
         }
-        
-        SetDirectorSpeed(2f);
+
+        _currentDirector.time = _currentDirector.playableGraph.GetRootPlayable(0).GetDuration() - _skipOffset;
+
+        // SetDirectorSpeed(2f);
     }
 
     private void SetDirectorSpeed(float speed)
@@ -68,9 +72,11 @@ public class TimelineManager : BaseManager<TimelineManager>
 
     private IEnumerator PlayRoutine(Action onComplete)
     {
+        // InputManager.Instance.SetEnableInputAll(false);
         _currentDirector.Play();
-        yield return new WaitUntil(() => IsPlay);
+        yield return new WaitUntil(() => !IsPlay);
         _currentDirector = null;
+        // InputManager.Instance.SetEnableInputAll(true);
         onComplete?.Invoke();
     }
 }
