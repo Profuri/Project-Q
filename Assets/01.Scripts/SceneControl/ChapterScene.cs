@@ -1,29 +1,19 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Playables;
 
 public class ChapterScene : Scene, IProvideLoad
 {
-    private Dictionary<ChapterType, Chapter> _chapterDictionary;
-
-    public UnityEvent<ChapterType,SaveData> OnChapterClear;
-    public UnityEvent<bool> OnSubChaptersClear;
-
+    [SerializeField] private UnityEvent onAllChapterClear = null;
+    
     private PlayableDirector _timelineDirector;
     
     protected override void Awake()
     {
         base.Awake();
         _timelineDirector = GetComponent<PlayableDirector>();
-        _chapterDictionary = new Dictionary<ChapterType, Chapter>();
-        var chapters = GetComponentsInChildren<Chapter>();
-        foreach( var chapter in chapters )
-        {
-            ChapterType chapterType = chapter.Data.chapter;
-            _chapterDictionary.Add(chapterType,chapter);
-        }
+        
         LoadToDataManager();
     }
 
@@ -33,10 +23,18 @@ public class ChapterScene : Scene, IProvideLoad
         DataManager.Instance.LoadData(this);
     }
     
-    private void ShowChapterClearTimeline(ChapterType clearChapter, bool skipOnStart = false, Action onComplete = null)
+    private void ShowChapterClearTimeline(SaveData saveData, ChapterType clearChapter, Action onComplete = null)
     {
         var type = (TimelineType)Enum.Parse(typeof(TimelineType), $"{clearChapter.ToString()}Clear");
-        TimelineManager.Instance.ShowTimeline(_timelineDirector, type, skipOnStart, onComplete);
+        var alreadyShowCutScene = saveData.ChapterTimelineDictionary[clearChapter]; 
+                
+        if (!alreadyShowCutScene)
+        {
+            saveData.ChapterTimelineDictionary[clearChapter] = true;
+            DataManager.Instance.SaveData();
+        }
+
+        TimelineManager.Instance.ShowTimeline(_timelineDirector, type, alreadyShowCutScene, onComplete);
     }
 
     private void LoadChapterEvents(SaveData saveData)
@@ -49,30 +47,27 @@ public class ChapterScene : Scene, IProvideLoad
         
         foreach(var (chapterType, isClear) in clearDictionary)
         {
-            if (!isClear)
+            if (chapterType == ChapterType.Cpu || !isClear)
             {
                 continue;
             }
             
             clearCnt++;
-            OnChapterClear?.Invoke(chapterType,saveData);
-
-            var alreadyShowCutScene = saveData.ChapterTimelineDictionary[chapterType]; 
-                
-            if (!alreadyShowCutScene)
-            {
-                saveData.ChapterTimelineDictionary[chapterType] = true;
-                DataManager.Instance.SaveData();
-            }
-
-            ShowChapterClearTimeline(chapterType, alreadyShowCutScene);
+            ShowChapterClearTimeline(saveData, chapterType);
         }
 
         if (clearCnt > 4)
         {
+            var alreadyShowCutScene = saveData.ChapterTimelineDictionary[ChapterType.Cpu]; 
+                
+            if (!alreadyShowCutScene)
+            {
+                saveData.ChapterTimelineDictionary[ChapterType.Cpu] = true;
+                DataManager.Instance.SaveData();
+            }
+            
             TimelineManager.Instance.ShowTimeline(_timelineDirector, TimelineType.AllChapterClear);
-            OnSubChaptersClear?.Invoke(true);
-            DataManager.Instance.SaveData();
+            onAllChapterClear?.Invoke();
         }
     }
 

@@ -1,7 +1,6 @@
 using InteractableSystem;
 using UnityEngine.Events;
 using AxisConvertSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Chapter : InteractableObject
