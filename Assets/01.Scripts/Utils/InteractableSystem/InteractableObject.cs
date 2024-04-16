@@ -23,6 +23,11 @@ namespace InteractableSystem
 
         protected ObjectUnit _communicator;
 
+        public override void OnPush()
+        {
+            base.OnPush();
+            OnDetectedLeave();
+        }
         protected virtual void OnDisable()
         {
             if (_communicator != null && _communicator is PlayerUnit playerUnit)

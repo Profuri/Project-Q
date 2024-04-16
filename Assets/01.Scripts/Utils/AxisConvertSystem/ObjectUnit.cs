@@ -6,6 +6,7 @@ using System.Reflection;
 using DG.Tweening;
 using UnityEngine;
 using DG.Tweening.Core.Easing;
+using System.Collections;
 
 namespace AxisConvertSystem
 {
@@ -198,7 +199,7 @@ namespace AxisConvertSystem
             {
                 return;
             }
-            
+
             activeUnit = active;
             Collider.enabled = active;
 
@@ -269,7 +270,7 @@ namespace AxisConvertSystem
             {
                 Dissolve(0f, dissolveTime, true, callBack);
                 Rigidbody.velocity = Vector3.zero;
-                PlaySpawnVFX();
+                //PlaySpawnVFX();
             }
         }
         
@@ -409,11 +410,16 @@ namespace AxisConvertSystem
         
         public void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
         {
+            CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(),DissolveRoutine(value,time,useDissolve,callBack));
+        }
+
+        private IEnumerator DissolveRoutine(float value, float time, bool useDissolve = true, Action callBack = null)
+        {
             value = Mathf.Clamp(value, 0f, 1f);
-        
+            var initVal = Mathf.Abs(1f - value);
+
             foreach (var material in _materials)
             {
-                var initVal = Mathf.Abs(1f - value);
                 if (useDissolve)
                 {
                     material.SetFloat(_dissolveProgressHash, initVal);
@@ -421,23 +427,28 @@ namespace AxisConvertSystem
                 material.SetFloat(_visibleProgressHash, initVal);
             }
 
-            var seq = DOTween.Sequence();
+            var currentTime = 0f;
 
-            foreach (var material in _materials)
+            while(currentTime <= time )
             {
-                if (useDissolve)
+                currentTime += Time.deltaTime;
+                var percent = currentTime / time;
+                var currentProgress = Mathf.Lerp(initVal,value,percent);
+                foreach (var material in _materials)
                 {
-                    seq.Join(DOTween.To(() => material.GetFloat(_dissolveProgressHash),
-                        progress => material.SetFloat(_dissolveProgressHash, progress), value, time));
+                    if (useDissolve)
+                    {
+                        material.SetFloat(_dissolveProgressHash, currentProgress);
+                    }
+                    material.SetFloat(_visibleProgressHash, currentProgress);
                 }
-                seq.Join(DOTween.To(() => material.GetFloat(_visibleProgressHash),
-                    progress => material.SetFloat(_visibleProgressHash, progress), value, time));
+                yield return null;
             }
-
-            seq.OnComplete(() => callBack?.Invoke());
+            callBack?.Invoke();
         }
 
-        private void PlaySpawnVFX()
+
+        protected void PlaySpawnVFX()
         {
             var spawnVFX = PoolManager.Instance.Pop("SpawnVFX") as PoolableVFX;
             var bounds = Collider.bounds;

@@ -11,6 +11,9 @@ public class PressurePlate : InteractableObject
     [SerializeField] private float _maxHeight;
     [SerializeField] private float _minHeight;
 
+    [SerializeField] private float _yScaleOffset = 1.2f;
+
+
     [SerializeField] private List<AffectedObject> _affectedObjects;
     [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
 
@@ -40,6 +43,7 @@ public class PressurePlate : InteractableObject
     public override void UpdateUnit()
     { 
         base.UpdateUnit();
+
         var curToggleState = CheckPressed();
         if (_lastToggleState != curToggleState)
         {
@@ -78,6 +82,7 @@ public class PressurePlate : InteractableObject
     {
         var checkPos = Collider.bounds.center;
         var checkSize = _pressureObjTrm.localScale;
+        checkSize.y *= _yScaleOffset;
 
         var cols = new Collider[2];
         var size = Physics.OverlapBoxNonAlloc(checkPos, checkSize / 2, cols, Quaternion.identity, _pressionorMask);

@@ -21,6 +21,7 @@ public class SlimeObjectUnit : ObjectUnit
     public override void Convert(AxisType axis)
     {
         base.Convert(axis);
+
         if (axis == AxisType.None && _prevAxisType == AxisType.Y)
         {
             _affectedUnits = GetMovementUnit();
@@ -49,24 +50,22 @@ public class SlimeObjectUnit : ObjectUnit
     private void ShowBounceEffect()
     {
         Vector3 originScale = transform.localScale;
-        Vector3 targetScale = transform.localScale;
+        Vector3 targetScale = transform.localScale * 1.2f;
 
-        transform.localScale = targetScale;
+        transform.localScale = new Vector3(1,0.1f,1f);
 
-        InputManager.Instance.SetEnableInputAll(false);
         Sequence seq = DOTween.Sequence();
-        seq.Append(transform.DOScale(originScale * 0.8f,_bounceTime * 0.5f)).SetEase(Ease.InBounce);
-        seq.Append(transform.DOScale(originScale * 1.2f,_bounceTime * 0.5f)).SetEase(Ease.InBounce);
-        seq.Append(transform.DOScale(originScale, _bounceTime * 0.5f)).SetEase(Ease.InBounce);
+        seq.Append(transform.DOScale(targetScale, _bounceTime)).SetEase(Ease.InBounce);
         seq.AppendCallback(() =>
         {
+
             foreach (var unit in _affectedUnits)
             {
                 SlimeImpact(unit);
             }
             _affectedUnits.Clear();
-            InputManager.Instance.SetEnableInputAll(true);
         });
+        seq.Append(transform.DOScale(originScale, _bounceTime)).SetEase(Ease.InBounce);
     }
 
     private List<ObjectUnit> GetMovementUnit()
