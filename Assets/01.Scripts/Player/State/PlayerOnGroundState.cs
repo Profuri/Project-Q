@@ -15,11 +15,11 @@ public class PlayerOnGroundState : PlayerBaseState
 
     public override void UpdateState()
     {
-        Player.StartCoyoteTime();
-        if (!Player.OnGround)
+        if(!Player.OnGround)
         {
+            Player.StartCoyoteTime();
             Controller.ChangeState(typeof(PlayerFallState));
-            return;
+            //return;
         }
     }
 

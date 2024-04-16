@@ -88,6 +88,11 @@ public class PlayerUnit : ObjectUnit
         {
             StoryManager.Instance.ShowMessage("리그오브레전드레이븐",Vector3.zero);
         }
+
+        //Debug.Log($"CurrentState: {_stateController.CurrentState}");
+        //Debug.Log($"CanJump: {CanJump}");
+
+        //Debug.Log($"IsCoyote: {IsCoyote}, OnGround: {OnGround}");
     }
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
