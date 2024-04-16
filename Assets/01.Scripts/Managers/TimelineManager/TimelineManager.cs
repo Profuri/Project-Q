@@ -56,6 +56,10 @@ public class TimelineManager : BaseManager<TimelineManager>
     public void ShowTimeline(PlayableDirector director, TimelineType type, bool skipOnStart = false, Action onComplete = null)
     {
         _timelineQueue.Enqueue(new TimelineQueueInfo(director, type, skipOnStart, onComplete));
+        while (_timelineQueue.Count > 1 && !_timelineQueue.Peek().SkipOnStart)
+        {
+            _timelineQueue.Enqueue(_timelineQueue.Dequeue());
+        }
 
         if (!IsPlay)
         {
