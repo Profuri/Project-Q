@@ -35,6 +35,7 @@ namespace AxisConvertSystem
         public void InitDepth()
         {
             Depth = float.MaxValue;
+            _owner.IntersectedUnits.Clear();
         }
 
         public void CalcDepth(AxisType axis)
@@ -52,20 +53,29 @@ namespace AxisConvertSystem
                 var isTransparent = unit.renderType == UnitRenderType.Transparent;
                 var isParentUnit = _owner.subUnit && _owner.GetParentUnit() == unit;
                 var isDynamic = !unit.staticUnit;
-                var excludeLayer = (unit.Collider.excludeLayers & _owner.gameObject.layer) == 1;
                 
-                if (isOwner || isTransparent || isParentUnit || isDynamic || excludeLayer)
+                if (isOwner || isTransparent || isParentUnit || isDynamic)
                 {
                     continue;
                 }
 
+                var excludeLayer = (_owner.Collider.excludeLayers & (1 << unit.gameObject.layer)) >= 1;
+                if (!excludeLayer && _depthCheckPoint[axis].Intersect(unit.DepthHandler._depthCheckPoint[axis]))
+                {
+                    unit.IntersectedUnits.Add(_owner);
+                }
+
                 if (_depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis]))
                 {
-                    unit.HidedUnits.Add(_owner);
                     Depth = 0f;
                     break;
                 }
             }
+        }
+
+        public DepthPoint GetDepthPoint(AxisType axis)
+        {
+            return _depthCheckPoint[axis];
         }
 
         public void DepthCheckPointSetting()
