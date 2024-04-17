@@ -70,6 +70,19 @@ public class UIComponent : PoolableMono
         }
     }
 
+    public void ResetPosition()
+    {
+        if(transform is RectTransform rectTransform)
+        {
+            rectTransform.offsetMin = Vector3.zero;
+            rectTransform.offsetMax = Vector3.zero;
+        }
+        else
+        {
+            transform.position = Vector3.zero;
+        }
+    }
+
     public override void OnPop()
     {
     }

@@ -11,6 +11,8 @@ public class SectionCamController : VirtualCamController
     private readonly Dictionary<AxisType, VirtualCamComponent> _virtualCamDiction =
         new Dictionary<AxisType, VirtualCamComponent>();
 
+    private Dictionary<VirtualCamComponent,Vector3> _virtualCamPosDictionary = new Dictionary<VirtualCamComponent, Vector3>();
+
     private VirtualCamComponent _axisControlCam;
 
     public override void Init()
@@ -31,7 +33,12 @@ public class SectionCamController : VirtualCamController
                 _virtualCamDiction.Add(cam.AxisType, vCam);
             }
         }
-        
+
+        foreach(var kvp in _virtualCamDiction)
+        {
+            Vector3 originPos = kvp.Value.transform.position;
+            _virtualCamPosDictionary.Add(kvp.Value,originPos);
+        }
         _originPos = _virtualCamDiction[AxisType.None].transform.position;
     }
 
@@ -73,9 +80,13 @@ public class SectionCamController : VirtualCamController
 
     public override void ResetCamera()
     {
-        _virtualCamDiction[AxisType.None].enabled = false;
-        _virtualCamDiction[AxisType.None].transform.position = _originPos;
-        _virtualCamDiction[AxisType.None].enabled = true;
+
+        foreach(var kvp in _virtualCamDiction)
+        {
+            _virtualCamDiction[kvp.Key].enabled = false;
+            _virtualCamDiction[kvp.Key].transform.position = _originPos;
+            _virtualCamDiction[kvp.Key].enabled = true;
+        }
         ChangeCameraAxis(AxisType.None);
     }
 }
