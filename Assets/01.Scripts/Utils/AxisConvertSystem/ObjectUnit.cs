@@ -491,19 +491,6 @@ namespace AxisConvertSystem
             callBack?.Invoke();
         }
 
-
-        protected void PlaySpawnVFX()
-        {
-            var spawnVFX = PoolManager.Instance.Pop("SpawnVFX") as PoolableVFX;
-            var bounds = Collider.bounds;
-            var position = transform.position;
-            position.y = bounds.min.y;
-
-            spawnVFX.SetPositionAndRotation(position, Quaternion.identity);
-            spawnVFX.SetScale(new Vector3(bounds.size.x, 1, bounds.size.z));
-            spawnVFX.Play();
-        }
-
         public override void OnPop()
         {
         }

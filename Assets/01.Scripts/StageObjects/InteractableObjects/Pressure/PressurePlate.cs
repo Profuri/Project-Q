@@ -1,9 +1,8 @@
-using System.Collections.Generic;
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
 
-public class PressurePlate : InteractableObject
+public class PressurePlate : ToggleTypeInteractableObject
 {
     [SerializeField] private LayerMask _pressionorMask;
 
@@ -13,31 +12,14 @@ public class PressurePlate : InteractableObject
 
     [SerializeField] private float _yScaleOffset = 1.2f;
 
-
-    [SerializeField] private List<AffectedObject> _affectedObjects;
-    [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
-
     private Transform _pressureMainTrm;
     private Transform _pressureObjTrm;
-
-    private bool _lastToggleState;
 
     public override void Awake()
     {
         base.Awake();
-        _lastToggleState = false;
         _pressureMainTrm = transform.Find("PressureMain");
         _pressureObjTrm = _pressureMainTrm.Find("PressureObject");
-    }
-
-    public override void Init(AxisConverter converter)
-    {
-        base.Init(converter);
-        _lastToggleState = false;
-        foreach (var toggleChangeEvent in _onToggleChangeEvents)
-        {
-            toggleChangeEvent.Invoke(_lastToggleState);
-        }
     }
 
     public override void UpdateUnit()
@@ -45,25 +27,19 @@ public class PressurePlate : InteractableObject
         base.UpdateUnit();
 
         var curToggleState = CheckPressed();
-        if (_lastToggleState != curToggleState)
+        if (LastToggleState != curToggleState)
         {
-            foreach (var toggleChangeEvent in _onToggleChangeEvents)
-            {
-                toggleChangeEvent.Invoke(curToggleState);
-            }
+            CallToggleChangeEvents(curToggleState);
         }
-        _lastToggleState = curToggleState;
-        OnInteraction(null, _lastToggleState);
+        LastToggleState = curToggleState;
+        OnInteraction(null, LastToggleState);
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         base.OnInteraction(communicator, interactValue, param);
 
-        foreach (var obj in _affectedObjects)
-        {
-            obj?.Invoke(null, interactValue);
-        }
+        InteractAffectedObjects(interactValue);
         
         var current = _pressureMainTrm.localScale.y;
         var dest = interactValue ? _minHeight : _maxHeight;
@@ -98,31 +74,5 @@ public class PressurePlate : InteractableObject
         }
 
         return true;
-}
-    
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        if (_pressureObjTrm)
-        {
-            Gizmos.color = Color.yellow;
-            var checkPos = Collider.bounds.center;
-            var checkSize = _pressureObjTrm.localScale;
-            Gizmos.DrawWireCube(checkPos, checkSize);
-        }
-
-        if (_affectedObjects.Count > 0)
-        {
-            Gizmos.color = Color.black;
-            foreach (var obj in _affectedObjects)
-            {
-                if (obj?.InteractableObject is null)
-                {
-                    continue;
-                }
-                Gizmos.DrawLine(transform.position, obj.InteractableObject.transform.position);
-            }
-        }
     }
-#endif
 }

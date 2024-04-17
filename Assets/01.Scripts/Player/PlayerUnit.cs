@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AxisConvertSystem;
 using InteractableSystem;
 using UnityEngine;
@@ -12,9 +13,9 @@ public class PlayerUnit : ObjectUnit
     public ObjectHoldingHandler HoldingHandler { get; private set; }
     public ObjectUnit StandingUnit { get; set; }
 
-
     private StateController _stateController;
 
+    private List<InteractableObject> _lastFindInteractableObjects;
     private InteractableObject _selectedInteractableObject;
     
     private readonly int _activeHash = Animator.StringToHash("Active");
@@ -29,13 +30,7 @@ public class PlayerUnit : ObjectUnit
         }
     }
 
-    public bool CanJump
-    {
-        get
-        {
-            return OnGround || IsCoyote;
-        }
-    }
+    public bool CanJump => OnGround || IsCoyote;
 
     public void StartCoyoteTime()
     {
@@ -46,7 +41,6 @@ public class PlayerUnit : ObjectUnit
     {
         _coyoteTime = float.MinValue;
     }
-
     
     public override void Awake()
     {
@@ -57,7 +51,7 @@ public class PlayerUnit : ObjectUnit
         ModelTrm = transform.Find("Model");
         Animator = ModelTrm.GetComponent<Animator>();
         HoldingHandler = GetComponent<ObjectHoldingHandler>();
-
+        _lastFindInteractableObjects = new List<InteractableObject>();
 
         _stateController = new StateController(this);
         _stateController.RegisterState(new PlayerIdleState(_stateController, true, "Idle"));
@@ -79,27 +73,12 @@ public class PlayerUnit : ObjectUnit
         _stateController.UpdateState();
 
         _selectedInteractableObject = FindInteractable();
-
-        if(Input.GetKeyDown(KeyCode.C))
-        {
-            StageManager.Instance.StageClear(this);
-        }
-        if(Input.GetKeyDown(KeyCode.V))
-        {
-            StoryManager.Instance.ShowMessage("리그오브레전드레이븐",Vector3.zero);
-        }
-
-        //Debug.Log($"CurrentState: {_stateController.CurrentState}");
-        //Debug.Log($"CanJump: {CanJump}");
-
-        //Debug.Log($"IsCoyote: {IsCoyote}, OnGround: {OnGround}");
     }
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
     {
         Converter.ConvertDimension(AxisType.None);
 
-        
         base.ReloadUnit(dissolveTime, () =>
         {
             callBack?.Invoke();
@@ -172,21 +151,21 @@ public class PlayerUnit : ObjectUnit
         {
             if (cols[i].TryGetComponent<InteractableObject>(out var interactable))
             {
+                var dir = (cols[i].bounds.center - Collider.bounds.center).normalized;
+                var isHit = Physics.Raycast(Collider.bounds.center - dir, dir, out var hit, Mathf.Infinity,
+                    canStandMask);
+
+                if (isHit && cols[i] != hit.collider)
+                {
+                    continue;
+                }
+
                 if(interactable.InteractType == EInteractType.INPUT_RECEIVE)
                 {
-                    var dir = (cols[i].bounds.center - Collider.bounds.center).normalized;
-                    var isHit = Physics.Raycast(Collider.bounds.center - dir, dir, out var hit, Mathf.Infinity,
-                        canStandMask);
-
-                    if (isHit && cols[i] != hit.collider)
-                    {
-                        continue;
-                    }
-
                     if (interactable != _selectedInteractableObject)
                     {
-                        _selectedInteractableObject?.OnDetectedLeave(this);
                         interactable.OnDetectedEnter(this);
+                        _selectedInteractableObject?.OnDetectedLeave(this);
                     }
                     return interactable;
                 }
@@ -232,7 +211,18 @@ public class PlayerUnit : ObjectUnit
         
         _selectedInteractableObject.OnInteraction(this, true);
     }
+    
+    private void PlaySpawnVFX()
+    {
+        var spawnVFX = PoolManager.Instance.Pop("SpawnVFX") as PoolableVFX;
+        var bounds = Collider.bounds;
+        var position = transform.position;
+        position.y = bounds.min.y;
 
+        spawnVFX.SetPositionAndRotation(position, Quaternion.identity);
+        spawnVFX.SetScale(new Vector3(bounds.size.x, 1, bounds.size.z));
+        spawnVFX.Play();
+    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
