@@ -100,7 +100,6 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         GenerateNextStage(_currentPlayChapterData.chapter, nextChapter);
         CurrentStage.IsClear = true;
     }
-    
 
     public Action<SaveData> GetSaveAction()
     {
@@ -109,15 +108,8 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             if (_currentPlayChapterData == null) return;
             var currentChapter = _currentPlayChapterData.chapter;
             bool isClear = CurrentStage.stageOrder + 1 >= _currentPlayChapterData.stageCnt;
-
-            if (saveData.ChapterProgressDictionary.ContainsKey(currentChapter) == false)
-            {
-                saveData.ChapterProgressDictionary.Add(currentChapter, isClear);
-            }
-            else
-            {
-                saveData.ChapterProgressDictionary[currentChapter] = isClear;
-            }
+            
+            saveData.ChapterClearDictionary[currentChapter] = isClear;
         };
     }
 
