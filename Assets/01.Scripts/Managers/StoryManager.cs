@@ -22,7 +22,11 @@ public class StoryManager : BaseManager<StoryManager>
     {
         CurrentPanel = null;
     }
+    public void ASDASD()
+    {
 
+
+    }
     public void ShowMessage(string message,Vector3 panelPos)
     {
         Action messageAction = () =>

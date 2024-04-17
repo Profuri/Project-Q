@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using TMPro.Examples;
 using Febucci.UI;
-using TinyGiantStudio.Text.Example;
 using System;
 
 public class StoryPanel : UIComponent
@@ -45,7 +40,6 @@ public class StoryPanel : UIComponent
     }
     #region TYPE_WRITER
     protected void OnEnable()  =>  _typeWriter.onMessage.AddListener(OnTypewriterMessage);
-
     protected void OnDisable()
     {
         _typeWriter.onMessage.RemoveListener(OnTypewriterMessage);
@@ -60,6 +54,7 @@ public class StoryPanel : UIComponent
         switch (eventMarker.name)
         {
             case "리그오브레전드레이븐":
+                
                 break;
         }
     }

@@ -16,7 +16,6 @@ public class PauseWindow : UIComponent
     public override void Disappear(Action callback = null)
     {
           base.Disappear(callback);
-
           InputManager.Instance.UIInputReader.OnPauseClickEvent -= OnPauseKeyClickHandle;
           CursorManager.UnRegisterUI(this);
     }
@@ -31,7 +30,6 @@ public class PauseWindow : UIComponent
         GameManager.Instance.Resume(false);
         Disappear(() => GameManager.Instance.InPause = false);
     }
-
      public void GenerateSettingPopup()
      {
           if (_settingWindow is null || !_settingWindow.poolOut)
@@ -59,6 +57,7 @@ public class PauseWindow : UIComponent
           if (_settingWindow is not null && _settingWindow.poolOut)
           {
                _settingWindow.Disappear();
+               _settingWindow = null;
           }
           else
           {
