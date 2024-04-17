@@ -5,8 +5,6 @@ using System.Linq;
 using System.Reflection;
 using DG.Tweening;
 using UnityEngine;
-using DG.Tweening.Core.Easing;
-using System.Collections;
 
 namespace AxisConvertSystem
 {
@@ -33,9 +31,9 @@ namespace AxisConvertSystem
         public UnitDepthHandler DepthHandler { get; private set; }
         public Section Section { get; protected set; }
         public bool IsHide { get; private set; }
-        public bool OnGround => CheckStandObject(out var temp, true);
+        public bool OnGround => CheckStandObject(out var tempCollider, true);
         
-        public List<ObjectUnit> HidedUnits { get; private set; }
+        public List<ObjectUnit> IntersectedUnits { get; private set; }
 
         private List<Renderer> _renderers;
         private List<Material> _materials;
@@ -60,10 +58,9 @@ namespace AxisConvertSystem
                 Rigidbody.useGravity = false;
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
+            IntersectedUnits = new List<ObjectUnit>();
             DepthHandler = new UnitDepthHandler(this);
-
-            HidedUnits = new List<ObjectUnit>();
-
+            
             _materials = new List<Material>();
             _renderers = new List<Renderer>();
             transform.GetComponentsInChildren<Renderer>(_renderers);
@@ -302,11 +299,9 @@ namespace AxisConvertSystem
                         UnitInfo.LocalPos = transform.localPosition;
                     }
                 }
-                HidedUnits.Clear();
             }
             else
             {
-                HidedUnits.Clear();
                 RewriteUnitInfo();
             }
         }
@@ -346,7 +341,7 @@ namespace AxisConvertSystem
 
         private ObjectUnit FlippingStandUnit(ObjectUnit standUnit)
         {
-            if (standUnit.HidedUnits.Count <= 0)
+            if (standUnit.IntersectedUnits.Count <= 0 || Converter.AxisType == AxisType.Y)
             {
                 return standUnit;
             }
@@ -363,15 +358,30 @@ namespace AxisConvertSystem
                 return standUnit;
             }
 
-            // find back unit
+            // is in front unit
             var backUnit = standUnit;
-            foreach (var hidedUnit in standUnit.HidedUnits)
+            var dynamicDepthPoint = Collider.GetDepthPoint(Converter.AxisType);
+            
+            // find back unit
+            foreach (var intersectedUnit in standUnit.IntersectedUnits)
             {
-                var hideUnitDepth = hidedUnit.DepthHandler.GetDepth();
-
-                if (backUnit.DepthHandler.GetDepth() >= hideUnitDepth)
+                if (intersectedUnit == this)
                 {
-                    backUnit = hidedUnit;
+                    continue;
+                }
+
+                var intersectedUnitDepthPoint = intersectedUnit.DepthHandler.GetDepthPoint(Converter.AxisType);
+                if (!dynamicDepthPoint.Intersect(intersectedUnitDepthPoint))
+                {
+                    continue;
+                }
+                
+                var currentUnitDepth = backUnit.DepthHandler.GetDepth();
+                var intersectedUnitDepth = intersectedUnit.DepthHandler.GetDepth();
+
+                if (currentUnitDepth >= intersectedUnitDepth)
+                {
+                    backUnit = intersectedUnit;
                 }
             }
 
@@ -382,30 +392,62 @@ namespace AxisConvertSystem
         {
             var origin = Collider.bounds.center;
             var triggerInteraction = ignoreTriggered ? QueryTriggerInteraction.Ignore : QueryTriggerInteraction.Collide;
-            
+
+            var size = 0;
+            var cols = new Collider[10];
+
+            col = null;
+
             if (Converter.AxisType == AxisType.Y)
             {
-                var cols = new Collider[10];
-                Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
-                col = cols[0];
+                size = Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
 
-                if (col is null)
+                if (size <= 0)
                 {
-                    Physics.OverlapBoxNonAlloc(origin - Vector3.up, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
-                    col = cols[0];
+                    size = Physics.OverlapBoxNonAlloc(origin - Vector3.up, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
                 }
-                
-                return col;
             }
             else
             {
                 var dir = Vector3.down;
                 var distance = Collider.bounds.size.y / 2f + checkOffset;
-                
-                var isHit = Physics.Raycast(origin, dir, out var hit, distance, canStandMask, triggerInteraction);
-                col = isHit ? hit.collider : null;
-                return isHit;
+
+                var results = new RaycastHit[10];
+                size = Physics.RaycastNonAlloc(origin, dir, results, distance, canStandMask, triggerInteraction);
+
+                for (var i = 0; i < size; i++)
+                {
+                    cols[i] = results[i].collider;
+                }
             }
+
+            for (var i = 0; i < size; i++)
+            {
+                if (cols[i] is null)
+                {
+                    continue;
+                }
+
+                if (col is null)
+                {
+                    col = cols[i];
+                }
+                else
+                {
+                    if (!col.TryGetComponent<ObjectUnit>(out var unit) ||
+                        !cols[i].TryGetComponent<ObjectUnit>(out var otherUnit))
+                    {
+                        continue;
+                    }
+                    
+                    if (unit.DepthHandler.GetDepth() <= otherUnit.DepthHandler.GetDepth())
+                    {
+                        col = cols[i];
+                    }
+                }
+            }
+
+            return size > 0;
         }
         
         public void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)

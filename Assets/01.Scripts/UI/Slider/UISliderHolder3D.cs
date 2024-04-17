@@ -15,7 +15,8 @@ public class UISliderHolder3D : UIButton3D, IClickUpHandler
     }
 
     private void Update()
-    { if (_isHold)
+    { 
+        if (_isHold)
         {
             Slider.SetProgress(GetHolderValue());
         }
