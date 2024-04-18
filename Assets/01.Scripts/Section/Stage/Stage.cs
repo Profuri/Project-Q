@@ -2,6 +2,7 @@ using UnityEngine;
 using AxisConvertSystem;
 using System;
 using DG.Tweening;
+using UnityEngine.InputSystem.Haptics;
 
 public class Stage : Section
 {
@@ -21,10 +22,19 @@ public class Stage : Section
 
     protected override void FixedUpdate()
     {
-        if (Active && (!IsConverting || IsClear))
+        if (Active)
         {
+
             foreach (var unit in SectionUnits)
             {
+                if(!IsConverting || IsClear)
+                {
+                    if(unit.TryGetComponent(out IUpdateBlockable blockable))
+                    {
+                        //do thing   
+                        continue;
+                    }
+                }
                 unit.FixedUpdateUnit();
             }
         }
@@ -32,10 +42,18 @@ public class Stage : Section
 
     protected override void Update()
     {
-        if (Active && (!IsConverting || IsClear))
+        if (Active)
         {
             foreach (var unit in SectionUnits)
             {
+                if(!IsConverting || IsClear)
+                {
+                    if(unit.TryGetComponent(out IUpdateBlockable blockable))
+                    {
+                        //do thing   
+                        continue;
+                    }
+                }
                 unit.UpdateUnit();
             }
         }
