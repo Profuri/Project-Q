@@ -560,6 +560,7 @@ namespace AxisConvertSystem
 
         public void UnShowSelectedBorder()
         {
+            Debug.Log(_selectedBorder);
             if (_selectedBorder is not null)
             {
                 SceneControlManager.Instance.DeleteObject(_selectedBorder);

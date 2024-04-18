@@ -14,9 +14,10 @@ public class SelectedBorder : PoolableMono
     {
         var bounds = col.bounds;
         var position = bounds.center;
-        var size = bounds.size;
+        var size = bounds.size + new Vector3(0.1f, 0.1f, 0.1f);
 
         transform.position = position;
         transform.localScale = size;
+        transform.SetParent(col.transform);
     }
 }
