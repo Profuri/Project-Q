@@ -62,6 +62,12 @@ public class LaserLauncherObject : ObjectUnit
         }
     }
 
+    public override void Convert(AxisType axis)
+    {
+        DisableLaser();
+        base.Convert(axis);
+    }
+
     private IEnumerator LaunchRoutine()
     {
         var waitForRefresh = new WaitForSeconds(_refreshDelay);

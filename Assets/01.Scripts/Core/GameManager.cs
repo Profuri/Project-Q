@@ -39,8 +39,14 @@ public class GameManager : MonoSingleton<GameManager>
         {
             manager.Init();
         }
+
+        CursorManager.ReloadCursor();
     }
 
+    private void Update()
+    {
+        Debug.Log($"CurrosrHashCnt: {CursorManager.CurrentCnt}");
+    }
     private void Start()
     {
         OnStartEvent?.Invoke();

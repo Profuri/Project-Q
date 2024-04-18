@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using InteractableSystem;
 using AxisConvertSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -14,6 +13,7 @@ public class FanObject : InteractableObject
     [SerializeField] private float _airMaxHeight;
     [SerializeField] private float _airPower;
     [SerializeField] private LayerMask _effectedMask;
+
     
     [Header("Fan Settings")]
     [SerializeField] private float _fanMaxSpeed;

@@ -19,11 +19,18 @@ public class StoryPanel : UIComponent
         _typeWriter = messageTrm.GetComponent<TypewriterByCharacter>();
     }
 
-    public void AppearMessage(string message)
+    public void AppearMessage(string message,bool isTypingAutomatic = true)
     {
         if (!IsActive) return;
-        _textAnimator.typewriterStartsAutomatically = true;
-        _typeWriter.ShowText(message);
+        _textAnimator.typewriterStartsAutomatically = isTypingAutomatic;
+        if(isTypingAutomatic)
+        {
+            _typeWriter.ShowText(message);
+        }
+        else
+        {
+            _textAnimator.SetText(message);
+        }
     }
 
     public string DisappearMessage(Action Callback = null)

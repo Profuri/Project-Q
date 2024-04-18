@@ -87,6 +87,7 @@ namespace AxisConvertSystem
             Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
         }
 
+
         public virtual void UpdateUnit()
         {
             if (!staticUnit)
@@ -132,6 +133,7 @@ namespace AxisConvertSystem
         public virtual void ApplyUnitInfo(AxisType axis)
         {
             ApplyInfo(ConvertedInfo);
+
 
             if (DepthHandler.Hide)
             {
