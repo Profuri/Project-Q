@@ -82,7 +82,6 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
 
     public void StageClear(PlayerUnit player)
     {
-        Debug.Log($"CurrentStage: {CurrentStage} NextStage: {NextStage}");
         if(CurrentStage is null || IsClear) return;
         //IsClear = true;
         CurrentStage.Lock = false;
