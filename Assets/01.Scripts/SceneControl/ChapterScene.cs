@@ -1,24 +1,19 @@
 using System;
-using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Playables;
 
 public class ChapterScene : Scene, IProvideLoad
 {
-    private Dictionary<ChapterType, Chapter> _chapterDictionary;
-
-    public UnityEvent<ChapterType,SaveData> OnChapterClear;
-    public UnityEvent<bool> OnSubChaptersClear;
+    [SerializeField] private UnityEvent onAllChapterClear = null;
+    
+    private PlayableDirector _timelineDirector;
     
     protected override void Awake()
     {
         base.Awake();
-        _chapterDictionary = new Dictionary<ChapterType, Chapter>();
-        var chapters = GetComponentsInChildren<Chapter>();
-        foreach( var chapter in chapters )
-        {
-            ChapterType chapterType = chapter.Data.chapter;
-            _chapterDictionary.Add(chapterType,chapter);
-        }
+        _timelineDirector = GetComponent<PlayableDirector>();
+        
         LoadToDataManager();
     }
 
@@ -27,32 +22,54 @@ public class ChapterScene : Scene, IProvideLoad
         base.OnPop();
         DataManager.Instance.LoadData(this);
     }
+    
+    private void ShowChapterClearTimeline(SaveData saveData, ChapterType clearChapter, Action onComplete = null)
+    {
+        var type = (TimelineType)Enum.Parse(typeof(TimelineType), $"{clearChapter.ToString()}Clear");
+        var alreadyShowCutScene = saveData.ChapterTimelineDictionary[clearChapter]; 
+                
+        if (!alreadyShowCutScene)
+        {
+            saveData.ChapterTimelineDictionary[clearChapter] = true;
+            DataManager.Instance.SaveData();
+        }
+
+        TimelineManager.Instance.ShowTimeline(_timelineDirector, type, alreadyShowCutScene, onComplete);
+    }
 
     private void LoadChapterEvents(SaveData saveData)
     {
         if (saveData == null)
             return;
         
-        Dictionary<ChapterType,bool> dictionary = saveData.ChapterProgressDictionary;
-
-        int clearCnt = 0;
-        foreach(KeyValuePair<ChapterType,bool> kvp in dictionary)
+        var clearDictionary = saveData.ChapterClearDictionary;
+        var clearCnt = 0;
+        
+        foreach(var (chapterType, isClear) in clearDictionary)
         {
-            ChapterType chapterType = kvp.Key;
-
-            if (kvp.Value)
+            if (chapterType == ChapterType.Cpu || !isClear)
             {
-                clearCnt++;
-                OnChapterClear?.Invoke(chapterType,saveData);
+                continue;
             }
+            
+            clearCnt++;
+            ShowChapterClearTimeline(saveData, chapterType);
         }
 
-        if(clearCnt > 4)
+        if (clearCnt > 4)
         {
-            OnSubChaptersClear?.Invoke(true);
+            var alreadyShowCutScene = saveData.ChapterTimelineDictionary[ChapterType.Cpu]; 
+                
+            if (!alreadyShowCutScene)
+            {
+                saveData.ChapterTimelineDictionary[ChapterType.Cpu] = true;
+                DataManager.Instance.SaveData();
+            }
+            
+            TimelineManager.Instance.ShowTimeline(_timelineDirector, TimelineType.AllChapterClear, alreadyShowCutScene);
+            onAllChapterClear?.Invoke();
         }
     }
-
 
     public Action<SaveData> GetLoadAction()
     {

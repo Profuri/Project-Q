@@ -202,16 +202,7 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
             {
                 EAUDIO_MIXER eMixerType = kvp.Key;
                 float volume = kvp.Value;
-
-                if (saveData.VolumeDictionary.ContainsKey(eMixerType))
-                {
-                    saveData.VolumeDictionary[eMixerType] = volume;
-                }
-                else
-                {
-                    saveData.VolumeDictionary.Add(eMixerType, volume);
-                }
-
+                saveData.VolumeDictionary[eMixerType] = volume;
             }
         };
     }

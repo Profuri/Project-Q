@@ -2,8 +2,6 @@ using System;
 using AxisConvertSystem;
 using InteractableSystem;
 using UnityEngine;
-using UnityEngine.InputSystem;
-
 public class PlayerUnit : ObjectUnit
 {
     [SerializeField] private PlayerData _data;
@@ -13,11 +11,42 @@ public class PlayerUnit : ObjectUnit
     public Animator Animator { get; private set; }
     public ObjectHoldingHandler HoldingHandler { get; private set; }
     public ObjectUnit StandingUnit { get; set; }
+
+
     private StateController _stateController;
 
     private InteractableObject _selectedInteractableObject;
     
     private readonly int _activeHash = Animator.StringToHash("Active");
+
+    private float _coyoteTime = 0f;
+    public bool IsCoyote
+    {
+        get
+        {
+            bool isCoyote = Time.time - _coyoteTime < Data.coyoteTime;
+            return isCoyote;
+        }
+    }
+
+    public bool CanJump
+    {
+        get
+        {
+            return OnGround || IsCoyote;
+        }
+    }
+
+    public void StartCoyoteTime()
+    {
+        _coyoteTime = Time.time;
+    }   
+    
+    public void ResetCoyoteTime()
+    {
+        _coyoteTime = float.MinValue;
+    }
+
     
     public override void Awake()
     {
@@ -28,6 +57,7 @@ public class PlayerUnit : ObjectUnit
         ModelTrm = transform.Find("Model");
         Animator = ModelTrm.GetComponent<Animator>();
         HoldingHandler = GetComponent<ObjectHoldingHandler>();
+
 
         _stateController = new StateController(this);
         _stateController.RegisterState(new PlayerIdleState(_stateController, true, "Idle"));
@@ -50,16 +80,25 @@ public class PlayerUnit : ObjectUnit
 
         _selectedInteractableObject = FindInteractable();
 
-        //Test code
         if(Input.GetKeyDown(KeyCode.C))
         {
             StageManager.Instance.StageClear(this);
         }
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            StoryManager.Instance.ShowMessage("리그오브레전드레이븐",Vector3.zero);
+        }
+
+        //Debug.Log($"CurrentState: {_stateController.CurrentState}");
+        //Debug.Log($"CanJump: {CanJump}");
+
+        //Debug.Log($"IsCoyote: {IsCoyote}, OnGround: {OnGround}");
     }
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
     {
         Converter.ConvertDimension(AxisType.None);
+
         
         base.ReloadUnit(dissolveTime, () =>
         {
@@ -68,6 +107,7 @@ public class PlayerUnit : ObjectUnit
         });
         
         InputManagerHelper.OnDeadPlayer();
+        PlaySpawnVFX();
 
         Converter.ConvertDimension(AxisType.None);
         Animator.SetBool(_activeHash, true);
@@ -192,6 +232,7 @@ public class PlayerUnit : ObjectUnit
         
         _selectedInteractableObject.OnInteraction(this, true);
     }
+
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()

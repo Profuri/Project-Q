@@ -15,6 +15,18 @@ public class PoolableParticle : PoolableMono
         _particleSystem.transform.SetPositionAndRotation(position, quaternion);
     }
 
+    public void SetDuration(float duration)
+    {
+        if (_particleSystem.isPlaying)
+        {
+            Debug.LogWarning("[PoolableParticle] Duration can't set playing particle. stop particle");
+            _particleSystem.Stop();
+        }
+
+        var mainModule = _particleSystem.main;
+        mainModule.duration = duration;
+    }
+
     public void Play()
     {
         CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), PlayRoutine());

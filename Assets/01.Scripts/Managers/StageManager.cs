@@ -8,7 +8,14 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     public Stage CurrentStage { get; private set; }
     public Stage NextStage { get; private set; }
 
-    public bool IsClear { get; private set; }
+    public bool IsClear
+    {
+        get
+        {
+            if (CurrentStage == null) return false;
+            return CurrentStage.IsClear;
+        }
+    }
 
     private ChapterData _currentPlayChapterData;
 
@@ -24,12 +31,13 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
 
     public void StartNewChapter(ChapterData chapterData)
     {
-        IsClear = false;
+        //IsClear = false;
 
         _currentPlayChapterData = chapterData;
         CurrentStage = SceneControlManager.Instance.AddObject(
             $"{chapterData.chapter.ToString().ToUpperFirstChar()}_Stage_0") as Stage;
         CurrentStage.Generate(Vector3.zero, false, 1.5f);
+        CurrentStage.IsClear = false;
     }
 
     public void GenerateNextStage(ChapterType chapter, int stage)
@@ -69,13 +77,14 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             CurrentStage.RemoveBridge();
         }
 
-        IsClear = false;
+        //sIsClear = false;
         CurrentStage = NextStage;
+        CurrentStage.IsClear = false;
     }
 
     public void StageClear(PlayerUnit player)
     {
-        IsClear = true;
+        //IsClear = true;
         CurrentStage.Lock = false;
         player.Converter.ConvertDimension(AxisType.None);
         player.Converter.SetConvertable(false);
@@ -89,8 +98,8 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         }
         
         GenerateNextStage(_currentPlayChapterData.chapter, nextChapter);
+        CurrentStage.IsClear = true;
     }
-    
 
     public Action<SaveData> GetSaveAction()
     {
@@ -99,15 +108,8 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             if (_currentPlayChapterData == null) return;
             var currentChapter = _currentPlayChapterData.chapter;
             bool isClear = CurrentStage.stageOrder + 1 >= _currentPlayChapterData.stageCnt;
-
-            if (saveData.ChapterProgressDictionary.ContainsKey(currentChapter) == false)
-            {
-                saveData.ChapterProgressDictionary.Add(currentChapter, isClear);
-            }
-            else
-            {
-                saveData.ChapterProgressDictionary[currentChapter] = isClear;
-            }
+            
+            saveData.ChapterClearDictionary[currentChapter] = isClear;
         };
     }
 
