@@ -4,11 +4,8 @@ using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
 
-public class LaserToggleObject : InteractableObject
+public class LaserToggleObject : ToggleTypeInteractableObject
 {
-    [SerializeField] private List<AffectedObject> _affectedObjects;
-    [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
-
     private Light _pointLight;
 
     private const float ToggleCancelDelay = 0.1f;
@@ -23,20 +20,20 @@ public class LaserToggleObject : InteractableObject
         
         _pointLight = transform.Find("Point Light").GetComponent<Light>();
         Toggled(false);
-        AffectedToggleChange();
+        CallToggleChangeEvents(_isToggle);
     }
 
     public override void UpdateUnit()
     {
         base.UpdateUnit();
-        AffectedObject();
+        InteractAffectedObjects(_isToggle);
         
         if(_isToggle)
         {
             if (_lastToggleTime + ToggleCancelDelay <= Time.time)
             {
                 Toggled(false);
-                AffectedToggleChange();
+                CallToggleChangeEvents(_isToggle);
             }
         }
     }
@@ -53,40 +50,7 @@ public class LaserToggleObject : InteractableObject
         if (!_isToggle)
         {
             Toggled(true);
-            AffectedToggleChange();
+            CallToggleChangeEvents(_isToggle);
         }
     }
-
-    private void AffectedObject()
-    {
-        foreach (var affectedObj in _affectedObjects)
-        {
-            affectedObj?.Invoke(this, _isToggle);
-        }
-    }
-
-    private void AffectedToggleChange()
-    {
-        foreach (var toggleChangeEvent in _onToggleChangeEvents)
-        {
-            toggleChangeEvent?.Invoke(_isToggle);
-        }
-    }
-    
-#if UNITY_EDITOR
-    protected override void OnDrawGizmos()
-    {
-        base.OnDrawGizmos();
-        if (_affectedObjects.Count == 0)
-        {
-            return;
-        }
-        
-        Gizmos.color = Color.black;
-        foreach (var obj in _affectedObjects)
-        {
-            Gizmos.DrawLine(transform.position, obj.InteractableObject.transform.position);
-        }
-    }
-#endif
 }

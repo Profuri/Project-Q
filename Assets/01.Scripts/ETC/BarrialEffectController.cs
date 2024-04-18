@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class BarrialEffectController : MonoBehaviour
 {
+    private Collider _collider;
     private Material _material;
 
     private float _originThreshold;
@@ -17,6 +18,9 @@ public class BarrialEffectController : MonoBehaviour
 
     private void Awake()
     {
+        _collider = GetComponent<Collider>();
+        _collider.enabled = false;
+        
         _material = GetComponent<Renderer>().material;
         _originThreshold = _material.GetFloat(_thresholdHash);
         _material.SetFloat(_thresholdHash, 1f);
@@ -41,6 +45,7 @@ public class BarrialEffectController : MonoBehaviour
             opacity => _material.SetFloat(_opacityHash, opacity),
             1f, _appearTime
         ));
+        seq.OnComplete(() => _collider.enabled = true);
     }
 
     public void Destroy()
@@ -66,6 +71,6 @@ public class BarrialEffectController : MonoBehaviour
             opacity => _material.SetFloat(_opacityHash, opacity),
             0f, _destroyTime
         ));
-        
+        seq.OnComplete(() => _collider.enabled = false);
     }
 }

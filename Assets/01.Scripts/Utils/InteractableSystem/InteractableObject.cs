@@ -42,19 +42,18 @@ namespace InteractableSystem
         {
             IsDetected = true;
 
-            if (_interactionMark == null)
+            if (_interactType == EInteractType.INPUT_RECEIVE && _interactionMark == null)
             {
                 _interactionMark = SceneControlManager.Instance.AddObject("InteractionMark") as InteractionMark;
                 _interactionMark.Setting(this);
             }
         }
 
-        
         public virtual void OnDetectedLeave(ObjectUnit communicator = null)
         {
             IsDetected = false;
 
-            if (_interactionMark != null)
+            if (_interactType == EInteractType.INPUT_RECEIVE && _interactionMark != null)
             {
                 SceneControlManager.Instance.DeleteObject(_interactionMark);
                 _interactionMark = null;
