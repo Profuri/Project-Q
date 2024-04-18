@@ -28,7 +28,13 @@ namespace InteractableSystem
         {
             foreach (var obj in _affectedObjects)
             {
-                obj?.Invoke(null, value);
+                if (obj is null)
+                {
+                    return;
+                }
+                
+                obj.interactableObject.SelectedBorderActivate(value);
+                obj.Invoke(null, value);
             }
         }
 
@@ -36,7 +42,21 @@ namespace InteractableSystem
         {
             foreach (var toggleChangeEvent in _onToggleChangeEvents)
             {
-                toggleChangeEvent?.Invoke(value);
+                if (toggleChangeEvent is null)
+                {
+                    return;
+                }
+                
+                var curEvent = toggleChangeEvent.invokeEvent;
+                for (var index = 0; index < curEvent.GetPersistentEventCount(); index++)
+                {
+                    if(curEvent.GetPersistentTarget(index) is ObjectUnit unit)
+                    {
+                        unit.SelectedBorderActivate(value);
+                    }
+                }
+                
+                toggleChangeEvent.Invoke(value);
             }
         }
 
