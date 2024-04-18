@@ -88,11 +88,6 @@ public class PlayerUnit : ObjectUnit
         {
             StoryManager.Instance.ShowMessage("리그오브레전드레이븐",Vector3.zero);
         }
-
-        //Debug.Log($"CurrentState: {_stateController.CurrentState}");
-        //Debug.Log($"CanJump: {CanJump}");
-
-        //Debug.Log($"IsCoyote: {IsCoyote}, OnGround: {OnGround}");
     }
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
@@ -233,6 +228,19 @@ public class PlayerUnit : ObjectUnit
         _selectedInteractableObject.OnInteraction(this, true);
     }
 
+    //계속 실행되니까 OnGround가 바뀌었을 때는 체크 안함
+    public override void SetGravity(bool useGravity)
+    {
+        if(OnGround)
+        {
+            this.useGravity = true;
+            return;
+        }        
+        else
+        {
+            this.useGravity = useGravity;
+        }
+    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()

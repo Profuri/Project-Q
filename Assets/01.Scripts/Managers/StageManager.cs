@@ -20,8 +20,6 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     private ChapterData _currentPlayChapterData;
 
     public AxisType CurrentStageAxis => SceneControlManager.Instance.Player.Converter.AxisType;
-   
-    
     public override void StartManager()
     {
         CurrentStage = null;

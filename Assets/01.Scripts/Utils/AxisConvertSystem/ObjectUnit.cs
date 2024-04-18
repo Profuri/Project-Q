@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using DG.Tweening;
 using UnityEngine;
+using System.Collections;
 
 namespace AxisConvertSystem
 {
@@ -479,7 +480,7 @@ namespace AxisConvertSystem
                 foreach (var material in _materials)
                 {
                     if (useDissolve)
-                    {
+                {
                         material.SetFloat(_dissolveProgressHash, currentProgress);
                     }
                     material.SetFloat(_visibleProgressHash, currentProgress);
@@ -608,6 +609,11 @@ namespace AxisConvertSystem
                     _materials.Add(material);    
                 }
             }
+        }
+
+        public virtual void SetGravity(bool useGravity)
+        {
+            this.useGravity = useGravity;
         }
     }
 }

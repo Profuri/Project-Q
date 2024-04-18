@@ -187,7 +187,8 @@ public class FanObject : InteractableObject
             var airPower = GetAirDir() * _airPower;
             velocity.SetAxisElement(GetAirNormalAxis(), airPower.GetAxisElement(GetAirNormalAxis()));
 
-            unit.useGravity = false;
+
+            unit.SetGravity(false);
             unit.SetVelocity(velocity, false);
         }
     }
