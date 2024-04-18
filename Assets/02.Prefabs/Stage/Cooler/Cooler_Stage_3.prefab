@@ -478,7 +478,6 @@ Transform:
   - {fileID: 1918616799778406841}
   - {fileID: 6362380928725246948}
   - {fileID: 4110969059276773321}
-  - {fileID: 3646509603519381420}
   m_Father: {fileID: 7932440477615480241}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2081092379289583721
@@ -1649,6 +1648,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3646509603519381420}
   - {fileID: 2456628545196073550}
   - {fileID: 4087134830155367604}
   m_Father: {fileID: 7251271249432079639}
@@ -1663,6 +1663,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3646509603519381420}
   - component: {fileID: 4213165796993934498}
+  - component: {fileID: 6051588734128885503}
   m_Layer: 6
   m_Name: SlimePlatform
   m_TagString: Untagged
@@ -1679,12 +1680,12 @@ Transform:
   m_GameObject: {fileID: 6588288771139619132}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.35300002, y: 5.5, z: 0.398}
-  m_LocalScale: {x: 0.2, y: 1, z: 0.2}
+  m_LocalPosition: {x: -3.5300002, y: 4.5, z: 3.98}
+  m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7976378767378503083}
-  m_Father: {fileID: 4698794301222979189}
+  m_Father: {fileID: 3649732754788690267}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &4213165796993934498
 BoxCollider:
@@ -1707,6 +1708,31 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6051588734128885503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6588288771139619132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingCnt: 5
+  poolOut: 0
+  compressLayer: -1
+  renderType: 0
+  climbableUnit: 1
+  staticUnit: 1
+  activeUnit: 1
+  subUnit: 0
+  canStandMask:
+    serializedVersion: 2
+    m_Bits: 0
+  checkOffset: 0.2
+  useGravity: 1
 --- !u!1 &6594301358848519243
 GameObject:
   m_ObjectHideFlags: 0
