@@ -1,9 +1,9 @@
 using Fabgrid;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DG.Tweening;
 using UnityEngine;
 using System.Collections;
 
@@ -41,6 +41,8 @@ namespace AxisConvertSystem
 
         private LayerMask _climbLayerMask;
         private UnClimbableEffect _unClimbableEffect;
+
+        private SelectedBorder _selectedBorder;
 
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
@@ -490,19 +492,6 @@ namespace AxisConvertSystem
             callBack?.Invoke();
         }
 
-
-        protected void PlaySpawnVFX()
-        {
-            var spawnVFX = PoolManager.Instance.Pop("SpawnVFX") as PoolableVFX;
-            var bounds = Collider.bounds;
-            var position = transform.position;
-            position.y = bounds.min.y;
-
-            spawnVFX.SetPositionAndRotation(position, Quaternion.identity);
-            spawnVFX.SetScale(new Vector3(bounds.size.x, 1, bounds.size.z));
-            spawnVFX.Play();
-        }
-
         public override void OnPop()
         {
         }
@@ -558,6 +547,24 @@ namespace AxisConvertSystem
             {
                 SceneControlManager.Instance.DeleteObject(_unClimbableEffect);
                 _unClimbableEffect = null;
+            }
+        }
+
+        public void ShowSelectedBorder()
+        {
+            if (_selectedBorder == null)
+            {
+                _selectedBorder = SceneControlManager.Instance.AddObject("SelectedBorder") as SelectedBorder;
+                _selectedBorder.Setting(Collider);
+            }
+        }
+
+        public void UnShowSelectedBorder()
+        {
+            if (_selectedBorder is not null)
+            {
+                SceneControlManager.Instance.DeleteObject(_selectedBorder);
+                _selectedBorder = null;
             }
         }
 
