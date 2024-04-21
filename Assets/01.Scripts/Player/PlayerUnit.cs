@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AxisConvertSystem;
 using InteractableSystem;
 using UnityEngine;
+
 public class PlayerUnit : ObjectUnit
 {
     [SerializeField] private PlayerData _data;
@@ -11,17 +12,16 @@ public class PlayerUnit : ObjectUnit
     public Transform ModelTrm { get; private set; }
     public Animator Animator { get; private set; }
     public ObjectHoldingHandler HoldingHandler { get; private set; }
+    public PlayerInteractHandler InteractHandler { get; private set; }
     public ObjectUnit StandingUnit { get; set; }
 
     private StateController _stateController;
 
-    private List<InteractableObject> _lastFindInteractableObjects;
-    private InteractableObject _selectedInteractableObject;
-    
     private readonly int _activeHash = Animator.StringToHash("Active");
 
     private float _coyoteTime = 0f;
-    public bool IsCoyote
+
+    private bool IsCoyote
     {
         get
         {
@@ -51,7 +51,7 @@ public class PlayerUnit : ObjectUnit
         ModelTrm = transform.Find("Model");
         Animator = ModelTrm.GetComponent<Animator>();
         HoldingHandler = GetComponent<ObjectHoldingHandler>();
-        _lastFindInteractableObjects = new List<InteractableObject>();
+        InteractHandler = GetComponent<PlayerInteractHandler>();
 
         _stateController = new StateController(this);
         _stateController.RegisterState(new PlayerIdleState(_stateController, true, "Idle"));
@@ -71,8 +71,9 @@ public class PlayerUnit : ObjectUnit
         }
         
         _stateController.UpdateState();
-
-        _selectedInteractableObject = FindInteractable();
+        
+        HoldingHandler.UpdateHandler();
+        InteractHandler.UpdateHandler();
     }
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
@@ -95,7 +96,7 @@ public class PlayerUnit : ObjectUnit
 
     public override void OnPop()
     {
-        InputManager.Instance.PlayerInputReader.OnInteractionEvent += OnInteraction;
+        InputManager.Instance.PlayerInputReader.OnInteractionEvent += InteractHandler.OnInteraction;
         InputManager.Instance.PlayerInputReader.OnReloadClickEvent += RestartStage;
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
@@ -137,50 +138,6 @@ public class PlayerUnit : ObjectUnit
         }
     }
 
-    private InteractableObject FindInteractable()
-    {
-        if (HoldingHandler.IsHold)
-        {
-            return null;
-        }
-        
-        var cols = new Collider[_data.maxInteractableCnt];
-        var size = Physics.OverlapSphereNonAlloc(Collider.bounds.center, _data.interactableRadius, cols, _data.interactableMask);
-
-        for(var i = 0; i < size; ++i)
-        {
-            if (cols[i].TryGetComponent<InteractableObject>(out var interactable))
-            {
-                var dir = (cols[i].bounds.center - Collider.bounds.center).normalized;
-                var isHit = Physics.Raycast(Collider.bounds.center - dir, dir, out var hit, Mathf.Infinity,
-                    canStandMask);
-
-                if (isHit && cols[i] != hit.collider)
-                {
-                    continue;
-                }
-
-                if(interactable.InteractType == EInteractType.INPUT_RECEIVE)
-                {
-                    if (interactable != _selectedInteractableObject)
-                    {
-                        interactable.OnDetectedEnter(this);
-                        _selectedInteractableObject?.OnDetectedLeave(this);
-                    }
-                    return interactable;
-                }
-            }
-        }
-        
-        if (_selectedInteractableObject)
-        {
-            _selectedInteractableObject.OnDetectedLeave(this);
-            _selectedInteractableObject = null;
-        }
-
-        return null;
-    }
-
     public void SetSection(Section section)
     {
         transform.SetParent(section.transform);
@@ -195,22 +152,6 @@ public class PlayerUnit : ObjectUnit
     {
         _stateController.CurrentState.AnimationTrigger(key);
     }
-
-    private void OnInteraction()
-    {
-        if (HoldingHandler.IsHold)
-        {
-            HoldingHandler.Detach();
-            return;
-        }
-        
-        if (_selectedInteractableObject is null)
-        {
-            return;
-        }
-        
-        _selectedInteractableObject.OnInteraction(this, true);
-    }
     
     private void PlaySpawnVFX()
     {
@@ -223,20 +164,4 @@ public class PlayerUnit : ObjectUnit
         spawnVFX.SetScale(new Vector3(bounds.size.x, 1, bounds.size.z));
         spawnVFX.Play();
     }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.cyan;
-
-        var col = GetComponent<Collider>();
-        Gizmos.DrawWireSphere(col.bounds.center, _data.interactableRadius);
-        
-        if (_selectedInteractableObject != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(col.bounds.center, _selectedInteractableObject.transform.position);
-        }
-    }
-#endif
 }
