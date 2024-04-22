@@ -39,14 +39,9 @@ public class GameManager : MonoSingleton<GameManager>
         {
             manager.Init();
         }
-
         CursorManager.ReloadCursor();
     }
 
-    private void Update()
-    {
-        Debug.Log($"CurrosrHashCnt: {CursorManager.CurrentCnt}");
-    }
     private void Start()
     {
         OnStartEvent?.Invoke();
@@ -83,6 +78,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void QuitGame()
     {
+        Debug.Log("QuitGame");
         Application.Quit();
     }
 }

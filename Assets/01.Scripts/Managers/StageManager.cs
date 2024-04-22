@@ -87,7 +87,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         CurrentStage.Lock = false;
         player.Converter.ConvertDimension(AxisType.None);
         player.Converter.SetConvertable(false);
-        var nextChapter = CurrentStage.stageOrder + 1;
+        var nextChapter = CurrentStage.StageOrder + 1;
 
         if (nextChapter >= _currentPlayChapterData.stageCnt)
         {
@@ -106,7 +106,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         {
             if (_currentPlayChapterData == null) return;
             var currentChapter = _currentPlayChapterData.chapter;
-            bool isClear = CurrentStage.stageOrder + 1 >= _currentPlayChapterData.stageCnt;
+            bool isClear = CurrentStage.StageOrder + 1 >= _currentPlayChapterData.stageCnt;
             
             saveData.ChapterClearDictionary[currentChapter] = isClear;
         };

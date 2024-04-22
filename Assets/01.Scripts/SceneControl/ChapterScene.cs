@@ -53,7 +53,7 @@ public class ChapterScene : Scene, IProvideLoad
             }
             
             clearCnt++;
-            ShowChapterClearTimeline(saveData, chapterType);
+            ShowChapterClearTimeline(saveData, chapterType,null);
         }
 
         if (clearCnt > 4)

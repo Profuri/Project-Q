@@ -9,9 +9,19 @@ public class Stage : Section
     [Header("Chapter Setting")]
     [SerializeField] private ChapterType _chapter;
     [SerializeField] private int _stageOrder;
-    public int stageOrder => _stageOrder;
+    public int StageOrder => _stageOrder;
 
-    public bool IsClear { get; set; }
+    public bool IsClear
+    {
+        get => _isClear;
+        set
+        {
+            _isClear = value;
+            StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_CLEAR,_chapter,StageOrder);
+        }
+    }
+    private bool _isClear = false;
+
     public bool IsConverting => !SceneControlManager.Instance.Player.Converter.Convertable;
 
     public override void OnPop()
@@ -68,6 +78,13 @@ public class Stage : Section
         {
             StageManager.Instance.ChangeToNextStage();
         }
+        StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_ENTER, _chapter, StageOrder);
+    }
+
+    public override void OnExit(PlayerUnit player)
+    {
+        base.OnExit(player);
+        StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_EXIT,_chapter, StageOrder);
     }
 
     public override void Disappear(float dissolveTime = 1.5f, Action Callback = null)

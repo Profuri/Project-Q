@@ -20,6 +20,8 @@ public class SaveData
         
         VolumeDictionary = new SerializableDictionary<EAUDIO_MIXER, float>();
 
+        StoryShowList = new List<bool>();
+
         ResolutionIndex = (uint)Screen.resolutions.Length - 1;
         DefaultQuality = QualityType.High;
     }
@@ -27,6 +29,7 @@ public class SaveData
     public SerializableDictionary<ChapterType, bool> ChapterClearDictionary;
     public SerializableDictionary<ChapterType, bool> ChapterTimelineDictionary;
     public SerializableDictionary<EAUDIO_MIXER, float> VolumeDictionary;
+    public List<bool> StoryShowList;
 
     public bool DefaultFullScreen;
     public QualityType DefaultQuality;
