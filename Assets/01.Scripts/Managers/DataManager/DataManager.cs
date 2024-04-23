@@ -91,6 +91,7 @@ public class DataManager : BaseManager<DataManager>
     public void ResetData()
     {
         _fileDataHandler.DeleteSaveData();
+        s_saveData = new SaveData();
     }
 
     public void SettingDataProvidable(IProvideSave dataProvidable,IProvideLoad dataLoadable)

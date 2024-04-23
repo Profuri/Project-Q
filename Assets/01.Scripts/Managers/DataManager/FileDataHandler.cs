@@ -119,8 +119,6 @@ public class FileDataHandler
                 Debug.LogError($"Error on trying to delete file {fullPath} \n {ex.Message}");
             }
         }
-
-
     }
     private string _codeWord = "leagueoflegendraven";
 
