@@ -4,14 +4,19 @@ using AxisConvertSystem;
 public class PlayerAxisControlState : PlayerBaseState
 {
     private AxisType _controllingAxis;
+    private SoundEffectPlayer _soundEffectPlayer;
     
     public PlayerAxisControlState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
+        _soundEffectPlayer = new SoundEffectPlayer(controller.Owner);
     }
 
     public override void EnterState()
     {
         base.EnterState();
+
+        SoundManager.Instance.PlaySFX("AxisControl",true,);
+
         _isControllingAxis = true;
 
         Player.StopImmediately(true);
