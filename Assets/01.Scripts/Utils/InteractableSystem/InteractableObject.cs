@@ -1,4 +1,3 @@
-using System;
 using AxisConvertSystem;
 using UnityEngine;
 
@@ -18,24 +17,12 @@ namespace InteractableSystem
         [SerializeField] private EInteractableAttribute _attribute;
         public EInteractableAttribute Attribute => _attribute;
 
-        public virtual void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param) => _communicator = communicator;
         private InteractionMark _interactionMark;
-
-        protected ObjectUnit _communicator;
 
         public override void OnPush()
         {
             base.OnPush();
             OnDetectedLeave();
-        }
-        protected virtual void OnDisable()
-        {
-            if (_communicator != null && _communicator is PlayerUnit playerUnit)
-            {
-                playerUnit.HoldingHandler.Detach();
-                OnDetectedLeave();
-                _communicator = null;
-            }
         }
 
         public virtual void OnDetectedEnter(ObjectUnit communicator = null)
@@ -60,26 +47,6 @@ namespace InteractableSystem
             }
         }
 
-
-        #if UNITY_EDITOR
-        protected virtual void OnDrawGizmos()
-        {
-            //Vector3 center = transform.position;
-
-            //var col = GetComponent<Collider>();
-            
-            //if (Offset < 0.1f)
-            //{
-            //    center += new Vector3(0,col.bounds.size.y * 0.7f,0);
-            //}
-            //else
-            //{
-            //    center += new Vector3(0, Offset, 0);
-            //}
-
-            //Gizmos.color = Color.red;
-            //Gizmos.DrawSphere(center,0.2f);
-        }
-        #endif
+        public abstract void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param);
     }
 }

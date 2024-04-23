@@ -60,22 +60,12 @@ public class PlayerInteractHandler : MonoBehaviour
                 tempList.Add(interactable);
             }
         }
-
-        if (tempList.Count <= 0)
+        
+        foreach (var lastSelected in _lastFindInteractableObjects)
         {
-            foreach (var unit in _lastFindInteractableObjects)
+            if (tempList.Count <= 0 || !tempList.Contains(lastSelected))
             {
-                unit.OnDetectedLeave(_player);
-            }
-        }
-        else
-        {
-            foreach (var lastSelected in _lastFindInteractableObjects)
-            {
-                if (!tempList.Contains(lastSelected))
-                {
-                    lastSelected.OnDetectedLeave(_player);
-                }
+                lastSelected.OnDetectedLeave(_player);
             }
         }
         
