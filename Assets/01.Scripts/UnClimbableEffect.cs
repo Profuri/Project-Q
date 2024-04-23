@@ -4,12 +4,12 @@ public class UnClimbableEffect : PoolableMono
 {
     public override void OnPop()
     {
-        
+
     }
 
     public override void OnPush()
     {
-        
+
     }
 
     public void Setting(Collider col)

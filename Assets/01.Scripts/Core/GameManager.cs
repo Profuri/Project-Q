@@ -39,6 +39,7 @@ public class GameManager : MonoSingleton<GameManager>
         {
             manager.Init();
         }
+        CursorManager.ReloadCursor();
     }
 
     private void Start()
@@ -55,7 +56,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         InPause = true;       
         Time.timeScale = 0;
-        InputManager.Instance.SetEnableInputAll(false);
+        InputManager.Instance.SetEnableInputWithout(EInputCategory.Escape,false);
         UIManager.Instance.GenerateUI("PauseWindow");
     }
 
@@ -77,6 +78,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void QuitGame()
     {
+        Debug.Log("QuitGame");
         Application.Quit();
     }
 }

@@ -20,8 +20,6 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     private ChapterData _currentPlayChapterData;
 
     public AxisType CurrentStageAxis => SceneControlManager.Instance.Player.Converter.AxisType;
-   
-    
     public override void StartManager()
     {
         CurrentStage = null;
@@ -84,11 +82,12 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
 
     public void StageClear(PlayerUnit player)
     {
+        if(CurrentStage is null || IsClear) return;
         //IsClear = true;
         CurrentStage.Lock = false;
         player.Converter.ConvertDimension(AxisType.None);
         player.Converter.SetConvertable(false);
-        var nextChapter = CurrentStage.stageOrder + 1;
+        var nextChapter = CurrentStage.StageOrder + 1;
 
         if (nextChapter >= _currentPlayChapterData.stageCnt)
         {
@@ -107,7 +106,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         {
             if (_currentPlayChapterData == null) return;
             var currentChapter = _currentPlayChapterData.chapter;
-            bool isClear = CurrentStage.stageOrder + 1 >= _currentPlayChapterData.stageCnt;
+            bool isClear = CurrentStage.StageOrder + 1 >= _currentPlayChapterData.stageCnt;
             
             saveData.ChapterClearDictionary[currentChapter] = isClear;
         };
