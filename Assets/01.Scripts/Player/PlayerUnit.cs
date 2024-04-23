@@ -59,6 +59,8 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerJumpState(_stateController, true, "Jump"));
         _stateController.RegisterState(new PlayerFallState(_stateController, true, "Fall"));
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
+
+        SoundManager.Instance.PlaySFX("Barrier",true);
     }
 
     public override void UpdateUnit()
@@ -69,9 +71,13 @@ public class PlayerUnit : ObjectUnit
         {
             StandingCheck();
         }
+
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            StageManager.Instance.StageClear(this);
+        }
         
         _stateController.UpdateState();
-        
         HoldingHandler.UpdateHandler();
         InteractHandler.UpdateHandler();
     }

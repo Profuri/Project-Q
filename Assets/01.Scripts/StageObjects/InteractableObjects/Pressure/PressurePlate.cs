@@ -15,11 +15,17 @@ public class PressurePlate : ToggleTypeInteractableObject
     private Transform _pressureMainTrm;
     private Transform _pressureObjTrm;
 
+    private SoundEffectPlayer _soundEffectPlayer;
+
+    private bool _isPressed = false;
+
     public override void Awake()
     {
         base.Awake();
         _pressureMainTrm = transform.Find("PressureMain");
         _pressureObjTrm = _pressureMainTrm.Find("PressureObject");
+
+        _soundEffectPlayer = new SoundEffectPlayer(this);
     }
 
     public override void UpdateUnit()
@@ -30,7 +36,12 @@ public class PressurePlate : ToggleTypeInteractableObject
         if (LastToggleState != curToggleState)
         {
             CallToggleChangeEvents(curToggleState);
+            if(curToggleState)
+            {
+                SoundManager.Instance.PlaySFX("PressPanel",false,_soundEffectPlayer);
+            }
         }
+        
         LastToggleState = curToggleState;
         OnInteraction(null, LastToggleState);
     }
@@ -38,6 +49,8 @@ public class PressurePlate : ToggleTypeInteractableObject
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         base.OnInteraction(communicator, interactValue, param);
+
+
 
         InteractAffectedObjects(interactValue);
         

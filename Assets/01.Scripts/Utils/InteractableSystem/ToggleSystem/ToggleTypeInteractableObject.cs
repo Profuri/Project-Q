@@ -33,7 +33,7 @@ namespace InteractableSystem
                     return;
                 }
                 
-                obj.interactableObject.SelectedBorderActivate(value);
+                obj?.interactableObject?.SelectedBorderActivate(value);
                 obj.Invoke(null, value);
             }
         }
@@ -78,7 +78,7 @@ namespace InteractableSystem
         {
             foreach (var obj in _affectedObjects)
             {
-                obj.interactableObject.ShowSelectedBorder();
+                obj?.interactableObject?.ShowSelectedBorder();
             }
 
             foreach (var toggleChangeEvent in _onToggleChangeEvents)
@@ -98,7 +98,7 @@ namespace InteractableSystem
         {
             foreach (var obj in _affectedObjects)
             {
-                obj.interactableObject.UnShowSelectedBorder();
+                obj?.interactableObject?.UnShowSelectedBorder();
             }
 
             foreach (var toggleChangeEvent in _onToggleChangeEvents)

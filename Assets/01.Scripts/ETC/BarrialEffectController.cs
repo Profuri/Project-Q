@@ -16,6 +16,8 @@ public class BarrialEffectController : MonoBehaviour
     
     [SerializeField] private float _appearTime;
 
+    private SoundEffectPlayer _soundEffectPlayer;
+
     private void Awake()
     {
         _collider = GetComponent<Collider>();
@@ -25,6 +27,9 @@ public class BarrialEffectController : MonoBehaviour
         _originThreshold = _material.GetFloat(_thresholdHash);
         _material.SetFloat(_thresholdHash, 1f);
         _material.SetFloat(_opacityHash, 0f);
+
+        _soundEffectPlayer = new SoundEffectPlayer(this);
+
     }
 
     public void Appear()
@@ -46,6 +51,7 @@ public class BarrialEffectController : MonoBehaviour
             1f, _appearTime
         ));
         seq.OnComplete(() => _collider.enabled = true);
+        SoundManager.Instance.PlaySFX("Barrier",true, _soundEffectPlayer);
     }
 
     public void Destroy()
@@ -72,5 +78,6 @@ public class BarrialEffectController : MonoBehaviour
             0f, _destroyTime
         ));
         seq.OnComplete(() => _collider.enabled = false);
+        _soundEffectPlayer.Stop();
     }
 }
