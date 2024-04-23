@@ -1,5 +1,4 @@
 using AxisConvertSystem;
-using Core;
 using UnityEngine;
 
 public class ObjectHoldingHandler : MonoBehaviour
@@ -18,7 +17,7 @@ public class ObjectHoldingHandler : MonoBehaviour
         _holdingPoint = transform.Find("HoldingPoint");
     }
 
-    private void Update()
+    public void UpdateHandler()
     {
         HoldingPointMovement();
         if (_heldObject is not null)

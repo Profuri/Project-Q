@@ -570,6 +570,14 @@ namespace AxisConvertSystem
             }
         }
 
+        public void SelectedBorderActivate(bool active)
+        {
+            if (_selectedBorder is not null)
+            {
+                _selectedBorder.Activate(active);
+            }
+        }
+
         public ObjectUnit GetParentUnit()
         {
             if (!subUnit)
