@@ -4,6 +4,8 @@ using UnityEngine;
 using ManagingSystem;
 using System;
 using System.Linq;
+using Unity.VisualScripting;
+using UnityEngine.Timeline;
 
 public enum ChapterCondition
 {
@@ -12,7 +14,7 @@ public enum ChapterCondition
     CHAPTER_CLEAR,
 }
 
-public class StoryManager : BaseManager<StoryManager>,IProvideSave
+public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 {
     public StoryPanel CurrentPanel { get; private set; }    
     public Canvas StoryCanvas { get; private set; }
@@ -34,14 +36,18 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
     private Tuple<ChapterStory,int> GetStory(ChapterCondition condition,ChapterType chapterType,int stageIndex = 7)
     {
         Predicate<ChapterStory> predicate = (cs) => cs.stageIndex == stageIndex && cs.chapterType == chapterType && cs.condition == condition;
-        int index = _storyList.FindIndex(0,_storyList.Count,predicate);
-        return Tuple.Create(_storyList[index],index);
+        int index = _storyList.FindIndex(0, _storyList.Count, predicate);
+        if (index != -1 && !_storyList[index].isShown)
+        {
+            return Tuple.Create(_storyList[index],index);
+        }
+        return null;
     }
-
 
     public override void StartManager()
     {
-
+        DataManager.Instance.SettingDataProvidable(this, this);
+        DataManager.Instance.LoadData(this);
     }
 
     public void ResetMessage()
@@ -49,7 +55,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
         CurrentPanel = null;
     }
 
-    public void StartStory(StorySO storySO,bool isTypingStory = false)
+    public void StartStory(StorySO storySO,int storyIndex = 0,bool isTypingStory = false)
     {
         if (CurrentPanel != null) return;
 
@@ -61,14 +67,19 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
 
     public bool StartStoryIfCan(ChapterCondition condition, ChapterType chapterType, int stageIndex = 7)
     {
-        var (chapterStory, index)= GetStory(condition,chapterType,stageIndex);
-        if (chapterStory.storySO == null) return false;
+        var tuple = GetStory(condition,chapterType,stageIndex);
+
+        if (tuple == null) return false;
+
+        StorySO storySO = tuple.Item1.storySO;
+        int index = tuple.Item2;
 
         _storyList[index].isShown = true;
 
-        StartStory(chapterStory.storySO, true);
+        StartStory(storySO,index, true);
         return true;
     }
+
 
     public Action<SaveData> GetSaveAction()
     {
@@ -76,7 +87,29 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
         {
             for(int i =0; i < _storyList.Count; i++)
             {
+                if(saveData.StoryShowList.Count <= i)
+                {
+                    saveData.StoryShowList.Add(_storyList[i].isShown);
+                }
                 saveData.StoryShowList[i] = _storyList[i].isShown;
+            }
+        };
+    }
+
+    public Action<SaveData> GetLoadAction()
+    {
+        return (saveData) =>
+        {
+            for (int i = 0; i < _storyList.Count; i++)
+            {
+                try
+                {
+                    _storyList[i].isShown = saveData.StoryShowList[i];
+                }
+                catch
+                {
+                    _storyList[i].isShown = false;
+                }
             }
         };
     }

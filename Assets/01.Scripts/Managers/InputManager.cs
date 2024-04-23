@@ -112,8 +112,6 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
             bool isInCategories = categories.Contains(category);
             bool isEnable = isInCategories ? enable : !enable; 
             
-            Debug.Log($"Category: {category}");
-            
             if (isEnable)
                 _inputDictionary[category].Enable();
             else

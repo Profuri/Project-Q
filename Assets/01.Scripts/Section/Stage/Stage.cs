@@ -17,7 +17,10 @@ public class Stage : Section
         set
         {
             _isClear = value;
-            StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_CLEAR,_chapter,StageOrder);
+            if(value == true)
+            {
+                StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_CLEAR,_chapter,StageOrder);
+            }
         }
     }
     private bool _isClear = false;

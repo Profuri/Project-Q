@@ -28,9 +28,6 @@ public class StoryPanel : UIComponent, IPointerClickHandler
         _typeWriter = messageTrm.GetComponent<TypewriterByCharacter>();
     }
 
-
-
-
     public void SettingStory(StorySO storySO,bool isTypingStory = false)
     {
         _storySO = storySO;
@@ -81,6 +78,7 @@ public class StoryPanel : UIComponent, IPointerClickHandler
             Callback?.Invoke();
             SceneControlManager.Instance.DeleteObject(this);
         });
+        StoryManager.Instance.ResetMessage();
         return _typeWriter.TextAnimator.textFull;
     }
 
