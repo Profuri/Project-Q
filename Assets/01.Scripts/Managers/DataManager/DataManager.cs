@@ -72,6 +72,7 @@ public class DataManager : BaseManager<DataManager>
     public override void Init()
     {
         base.Init();
+        
         _fileDataHandler = new FileDataHandler(Application.persistentDataPath, _fileName, _isEncrypt, _isBase64);
 
         SaveData saveData = _fileDataHandler.Load();
@@ -94,6 +95,7 @@ public class DataManager : BaseManager<DataManager>
     public void ResetData()
     {
         _fileDataHandler.DeleteSaveData();
+        Instance.SaveData();
     }
 
     public void SettingDataProvidable(IProvideSave dataProvidable,IProvideLoad dataLoadable)
@@ -112,6 +114,8 @@ public class DataManager : BaseManager<DataManager>
         }
     }
 
+
+    #region SAVE_DATA && LOAD_DATA
     public void SaveData()
     {
         foreach (var dataProvidable in _dataSaveDictionary.Keys)
@@ -144,5 +148,5 @@ public class DataManager : BaseManager<DataManager>
 
         _dataLoadDictionary[providable]?.Invoke(s_saveData);
     }
-
+    #endregion
 }
