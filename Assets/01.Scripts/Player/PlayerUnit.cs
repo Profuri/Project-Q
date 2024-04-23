@@ -170,33 +170,14 @@ public class PlayerUnit : ObjectUnit
     }
 
     //계속 실행되니까 OnGround가 바뀌었을 때는 체크 안함
-    public override void SetGravity(bool useGravity)
+    public override void SetGravity(bool useGravityParam)
     {
         if(OnGround)
         {
-            this.useGravity = true;
+            useGravity = true;
             return;
         }        
-        else
-        {
-            this.useGravity = useGravity;
-        }
-
-    }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.cyan;
-
-        var col = GetComponent<Collider>();
-        Gizmos.DrawWireSphere(col.bounds.center, _data.interactableRadius);
         
-        if (_selectedInteractableObject != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(col.bounds.center, _selectedInteractableObject.transform.position);
-        }
+        useGravity = useGravityParam;
     }
-#endif
 }

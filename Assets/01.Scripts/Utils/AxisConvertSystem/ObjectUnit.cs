@@ -628,9 +628,9 @@ namespace AxisConvertSystem
             }
         }
 
-        public virtual void SetGravity(bool useGravity)
+        public virtual void SetGravity(bool useGravityParam)
         {
-            this.useGravity = useGravity;
+            useGravity = useGravityParam;
         }
     }
 }
