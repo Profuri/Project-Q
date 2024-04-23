@@ -71,7 +71,11 @@ public class PlayerUnit : ObjectUnit
         }
         
         _stateController.UpdateState();
-        
+
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            StageManager.Instance.StageClear(this);
+        }
         HoldingHandler.UpdateHandler();
         InteractHandler.UpdateHandler();
     }
@@ -164,4 +168,35 @@ public class PlayerUnit : ObjectUnit
         spawnVFX.SetScale(new Vector3(bounds.size.x, 1, bounds.size.z));
         spawnVFX.Play();
     }
+
+    //계속 실행되니까 OnGround가 바뀌었을 때는 체크 안함
+    public override void SetGravity(bool useGravity)
+    {
+        if(OnGround)
+        {
+            this.useGravity = true;
+            return;
+        }        
+        else
+        {
+            this.useGravity = useGravity;
+        }
+
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+
+        var col = GetComponent<Collider>();
+        Gizmos.DrawWireSphere(col.bounds.center, _data.interactableRadius);
+        
+        if (_selectedInteractableObject != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(col.bounds.center, _selectedInteractableObject.transform.position);
+        }
+    }
+#endif
 }

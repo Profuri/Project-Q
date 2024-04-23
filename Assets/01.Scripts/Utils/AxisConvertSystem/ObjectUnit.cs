@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using System.Collections;
 
 namespace AxisConvertSystem
 {
@@ -86,6 +87,7 @@ namespace AxisConvertSystem
             Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
         }
 
+
         public virtual void UpdateUnit()
         {
             if (!staticUnit)
@@ -131,6 +133,7 @@ namespace AxisConvertSystem
         public virtual void ApplyUnitInfo(AxisType axis)
         {
             ApplyInfo(ConvertedInfo);
+
 
             if (DepthHandler.Hide)
             {
@@ -481,7 +484,7 @@ namespace AxisConvertSystem
                 foreach (var material in _materials)
                 {
                     if (useDissolve)
-                    {
+                {
                         material.SetFloat(_dissolveProgressHash, currentProgress);
                     }
                     material.SetFloat(_visibleProgressHash, currentProgress);
@@ -623,6 +626,11 @@ namespace AxisConvertSystem
                     _materials.Add(material);    
                 }
             }
+        }
+
+        public virtual void SetGravity(bool useGravity)
+        {
+            this.useGravity = useGravity;
         }
     }
 }

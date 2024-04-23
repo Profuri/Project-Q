@@ -88,7 +88,8 @@ public class PlayerAxisControlState : PlayerBaseState
         Controller.ChangeState(typeof(PlayerIdleState));
         
         // block input
-        InputManager.Instance.SetEnableInputAll(false);
+        //InputManager.Instance.SetEnableInputAll(false);
+        InputManager.Instance.SetEnableInputWithout(EInputCategory.Escape,false);
         Player.Converter.ConvertDimension(_controllingAxis,() => 
             InputManagerHelper.OnCancelingAxis());
 

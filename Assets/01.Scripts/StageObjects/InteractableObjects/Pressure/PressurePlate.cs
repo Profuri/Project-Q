@@ -1,19 +1,19 @@
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
+using UnityEditor.ShaderGraph.Internal;
 
-public class PressurePlate : ToggleTypeInteractableObject
+public class PressurePlate : ToggleTypeInteractableObject, IUpdateBlockable
 {
     [SerializeField] private LayerMask _pressionorMask;
 
     [SerializeField] private float _pressSpeed;
     [SerializeField] private float _maxHeight;
     [SerializeField] private float _minHeight;
-
     [SerializeField] private float _yScaleOffset = 1.2f;
-
     private Transform _pressureMainTrm;
     private Transform _pressureObjTrm;
+
 
     public override void Awake()
     {
@@ -25,7 +25,6 @@ public class PressurePlate : ToggleTypeInteractableObject
     public override void UpdateUnit()
     { 
         base.UpdateUnit();
-
         var curToggleState = CheckPressed();
         if (LastToggleState != curToggleState)
         {
