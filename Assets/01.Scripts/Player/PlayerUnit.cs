@@ -187,16 +187,16 @@ public class PlayerUnit : ObjectUnit
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.cyan;
+        //Gizmos.color = Color.cyan;
 
-        var col = GetComponent<Collider>();
-        Gizmos.DrawWireSphere(col.bounds.center, _data.interactableRadius);
+        //var col = GetComponent<Collider>();
+        //Gizmos.DrawWireSphere(col.bounds.center, _data.interactableRadius);
         
-        if (_selectedInteractableObject != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(col.bounds.center, _selectedInteractableObject.transform.position);
-        }
+        //if (_selectedInteractableObject != null)
+        //{
+        //    Gizmos.color = Color.green;
+        //    Gizmos.DrawLine(col.bounds.center, _selectedInteractableObject.transform.position);
+        //}
     }
 #endif
 }
