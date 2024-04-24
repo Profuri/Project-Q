@@ -1,17 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using TMPro.Examples;
 using Febucci.UI;
-using TinyGiantStudio.Text.Example;
 using System;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class StoryPanel : UIComponent
+public class StoryPanel : UIComponent, IPointerClickHandler
 {
     protected TextAnimator_TMP _textAnimator;
     protected TypewriterByCharacter _typeWriter;
+
+    protected StorySO _storySO;
+    private int _currentIndex;
+    private bool _isTyping;
+
     public RectTransform RectTrm {get; private set; }
+
+
     public bool IsActive => gameObject.activeSelf;
 
     protected override void Awake()
@@ -24,12 +28,45 @@ public class StoryPanel : UIComponent
         _typeWriter = messageTrm.GetComponent<TypewriterByCharacter>();
     }
 
-    public void AppearMessage(string message)
+    public void SettingStory(StorySO storySO,bool isTypingStory = false)
+    {
+        _storySO = storySO;
+        _currentIndex = 0;
+        this._isTyping = isTypingStory;
+
+        string message = _storySO.contentList[_currentIndex].storyText;
+        AppearMessage(message,isTypingStory);
+    }
+
+    private void NextStory()
+    {
+        ++_currentIndex;
+        if(_currentIndex >=  _storySO.contentList.Count)
+        {
+            // 스토리를 전부 본 상황
+            // 안봤으면 어쩔건데 XX아
+            Disappear();
+            return;
+        }
+        StoryContent content = _storySO.contentList[_currentIndex];
+        string message = content.storyText;
+        AppearMessage(message,_isTyping);
+    }
+
+    private void AppearMessage(string message,bool isTypingAutomatic = true)
     {
         if (!IsActive) return;
-        _textAnimator.typewriterStartsAutomatically = true;
-        _typeWriter.ShowText(message);
+        _textAnimator.typewriterStartsAutomatically = isTypingAutomatic;
+        if(isTypingAutomatic)
+        {
+            _typeWriter.ShowText(message);
+        }
+        else
+        {
+            _textAnimator.SetText(message);
+        }
     }
+
 
     public string DisappearMessage(Action Callback = null)
     {
@@ -41,11 +78,31 @@ public class StoryPanel : UIComponent
             Callback?.Invoke();
             SceneControlManager.Instance.DeleteObject(this);
         });
+        StoryManager.Instance.ResetMessage();
         return _typeWriter.TextAnimator.textFull;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData != null)
+        {
+            NextStory();
+        }
+    }
+
+    public override void Appear(Transform parentTrm, Action callback = null)
+    {
+        base.Appear(parentTrm, callback);
+        CursorManager.RegisterUI(this);
+    }
+
+    public override void Disappear(Action callback = null)
+    {
+        base.Disappear(callback);
+        CursorManager.UnRegisterUI(this);
     }
     #region TYPE_WRITER
     protected void OnEnable()  =>  _typeWriter.onMessage.AddListener(OnTypewriterMessage);
-
     protected void OnDisable()
     {
         _typeWriter.onMessage.RemoveListener(OnTypewriterMessage);
@@ -60,8 +117,11 @@ public class StoryPanel : UIComponent
         switch (eventMarker.name)
         {
             case "리그오브레전드레이븐":
+                
                 break;
         }
     }
+
+
     #endregion
 }

@@ -2,15 +2,29 @@ using UnityEngine;
 using AxisConvertSystem;
 using System;
 using DG.Tweening;
+using UnityEngine.InputSystem.Haptics;
 
 public class Stage : Section
 {
     [Header("Chapter Setting")]
     [SerializeField] private ChapterType _chapter;
     [SerializeField] private int _stageOrder;
-    public int stageOrder => _stageOrder;
+    public int StageOrder => _stageOrder;
 
-    public bool IsClear { get; set; }
+    public bool IsClear
+    {
+        get => _isClear;
+        set
+        {
+            _isClear = value;
+            if(value == true)
+            {
+                StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_CLEAR,_chapter,StageOrder);
+            }
+        }
+    }
+    private bool _isClear = false;
+
     public bool IsConverting => !SceneControlManager.Instance.Player.Converter.Convertable;
 
     public override void OnPop()
@@ -21,10 +35,19 @@ public class Stage : Section
 
     protected override void FixedUpdate()
     {
-        if (Active && (!IsConverting || IsClear))
+        if (Active)
         {
+
             foreach (var unit in SectionUnits)
             {
+                if(!IsConverting || IsClear)
+                {
+                    if(unit.TryGetComponent(out IUpdateBlockable blockable))
+                    {
+                        //do thing   
+                        continue;
+                    }
+                }
                 unit.FixedUpdateUnit();
             }
         }
@@ -32,10 +55,18 @@ public class Stage : Section
 
     protected override void Update()
     {
-        if (Active && (!IsConverting || IsClear))
+        if (Active)
         {
             foreach (var unit in SectionUnits)
             {
+                if(!IsConverting || IsClear)
+                {
+                    if(unit.TryGetComponent(out IUpdateBlockable blockable))
+                    {
+                        //do thing   
+                        continue;
+                    }
+                }
                 unit.UpdateUnit();
             }
         }
@@ -50,6 +81,13 @@ public class Stage : Section
         {
             StageManager.Instance.ChangeToNextStage();
         }
+        StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_ENTER, _chapter, StageOrder);
+    }
+
+    public override void OnExit(PlayerUnit player)
+    {
+        base.OnExit(player);
+        StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_EXIT,_chapter, StageOrder);
     }
 
     public override void Disappear(float dissolveTime = 1.5f, Action Callback = null)

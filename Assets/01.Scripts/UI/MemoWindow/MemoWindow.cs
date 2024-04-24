@@ -6,7 +6,7 @@ public class MemoWindow : UIComponent
     public override void Appear(Transform parentTrm, Action callback = null)
     {
         base.Appear(parentTrm, callback);
-
+        
         CursorManager.RegisterUI(this);
     }
 
