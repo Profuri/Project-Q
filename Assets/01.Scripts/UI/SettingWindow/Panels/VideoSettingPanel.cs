@@ -16,8 +16,7 @@ public class VideoSettingPanel : WindowPanel
         DataManager.Instance.LoadData(VideoManager.Instance);
     }
 
-
-    public void GenerateResolutionDropdown(UIButton3D caller)
+    public void GenerateResolutionDropdown()
     {
         UIManager.Instance.Interact3DButton = false;
         
@@ -33,7 +32,7 @@ public class VideoSettingPanel : WindowPanel
 
             dropdown.AddOption($"{width} x {height}", () =>
             {
-                caller.Text = $"{width}x{height}";
+                _resolutionBtn.Text = $"{width}x{height}";
                 VideoManager.Instance.SetResolution(index);
                 VideoManager.Instance.SetFullScreen(Screen.fullScreen);
                 UIManager.Instance.Interact3DButton = true;
@@ -54,7 +53,7 @@ public class VideoSettingPanel : WindowPanel
         VideoManager.Instance.SetFullScreen(fullScreen);
     }
     
-    public void GenerateQualityDropdown(UIButton3D caller)
+    public void GenerateQualityDropdown()
     {
         UIManager.Instance.Interact3DButton = false;
         
@@ -67,7 +66,7 @@ public class VideoSettingPanel : WindowPanel
             
             dropdown.AddOption(qualityName, () =>
             {
-                caller.Text = qualityName.ToUpper();
+                _qualityBtn.Text = qualityName.ToUpper();
                VideoManager.Instance.SetQuality(quality); 
                UIManager.Instance.Interact3DButton = true;
             });
@@ -98,13 +97,12 @@ public class VideoSettingPanel : WindowPanel
             string resolutionText = $"{resolution.width} X {resolution.height}";
             _resolutionBtn.Text = resolutionText;
         }
+        
         //Qaulity
-        Debug.Log($"DefaultQuality: {saveData.DefaultQuality}");
         QualityType qualityType = saveData.DefaultQuality;
         _qualityBtn.Text = qualityType.ToString().ToUpper();
 
         //FullScreen
-        Debug.Log($"DefaultQuality: {saveData.DefaultFullScreen}");
         _fullScreenYesBtn.SettingActive(saveData.DefaultFullScreen);
         _fullScreenNoBtn.SettingActive(!saveData.DefaultFullScreen);
     }

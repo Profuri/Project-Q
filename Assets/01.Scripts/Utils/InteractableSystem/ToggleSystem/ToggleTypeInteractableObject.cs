@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace InteractableSystem
 {
-    public class ToggleTypeInteractableObject : InteractableObject
+    public abstract class ToggleTypeInteractableObject : InteractableObject
     {
         [SerializeField] private List<AffectedObject> _affectedObjects;
         [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
