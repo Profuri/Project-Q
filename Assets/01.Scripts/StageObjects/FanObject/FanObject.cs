@@ -29,6 +29,8 @@ public class FanObject : InteractableObject
 
     private List<ObjectUnit> _affectedUnits;
 
+    private SoundEffectPlayer _soundEffectPlayer;
+
     public override void Awake()
     {
         var model = transform.Find("Model");
@@ -36,6 +38,8 @@ public class FanObject : InteractableObject
         _airParticle = _fanTrm.Find("AirParticle").GetComponent<ParticleSystem>();
 
         _affectedUnits = new List<ObjectUnit>();
+
+        _soundEffectPlayer = new SoundEffectPlayer(this);
         
         base.Awake();
     }
@@ -107,12 +111,14 @@ public class FanObject : InteractableObject
     {
         _enabled = true;
         _airParticle.Play();
+        SoundManager.Instance.PlaySFX("Fan",true,_soundEffectPlayer);
     }
 
     private void ReleaseFan()
     {
         _enabled = false;
         _airParticle.Stop();
+        _soundEffectPlayer.Stop();
     }
     
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
