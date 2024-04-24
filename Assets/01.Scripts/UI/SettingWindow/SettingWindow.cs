@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SettingWindow : UIComponent
@@ -7,6 +8,7 @@ public class SettingWindow : UIComponent
     [SerializeField] private AudioSettingPanel _audioSettingPanel;
     [SerializeField] private ControlSettingPanel _controlSettingPanel;
     [SerializeField] private VideoSettingPanel _videoSettingPanel;
+
     
     private WindowPanel _currentPanel;
 
@@ -16,6 +18,7 @@ public class SettingWindow : UIComponent
         _audioSettingPanel.Init(this);
         _controlSettingPanel.Init(this);
         _videoSettingPanel.Init(this);
+
         ChangePanel(_mainSettingPanel);
     }
 
@@ -23,12 +26,15 @@ public class SettingWindow : UIComponent
     {
         base.Appear(parentTrm, callback);
         ChangePanel(_mainSettingPanel);
+
+        SoundManager.Instance.PlaySFX("PanelPopup", false);
         CursorManager.RegisterUI(this);
     }
 
     public void Close()
     {
         _currentPanel?.ReleasePanel();
+        SoundManager.Instance.PlaySFX("PanelClose", false);
         Disappear();
     }
 
@@ -41,26 +47,29 @@ public class SettingWindow : UIComponent
     // Button Callbacks
     public void GoMain()
     {
-        ChangePanel(_mainSettingPanel);
+        ChangePanel(_mainSettingPanel,true);
     }
 
     public void GoAudioSetting()
     {
-        ChangePanel(_audioSettingPanel);
+        ChangePanel(_audioSettingPanel,true);
     }
 
     public void GoVideoSetting()
     {
-        ChangePanel(_videoSettingPanel);
+        ChangePanel(_videoSettingPanel,true);
     }
 
     public void GoControlSetting()
     {
-        ChangePanel(_controlSettingPanel);
+        ChangePanel(_controlSettingPanel,true);
     }
 
-    private void ChangePanel(WindowPanel panel)
+    private void ChangePanel(WindowPanel panel,bool isSound = false)
     {
+        if(isSound)
+            SoundManager.Instance.PlaySFX("UITap", false);
+
         _currentPanel?.ReleasePanel();
         _currentPanel = panel;
         _currentPanel.LoadPanel();

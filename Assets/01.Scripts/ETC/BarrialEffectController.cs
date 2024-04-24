@@ -27,9 +27,12 @@ public class BarrialEffectController : MonoBehaviour
         _originThreshold = _material.GetFloat(_thresholdHash);
         _material.SetFloat(_thresholdHash, 1f);
         _material.SetFloat(_opacityHash, 0f);
-
         _soundEffectPlayer = new SoundEffectPlayer(this);
+    }
 
+    private void OnDisable()
+    {
+        _soundEffectPlayer.Stop();
     }
 
     public void Appear()

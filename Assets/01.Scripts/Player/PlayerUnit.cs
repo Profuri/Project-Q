@@ -14,6 +14,7 @@ public class PlayerUnit : ObjectUnit
     public ObjectHoldingHandler HoldingHandler { get; private set; }
     public PlayerInteractHandler InteractHandler { get; private set; }
     public ObjectUnit StandingUnit { get; set; }
+    public SoundEffectPlayer SoundEffectPlayer { get; private set; }
 
     private StateController _stateController;
 
@@ -60,7 +61,7 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerFallState(_stateController, true, "Fall"));
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
 
-        SoundManager.Instance.PlaySFX("Barrier",true);
+        SoundEffectPlayer = new SoundEffectPlayer(this);
     }
 
     public override void UpdateUnit()

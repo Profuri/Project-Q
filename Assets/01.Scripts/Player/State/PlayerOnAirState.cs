@@ -17,6 +17,7 @@ public class PlayerOnAirState : PlayerBaseState
     {
         if (Player.OnGround)
         {
+            SoundManager.Instance.PlaySFX("PlayerAfterJump", false, Player.SoundEffectPlayer);
             Controller.ChangeState(typeof(PlayerIdleState));
             return;
         }

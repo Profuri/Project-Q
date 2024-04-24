@@ -26,6 +26,8 @@ public class PlayerJumpState : PlayerOnAirState
         }
         Player.SetVelocity(Vector3.up * Player.Data.jumpPower, false);
         Player.ResetCoyoteTime();
+
+        SoundManager.Instance.PlaySFX("PlayerJump",false,Player.SoundEffectPlayer);
     }
 
     public override void UpdateState()

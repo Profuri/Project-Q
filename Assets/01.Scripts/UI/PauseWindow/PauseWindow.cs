@@ -10,6 +10,7 @@ public class PauseWindow : UIComponent
           base.Appear(parentTrm, callback);
 
           InputManager.Instance.UIInputReader.OnPauseClickEvent += OnPauseKeyClickHandle;
+        SoundManager.Instance.PlaySFX("PanelPopup", false);
           CursorManager.RegisterUI(this);
      }
 
@@ -17,7 +18,8 @@ public class PauseWindow : UIComponent
     {
           base.Disappear(callback);
 
-          InputManager.Instance.UIInputReader.OnPauseClickEvent -= OnPauseKeyClickHandle;
+        SoundManager.Instance.PlaySFX("PanelClose", false);
+        InputManager.Instance.UIInputReader.OnPauseClickEvent -= OnPauseKeyClickHandle;
           CursorManager.UnRegisterUI(this);
     }
 

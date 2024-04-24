@@ -6,14 +6,13 @@ public class MemoWindow : UIComponent
     public override void Appear(Transform parentTrm, Action callback = null)
     {
         base.Appear(parentTrm, callback);
-
         CursorManager.RegisterUI(this);
     }
 
     public override void Disappear(Action callback = null)
     {
         base.Disappear(callback);
-
+        SoundManager.Instance.PlaySFX("PanelClose", false);
         CursorManager.UnRegisterUI(this);
     }
 

@@ -15,7 +15,7 @@ public class PlayerAxisControlState : PlayerBaseState
     {
         base.EnterState();
 
-        SoundManager.Instance.PlaySFX("AxisControl",true,);
+        SoundManager.Instance.PlaySFX("AxisControl", true, _soundEffectPlayer);
 
         _isControllingAxis = true;
 
@@ -53,6 +53,8 @@ public class PlayerAxisControlState : PlayerBaseState
     public override void ExitState()
     {
         base.ExitState();
+
+        _soundEffectPlayer.Stop();
 
         _isControllingAxis = false;
         InputManager.Instance.PlayerInputReader.OnAxisControlEvent -= AxisControlHandle;

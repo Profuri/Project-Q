@@ -118,6 +118,7 @@ public class VideoSettingPanel : WindowPanel
 
     public void SaveDatas()
     {
+        SoundManager.Instance.PlaySFX("UIApply", false);
         DataManager.Instance.SaveData(VideoManager.Instance);
     }
 }

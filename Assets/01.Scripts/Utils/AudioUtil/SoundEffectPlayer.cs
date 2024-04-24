@@ -11,10 +11,10 @@ public class SoundEffectPlayer
         if(audioSource == null)
         {
             audioSource = mono.AddComponent<AudioSource>();
+            SettingAudioSource(audioSource);
         }
         _audioSource = audioSource;
-
-        SettingAudioSource();
+        _audioSource.playOnAwake = false;
     }
     
     public void Play(AudioClip clip, bool loop)
@@ -25,17 +25,17 @@ public class SoundEffectPlayer
         _audioSource.Play();
     }
 
-    private void SettingAudioSource()
+    private void SettingAudioSource(AudioSource audioSource)
     {
-        _audioSource.priority = 128;
-        _audioSource.volume = 1;
-        _audioSource.pitch = 1;
-        _audioSource.spatialBlend = 1;
+        audioSource.priority = 128;
+        audioSource.volume = 1;
+        audioSource.pitch = 1;
+        audioSource.spatialBlend = 1;
 
-        _audioSource.dopplerLevel = 1;
-        _audioSource.spread = 360;
-        _audioSource.minDistance = 1;
-        _audioSource.maxDistance = 3;
+        audioSource.dopplerLevel = 1;
+        audioSource.spread = 360;
+        audioSource.minDistance = 1;
+        audioSource.maxDistance = 3;
     }
 
     public void Stop()
