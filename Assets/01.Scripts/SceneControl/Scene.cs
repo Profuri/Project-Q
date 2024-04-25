@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using AxisConvertSystem;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
@@ -33,6 +34,7 @@ public class Scene : PoolableMono
             InputManager.Instance.UIInputReader.OnPauseClickEvent += GameManager.Instance.Pause;    
         }
     }
+
 
     public override void OnPush()
     {

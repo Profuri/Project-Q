@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class UIButton3D : UIComponent, IClickHandler, IHoverHandler
 {
-    public UnityEvent<UIButton3D> OnClickEvent;
+    public UnityEvent OnClickEvent;
 
     protected Vector3 _originScale;
     protected Modular3DText _3dText;
@@ -25,7 +25,7 @@ public class UIButton3D : UIComponent, IClickHandler, IHoverHandler
 
     public virtual void OnClickHandle()
     {
-        OnClickEvent?.Invoke(this);
+        OnClickEvent?.Invoke();
     }
 
     public virtual void OnHoverHandle()

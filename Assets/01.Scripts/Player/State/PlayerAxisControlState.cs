@@ -4,18 +4,15 @@ using AxisConvertSystem;
 public class PlayerAxisControlState : PlayerBaseState
 {
     private AxisType _controllingAxis;
-    private SoundEffectPlayer _soundEffectPlayer;
     
     public PlayerAxisControlState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
-        _soundEffectPlayer = new SoundEffectPlayer(controller.Owner);
     }
 
     public override void EnterState()
     {
         base.EnterState();
 
-        SoundManager.Instance.PlaySFX("AxisControl", true, _soundEffectPlayer);
 
         _isControllingAxis = true;
 
@@ -53,8 +50,6 @@ public class PlayerAxisControlState : PlayerBaseState
     public override void ExitState()
     {
         base.ExitState();
-
-        _soundEffectPlayer.Stop();
 
         _isControllingAxis = false;
         InputManager.Instance.PlayerInputReader.OnAxisControlEvent -= AxisControlHandle;
@@ -95,10 +90,13 @@ public class PlayerAxisControlState : PlayerBaseState
         Controller.ChangeState(typeof(PlayerIdleState));
         
         // block input
-        InputManager.Instance.SetEnableInputAll(false);
-        Player.Converter.ConvertDimension(_controllingAxis,() => 
-            InputManagerHelper.OnCancelingAxis());
-
+        //InputManager.Instance.SetEnableInputAll(false);
+        InputManager.Instance.SetEnableInputWithout(EInputCategory.Escape,false);
+        Player.Converter.ConvertDimension(_controllingAxis, () =>
+        {
+            InputManagerHelper.OnCancelingAxis();
+        });
         _isControllingAxis = false;
+
     }
 }

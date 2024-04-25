@@ -31,7 +31,15 @@ public class PlayerUnit : ObjectUnit
         }
     }
 
-    public bool CanJump => OnGround || IsCoyote;
+    //public bool CanJump => OnGround || IsCoyote;
+    public bool CanJump
+    {
+        get
+        {
+            Debug.LogError($"OnGround: {OnGround} IsCoyote: {IsCoyote}");
+            return OnGround || IsCoyote;
+        }
+    }
 
     public void StartCoyoteTime()
     {
@@ -81,6 +89,8 @@ public class PlayerUnit : ObjectUnit
         _stateController.UpdateState();
         HoldingHandler.UpdateHandler();
         InteractHandler.UpdateHandler();
+
+        Debug.Log($"CurrentState: {_stateController.CurrentState}");
     }
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
@@ -171,5 +181,17 @@ public class PlayerUnit : ObjectUnit
         spawnVFX.SetPositionAndRotation(position, Quaternion.identity);
         spawnVFX.SetScale(new Vector3(bounds.size.x, 1, bounds.size.z));
         spawnVFX.Play();
+    }
+
+    //계속 실행되니까 OnGround가 바뀌었을 때는 체크 안함
+    public override void SetGravity(bool useGravityParam)
+    {
+        if(OnGround)
+        {
+            useGravity = true;
+            return;
+        }        
+        
+        useGravity = useGravityParam;
     }
 }

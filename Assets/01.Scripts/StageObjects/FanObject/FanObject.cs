@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using InteractableSystem;
 using AxisConvertSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -14,6 +13,7 @@ public class FanObject : InteractableObject
     [SerializeField] private float _airMaxHeight;
     [SerializeField] private float _airPower;
     [SerializeField] private LayerMask _effectedMask;
+
     
     [Header("Fan Settings")]
     [SerializeField] private float _fanMaxSpeed;
@@ -193,14 +193,15 @@ public class FanObject : InteractableObject
             var airPower = GetAirDir() * _airPower;
             velocity.SetAxisElement(GetAirNormalAxis(), airPower.GetAxisElement(GetAirNormalAxis()));
 
-            unit.useGravity = false;
+
+            unit.SetGravity(false);
             unit.SetVelocity(velocity, false);
         }
     }
 
     private bool CheckCollision(out Collider[] cols)
     {
-        var center = transform.position + GetAirDir() * (_airMaxHeight / 2f);
+        var center = Collider.bounds.center + GetAirDir() * (_airMaxHeight / 2f);
         var colSize = Vector3.one * _collisionSize;
         colSize.SetAxisElement(GetAirNormalAxis(), _airMaxHeight);
 
