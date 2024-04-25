@@ -18,11 +18,13 @@ namespace VirtualCam
 
         public void EnterCam()
         {
+            this.gameObject.SetActive(true);
             _virtualCam.m_Priority = 10;
         }
 
         public void ExitCam()
         {
+            this.gameObject.SetActive(false);
             _virtualCam.m_Priority = 0;
         }
 
