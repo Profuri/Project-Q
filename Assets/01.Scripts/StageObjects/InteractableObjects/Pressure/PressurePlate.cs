@@ -1,35 +1,47 @@
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
-using UnityEditor.ShaderGraph.Internal;
 
-public class PressurePlate : ToggleTypeInteractableObject, IUpdateBlockable
+public class PressurePlate : ToggleTypeInteractableObject
 {
     [SerializeField] private LayerMask _pressionorMask;
 
     [SerializeField] private float _pressSpeed;
     [SerializeField] private float _maxHeight;
     [SerializeField] private float _minHeight;
+
     [SerializeField] private float _yScaleOffset = 1.2f;
+
     private Transform _pressureMainTrm;
     private Transform _pressureObjTrm;
 
+    private SoundEffectPlayer _soundEffectPlayer;
+
+    private bool _isPressed = false;
 
     public override void Awake()
     {
         base.Awake();
         _pressureMainTrm = transform.Find("PressureMain");
         _pressureObjTrm = _pressureMainTrm.Find("PressureObject");
+
+        _soundEffectPlayer = new SoundEffectPlayer(this);
     }
 
     public override void UpdateUnit()
     { 
         base.UpdateUnit();
+
         var curToggleState = CheckPressed();
         if (LastToggleState != curToggleState)
         {
             CallToggleChangeEvents(curToggleState);
+            if(curToggleState)
+            {
+                SoundManager.Instance.PlaySFX("PressPanel",false,_soundEffectPlayer);
+            }
         }
+        
         LastToggleState = curToggleState;
         OnInteraction(null, LastToggleState);
     }

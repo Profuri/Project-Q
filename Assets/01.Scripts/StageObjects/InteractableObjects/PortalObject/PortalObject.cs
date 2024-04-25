@@ -9,10 +9,18 @@ public class PortalObject : InteractableObject
 
     [SerializeField] private float _portalOutDistance = 1f;
 
+    private SoundEffectPlayer _soundEffectPlayer;
+
+    public override void Init(AxisConverter converter)
+    {
+        base.Init(converter);
+        _soundEffectPlayer = new SoundEffectPlayer(this);
+    }
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         if (communicator is PlayerUnit playerUnit)
         {
+            SoundManager.Instance.PlaySFX("Portal", false, _soundEffectPlayer);
             var center = _linkedPortal.Collider.bounds.center;
             var dest = center + Vector3ExtensionMethod.GetAxisDir(_linkedPortal._portalAxis) * _portalOutDistance;
             
