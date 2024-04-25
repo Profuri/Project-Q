@@ -53,10 +53,8 @@ public class PlayerJumpState : PlayerOnAirState
         }
         Player.SetVelocity(dir * Player.Data.walkSpeed);
 
-        Debug.Log($"IsFalling: {IsFalling}");
         if (IsFalling)
         {
-            //Debug.Break();
             Player.ResetCoyoteTime();
             Controller.ChangeState(typeof(PlayerFallState));
         }
