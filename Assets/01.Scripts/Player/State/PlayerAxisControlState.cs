@@ -95,7 +95,6 @@ public class PlayerAxisControlState : PlayerBaseState
         Player.Converter.ConvertDimension(_controllingAxis, () =>
         {
             InputManagerHelper.OnCancelingAxis();
-            SoundManager.Instance.PlaySFX("AxisControl", false);
         });
         _isControllingAxis = false;
 
