@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using System.Collections;
 
 namespace AxisConvertSystem
 {
@@ -628,9 +627,9 @@ namespace AxisConvertSystem
             }
         }
 
-        public virtual void SetGravity(bool useGravity)
+        public virtual void SetGravity(bool useGravityParam)
         {
-            this.useGravity = useGravity;
+            useGravity = useGravityParam;
         }
     }
 }

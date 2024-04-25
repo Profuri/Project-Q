@@ -171,4 +171,16 @@ public class PlayerUnit : ObjectUnit
         spawnVFX.SetScale(new Vector3(bounds.size.x, 1, bounds.size.z));
         spawnVFX.Play();
     }
+
+    //계속 실행되니까 OnGround가 바뀌었을 때는 체크 안함
+    public override void SetGravity(bool useGravityParam)
+    {
+        if(OnGround)
+        {
+            useGravity = true;
+            return;
+        }        
+        
+        useGravity = useGravityParam;
+    }
 }

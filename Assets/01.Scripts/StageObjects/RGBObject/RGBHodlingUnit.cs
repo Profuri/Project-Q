@@ -1,10 +1,24 @@
 using AxisConvertSystem;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class RGBHodlingUnit : RGBObjectUnit, IHoldable
 {
+    private ObjectHoldingHandler _holdingHandler;
+
+    public override void Awake()
+    {
+        base.Awake();
+        _holdingHandler = null;
+    }
+    
+    public override void UpdateUnit()
+    {
+        base.UpdateUnit();
+        if (_holdingHandler is not null)
+        {
+            SetPosition(_holdingHandler.HoldingPoint);
+        }
+    }
+
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         if (communicator is PlayerUnit playerUnit)
@@ -20,10 +34,18 @@ public class RGBHodlingUnit : RGBObjectUnit, IHoldable
             base.OnInteraction(communicator, interactValue, param);
         }
     }
-
-    public override void ApplyUnitInfo(AxisType axis)
+    
+    public void Attach(ObjectHoldingHandler handler)
     {
-        base.ApplyUnitInfo(axis);
+        _holdingHandler = handler;    
+        useGravity = false;
+        StopImmediately(true);
     }
-    public ObjectUnit GetObjectUnit() => this;
+
+    public void Detach()
+    {
+        _holdingHandler = null;
+        StopImmediately(true);
+        useGravity = true;
+    }
 }

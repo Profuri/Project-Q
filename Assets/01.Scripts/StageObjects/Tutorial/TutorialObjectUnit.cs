@@ -16,14 +16,6 @@ public class TutorialObjectUnit : InteractableObject
         gameObject.layer = LayerMask.NameToLayer("Interactable");
     }
 
-    private void OnDisable()
-    {
-        if(_tutorialMark != null)
-        {
-            _tutorialMark.Off();
-        }
-    }
-
     public override void OnPush()
     {
         base.OnPush();
