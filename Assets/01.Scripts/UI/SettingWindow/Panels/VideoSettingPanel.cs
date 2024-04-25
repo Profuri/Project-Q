@@ -10,12 +10,6 @@ public class VideoSettingPanel : WindowPanel
     [SerializeField] private UIYesNoButton3D _fullScreenYesBtn;
     [SerializeField] private UIYesNoButton3D _fullScreenNoBtn;
 
-    public override void Init(SettingWindow settingWindow)
-    {
-        base.Init(settingWindow);
-        DataManager.Instance.LoadData(VideoManager.Instance);
-    }
-
     public void GenerateResolutionDropdown()
     {
         UIManager.Instance.Interact3DButton = false;

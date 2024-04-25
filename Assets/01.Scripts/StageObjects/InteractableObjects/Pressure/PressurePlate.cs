@@ -48,8 +48,6 @@ public class PressurePlate : ToggleTypeInteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        base.OnInteraction(communicator, interactValue, param);
-
         InteractAffectedObjects(interactValue);
         
         var current = _pressureMainTrm.localScale.y;

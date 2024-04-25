@@ -28,7 +28,7 @@ public class SoundEffectPlayer
     private void SettingAudioSource(AudioSource audioSource)
     {
         audioSource.priority = 128;
-        audioSource.volume = 1;
+        audioSource.volume = 2f;
         audioSource.pitch = 1;
         audioSource.spatialBlend = 1;
 

@@ -14,6 +14,7 @@ public abstract class WindowPanel : MonoBehaviour
     {
         gameObject.SetActive(true);
     }
+
     public virtual void ReleasePanel()
     {
         gameObject.SetActive(false);
