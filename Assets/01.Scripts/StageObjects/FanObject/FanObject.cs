@@ -111,7 +111,7 @@ public class FanObject : InteractableObject
     {
         _enabled = true;
         _airParticle.Play();
-        SoundManager.Instance.PlaySFX("Fan",true,_soundEffectPlayer);
+        SoundManager.Instance.PlaySFX("FanLoop",true,_soundEffectPlayer);
     }
 
     private void ReleaseFan()

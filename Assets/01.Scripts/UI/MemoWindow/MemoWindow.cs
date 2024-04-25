@@ -12,7 +12,7 @@ public class MemoWindow : UIComponent
     public override void Disappear(Action callback = null)
     {
         base.Disappear(callback);
-        SoundManager.Instance.PlaySFX("PanelClose", false);
+        SoundManager.Instance.PlaySFX("PanelDisappear");
         CursorManager.UnRegisterUI(this);
     }
 

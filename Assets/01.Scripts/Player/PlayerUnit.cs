@@ -85,6 +85,7 @@ public class PlayerUnit : ObjectUnit
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
     {
+        SoundManager.Instance.PlaySFX("PlayerDead");
         Converter.ConvertDimension(AxisType.None);
 
         base.ReloadUnit(dissolveTime, () =>

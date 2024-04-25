@@ -3,39 +3,41 @@ using UnityEngine;
 
 public class SoundEffectPlayer
 {
-    private AudioSource _audioSource;
+    private readonly AudioSource _audioSource;
 
-    public SoundEffectPlayer(MonoBehaviour mono)
+    public SoundEffectPlayer(Component compo)
     {
-        var audioSource = mono.GetComponent<AudioSource>();
-        if(audioSource == null)
+        _audioSource = compo.GetComponent<AudioSource>();
+        if (_audioSource == null)
         {
-            audioSource = mono.AddComponent<AudioSource>();
-            SettingAudioSource(audioSource);
+            _audioSource = compo.AddComponent<AudioSource>();
         }
-        _audioSource = audioSource;
-        _audioSource.playOnAwake = false;
+        
+        SettingAudioSource();
     }
     
     public void Play(AudioClip clip, bool loop)
     {
-        _audioSource.outputAudioMixerGroup ??= SoundManager.Instance.SfxGroup;
         _audioSource.clip = clip;
         _audioSource.loop = loop;
         _audioSource.Play();
     }
 
-    private void SettingAudioSource(AudioSource audioSource)
+    private void SettingAudioSource()
     {
-        audioSource.priority = 128;
-        audioSource.volume = 1;
-        audioSource.pitch = 1;
-        audioSource.spatialBlend = 1;
+        _audioSource.outputAudioMixerGroup = SoundManager.Instance.SfxGroup;
+        
+        _audioSource.priority = 128;
+        _audioSource.volume = 1;
+        _audioSource.pitch = 1;
+        _audioSource.spatialBlend = 1;
 
-        audioSource.dopplerLevel = 1;
-        audioSource.spread = 360;
-        audioSource.minDistance = 1;
-        audioSource.maxDistance = 3;
+        _audioSource.dopplerLevel = 1;
+        _audioSource.spread = 0;
+        _audioSource.minDistance = 2;
+        _audioSource.maxDistance = 3.5f;
+        
+        _audioSource.playOnAwake = false;
     }
 
     public void Stop()
