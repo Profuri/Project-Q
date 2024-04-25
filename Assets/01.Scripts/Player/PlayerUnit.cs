@@ -89,8 +89,6 @@ public class PlayerUnit : ObjectUnit
         _stateController.UpdateState();
         HoldingHandler.UpdateHandler();
         InteractHandler.UpdateHandler();
-
-        Debug.Log($"CurrentState: {_stateController.CurrentState}");
     }
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)

@@ -20,7 +20,6 @@ public class BarrialEffectController : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log(1);
         _collider = GetComponent<Collider>();
         _collider.enabled = false;
 
