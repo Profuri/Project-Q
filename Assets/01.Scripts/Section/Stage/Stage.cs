@@ -17,15 +17,13 @@ public class Stage : Section
         set
         {
             _isClear = value;
-            if(value == true)
+            if(value)
             {
                 StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_CLEAR,_chapter,StageOrder);
             }
         }
     }
     private bool _isClear = false;
-
-    public bool IsConverting => !SceneControlManager.Instance.Player.Converter.Convertable;
 
     public override void OnPop()
     {
@@ -37,17 +35,8 @@ public class Stage : Section
     {
         if (Active)
         {
-
             foreach (var unit in SectionUnits)
             {
-                if(!IsConverting || IsClear)
-                {
-                    if(unit.TryGetComponent(out IUpdateBlockable blockable))
-                    {
-                        //do thing   
-                        continue;
-                    }
-                }
                 unit.FixedUpdateUnit();
             }
         }
@@ -59,14 +48,6 @@ public class Stage : Section
         {
             foreach (var unit in SectionUnits)
             {
-                if(!IsConverting || IsClear)
-                {
-                    if(unit.TryGetComponent(out IUpdateBlockable blockable))
-                    {
-                        //do thing   
-                        continue;
-                    }
-                }
                 unit.UpdateUnit();
             }
         }

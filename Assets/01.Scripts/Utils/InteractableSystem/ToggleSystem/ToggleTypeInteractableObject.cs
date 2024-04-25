@@ -9,19 +9,34 @@ namespace InteractableSystem
         [SerializeField] private List<AffectedObject> _affectedObjects;
         [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
 
-        protected bool LastToggleState;
+        private bool _lastToggleState;
+
+        protected bool LastToggleState
+        {
+            get => _lastToggleState;
+            set
+            {
+                if (value == false && _lastToggleState)
+                {
+                    UnShowSelectedBorder();
+                    UnShowSelectedBorderInConnectedUnit();
+                }
+        
+                _lastToggleState = value;
+            }
+        }
 
         public override void Awake()
         {
             base.Awake();
-            LastToggleState = false;
+            _lastToggleState = false;
         }
 
         public override void Init(AxisConverter converter)
         {
             base.Init(converter);
-            LastToggleState = false;
-            CallToggleChangeEvents(LastToggleState);
+            _lastToggleState = false;
+            CallToggleChangeEvents(_lastToggleState);
         }
 
         protected void InteractAffectedObjects(bool value)
@@ -32,8 +47,13 @@ namespace InteractableSystem
                 {
                     return;
                 }
+
+                if (value)
+                {
+                    obj.interactableObject.ShowSelectedBorder();
+                }
+                obj.interactableObject.SelectedBorderActivate(value);
                 
-                obj?.interactableObject?.SelectedBorderActivate(value);
                 obj.Invoke(null, value);
             }
         }
@@ -52,6 +72,10 @@ namespace InteractableSystem
                 {
                     if(curEvent.GetPersistentTarget(index) is ObjectUnit unit)
                     {
+                        if (value)
+                        {
+                            unit.ShowSelectedBorder();
+                        }
                         unit.SelectedBorderActivate(value);
                     }
                 }
