@@ -38,7 +38,7 @@ public class LaserReflectObject : InteractableObject
         var dir = Vector3.Reflect(lastDir, normal).normalized;
 
         laserObject.AddLaser(new LaserInfo { origin = point, dir = dir });
-    }
+    }s
 
     private IEnumerator RotateSequence(float rotateTime,float rotateValue,Action Callback = null)
     {
@@ -54,6 +54,8 @@ public class LaserReflectObject : InteractableObject
             transform.rotation = Quaternion.Lerp(originRotation, targetRotation, percent);
             yield return null;
         }
+        
+        UnitInfo.LocalRot = transform.localRotation;
         Callback?.Invoke();
     }
 }
