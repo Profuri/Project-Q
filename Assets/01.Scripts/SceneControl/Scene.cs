@@ -54,6 +54,7 @@ public class Scene : PoolableMono
         onDestroyScene?.Invoke();
     }
 
+    //플레이어 땅으로 떨구는 함수
     public void CreatePlayer()
     {
         if (Player is not null)
@@ -74,6 +75,7 @@ public class Scene : PoolableMono
             landParticle.SetPositionAndRotation(Player.transform.position, Quaternion.identity);
             landParticle.Play();
             InputManager.Instance.SetEnableInputAll(true);
+            SoundManager.Instance.PlaySFX("PlayerSpawnLand",false);
         });
     }
 

@@ -14,4 +14,9 @@ public class PlayerAnimationTrigger : MonoBehaviour
     {
         _playerUnit.AnimationTrigger(key);
     }
+
+    public void OnWalkStep()
+    {
+        SoundManager.Instance.PlaySFX("PlayerFootStep",false);
+    }
 }

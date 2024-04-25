@@ -92,6 +92,7 @@ public class ControlSettingPanel : WindowPanel
 
     public void SaveControls()
     {
+        SoundManager.Instance.PlaySFX("UIApply",false);
         DataManager.Instance.SaveData(InputManager.Instance);
     }
 }

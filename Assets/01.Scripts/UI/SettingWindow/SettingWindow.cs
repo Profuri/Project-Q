@@ -1,6 +1,8 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+
 
 public enum SettingType
 {
@@ -30,29 +32,28 @@ public class SettingWindow : UIComponent
 
             var panelName = $"Canvas/{type}SettingPanel";
             var panel = transform.Find(panelName).GetComponent<WindowPanel>();
+            panel.Init(this);
             _panels[(int)type] = panel;
         }
     }
 
-    private void Start()
-    {
-        foreach (var panel in _panels)
-        {
-            panel.Init(this);
-        }
-        ChangePanel((int)SettingType.None);
-    }
 
     public override void Appear(Transform parentTrm, Action callback = null)
     {
+        _currentPanel?.ReleasePanel();
+        _currentPanel = _panels[(int)SettingType.None];
+        _currentPanel.LoadPanel();
+
         base.Appear(parentTrm, callback);
-        ChangePanel((int)SettingType.None);
+
+        SoundManager.Instance.PlaySFX("PanelPopup", false);
         CursorManager.RegisterUI(this);
     }
 
     public void Close()
     {
         _currentPanel?.ReleasePanel();
+        SoundManager.Instance.PlaySFX("PanelClose", false);
         Disappear();
     }
 
@@ -61,12 +62,18 @@ public class SettingWindow : UIComponent
         base.Disappear(callback);
         CursorManager.UnRegisterUI(this);
     }
-
+    
     [VisibleEnum(typeof(SettingType))]
     public void ChangePanel(int type)
     {
+        PlayTapSound();
         _currentPanel?.ReleasePanel();
         _currentPanel = _panels[type];
         _currentPanel.LoadPanel();
+    }
+
+    private void PlayTapSound()
+    {
+        SoundManager.Instance.PlaySFX("UITap");
     }
 }

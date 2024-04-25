@@ -27,11 +27,13 @@ public class CinemachineHolderMixerBehaviour : PlayableBehaviour
         }
 
         _bidingCam.m_Priority = totalWeight <= 0f ? 0 : 500;
+        _bidingCam.gameObject.SetActive(totalWeight > 0f);
     }
 
     public override void OnGraphStop(Playable playable)
     {
         _bidingCam.m_Priority = 0;
+        _bidingCam.gameObject.SetActive(false);
         base.OnGraphStop(playable);
     }
 }

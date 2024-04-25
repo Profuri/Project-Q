@@ -12,6 +12,8 @@ public class PlayerAxisControlState : PlayerBaseState
     public override void EnterState()
     {
         base.EnterState();
+
+
         _isControllingAxis = true;
 
         Player.StopImmediately(true);
@@ -90,9 +92,12 @@ public class PlayerAxisControlState : PlayerBaseState
         // block input
         //InputManager.Instance.SetEnableInputAll(false);
         InputManager.Instance.SetEnableInputWithout(EInputCategory.Escape,false);
-        Player.Converter.ConvertDimension(_controllingAxis,() => 
-            InputManagerHelper.OnCancelingAxis());
-
+        Player.Converter.ConvertDimension(_controllingAxis, () =>
+        {
+            InputManagerHelper.OnCancelingAxis();
+            SoundManager.Instance.PlaySFX("AxisControl", false);
+        });
         _isControllingAxis = false;
+
     }
 }

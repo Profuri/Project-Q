@@ -14,6 +14,7 @@ public class PlayerUnit : ObjectUnit
     public ObjectHoldingHandler HoldingHandler { get; private set; }
     public PlayerInteractHandler InteractHandler { get; private set; }
     public ObjectUnit StandingUnit { get; set; }
+    public SoundEffectPlayer SoundEffectPlayer { get; private set; }
 
     private StateController _stateController;
 
@@ -59,6 +60,8 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerJumpState(_stateController, true, "Jump"));
         _stateController.RegisterState(new PlayerFallState(_stateController, true, "Fall"));
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
+
+        SoundEffectPlayer = new SoundEffectPlayer(this);
     }
 
     public override void UpdateUnit()
@@ -69,13 +72,13 @@ public class PlayerUnit : ObjectUnit
         {
             StandingCheck();
         }
-        
-        _stateController.UpdateState();
 
         if(Input.GetKeyDown(KeyCode.C))
         {
             StageManager.Instance.StageClear(this);
         }
+        
+        _stateController.UpdateState();
         HoldingHandler.UpdateHandler();
         InteractHandler.UpdateHandler();
     }
