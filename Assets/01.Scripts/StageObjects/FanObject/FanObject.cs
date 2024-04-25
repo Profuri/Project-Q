@@ -201,7 +201,7 @@ public class FanObject : InteractableObject
 
     private bool CheckCollision(out Collider[] cols)
     {
-        var center = transform.position + GetAirDir() * (_airMaxHeight / 2f);
+        var center = Collider.bounds.center + GetAirDir() * (_airMaxHeight / 2f);
         var colSize = Vector3.one * _collisionSize;
         colSize.SetAxisElement(GetAirNormalAxis(), _airMaxHeight);
 

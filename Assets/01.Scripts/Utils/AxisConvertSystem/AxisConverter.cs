@@ -44,6 +44,7 @@ namespace AxisConvertSystem
 
             if(axisType == AxisType.None)
             {
+                SoundManager.Instance.PlaySFX("AxisControl", false);
                 ChangeAxis(axisType);
             }
 
@@ -63,6 +64,7 @@ namespace AxisConvertSystem
                     
                     if(axisType != AxisType.None)
                     {
+                        SoundManager.Instance.PlaySFX("AxisControl", false);
                         ChangeAxis(axisType);
                     }
                     
