@@ -532,6 +532,7 @@ namespace AxisConvertSystem
         {
             if (_selectedBorder is not null)
             {
+                SelectedBorderActivate(false);
                 SceneControlManager.Instance.DeleteObject(_selectedBorder);
                 _selectedBorder = null;
             }

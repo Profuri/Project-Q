@@ -3,7 +3,7 @@ using AxisConvertSystem;
 using UnityEngine;
 using UnityEditor.ShaderGraph.Internal;
 
-public class PressurePlate : ToggleTypeInteractableObject, IUpdateBlockable
+public class PressurePlate : ToggleTypeInteractableObject
 {
     [SerializeField] private LayerMask _pressionorMask;
 

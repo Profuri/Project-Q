@@ -1,7 +1,7 @@
 using UnityEngine;
 using AxisConvertSystem;
 
-public class GlassObjectUnit : ObjectUnit,IProvidableFieldInfo
+public class GlassObjectUnit : ObjectUnit
 {
     [SerializeField] private AxisType _activeAxisType;
 
