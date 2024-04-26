@@ -11,7 +11,7 @@ public abstract class PlayerBaseState : State
     {
         Controller.ChangeState(typeof(PlayerJumpState));
     }
-
+    
     protected void AxisControlHandle()
     {
         if (!Player.Converter.Convertable)
@@ -23,7 +23,6 @@ public abstract class PlayerBaseState : State
         {
             Player.Converter.UnShowClimbableEffect();
             Controller.ChangeState(typeof(PlayerIdleState));
-
         }
         else
         {

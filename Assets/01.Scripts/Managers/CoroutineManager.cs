@@ -18,7 +18,7 @@ public class CoroutineManager : BaseManager<CoroutineManager>
         _coroutineDiction.Clear();
     }
 
-    public Coroutine StartSafeCoroutine(int ownerInstanceId, IEnumerator routine)
+    public void StartSafeCoroutine(int ownerInstanceId, IEnumerator routine)
     {
         var routineName = routine.ToString();
 
@@ -32,7 +32,7 @@ public class CoroutineManager : BaseManager<CoroutineManager>
             StopSafeCoroutine(ownerInstanceId, routine);
         }
         
-        return base.StartCoroutine(CoroutinePlayRoutine(ownerInstanceId, routine));
+        base.StartCoroutine(CoroutinePlayRoutine(ownerInstanceId, routine));
     }
 
     public void StopSafeCoroutine(int ownerInstanceId, IEnumerator routine)
@@ -47,6 +47,6 @@ public class CoroutineManager : BaseManager<CoroutineManager>
         var routineName = routine.ToString();
         _coroutineDiction[ownerInstanceId][routineName] = base.StartCoroutine(routine);
         yield return _coroutineDiction[ownerInstanceId][routineName];
-        StopSafeCoroutine(ownerInstanceId, routine);
+        _coroutineDiction[ownerInstanceId][routineName] = null;
     }
 }

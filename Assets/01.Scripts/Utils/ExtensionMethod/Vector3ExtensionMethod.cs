@@ -42,7 +42,13 @@ public static class Vector3ExtensionMethod
 
         return 0f;
     }
-    
+
+    public static Vector3 Abs(this Vector3 vec)
+    {
+        var newVec = new Vector3(Mathf.Abs(vec.x), Mathf.Abs(vec.y), Mathf.Abs(vec.z));
+        return newVec;
+    }
+
     public static Vector3 GetAxisDir(AxisType axis)
     {
         return new Vector3(axis == AxisType.X ? 1 : 0, axis == AxisType.Y ? 1 : 0, axis == AxisType.Z ? -1 : 0);

@@ -2,25 +2,22 @@ using InteractableSystem;
 using UnityEngine.Events;
 using AxisConvertSystem;
 using UnityEngine;
-using DG.Tweening;
 
 public class Chapter : InteractableObject
 {
     [field:SerializeField] public ChapterData Data {get; private set; }
+    
     [SerializeField] private float _symbolRotateSpeed;
-
     [SerializeField] private bool _canInteract = true;
 
-    public UnityEvent OnShowSequence;
-
-    protected static float s_sequenceTime = 5f;
+    public UnityEvent onPopEvent = null;
 
     private Transform _symbolTrm;
 
     public override void Awake()
     {
         base.Awake();
-        _symbolTrm = transform.Find("Symbol");
+        _symbolTrm = transform.Find("Section/Symbol");
     }
 
     public override void UpdateUnit()
@@ -54,38 +51,19 @@ public class Chapter : InteractableObject
         );
     }
 
-
-    public virtual void ShowingSequence(ChapterType chapterType,SaveData saveData)
+    public virtual void ShowingSequence(ChapterType chapterType, SaveData saveData)
     {
         gameObject.SetActive(true);
-
-        if (saveData.IsShowSequence)
-        {
-            return;
-        }
-
-        if (chapterType == ChapterType.Tutorial)
-        {
-            Vector3 targetPos = transform.position;
-
-            transform.position = targetPos - Vector3.up * 3f;
-            Sequence sequence = DOTween.Sequence();
-            sequence.Append(transform.DOMove(targetPos,s_sequenceTime));
-            sequence.AppendCallback(() =>
-            {
-                if (saveData.IsShowSequence == false)
-                {
-                    saveData.IsShowSequence = true;
-                    DataManager.Instance.SaveData();
-                }
-            });
-
-            OnShowSequence?.Invoke();
-        }
     }
 
     public void ChangeInteract(bool canInteract)
     {
         _canInteract = canInteract;
+    }
+
+    public override void OnPop()
+    {
+        base.OnPop();
+        onPopEvent?.Invoke();
     }
 }

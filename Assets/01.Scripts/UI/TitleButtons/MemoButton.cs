@@ -12,13 +12,18 @@ public class MemoButton : InteractableObject
         GenerateMemoWindow();
     }
 
-    public void GenerateMemoWindow()
+    public void GenerateMemoWindow(bool isSound = true)
     {
         if (_memoWindow is null || !_memoWindow.poolOut)
         {
             _memoWindow = UIManager.Instance.GenerateUI("MemoWindow", _titleCanvasTrm) as MemoWindow;
             _memoWindow.transform.localPosition = new Vector3(0.77f, 0f, 6.36f);
             _memoWindow.transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
+
+            if(isSound)
+            {
+                SoundManager.Instance.PlaySFX("PanelAppear", false);
+            }
         }
     }
 }

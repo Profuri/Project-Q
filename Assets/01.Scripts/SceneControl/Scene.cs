@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using AxisConvertSystem;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
@@ -34,6 +35,7 @@ public class Scene : PoolableMono
         }
     }
 
+
     public override void OnPush()
     {
         PoolManager.Instance.Push(Player);
@@ -52,6 +54,7 @@ public class Scene : PoolableMono
         onDestroyScene?.Invoke();
     }
 
+    //플레이어 땅으로 떨구는 함수
     public void CreatePlayer()
     {
         if (Player is not null)
@@ -61,6 +64,7 @@ public class Scene : PoolableMono
         }
         
         Player = AddObject("Player") as PlayerUnit;
+        InputManager.Instance.SetEnableInputAll(false);
         Player.transform.localPosition = initSection.PlayerResetPoint;
 
         Player.ModelTrm.localPosition += Vector3.up * 5;
@@ -70,6 +74,8 @@ public class Scene : PoolableMono
             var landParticle = SceneControlManager.Instance.AddObject("PlayerLandParticle") as PoolableParticle;
             landParticle.SetPositionAndRotation(Player.transform.position, Quaternion.identity);
             landParticle.Play();
+            InputManager.Instance.SetEnableInputAll(true);
+            SoundManager.Instance.PlaySFX("PlayerAfterJump");
         });
     }
 

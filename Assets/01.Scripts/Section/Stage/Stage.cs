@@ -2,13 +2,56 @@ using UnityEngine;
 using AxisConvertSystem;
 using System;
 using DG.Tweening;
+using UnityEngine.InputSystem.Haptics;
 
 public class Stage : Section
 {
     [Header("Chapter Setting")]
     [SerializeField] private ChapterType _chapter;
     [SerializeField] private int _stageOrder;
-    public int stageOrder => _stageOrder;
+    public int StageOrder => _stageOrder;
+
+    public bool IsClear
+    {
+        get => _isClear;
+        set
+        {
+            _isClear = value;
+            if(value)
+            {
+                StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_CLEAR,_chapter,StageOrder);
+            }
+        }
+    }
+    private bool _isClear = false;
+
+    public override void OnPop()
+    {
+        base.OnPop();
+        IsClear = false;
+    }
+
+    protected override void FixedUpdate()
+    {
+        if (Active)
+        {
+            foreach (var unit in SectionUnits)
+            {
+                unit.FixedUpdateUnit();
+            }
+        }
+    }
+
+    protected override void Update()
+    {
+        if (Active)
+        {
+            foreach (var unit in SectionUnits)
+            {
+                unit.UpdateUnit();
+            }
+        }
+    }
 
     public override void OnEnter(PlayerUnit player)
     {
@@ -19,6 +62,13 @@ public class Stage : Section
         {
             StageManager.Instance.ChangeToNextStage();
         }
+        StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_ENTER, _chapter, StageOrder);
+    }
+
+    public override void OnExit(PlayerUnit player)
+    {
+        base.OnExit(player);
+        StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_EXIT,_chapter, StageOrder);
     }
 
     public override void Disappear(float dissolveTime = 1.5f, Action Callback = null)

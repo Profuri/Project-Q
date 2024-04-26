@@ -1,4 +1,4 @@
-using System;
+                                                                            using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
@@ -50,7 +50,6 @@ public class CameraManager : BaseManager<CameraManager>
             camController.ResetCamera();
         });
     }
-
 
     public void ChangeVCamController(VirtualCamType type)
     {

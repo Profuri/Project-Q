@@ -6,5 +6,4 @@ public enum ChapterType
     Storage = 3,
     Power = 4,
     Cpu = 5,
-    Cnt = 6,
 }

@@ -23,12 +23,16 @@ public class LaserLauncherObject : ObjectUnit
 
     private bool _isActiveLaser;
 
+    private SoundEffectPlayer _soundEffectPlayer;
+
     public override void Awake()
     {
         base.Awake();
         _laserRenderer = GetComponent<LineRenderer>();
         _laserInfos = new Queue<LaserInfo>();
+        _soundEffectPlayer = new SoundEffectPlayer(this);
         DisableLaser();
+
     }
 
     public override void Init(AxisConverter converter)
@@ -48,6 +52,14 @@ public class LaserLauncherObject : ObjectUnit
     public override void UpdateUnit()
     {
         base.UpdateUnit();
+
+
+        bool isClear = StageManager.Instance.IsClear;
+        if(isClear)
+        {
+            DisableLaser();
+            return;
+        }
         if (_isActiveLaser)
         {
             Launch();
@@ -72,12 +84,15 @@ public class LaserLauncherObject : ObjectUnit
     {
         _isActiveLaser = true;
         _laserRenderer.enabled = true;
+        SoundManager.Instance.PlaySFX("Laser",true,_soundEffectPlayer);
     }
+
 
     private void DisableLaser()
     {
         _isActiveLaser = false;
         _laserRenderer.enabled = false;
+        _soundEffectPlayer.Stop();
     }
 
     private void Launch()

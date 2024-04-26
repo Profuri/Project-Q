@@ -4,27 +4,25 @@ public class UnClimbableEffect : PoolableMono
 {
     public override void OnPop()
     {
-        
+
     }
 
     public override void OnPush()
     {
-        
+
     }
 
-    public void Setting(Collider collider)
+    public void Setting(Collider col)
     {
-        float xMax = collider.bounds.max.x;
-        float xMin = collider.bounds.min.x;
-        float yMax = collider.bounds.max.z;
-        float yMin = collider.bounds.min.z;
         const float yOffset = 0.1f;
 
-        Vector3 position = collider.bounds.center;
-        position.y = collider.bounds.max.y + yOffset;
+        Vector3 size = col.bounds.size;
+        size.y = 0.1f;
+        Vector3 position = col.bounds.center;
+        position.y = col.bounds.max.y + yOffset;
 
-        transform.localScale = new Vector3(Mathf.Abs(xMax - xMin),Mathf.Abs(yMin - yMax),0.1f);
+        transform.localScale = new Vector3(size.x, size.z, size.y);
         transform.position = position;
-        transform.SetParent(collider.transform);
+        transform.SetParent(col.transform);
     }
 }

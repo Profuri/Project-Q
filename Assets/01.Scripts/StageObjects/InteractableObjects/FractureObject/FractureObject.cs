@@ -19,16 +19,22 @@ public class FractureObject : InteractableObject
 
     private MeshRenderer _meshRenderer;
     public MeshRenderer MeshRenderer => _meshRenderer;
+
+    private SoundEffectPlayer _soundEffectPlayer;
     
     public override void Awake()
     {
         base.Awake();
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
+
+        _soundEffectPlayer = new SoundEffectPlayer(this);
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
+        SoundManager.Instance.PlaySFX("GlassBroke",false,_soundEffectPlayer);
+        
         var originalMesh = _meshFilter.mesh;
         originalMesh.RecalculateBounds();
         var parts = new List<FracturePart>();

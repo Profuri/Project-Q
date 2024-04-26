@@ -1,15 +1,11 @@
-using Fabgrid;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using DG.Tweening;
 using UnityEngine;
-using DG.Tweening.Core.Easing;
 
 namespace AxisConvertSystem
 {
-    public class ObjectUnit : PoolableMono, IProvidableFieldInfo
+    public class ObjectUnit : PoolableMono
     {
         [HideInInspector] public CompressLayer compressLayer = CompressLayer.Platform;
         [HideInInspector] public UnitRenderType renderType = UnitRenderType.Opaque;
@@ -22,8 +18,8 @@ namespace AxisConvertSystem
         [HideInInspector] public float checkOffset = 0.2f; 
         [HideInInspector] public bool useGravity = true;
 
-        protected UnitInfo OriginUnitInfo;
-        private UnitInfo _unitInfo;
+        protected UnitInfo OriginUnitInfo; 
+        protected UnitInfo UnitInfo;
         protected UnitInfo ConvertedInfo;
 
         public AxisConverter Converter { get; protected set; }
@@ -32,15 +28,17 @@ namespace AxisConvertSystem
         public UnitDepthHandler DepthHandler { get; private set; }
         public Section Section { get; protected set; }
         public bool IsHide { get; private set; }
-        public bool OnGround => CheckStandObject(out var temp, true);
+        public bool OnGround => CheckStandObject(out var tempCollider, true);
         
-        public List<ObjectUnit> HidedUnits { get; private set; }
+        public List<ObjectUnit> IntersectedUnits { get; private set; }
 
         private List<Renderer> _renderers;
         private List<Material> _materials;
 
         private LayerMask _climbLayerMask;
         private UnClimbableEffect _unClimbableEffect;
+
+        private SelectedBorder _selectedBorder;
 
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
@@ -59,10 +57,9 @@ namespace AxisConvertSystem
                 Rigidbody.useGravity = false;
                 Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             }
+            IntersectedUnits = new List<ObjectUnit>();
             DepthHandler = new UnitDepthHandler(this);
-
-            HidedUnits = new List<ObjectUnit>();
-
+            
             _materials = new List<Material>();
             _renderers = new List<Renderer>();
             transform.GetComponentsInChildren<Renderer>(_renderers);
@@ -86,6 +83,7 @@ namespace AxisConvertSystem
             Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
         }
 
+
         public virtual void UpdateUnit()
         {
             if (!staticUnit)
@@ -106,7 +104,7 @@ namespace AxisConvertSystem
             OriginUnitInfo.LocalScale = transform.localScale;
             OriginUnitInfo.ColliderCenter = Collider.GetLocalCenter();
             
-            _unitInfo = OriginUnitInfo;
+            UnitInfo = OriginUnitInfo;
 
             DepthHandler.DepthCheckPointSetting();
         }
@@ -125,12 +123,13 @@ namespace AxisConvertSystem
             }
             
             SynchronizePosition(axis);
-            ConvertedInfo = ConvertInfo(_unitInfo, axis);
+            ConvertedInfo = ConvertInfo(UnitInfo, axis);
         }
         
         public virtual void ApplyUnitInfo(AxisType axis)
         {
             ApplyInfo(ConvertedInfo);
+
 
             if (DepthHandler.Hide)
             {
@@ -181,15 +180,13 @@ namespace AxisConvertSystem
                 basic.LocalPos.SetAxisElement(axis, layerDepth);
             }
 
-
             basic.LocalScale = basic.LocalRot * basic.LocalScale;
             basic.LocalScale.SetAxisElement(axis, 1);
-            basic.LocalScale = Quaternion.Inverse(basic.LocalRot) * basic.LocalScale;
+            basic.LocalScale = (Quaternion.Inverse(basic.LocalRot) * basic.LocalScale).Abs();
 
             basic.ColliderCenter = basic.LocalRot * basic.ColliderCenter;
             basic.ColliderCenter.SetAxisElement(axis, -layerDepth);
             basic.ColliderCenter = Quaternion.Inverse(basic.LocalRot) * basic.ColliderCenter;
-
 
             return basic;
         }
@@ -200,7 +197,7 @@ namespace AxisConvertSystem
             {
                 return;
             }
-            
+
             activeUnit = active;
             Collider.enabled = active;
 
@@ -261,9 +258,9 @@ namespace AxisConvertSystem
 
         public virtual void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
         {
-            _unitInfo = OriginUnitInfo;
+            UnitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
-            ConvertedInfo = ConvertInfo(_unitInfo, Converter.AxisType);
+            ConvertedInfo = ConvertInfo(UnitInfo, Converter.AxisType);
             ApplyUnitInfo(Converter.AxisType);
             Physics.SyncTransforms();
 
@@ -271,16 +268,16 @@ namespace AxisConvertSystem
             {
                 Dissolve(0f, dissolveTime, true, callBack);
                 Rigidbody.velocity = Vector3.zero;
-                PlaySpawnVFX();
+                //PlaySpawnVFX();
             }
         }
         
         public void RewriteUnitInfo()
         {
-            _unitInfo.LocalPos = transform.localPosition;
-            _unitInfo.LocalRot = transform.localRotation;
-            _unitInfo.LocalScale = transform.localScale;
-            _unitInfo.ColliderCenter = Collider.GetLocalCenter();
+            UnitInfo.LocalPos = transform.localPosition;
+            UnitInfo.LocalRot = transform.localRotation;
+            UnitInfo.LocalScale = transform.localScale;
+            UnitInfo.ColliderCenter = Collider.GetLocalCenter();
         }
 
         private void SynchronizePosition(AxisType axis)
@@ -300,14 +297,12 @@ namespace AxisConvertSystem
                     }
                     else
                     {
-                        _unitInfo.LocalPos = transform.localPosition;
+                        UnitInfo.LocalPos = transform.localPosition;
                     }
                 }
-                HidedUnits.Clear();
             }
             else
             {
-                HidedUnits.Clear();
                 RewriteUnitInfo();
             }
         }
@@ -317,7 +312,7 @@ namespace AxisConvertSystem
             var standUnit = col.transform.GetComponent<ObjectUnit>();
             var unit = FlippingStandUnit(standUnit);
             
-            var info = unit._unitInfo;
+            var info = unit.UnitInfo;
 
             var standPos = transform.localPosition;
             standPos.y = col.bounds.max.y;
@@ -326,7 +321,7 @@ namespace AxisConvertSystem
             if (unit.subUnit)
             {
                 var parentUnit = unit.GetParentUnit();
-                info = parentUnit._unitInfo;
+                info = parentUnit.UnitInfo;
                 standUnitLocalPos += info.LocalPos;
             }
             
@@ -338,16 +333,16 @@ namespace AxisConvertSystem
             else
             {
                 standPos.SetAxisElement(Converter.AxisType,
-                    (unit is PlaneUnit or TutorialObjectUnit ? _unitInfo.LocalPos : standUnitLocalPos)
+                    (unit is PlaneUnit or TutorialObjectUnit ? UnitInfo.LocalPos : standUnitLocalPos)
                     .GetAxisElement(Converter.AxisType));
             }
 
-            _unitInfo.LocalPos = standPos;
+            UnitInfo.LocalPos = standPos;
         }
 
         private ObjectUnit FlippingStandUnit(ObjectUnit standUnit)
         {
-            if (standUnit.HidedUnits.Count <= 0)
+            if (standUnit.IntersectedUnits.Count <= 0 || Converter.AxisType == AxisType.Y)
             {
                 return standUnit;
             }
@@ -356,7 +351,7 @@ namespace AxisConvertSystem
             var depth = DepthHandler.GetDepth();
 
             var frontDepth = standUnit.DepthHandler.GetDepth();
-            var boundsSize = (standUnit._unitInfo.LocalRot * standUnit._unitInfo.LocalScale).GetAxisElement(axis);
+            var boundsSize = (standUnit.UnitInfo.LocalRot * standUnit.UnitInfo.LocalScale).GetAxisElement(axis);
 
             // is in back unit
             if (depth > frontDepth || depth < frontDepth - boundsSize)
@@ -364,15 +359,30 @@ namespace AxisConvertSystem
                 return standUnit;
             }
 
-            // find back unit
+            // is in front unit
             var backUnit = standUnit;
-            foreach (var hidedUnit in standUnit.HidedUnits)
+            var dynamicDepthPoint = Collider.GetDepthPoint(Converter.AxisType);
+            
+            // find back unit
+            foreach (var intersectedUnit in standUnit.IntersectedUnits)
             {
-                var hideUnitDepth = hidedUnit.DepthHandler.GetDepth();
-
-                if (backUnit.DepthHandler.GetDepth() >= hideUnitDepth)
+                if (intersectedUnit == this)
                 {
-                    backUnit = hidedUnit;
+                    continue;
+                }
+
+                var intersectedUnitDepthPoint = intersectedUnit.DepthHandler.GetDepthPoint(Converter.AxisType);
+                if (!dynamicDepthPoint.Intersect(intersectedUnitDepthPoint))
+                {
+                    continue;
+                }
+                
+                var currentUnitDepth = backUnit.DepthHandler.GetDepth();
+                var intersectedUnitDepth = intersectedUnit.DepthHandler.GetDepth();
+
+                if (currentUnitDepth >= intersectedUnitDepth)
+                {
+                    backUnit = intersectedUnit;
                 }
             }
 
@@ -383,39 +393,76 @@ namespace AxisConvertSystem
         {
             var origin = Collider.bounds.center;
             var triggerInteraction = ignoreTriggered ? QueryTriggerInteraction.Ignore : QueryTriggerInteraction.Collide;
-            
+
+            var size = 0;
+            var cols = new Collider[10];
+
+            col = null;
+
             if (Converter.AxisType == AxisType.Y)
             {
-                var cols = new Collider[10];
-                Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
-                col = cols[0];
+                size = Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
 
-                if (col is null)
+                if (size <= 0)
                 {
-                    Physics.OverlapBoxNonAlloc(origin - Vector3.up, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
-                    col = cols[0];
+                    size = Physics.OverlapBoxNonAlloc(origin - Vector3.up, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
                 }
-                
-                return col;
             }
             else
             {
                 var dir = Vector3.down;
                 var distance = Collider.bounds.size.y / 2f + checkOffset;
-                
-                var isHit = Physics.Raycast(origin, dir, out var hit, distance, canStandMask, triggerInteraction);
-                col = isHit ? hit.collider : null;
-                return isHit;
+
+                var results = new RaycastHit[10];
+                size = Physics.RaycastNonAlloc(origin, dir, results, distance, canStandMask, triggerInteraction);
+
+                for (var i = 0; i < size; i++)
+                {
+                    cols[i] = results[i].collider;
+                }
             }
+
+            for (var i = 0; i < size; i++)
+            {
+                if (cols[i] is null)
+                {
+                    continue;
+                }
+
+                if (col is null)
+                {
+                    col = cols[i];
+                }
+                else
+                {
+                    if (!col.TryGetComponent<ObjectUnit>(out var unit) ||
+                        !cols[i].TryGetComponent<ObjectUnit>(out var otherUnit))
+                    {
+                        continue;
+                    }
+                    
+                    if (unit.DepthHandler.GetDepth() <= otherUnit.DepthHandler.GetDepth())
+                    {
+                        col = cols[i];
+                    }
+                }
+            }
+
+            return size > 0;
         }
         
         public void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
         {
+            CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(),DissolveRoutine(value,time,useDissolve,callBack));
+        }
+
+        private IEnumerator DissolveRoutine(float value, float time, bool useDissolve = true, Action callBack = null)
+        {
             value = Mathf.Clamp(value, 0f, 1f);
-        
+            var initVal = Mathf.Abs(1f - value);
+
             foreach (var material in _materials)
             {
-                var initVal = Mathf.Abs(1f - value);
                 if (useDissolve)
                 {
                     material.SetFloat(_dissolveProgressHash, initVal);
@@ -423,32 +470,24 @@ namespace AxisConvertSystem
                 material.SetFloat(_visibleProgressHash, initVal);
             }
 
-            var seq = DOTween.Sequence();
+            var currentTime = 0f;
 
-            foreach (var material in _materials)
+            while(currentTime <= time )
             {
-                if (useDissolve)
+                currentTime += Time.deltaTime;
+                var percent = currentTime / time;
+                var currentProgress = Mathf.Lerp(initVal,value,percent);
+                foreach (var material in _materials)
                 {
-                    seq.Join(DOTween.To(() => material.GetFloat(_dissolveProgressHash),
-                        progress => material.SetFloat(_dissolveProgressHash, progress), value, time));
+                    if (useDissolve)
+                    {
+                        material.SetFloat(_dissolveProgressHash, currentProgress);
+                    }
+                    material.SetFloat(_visibleProgressHash, currentProgress);
                 }
-                seq.Join(DOTween.To(() => material.GetFloat(_visibleProgressHash),
-                    progress => material.SetFloat(_visibleProgressHash, progress), value, time));
+                yield return null;
             }
-
-            seq.OnComplete(() => callBack?.Invoke());
-        }
-
-        private void PlaySpawnVFX()
-        {
-            var spawnVFX = PoolManager.Instance.Pop("SpawnVFX") as PoolableVFX;
-            var bounds = Collider.bounds;
-            var position = transform.position;
-            position.y = bounds.min.y;
-
-            spawnVFX.SetPositionAndRotation(position, Quaternion.identity);
-            spawnVFX.SetScale(new Vector3(bounds.size.x, 1, bounds.size.z));
-            spawnVFX.Play();
+            callBack?.Invoke();
         }
 
         public override void OnPop()
@@ -457,35 +496,6 @@ namespace AxisConvertSystem
 
         public override void OnPush()
         {
-        }
-
-        public List<FieldInfo> GetFieldInfos()
-        {
-            Type type = this.GetType();
-            FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            return fields.ToList();
-        }
-
-        public void SetFieldInfos(List<FieldInfo> infos)
-        {
-            if (infos == null)
-            {
-                Debug.Log("Info is null");
-                return;
-            }
-
-            foreach (FieldInfo info in infos)
-            {
-                try
-                {
-                    object value = FieldInfoStorage.GetFieldValue(info.FieldType);
-                    info.SetValue(this, value);
-                }
-                catch
-                {
-                    Debug.Log($"This info can't set value: {info}");
-                }
-            }
         }
 
         public void ShowUnClimbableEffect()
@@ -506,6 +516,33 @@ namespace AxisConvertSystem
             {
                 SceneControlManager.Instance.DeleteObject(_unClimbableEffect);
                 _unClimbableEffect = null;
+            }
+        }
+
+        public void ShowSelectedBorder()
+        {
+            if (_selectedBorder == null)
+            {
+                _selectedBorder = SceneControlManager.Instance.AddObject("SelectedBorder") as SelectedBorder;
+                _selectedBorder.Setting(Collider);
+            }
+        }
+
+        public void UnShowSelectedBorder()
+        {
+            if (_selectedBorder is not null)
+            {
+                SelectedBorderActivate(false);
+                SceneControlManager.Instance.DeleteObject(_selectedBorder);
+                _selectedBorder = null;
+            }
+        }
+
+        public void SelectedBorderActivate(bool active)
+        {
+            if (_selectedBorder is not null)
+            {
+                _selectedBorder.Activate(active);
             }
         }
 
@@ -557,6 +594,11 @@ namespace AxisConvertSystem
                     _materials.Add(material);    
                 }
             }
+        }
+
+        public virtual void SetGravity(bool useGravityParam)
+        {
+            useGravity = useGravityParam;
         }
     }
 }

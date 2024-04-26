@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using AxisConvertSystem;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(SectionCollisionChecker))]
 public class Section : PoolableMono
@@ -12,7 +13,6 @@ public class Section : PoolableMono
     [SerializeField] private Vector3 _exitPoint;
     [SerializeField] private Vector3 _playerResetPoint;
     public Vector3 PlayerResetPoint => _playerResetPoint;
-
     [SerializeField] private SectionData _sectionData;
     public SectionData SectionData => _sectionData;
 
@@ -33,7 +33,7 @@ public class Section : PoolableMono
         SectionUnits = new List<ObjectUnit>();
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (Active)
         {
@@ -44,7 +44,7 @@ public class Section : PoolableMono
         }
     }
 
-    public void Update()
+    protected virtual void Update()
     {
         if (Active)
         {

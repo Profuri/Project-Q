@@ -1,12 +1,13 @@
 using AxisConvertSystem;
-using Core;
 using UnityEngine;
 
 public class ObjectHoldingHandler : MonoBehaviour
 {
     private PlayerUnit _player;
     private Transform _holdingPoint;
-    private ObjectUnit _heldObject;
+    private IHoldable _heldObject;
+
+    public Vector3 HoldingPoint => _holdingPoint.position;
 
     private readonly int _animationHoldHash = Animator.StringToHash("IsHold");
 
@@ -18,30 +19,24 @@ public class ObjectHoldingHandler : MonoBehaviour
         _holdingPoint = transform.Find("HoldingPoint");
     }
 
-    private void Update()
+    public void UpdateHandler()
     {
         HoldingPointMovement();
-        if (_heldObject is not null)
-        {
-            _heldObject.SetPosition(_holdingPoint.position);
-        }
     }
 
     public void Attach(IHoldable obj)
     {
+        if (IsHold) return;
         _player.Animator.SetBool(_animationHoldHash, true);
-        
-        _heldObject = obj.GetObjectUnit();
-        _heldObject.useGravity = false;
-        _heldObject.StopImmediately(true);
+        _heldObject = obj;
+        _heldObject.Attach(this);
     }
 
     public void Detach()
     {
+        if (!IsHold) return;
         _player.Animator.SetBool(_animationHoldHash, false);
-        
-        _heldObject.StopImmediately(true);
-        _heldObject.useGravity = true;
+        _heldObject.Detach();
         _heldObject = null;
     }
 

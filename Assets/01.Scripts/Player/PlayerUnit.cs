@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using AxisConvertSystem;
 using InteractableSystem;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerUnit : ObjectUnit
 {
@@ -12,12 +12,44 @@ public class PlayerUnit : ObjectUnit
     public Transform ModelTrm { get; private set; }
     public Animator Animator { get; private set; }
     public ObjectHoldingHandler HoldingHandler { get; private set; }
+    public PlayerInteractHandler InteractHandler { get; private set; }
     public ObjectUnit StandingUnit { get; set; }
+    public SoundEffectPlayer SoundEffectPlayer { get; private set; }
+
     private StateController _stateController;
 
-    private InteractableObject _selectedInteractableObject;
-    
     private readonly int _activeHash = Animator.StringToHash("Active");
+
+    private float _coyoteTime = 0f;
+
+    private bool IsCoyote
+    {
+        get
+        {
+            bool isCoyote = Time.time - _coyoteTime < Data.coyoteTime;
+            return isCoyote;
+        }
+    }
+
+    //public bool CanJump => OnGround || IsCoyote;
+    public bool CanJump
+    {
+        get
+        {
+            Debug.LogError($"OnGround: {OnGround} IsCoyote: {IsCoyote}");
+            return OnGround || IsCoyote;
+        }
+    }
+
+    public void StartCoyoteTime()
+    {
+        _coyoteTime = Time.time;
+    }   
+    
+    public void ResetCoyoteTime()
+    {
+        _coyoteTime = float.MinValue;
+    }
     
     public override void Awake()
     {
@@ -28,6 +60,7 @@ public class PlayerUnit : ObjectUnit
         ModelTrm = transform.Find("Model");
         Animator = ModelTrm.GetComponent<Animator>();
         HoldingHandler = GetComponent<ObjectHoldingHandler>();
+        InteractHandler = GetComponent<PlayerInteractHandler>();
 
         _stateController = new StateController(this);
         _stateController.RegisterState(new PlayerIdleState(_stateController, true, "Idle"));
@@ -35,6 +68,8 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerJumpState(_stateController, true, "Jump"));
         _stateController.RegisterState(new PlayerFallState(_stateController, true, "Fall"));
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
+
+        SoundEffectPlayer = new SoundEffectPlayer(this);
     }
 
     public override void UpdateUnit()
@@ -45,22 +80,22 @@ public class PlayerUnit : ObjectUnit
         {
             StandingCheck();
         }
-        
-        _stateController.UpdateState();
 
-        _selectedInteractableObject = FindInteractable();
-
-        //Test code
         if(Input.GetKeyDown(KeyCode.C))
         {
             StageManager.Instance.StageClear(this);
         }
+        
+        _stateController.UpdateState();
+        HoldingHandler.UpdateHandler();
+        InteractHandler.UpdateHandler();
     }
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
     {
+        SoundManager.Instance.PlaySFX("PlayerDead");
         Converter.ConvertDimension(AxisType.None);
-        
+
         base.ReloadUnit(dissolveTime, () =>
         {
             callBack?.Invoke();
@@ -68,6 +103,7 @@ public class PlayerUnit : ObjectUnit
         });
         
         InputManagerHelper.OnDeadPlayer();
+        PlaySpawnVFX();
 
         Converter.ConvertDimension(AxisType.None);
         Animator.SetBool(_activeHash, true);
@@ -76,7 +112,7 @@ public class PlayerUnit : ObjectUnit
 
     public override void OnPop()
     {
-        InputManager.Instance.PlayerInputReader.OnInteractionEvent += OnInteraction;
+        InputManager.Instance.PlayerInputReader.OnInteractionEvent += InteractHandler.OnInteraction;
         InputManager.Instance.PlayerInputReader.OnReloadClickEvent += RestartStage;
         _stateController.ChangeState(typeof(PlayerIdleState));
         Animator.SetBool(_activeHash, true);
@@ -118,50 +154,6 @@ public class PlayerUnit : ObjectUnit
         }
     }
 
-    private InteractableObject FindInteractable()
-    {
-        if (HoldingHandler.IsHold)
-        {
-            return null;
-        }
-        
-        var cols = new Collider[_data.maxInteractableCnt];
-        var size = Physics.OverlapSphereNonAlloc(Collider.bounds.center, _data.interactableRadius, cols, _data.interactableMask);
-
-        for(var i = 0; i < size; ++i)
-        {
-            if (cols[i].TryGetComponent<InteractableObject>(out var interactable))
-            {
-                if(interactable.InteractType == EInteractType.INPUT_RECEIVE)
-                {
-                    var dir = (cols[i].bounds.center - Collider.bounds.center).normalized;
-                    var isHit = Physics.Raycast(Collider.bounds.center - dir, dir, out var hit, Mathf.Infinity,
-                        canStandMask);
-
-                    if (isHit && cols[i] != hit.collider)
-                    {
-                        continue;
-                    }
-
-                    if (interactable != _selectedInteractableObject)
-                    {
-                        _selectedInteractableObject?.OnDetectedLeave(this);
-                        interactable.OnDetectedEnter(this);
-                    }
-                    return interactable;
-                }
-            }
-        }
-        
-        if (_selectedInteractableObject)
-        {
-            _selectedInteractableObject.OnDetectedLeave(this);
-            _selectedInteractableObject = null;
-        }
-
-        return null;
-    }
-
     public void SetSection(Section section)
     {
         transform.SetParent(section.transform);
@@ -176,36 +168,28 @@ public class PlayerUnit : ObjectUnit
     {
         _stateController.CurrentState.AnimationTrigger(key);
     }
-
-    private void OnInteraction()
+    
+    private void PlaySpawnVFX()
     {
-        if (HoldingHandler.IsHold)
-        {
-            HoldingHandler.Detach();
-            return;
-        }
-        
-        if (_selectedInteractableObject is null)
-        {
-            return;
-        }
-        
-        _selectedInteractableObject.OnInteraction(this, true);
+        var spawnVFX = PoolManager.Instance.Pop("SpawnVFX") as PoolableVFX;
+        var bounds = Collider.bounds;
+        var position = transform.position;
+        position.y = bounds.min.y;
+
+        spawnVFX.SetPositionAndRotation(position, Quaternion.identity);
+        spawnVFX.SetScale(new Vector3(bounds.size.x, 1, bounds.size.z));
+        spawnVFX.Play();
     }
 
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
+    //계속 실행되니까 OnGround가 바뀌었을 때는 체크 안함
+    public override void SetGravity(bool useGravityParam)
     {
-        Gizmos.color = Color.cyan;
-
-        var col = GetComponent<Collider>();
-        Gizmos.DrawWireSphere(col.bounds.center, _data.interactableRadius);
-        
-        if (_selectedInteractableObject != null)
+        if(OnGround)
         {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(col.bounds.center, _selectedInteractableObject.transform.position);
-        }
+            useGravity = true;
+            return;
+        }        
+        
+        useGravity = useGravityParam;
     }
-#endif
 }

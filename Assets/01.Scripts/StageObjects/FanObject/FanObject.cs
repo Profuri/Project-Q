@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using InteractableSystem;
 using AxisConvertSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -14,6 +13,7 @@ public class FanObject : InteractableObject
     [SerializeField] private float _airMaxHeight;
     [SerializeField] private float _airPower;
     [SerializeField] private LayerMask _effectedMask;
+
     
     [Header("Fan Settings")]
     [SerializeField] private float _fanMaxSpeed;
@@ -29,6 +29,8 @@ public class FanObject : InteractableObject
 
     private List<ObjectUnit> _affectedUnits;
 
+    private SoundEffectPlayer _soundEffectPlayer;
+
     public override void Awake()
     {
         var model = transform.Find("Model");
@@ -36,6 +38,8 @@ public class FanObject : InteractableObject
         _airParticle = _fanTrm.Find("AirParticle").GetComponent<ParticleSystem>();
 
         _affectedUnits = new List<ObjectUnit>();
+
+        _soundEffectPlayer = new SoundEffectPlayer(this);
         
         base.Awake();
     }
@@ -107,12 +111,14 @@ public class FanObject : InteractableObject
     {
         _enabled = true;
         _airParticle.Play();
+        SoundManager.Instance.PlaySFX("FanLoop",true,_soundEffectPlayer);
     }
 
     private void ReleaseFan()
     {
         _enabled = false;
         _airParticle.Stop();
+        _soundEffectPlayer.Stop();
     }
     
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
@@ -187,14 +193,15 @@ public class FanObject : InteractableObject
             var airPower = GetAirDir() * _airPower;
             velocity.SetAxisElement(GetAirNormalAxis(), airPower.GetAxisElement(GetAirNormalAxis()));
 
-            unit.useGravity = false;
+
+            unit.SetGravity(false);
             unit.SetVelocity(velocity, false);
         }
     }
 
     private bool CheckCollision(out Collider[] cols)
     {
-        var center = transform.position + GetAirDir() * (_airMaxHeight / 2f);
+        var center = Collider.bounds.center + GetAirDir() * (_airMaxHeight / 2f);
         var colSize = Vector3.one * _collisionSize;
         colSize.SetAxisElement(GetAirNormalAxis(), _airMaxHeight);
 

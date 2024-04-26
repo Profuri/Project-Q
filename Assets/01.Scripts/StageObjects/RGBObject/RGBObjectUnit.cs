@@ -186,10 +186,8 @@ public class RGBObjectUnit : InteractableObject
     }
 #if UNITY_EDITOR
 
-    protected override void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
-        base.OnDrawGizmos();
-
         Gizmos.color = GetColorFromRGBColor(originColor);
 
         var col = GetComponent<Collider>();

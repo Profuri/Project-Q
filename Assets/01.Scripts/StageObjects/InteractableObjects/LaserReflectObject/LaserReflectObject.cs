@@ -54,6 +54,8 @@ public class LaserReflectObject : InteractableObject
             transform.rotation = Quaternion.Lerp(originRotation, targetRotation, percent);
             yield return null;
         }
+        
+        UnitInfo.LocalRot = transform.localRotation;
         Callback?.Invoke();
     }
 }

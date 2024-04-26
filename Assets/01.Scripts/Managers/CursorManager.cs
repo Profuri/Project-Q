@@ -7,15 +7,12 @@ public static class CursorManager
     private static HashSet<UIComponent> _uiHashSet = new HashSet<UIComponent>();
     public static int CurrentCnt => _uiHashSet.Count;
 
-
-
     public static void RegisterUI(UIComponent component)
     {
         if (_uiHashSet.Contains(component)) return;
 
         _uiHashSet.Add(component);
         ReloadCursor();
-
     }
 
     public static void UnRegisterUI(UIComponent component)

@@ -16,6 +16,7 @@ public enum EInputCategory
     AxisControl,
     ZoomOut,
     Reload,
+    Escape,
 }
 
 public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoad
@@ -23,6 +24,7 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
     [field:SerializeField] public PlayerInputReader PlayerInputReader { get; private set; }
     [field:SerializeField] public UIInputReader UIInputReader { get; private set; }
     [field:SerializeField] public CameraInputReader CameraInputReader { get; private set; }
+
 
     private Dictionary<EInputCategory, InputAction> _inputDictionary;
 
@@ -38,6 +40,7 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
     {
         _inputDictionary = new Dictionary<EInputCategory, InputAction>
         {
+            { EInputCategory.Escape,            UIInputReader.Actions.Pause},
             { EInputCategory.Movement,          PlayerInputReader.Actions.Movement },
             { EInputCategory.Jump,              PlayerInputReader.Actions.Jump },
             { EInputCategory.Interaction,       PlayerInputReader.Actions.Interaction },
@@ -108,7 +111,6 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
         {
             bool isInCategories = categories.Contains(category);
             bool isEnable = isInCategories ? enable : !enable; 
-            
             
             if (isEnable)
                 _inputDictionary[category].Enable();
@@ -206,7 +208,6 @@ public static class InputManagerHelper
         InputManager.Instance.SetEnableInputWithout(inputs, true);
     }
     public static void OnCancelingAxis() => InputManager.Instance.SetEnableInputAll(true);
-
     public static void OnDeadPlayer() => InputManager.Instance.SetEnableInputAll(false);
     public static void OnRevivePlayer() => InputManager.Instance.SetEnableInputAll(true);
 }
