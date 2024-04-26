@@ -46,14 +46,14 @@ public class SettingWindow : UIComponent
 
         base.Appear(parentTrm, callback);
 
-        SoundManager.Instance.PlaySFX("PanelPopup", false);
+        SoundManager.Instance.PlaySFX("PanelAppear", false);
         CursorManager.RegisterUI(this);
     }
 
     public void Close()
     {
         _currentPanel?.ReleasePanel();
-        SoundManager.Instance.PlaySFX("PanelClose", false);
+        SoundManager.Instance.PlaySFX("PanelDisappear", false);
         Disappear();
     }
 

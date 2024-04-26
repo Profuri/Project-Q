@@ -75,7 +75,7 @@ public class Scene : PoolableMono
             landParticle.SetPositionAndRotation(Player.transform.position, Quaternion.identity);
             landParticle.Play();
             InputManager.Instance.SetEnableInputAll(true);
-            SoundManager.Instance.PlaySFX("PlayerSpawnLand",false);
+            SoundManager.Instance.PlaySFX("PlayerAfterJump");
         });
     }
 

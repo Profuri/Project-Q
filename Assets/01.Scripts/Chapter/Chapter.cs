@@ -17,7 +17,7 @@ public class Chapter : InteractableObject
     public override void Awake()
     {
         base.Awake();
-        _symbolTrm = transform.Find("Symbol");
+        _symbolTrm = transform.Find("Section/Symbol");
     }
 
     public override void UpdateUnit()

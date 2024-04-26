@@ -22,7 +22,7 @@ public class MemoButton : InteractableObject
 
             if(isSound)
             {
-                SoundManager.Instance.PlaySFX("PanelPopup", false);
+                SoundManager.Instance.PlaySFX("PanelAppear", false);
             }
         }
     }
