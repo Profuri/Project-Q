@@ -146,7 +146,6 @@ public class DataManager : BaseManager<DataManager>
     public void LoadData(IProvideLoad providable)
     {
         s_saveData = _fileDataHandler.Load();
-
         _dataLoadDictionary[providable]?.Invoke(s_saveData);
     }
     #endregion
