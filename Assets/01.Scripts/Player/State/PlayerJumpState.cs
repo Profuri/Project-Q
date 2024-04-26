@@ -1,10 +1,12 @@
 using AxisConvertSystem;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class PlayerJumpState : PlayerOnAirState
 {
     public bool IsFalling => Player.Rigidbody.velocity.y < 0f;
     private StateController _controller;
+    
     public PlayerJumpState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
         _controller = controller;
@@ -14,7 +16,12 @@ public class PlayerJumpState : PlayerOnAirState
         InputManager.Instance.PlayerInputReader.OnJumpEvent -= JumpHandle;
 
 
-        if (!Player.CanJump) return;
+        if (!Player.CanJump)
+        {
+            Player.ResetCoyoteTime();
+            Controller.ChangeState(typeof(PlayerFallState));
+            return;
+        }
 
         base.EnterState();
 
@@ -26,6 +33,8 @@ public class PlayerJumpState : PlayerOnAirState
         }
         Player.SetVelocity(Vector3.up * Player.Data.jumpPower, false);
         Player.ResetCoyoteTime();
+
+        SoundManager.Instance.PlaySFX("PlayerJump",false,Player.SoundEffectPlayer);
     }
 
     public override void UpdateState()
@@ -46,7 +55,6 @@ public class PlayerJumpState : PlayerOnAirState
 
         if (IsFalling)
         {
-            //Debug.Break();
             Player.ResetCoyoteTime();
             Controller.ChangeState(typeof(PlayerFallState));
         }

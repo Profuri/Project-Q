@@ -19,6 +19,7 @@ public class SelectedBorder : PoolableMono
     public override void OnPop()
     {
         _active = false;
+        Activate(_active);
     }
 
     public override void OnPush()

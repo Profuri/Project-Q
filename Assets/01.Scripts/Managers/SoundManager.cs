@@ -4,7 +4,6 @@ using ManagingSystem;
 using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections.Generic;
-using UnityEngine.Rendering;
 
 public enum SoundEnum
 {
@@ -23,12 +22,14 @@ public enum EAUDIO_MIXER
 public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoad
 {
     [SerializeField] private AudioClipSO _audioClipSO;
+    public AudioClipSO AudioClipSO => _audioClipSO;
     [SerializeField] private AudioClipSO _bgmClipSO;
     private AudioSource _audioSource;
 
     [SerializeField] private AudioMixer _masterMixer;
     [SerializeField] private AudioMixerGroup _bgmGroup;
     [SerializeField] private AudioMixerGroup _sfxGroup;
+    public AudioMixerGroup SfxGroup => _sfxGroup;
 
     [SerializeField] private float _defaultVolume = 0f;
 
@@ -68,10 +69,10 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
         //DataManager.Instance.LoadData(this);
     }
     
-    public void PlaySFX(string clipName)
+    public void PlaySFX(string clipName,bool loop = false, SoundEffectPlayer soundEffectPlayer = null)
     {
         AudioClip clip = _audioClipSO.GetAudioClip(clipName);
-        Play(clip, SoundEnum.EFFECT);
+        Play(clip, SoundEnum.EFFECT,loop, soundEffectPlayer);
     }
 
     public void PlayBGM(string clipName)
@@ -80,9 +81,9 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
         Play(clip, SoundEnum.BGM);
     }
 
-    public void Play(AudioClip audioClips, SoundEnum type = SoundEnum.EFFECT)
+    public void Play(AudioClip audioClip, SoundEnum type = SoundEnum.EFFECT, bool loop = false, SoundEffectPlayer soundEffectPlayer = null)
     {
-        if (audioClips == null)
+        if (audioClip == null)
         {
             Debug.LogError("cannot find audioclips");
             return;
@@ -97,16 +98,21 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
                 audioSource.Stop();
 
             audioSource.volume = 0;
-            audioSource.clip = audioClips;
+            audioSource.clip = audioClip;
             audioSource.Play();
 
             StartCoroutine(SoundFade(true, _audioSources[(int)SoundEnum.BGM], soundFadeOnTime, 1, SoundEnum.BGM));
             StartCoroutine(SoundFade(false, _audioSources[(int)SoundEnum.BGM], soundFadeOnTime, 0, SoundEnum.BGM));
         }
-        else
+        else if(type == SoundEnum.EFFECT) 
         {
-            AudioSource audioSource = _audioSources[(int)SoundEnum.EFFECT];
-            audioSource.PlayOneShot(audioClips);
+            if(soundEffectPlayer == null)
+            {
+                AudioSource audioSource = _audioSources[(int)SoundEnum.EFFECT];
+                audioSource.PlayOneShot(audioClip);
+                return;
+            }
+            soundEffectPlayer.Play(audioClip, loop);
         }
     }
 

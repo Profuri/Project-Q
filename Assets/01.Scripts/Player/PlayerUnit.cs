@@ -14,6 +14,7 @@ public class PlayerUnit : ObjectUnit
     public ObjectHoldingHandler HoldingHandler { get; private set; }
     public PlayerInteractHandler InteractHandler { get; private set; }
     public ObjectUnit StandingUnit { get; set; }
+    public SoundEffectPlayer SoundEffectPlayer { get; private set; }
 
     private StateController _stateController;
 
@@ -30,7 +31,15 @@ public class PlayerUnit : ObjectUnit
         }
     }
 
-    public bool CanJump => OnGround || IsCoyote;
+    //public bool CanJump => OnGround || IsCoyote;
+    public bool CanJump
+    {
+        get
+        {
+            Debug.LogError($"OnGround: {OnGround} IsCoyote: {IsCoyote}");
+            return OnGround || IsCoyote;
+        }
+    }
 
     public void StartCoyoteTime()
     {
@@ -59,6 +68,8 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerJumpState(_stateController, true, "Jump"));
         _stateController.RegisterState(new PlayerFallState(_stateController, true, "Fall"));
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
+
+        SoundEffectPlayer = new SoundEffectPlayer(this);
     }
 
     public override void UpdateUnit()
@@ -69,19 +80,20 @@ public class PlayerUnit : ObjectUnit
         {
             StandingCheck();
         }
-        
-        _stateController.UpdateState();
 
         if(Input.GetKeyDown(KeyCode.C))
         {
             StageManager.Instance.StageClear(this);
         }
+        
+        _stateController.UpdateState();
         HoldingHandler.UpdateHandler();
         InteractHandler.UpdateHandler();
     }
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
     {
+        SoundManager.Instance.PlaySFX("PlayerDead");
         Converter.ConvertDimension(AxisType.None);
 
         base.ReloadUnit(dissolveTime, () =>
@@ -170,17 +182,14 @@ public class PlayerUnit : ObjectUnit
     }
 
     //계속 실행되니까 OnGround가 바뀌었을 때는 체크 안함
-    public override void SetGravity(bool useGravity)
+    public override void SetGravity(bool useGravityParam)
     {
         if(OnGround)
         {
-            this.useGravity = true;
+            useGravity = true;
             return;
         }        
-        else
-        {
-            this.useGravity = useGravity;
-        }
-
+        
+        useGravity = useGravityParam;
     }
 }

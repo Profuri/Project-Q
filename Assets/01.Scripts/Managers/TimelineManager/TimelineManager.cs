@@ -60,7 +60,6 @@ public class TimelineManager : BaseManager<TimelineManager>
         {
             _timelineQueue.Enqueue(_timelineQueue.Dequeue());
         }
-
         if (!IsPlay)
         {
             PlayNextQueue();

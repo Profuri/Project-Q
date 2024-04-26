@@ -1,15 +1,11 @@
-using Fabgrid;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using UnityEngine;
-using System.Collections;
 
 namespace AxisConvertSystem
 {
-    public class ObjectUnit : PoolableMono, IProvidableFieldInfo
+    public class ObjectUnit : PoolableMono
     {
         [HideInInspector] public CompressLayer compressLayer = CompressLayer.Platform;
         [HideInInspector] public UnitRenderType renderType = UnitRenderType.Opaque;
@@ -484,7 +480,7 @@ namespace AxisConvertSystem
                 foreach (var material in _materials)
                 {
                     if (useDissolve)
-                {
+                    {
                         material.SetFloat(_dissolveProgressHash, currentProgress);
                     }
                     material.SetFloat(_visibleProgressHash, currentProgress);
@@ -500,35 +496,6 @@ namespace AxisConvertSystem
 
         public override void OnPush()
         {
-        }
-
-        public List<FieldInfo> GetFieldInfos()
-        {
-            Type type = this.GetType();
-            FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            return fields.ToList();
-        }
-
-        public void SetFieldInfos(List<FieldInfo> infos)
-        {
-            if (infos == null)
-            {
-                Debug.Log("Info is null");
-                return;
-            }
-
-            foreach (FieldInfo info in infos)
-            {
-                try
-                {
-                    object value = FieldInfoStorage.GetFieldValue(info.FieldType);
-                    info.SetValue(this, value);
-                }
-                catch
-                {
-                    Debug.Log($"This info can't set value: {info}");
-                }
-            }
         }
 
         public void ShowUnClimbableEffect()
@@ -565,6 +532,7 @@ namespace AxisConvertSystem
         {
             if (_selectedBorder is not null)
             {
+                SelectedBorderActivate(false);
                 SceneControlManager.Instance.DeleteObject(_selectedBorder);
                 _selectedBorder = null;
             }
@@ -628,9 +596,9 @@ namespace AxisConvertSystem
             }
         }
 
-        public virtual void SetGravity(bool useGravity)
+        public virtual void SetGravity(bool useGravityParam)
         {
-            this.useGravity = useGravity;
+            useGravity = useGravityParam;
         }
     }
 }

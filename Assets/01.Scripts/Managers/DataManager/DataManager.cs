@@ -95,6 +95,7 @@ public class DataManager : BaseManager<DataManager>
     public void ResetData()
     {
         _fileDataHandler.DeleteSaveData();
+        s_saveData = new SaveData();
         Instance.SaveData();
     }
 

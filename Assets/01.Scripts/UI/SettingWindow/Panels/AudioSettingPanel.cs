@@ -42,6 +42,7 @@ public class AudioSettingPanel : WindowPanel
 
     public void SaveVolumes()
     {
+        SoundManager.Instance.PlaySFX("UIApply", false);
         DataManager.Instance.SaveData(SoundManager.Instance);
     }
 

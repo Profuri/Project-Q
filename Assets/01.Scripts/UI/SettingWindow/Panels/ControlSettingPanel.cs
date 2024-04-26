@@ -12,44 +12,29 @@ public class ControlSettingPanel : WindowPanel
     [SerializeField] private UIButton3D _zoomOutBtn;
     [SerializeField] private UIButton3D _stageResetBtn;
 
-    public void ChangeMoveFrontKeyBinding(UIButton3D caller)
+    public void ChangeMovementKeyBinding(int index)
     {
-        ChangeKeyBinding(caller, EInputCategory.Movement, 1);
+        ChangeKeyBinding(_movementBtnList[index], EInputCategory.Movement, index + 1);
     }
     
-    public void ChangeMoveBackwardKeyBinding(UIButton3D caller)
+    public void ChangeJumpKeyBinding()
     {
-        ChangeKeyBinding(caller, EInputCategory.Movement, 2);
+        ChangeKeyBinding(_jumpBtn, EInputCategory.Jump);
     }
     
-    public void ChangeMoveLeftKeyBinding(UIButton3D caller)
+    public void ChangeInteractionKeyBinding()
     {
-        ChangeKeyBinding(caller, EInputCategory.Movement, 3);
+        ChangeKeyBinding(_interactionBtn, EInputCategory.Interaction);
     }
     
-    public void ChangeMoveRightKeyBinding(UIButton3D caller)
+    public void ChangeZoomOutKeyBinding()
     {
-        ChangeKeyBinding(caller, EInputCategory.Movement, 4);   
+        ChangeKeyBinding(_zoomOutBtn, EInputCategory.ZoomOut);
     }
     
-    public void ChangeJumpKeyBinding(UIButton3D caller)
+    public void ChangeStageResetKeyBinding()
     {
-        ChangeKeyBinding(caller, EInputCategory.Jump);
-    }
-    
-    public void ChangeInteractionKeyBinding(UIButton3D caller)
-    {
-        ChangeKeyBinding(caller, EInputCategory.Interaction);
-    }
-    
-    public void ChangeZoomOutKeyBinding(UIButton3D caller)
-    {
-        ChangeKeyBinding(caller, EInputCategory.ZoomOut);
-    }
-    
-    public void ChangeStageResetKeyBinding(UIButton3D caller)
-    {
-        ChangeKeyBinding(caller, EInputCategory.Reload);
+        ChangeKeyBinding(_stageResetBtn, EInputCategory.Reload);
     }
     
     private void ChangeKeyBinding(UIButton3D caller, EInputCategory category, int bindingIndex = 0)
@@ -107,6 +92,7 @@ public class ControlSettingPanel : WindowPanel
 
     public void SaveControls()
     {
+        SoundManager.Instance.PlaySFX("UIApply",false);
         DataManager.Instance.SaveData(InputManager.Instance);
     }
 }

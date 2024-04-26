@@ -44,6 +44,7 @@ namespace AxisConvertSystem
 
             if(axisType == AxisType.None)
             {
+                SoundManager.Instance.PlaySFX("AxisControl", false);
                 ChangeAxis(axisType);
             }
 
@@ -63,6 +64,7 @@ namespace AxisConvertSystem
                     
                     if(axisType != AxisType.None)
                     {
+                        SoundManager.Instance.PlaySFX("AxisControl", false);
                         ChangeAxis(axisType);
                     }
                     
@@ -94,6 +96,8 @@ namespace AxisConvertSystem
 
         private void CancelChangeAxis(AxisType canceledAxis, Collider frontCol, Collider backCol)
         {
+            SoundManager.Instance.PlaySFX("AxisControlFailure",false);
+
             var seq = DOTween.Sequence();
         
             var reverseAxisDir = Vector3ExtensionMethod.GetAxisDir(canceledAxis) - Vector3.one;

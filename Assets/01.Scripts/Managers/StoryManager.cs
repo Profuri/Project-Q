@@ -1,11 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ManagingSystem;
 using System;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEngine.Timeline;
 
 public enum ChapterCondition
 {
@@ -35,12 +31,17 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 
     private Tuple<ChapterStory,int> GetStory(ChapterCondition condition,ChapterType chapterType,int stageIndex = 7)
     {
-        Predicate<ChapterStory> predicate = (cs) => cs.stageIndex == stageIndex && cs.chapterType == chapterType && cs.condition == condition;
-        int index = _storyList.FindIndex(0, _storyList.Count, predicate);
+        bool Predicate(ChapterStory cs)
+        {
+            return cs.stageIndex == stageIndex && cs.chapterType == chapterType && cs.condition == condition;
+        }
+        
+        int index = _storyList.FindIndex(0, _storyList.Count, Predicate);
         if (index != -1 && !_storyList[index].isShown)
         {
             return Tuple.Create(_storyList[index],index);
         }
+        
         return null;
     }
 
