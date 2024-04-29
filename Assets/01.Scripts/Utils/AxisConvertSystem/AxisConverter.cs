@@ -133,22 +133,11 @@ namespace AxisConvertSystem
             VolumeManager.Instance.Highlight(0.2f);
             LightManager.Instance.SetShadow(axisType == AxisType.None ? LightShadows.Soft : LightShadows.None);
 
-            foreach (var unit in _section.SectionUnits)
-            {
-                unit.Convert(axisType);
-            }
-            foreach (var unit in _section.SectionUnits)
-            {
-                unit.DepthHandler.CalcDepth(axisType);
-            }
-            foreach (var unit in _section.SectionUnits)
-            {
-                unit.ApplyUnitInfo(axisType);
-            }
-            foreach (var unit in _section.SectionUnits)
-            {
-                unit.ApplyDepth();
-            }
+            foreach (var unit in _section.SectionUnits) unit.Convert(axisType);
+            foreach (var unit in _section.SectionUnits) unit.IntersectedUnits.Clear();
+            foreach (var unit in _section.SectionUnits) unit.DepthHandler.CalcDepth(axisType);
+            foreach (var unit in _section.SectionUnits) unit.ApplyUnitInfo(axisType);
+            foreach (var unit in _section.SectionUnits) unit.ApplyDepth();
 
             AxisType = axisType;
         }
