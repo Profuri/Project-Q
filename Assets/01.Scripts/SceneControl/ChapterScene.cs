@@ -31,7 +31,6 @@ public class ChapterScene : Scene, IProvideLoad
         if (!alreadyShowCutScene)
         {
             saveData.ChapterTimelineDictionary[clearChapter] = true;
-            DataManager.Instance.SaveData();
         }
 
         TimelineManager.Instance.ShowTimeline(_timelineDirector, type, alreadyShowCutScene, onComplete);
@@ -44,7 +43,7 @@ public class ChapterScene : Scene, IProvideLoad
         
         var clearDictionary = saveData.ChapterClearDictionary;
         var clearCnt = 0;
-        
+
         foreach(var (chapterType, isClear) in clearDictionary)
         {
             if (chapterType == ChapterType.Cpu || !isClear)
@@ -53,7 +52,7 @@ public class ChapterScene : Scene, IProvideLoad
             }
             
             clearCnt++;
-            ShowChapterClearTimeline(saveData, chapterType,null);
+            ShowChapterClearTimeline(saveData, chapterType, null);
         }
 
         if (clearCnt > 4)
@@ -63,13 +62,14 @@ public class ChapterScene : Scene, IProvideLoad
             if (!alreadyShowCutScene)
             {
                 saveData.ChapterTimelineDictionary[ChapterType.Cpu] = true;
-                DataManager.Instance.SaveData();
             }
             
 
             TimelineManager.Instance.ShowTimeline(_timelineDirector, TimelineType.AllChapterClear, alreadyShowCutScene);
             onAllChapterClear?.Invoke();
         }
+        
+        DataManager.Instance.SaveData();
     }
 
     public Action<SaveData> GetLoadAction()
