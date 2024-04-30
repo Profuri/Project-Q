@@ -14,9 +14,6 @@ public class DoorObject : InteractableObject
     [SerializeField] private bool _redstoneToggle = false;
 
 
-
-
-
     private Vector3 _originPos;
 
     private void Awake()

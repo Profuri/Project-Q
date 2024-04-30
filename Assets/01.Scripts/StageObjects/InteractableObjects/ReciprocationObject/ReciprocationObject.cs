@@ -42,11 +42,9 @@ public class ReciprocationObject : InteractableObject
         var lerpPos = Vector3.Lerp(curPos, destPos, _reciprocationSpeed * Time.deltaTime);
 
         transform.localPosition = lerpPos;
-
+        
 
         float yDiff = transform.localPosition.y - lerpPos.y;
-
-        //���⼭ CollisionTest �ذ����� �Ʒ� ���� ����� �ǰ�
 
         if(yDiff > 0.01f)
         {

@@ -11,6 +11,19 @@ namespace InteractableSystem
 
         protected bool LastToggleState;
 
+        public float DistanceByPlayer
+        {
+            get
+            {
+                Vector3 playerPos = SceneControlManager.Instance.Player.Collider.bounds.center;
+                Vector3 curPos = Collider.bounds.center;
+
+                playerPos.y = curPos.y = 0;
+
+                return Vector3.Distance(playerPos, curPos);
+            }
+        }
+
         public override void Awake()
         {
             base.Awake();
@@ -67,6 +80,7 @@ namespace InteractableSystem
             ShowSelectedBorderInConnectedUnit();
         }
 
+
         public override void OnDetectedLeave(ObjectUnit communicator = null)
         {
             base.OnDetectedLeave(communicator);
@@ -79,6 +93,9 @@ namespace InteractableSystem
             foreach (var obj in _affectedObjects)
             {
                 obj?.interactableObject?.ShowSelectedBorder();
+                float interactableRadius = SceneControlManager.Instance.CurrentScene.Player.Data.interactableRadius;
+                float alpha = 1.2f - DistanceByPlayer / interactableRadius;
+                obj?.interactableObject?.SetAlphaSelectedBorder(alpha);
             }
 
             foreach (var toggleChangeEvent in _onToggleChangeEvents)
@@ -89,6 +106,9 @@ namespace InteractableSystem
                     if(curEvent.GetPersistentTarget(index) is ObjectUnit unit)
                     {
                         unit.ShowSelectedBorder();
+                        float interactableRadius = SceneControlManager.Instance.CurrentScene.Player.Data.interactableRadius;
+                        float alpha = 1.2f - DistanceByPlayer / interactableRadius;
+                        unit?.SetAlphaSelectedBorder(alpha);
                     }
                 }
             }

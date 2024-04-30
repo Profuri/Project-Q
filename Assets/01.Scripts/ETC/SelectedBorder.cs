@@ -1,5 +1,7 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SelectedBorder : PoolableMono
 {
@@ -7,8 +9,22 @@ public class SelectedBorder : PoolableMono
 
     private Material _material;
     private readonly int _activeProgressHash = Shader.PropertyToID("_ActiveProgress");
+    private readonly int _alphaProgressHash = Shader.PropertyToID("_Alpha");
 
+    private Collider _col;
     private bool _active = false;
+    public float Distance
+    {
+        get
+        {
+            var playerPos = SceneControlManager.Instance.CurrentScene.Player.Collider.bounds.center;
+            playerPos.y = 0;
+            var curPos = _col.bounds.center;
+            curPos.y = 0;
+
+            return Vector3.Distance(playerPos, curPos);
+        }
+    }
 
     private void Awake()
     {
@@ -28,6 +44,7 @@ public class SelectedBorder : PoolableMono
 
     public void Setting(Collider col)
     {
+        _col = col;
         var bounds = col.bounds;
         var position = bounds.center;
         var size = bounds.size + new Vector3(0.1f, 0.1f, 0.1f);
@@ -48,6 +65,11 @@ public class SelectedBorder : PoolableMono
         CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), ActiveRoutine(active));
     }
 
+    public void SetAlpha(float alpha)
+    {
+        _material.SetFloat(_alphaProgressHash, alpha);
+    }
+    
     private IEnumerator ActiveRoutine(bool active)
     {
         var initProgress = _material.GetFloat(_activeProgressHash);

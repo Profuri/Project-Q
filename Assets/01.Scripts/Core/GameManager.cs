@@ -15,21 +15,6 @@ public class GameManager : MonoSingleton<GameManager>
 
     public bool InPause { get; set; }
     
-    public PlayerUnit PlayerUnit
-    {
-        get
-        {
-            if (_playerUnit == null)
-            {
-                _playerUnit = FindObjectOfType<PlayerUnit>();
-            }
-
-            return _playerUnit;
-        }
-    }
-
-    private PlayerUnit _playerUnit;
-
     private void Awake()
     {
         DOTween.Init(true, true, LogBehaviour.Verbose). SetCapacity(2000, 100);

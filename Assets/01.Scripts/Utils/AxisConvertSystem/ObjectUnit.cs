@@ -560,6 +560,14 @@ namespace AxisConvertSystem
             }
         }
 
+        public void SetAlphaSelectedBorder(float alpha)
+        {
+            if(_selectedBorder != null)
+            {
+                _selectedBorder.SetAlpha(alpha);
+            }
+        }
+
         public void UnShowSelectedBorder()
         {
             if (_selectedBorder is not null)
