@@ -204,7 +204,7 @@ public static class InputManagerHelper
 {
     public static void OnControllingAxis()
     {
-        EInputCategory[] inputs = { EInputCategory.AxisControl, EInputCategory.Click };
+        EInputCategory[] inputs = { EInputCategory.AxisControl, EInputCategory.Click,  };
         InputManager.Instance.SetEnableInputWithout(inputs, true);
     }
     public static void OnCancelingAxis() => InputManager.Instance.SetEnableInputAll(true);

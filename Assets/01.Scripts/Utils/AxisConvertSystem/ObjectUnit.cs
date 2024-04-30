@@ -268,7 +268,6 @@ namespace AxisConvertSystem
             {
                 Dissolve(0f, dissolveTime, true, callBack);
                 Rigidbody.velocity = Vector3.zero;
-                //PlaySpawnVFX();
             }
         }
         
@@ -351,7 +350,7 @@ namespace AxisConvertSystem
             var depth = DepthHandler.GetDepth();
 
             var frontDepth = standUnit.DepthHandler.GetDepth();
-            var boundsSize = (standUnit.UnitInfo.LocalRot * standUnit.UnitInfo.LocalScale).GetAxisElement(axis);
+            var boundsSize = (standUnit.UnitInfo.LocalRot * standUnit.Collider.bounds.size).GetAxisElement(axis);
 
             // is in back unit
             if (depth > frontDepth || depth < frontDepth - boundsSize)
@@ -372,7 +371,8 @@ namespace AxisConvertSystem
                 }
 
                 var intersectedUnitDepthPoint = intersectedUnit.DepthHandler.GetDepthPoint(Converter.AxisType);
-                if (!dynamicDepthPoint.Intersect(intersectedUnitDepthPoint))
+                if (dynamicDepthPoint.Min.x < intersectedUnitDepthPoint.Min.x || dynamicDepthPoint.Min.x > intersectedUnitDepthPoint.Max.x &&
+                    dynamicDepthPoint.Max.x < intersectedUnitDepthPoint.Min.x || dynamicDepthPoint.Max.x > intersectedUnitDepthPoint.Max.x)
                 {
                     continue;
                 }
