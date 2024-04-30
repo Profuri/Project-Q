@@ -31,12 +31,10 @@ public class PlayerUnit : ObjectUnit
         }
     }
 
-    //public bool CanJump => OnGround || IsCoyote;
     public bool CanJump
     {
         get
         {
-            Debug.LogError($"OnGround: {OnGround} IsCoyote: {IsCoyote}");
             return OnGround || IsCoyote;
         }
     }

@@ -20,9 +20,19 @@ public class ReciprocationObject : InteractableObject
         _originPos = transform.localPosition;
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
     }
-    
+
+    public override void ApplyUnitInfo(AxisType axis)
+    {
+        base.ApplyUnitInfo(axis);
+    }
+
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
+        if (!Converter.Convertable)
+        {
+            return;
+        }
+
         var curPos = transform.localPosition;  
         var destPos = interactValue ? _destPos : _originPos;
 
