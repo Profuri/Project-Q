@@ -23,15 +23,11 @@ public class RGBHodlingUnit : RGBObjectUnit, IHoldable
     {
         if (communicator is PlayerUnit playerUnit)
         {
-            if(MatchRGBColor)
+            if(MatchRGB)
             {
                 return;
             }
             playerUnit.HoldingHandler.Attach(this);
-        }
-        else
-        {
-            base.OnInteraction(communicator, interactValue, param);
         }
     }
     

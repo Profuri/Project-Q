@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using AxisConvertSystem;
 using UnityEngine;
 
-public class PictureObject : ObjectUnit
+public class PictureObject : ObjectUnit, IPassable
 {
     [SerializeField] private Material _enableMat;
     [SerializeField] private Material _disableMat;
 
     private List<PictureUnit> _units;
 
-    private bool _enable;
+    public bool PassableAfterAxis { get; set; }
 
     public override void Awake()
     {
@@ -20,12 +20,6 @@ public class PictureObject : ObjectUnit
         {
             unit.SetPictureUnit(this, _enableMat, _disableMat);
         }
-    }
-
-    public override void Init(AxisConverter converter)
-    {
-        base.Init(converter);
-        _enable = true;
     }
 
     public override void Convert(AxisType axis)
@@ -47,13 +41,22 @@ public class PictureObject : ObjectUnit
             return;
         }
 
-        var enable = axis == AxisType.None;
-        
-        if (_enable != enable)
+        if (Collider.isTrigger != PassableAfterAxis)
         {
-            Collider.isTrigger = !enable;
+            Collider.isTrigger = PassableAfterAxis;
             Dissolve(Collider.isTrigger ? 0.55f : 0f, 0.5f, false);
-            _enable = enable;
+        }
+    }
+    
+    public void PassableCheck(AxisType axis)
+    {
+        if (axis == AxisType.Y)
+        {
+            PassableAfterAxis = false;
+        }
+        else
+        {
+            PassableAfterAxis = axis != AxisType.None;
         }
     }
 }

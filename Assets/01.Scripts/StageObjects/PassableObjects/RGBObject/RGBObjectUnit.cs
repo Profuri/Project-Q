@@ -1,36 +1,35 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AxisConvertSystem;
 using InteractableSystem;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 [Flags]
 public enum RGBColor
 {
-    NONE = 0,
-    RED = 1,
-    GREEN = 2,
-    BLUE = 4,
+    None = 0,
+    Red = 1,
+    Green = 2,
+    Blue = 4,
 }
 
-public class RGBObjectUnit : InteractableObject
+public class RGBObjectUnit : InteractableObject, IPassable
 {
-    private static readonly int s_allMatchColor = (int)(RGBColor.RED | RGBColor.BLUE | RGBColor.GREEN);
+    private const int AllMatchColor = (int)(RGBColor.Red | RGBColor.Blue | RGBColor.Green);
 
     [Header("Color")]
     public RGBColor originColor;
-    private RGBColor _affectedColor;
+    private RGBColor _addedColor;
+    private RGBColor HasColor => originColor | _addedColor;
+    protected bool MatchRGB => (int)HasColor == AllMatchColor;
 
     [Header("Layer")]
     [SerializeField] private LayerMask _targetLayer;
     
     private MeshRenderer _renderer;
-    
-    public RGBColor HasColor => (originColor | _affectedColor);
-    public bool MatchRGBColor => (int)HasColor == s_allMatchColor;
 
+    public bool PassableAfterAxis { get; set; }
+    
     private static readonly int BaseColorHash = Shader.PropertyToID("_BaseColor");
     private static readonly int EmissionColorHash = Shader.PropertyToID("_EmissionColor");
     private static readonly int VisibleHash = Shader.PropertyToID("_VisibleProgress");
@@ -42,25 +41,54 @@ public class RGBObjectUnit : InteractableObject
         {
             _renderer = GetComponentInChildren<MeshRenderer>();
         }
-        SettingColor(HasColor);
+        SettingColor();
     }
 
     public override void Init(AxisConverter converter)
     {
         base.Init(converter);
 
-        SettingColor(HasColor);
+        SettingColor();
         SettingCollider();
     }
-
-    private void SettingColor(RGBColor rgbColor)
+    
+    public override void Convert(AxisType axis)
     {
-        var color = GetColorFromRGBColor(rgbColor);
+        base.Convert(axis);
+        SettingColor();
+    }
+
+    public override void ApplyUnitInfo(AxisType axis)
+    {
+        base.ApplyUnitInfo(axis);
+        SettingCollider();
+    }
+    
+    public void PassableCheck(AxisType axis)
+    {
+        if(AxisType.None == axis)
+        {
+            _addedColor = RGBColor.None;
+        }
+        else
+        {
+            FindRGBUnit(axis);
+        }
+
+        PassableAfterAxis = !MatchRGB;
+    }
+    
+    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
+    {
+    }
+
+    private void SettingColor()
+    {
+        var color = GetColorFromRGBColor(HasColor);
         var alpha = 1f - color.a;
         
         _renderer.materials[0].SetColor(BaseColorHash, color);
         _renderer.materials[0].SetColor(EmissionColorHash, color * 3f);
-
 
         foreach (var material in _renderer.materials)
         {
@@ -68,10 +96,10 @@ public class RGBObjectUnit : InteractableObject
         }
     }
 
-    protected void SettingCollider()
+    private void SettingCollider()
     {
         int layer;
-        if(MatchRGBColor)
+        if(MatchRGB)
         {
             layer = 0;
             if(Rigidbody != null)
@@ -86,54 +114,42 @@ public class RGBObjectUnit : InteractableObject
         Collider.excludeLayers = layer;
     }
 
-    private Color GetColorFromRGBColor(RGBColor color)
+    private Color GetColorFromRGBColor(RGBColor rgb)
     {
-        switch(color)
-        {
-            case RGBColor.RED:
-                return new Color(1, 0, 0, 0.7f);
-            case RGBColor.GREEN:
-                return new Color(0, 1, 0, 0.7f);
-            case RGBColor.BLUE:
-                return new Color(0, 0, 1, 0.7f);
-            case RGBColor.RED | RGBColor.GREEN:
-                return new Color(1, 1, 0, 0.85f);
-            case RGBColor.GREEN | RGBColor.BLUE:
-                return new Color(0, 1, 1, 0.85f);
-            case RGBColor.RED | RGBColor.BLUE:
-                return new Color(1, 0, 1, 0.85f);
-            case RGBColor.RED | RGBColor.GREEN | RGBColor.BLUE:
-                return new Color(1, 1, 1, 1f);
-            default:
-                return Color.clear;
-        }
-    }
+        var color = new Color(0, 0, 0, 0);
+        var addedCount = 0;
 
-    public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
-    {
-        try
+        if (rgb.HasFlag(RGBColor.Red))
         {
-            RGBColor rgbColor = (RGBColor)param[0];
+            addedCount++;
+            color.r = 1;
+        }
+        if (rgb.HasFlag(RGBColor.Blue))
+        {
+            addedCount++;
+            color.b = 1;
+        }
+        if (rgb.HasFlag(RGBColor.Green))
+        {
+            addedCount++;
+            color.g = 1;
+        }
 
-            if (interactValue)
-            {
-                TransitionRGB(rgbColor);
-            }
-        }
-        catch(Exception ex)
+        if (addedCount > 0)
         {
-            Debug.LogError($"Can't convert to rgb Color! Message: {ex.Message}");
+            color.a = 0.7f + (addedCount - 1) * 0.15f;
         }
+
+        return color;
     }
 
     private void FindRGBUnit(AxisType axis)
     {
-        if (MatchRGBColor) return;
+        if (MatchRGB) return;
         Vector3 direction = Vector3ExtensionMethod.GetAxisDir(axis);
         Vector3 center = transform.position;
         Vector3 halfExtents = Collider.bounds.extents * 0.5f;
         Quaternion rotation = transform.rotation;
-
 
         List<RaycastHit> hitInfoList = new List<RaycastHit>();
 
@@ -158,32 +174,11 @@ public class RGBObjectUnit : InteractableObject
         }
     }
 
-    private void TransitionRGB(RGBColor color)
+    private void TransitionRGB(RGBColor rgb)
     {
-        _affectedColor = _affectedColor | color;
+        _addedColor |= rgb;
     }
 
-    //이건 위치 값 변하기 전
-    public override void Convert(AxisType axis)
-    {
-        base.Convert(axis);
-        if(AxisType.None == axis)
-        {
-            _affectedColor = RGBColor.NONE;
-        }
-        else
-        {
-            FindRGBUnit(axis);
-        }
-
-        SettingColor(HasColor);
-    }
-
-    public override void ApplyUnitInfo(AxisType axis)
-    {
-        base.ApplyUnitInfo(axis);
-        SettingCollider();
-    }
 #if UNITY_EDITOR
 
     private void OnDrawGizmos()

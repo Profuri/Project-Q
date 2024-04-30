@@ -32,9 +32,9 @@ namespace AxisConvertSystem
             Convertable = convertable;
         }
 
-        public void ConvertDimension(AxisType axisType, Action callback = null)
+        public void ConvertDimension(AxisType nextAxis, Action callback = null)
         {
-            if (!Convertable || AxisType == axisType || (AxisType != AxisType.None && axisType != AxisType.None))
+            if (!Convertable || AxisType == nextAxis || (AxisType != AxisType.None && nextAxis != AxisType.None))
             {
                 return;
             }
@@ -42,30 +42,42 @@ namespace AxisConvertSystem
             _cancelConvert = false;
             Convertable = false;
 
-            if(axisType == AxisType.None)
+            foreach (var unit in _section.SectionUnits)
+            {
+                if (unit is IPassable passable)
+                {
+                    passable.PassableCheck(nextAxis);
+                }
+            }
+
+            if(nextAxis == AxisType.None)
             {
                 SoundManager.Instance.PlaySFX("AxisControl", false);
-                ChangeAxis(axisType);
+                ChangeAxis(nextAxis);
             }
 
             if (CameraManager.Instance.CurrentCamController is SectionCamController)
             {
-                ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(axisType, () =>
+                ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(nextAxis, () =>
                 {
-                    if (!SafeConvertAxis(axisType, out var front, out var back))
+                    if (!SafeConvertAxis(nextAxis, out var front, out var back))
                     {
-                        HandleAxisConversionFailure(axisType, front.collider, back.collider);
+                        var frontUnit = front.collider ? front.collider.GetComponent<ObjectUnit>() : null;
+                        var backUnit = back.collider ? back.collider.GetComponent<ObjectUnit>() : null;
+
+                        HandleAxisConversionFailure(nextAxis, frontUnit, backUnit);
                     }
 
                     if (_cancelConvert)
                     {
+                        SoundManager.Instance.PlaySFX("AxisControlFailure");
                         return;
                     }
                     
-                    if(axisType != AxisType.None)
+                    if(nextAxis != AxisType.None)
                     {
-                        SoundManager.Instance.PlaySFX("AxisControl", false);
-                        ChangeAxis(axisType);
+                        SoundManager.Instance.PlaySFX("AxisControl");
+                        ChangeAxis(nextAxis);
                     }
                     
                     Convertable = true;
@@ -74,43 +86,47 @@ namespace AxisConvertSystem
             }
         }
 
-        private void HandleAxisConversionFailure(AxisType axis, Collider frontCol, Collider backCol)
+        private void HandleAxisConversionFailure(AxisType axis, ObjectUnit frontUnit, ObjectUnit backUnit)
         {
-            Player.CheckStandObject(out var hit);
+            Player.CheckStandObject(out var playerStandCol);
 
-            if (!(axis == AxisType.Y && frontCol is null && hit == backCol))
-            {
-                CancelChangeAxis(axis, frontCol, backCol);
-                _cancelConvert = true;
-            }
             // when y axis convert, already standing object
-            else
+            if (axis == AxisType.Y && frontUnit is null && playerStandCol == backUnit.Collider)
             {
-                var unit = backCol.GetComponent<ObjectUnit>();
+                var unit = backUnit.GetComponent<ObjectUnit>();
                 if (!unit.climbableUnit)
                 {
                     Player.StandingUnit = unit;
                 }
             }
+            else
+            {
+                if (frontUnit is null or IPassable { PassableAfterAxis: true } && 
+                    backUnit is null or IPassable { PassableAfterAxis: true })
+                {
+                    return;
+                }
+
+                CancelChangeAxis(axis, frontUnit, backUnit);
+                _cancelConvert = true;
+            }
         }
 
-        private void CancelChangeAxis(AxisType canceledAxis, Collider frontCol, Collider backCol)
+        private void CancelChangeAxis(AxisType canceledAxis, ObjectUnit frontUnit, ObjectUnit backUnit)
         {
-            SoundManager.Instance.PlaySFX("AxisControlFailure",false);
-
             var seq = DOTween.Sequence();
         
             var reverseAxisDir = Vector3ExtensionMethod.GetAxisDir(canceledAxis) - Vector3.one;
             var shakeDir = new Vector3(Mathf.Abs(reverseAxisDir.x), Mathf.Abs(reverseAxisDir.y), Mathf.Abs(reverseAxisDir.z));
 
-            if (frontCol != backCol && frontCol is not null)
+            if (frontUnit != backUnit && frontUnit is not null)
             {
-                seq.Join(frontCol.transform.DOShakePosition(0.25f, shakeDir * 0.5f, 30));
+                seq.Join(frontUnit.transform.DOShakePosition(0.25f, shakeDir * 0.5f, 30));
             }
 
-            if (backCol is not null)
+            if (backUnit is not null)
             {
-                seq.Join(backCol.transform.DOShakePosition(0.25f, shakeDir * 0.5f, 30));
+                seq.Join(backUnit.transform.DOShakePosition(0.25f, shakeDir * 0.5f, 30));
             }
         
             seq.OnComplete(() =>
@@ -126,20 +142,20 @@ namespace AxisConvertSystem
             });
         }
 
-        private void ChangeAxis(AxisType axisType)
+        private void ChangeAxis(AxisType nextAxis)
         {
             Player.Converter.UnShowClimbableEffect();
             CameraManager.Instance.ShakeCam(1f, 0.1f);
             VolumeManager.Instance.Highlight(0.2f);
-            LightManager.Instance.SetShadow(axisType == AxisType.None ? LightShadows.Soft : LightShadows.None);
+            LightManager.Instance.SetShadow(nextAxis == AxisType.None ? LightShadows.Soft : LightShadows.None);
 
-            foreach (var unit in _section.SectionUnits) unit.Convert(axisType);
+            foreach (var unit in _section.SectionUnits) unit.Convert(nextAxis);
             foreach (var unit in _section.SectionUnits) unit.IntersectedUnits.Clear();
-            foreach (var unit in _section.SectionUnits) unit.DepthHandler.CalcDepth(axisType);
-            foreach (var unit in _section.SectionUnits) unit.ApplyUnitInfo(axisType);
+            foreach (var unit in _section.SectionUnits) unit.DepthHandler.CalcDepth(nextAxis);
+            foreach (var unit in _section.SectionUnits) unit.ApplyUnitInfo(nextAxis);
             foreach (var unit in _section.SectionUnits) unit.ApplyDepth();
 
-            AxisType = axisType;
+            AxisType = nextAxis;
         }
 
         private bool SafeConvertAxis(AxisType axis, out RaycastHit front, out RaycastHit back)
