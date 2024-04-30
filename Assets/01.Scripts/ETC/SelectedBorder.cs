@@ -1,5 +1,6 @@
 using AxisConvertSystem;
 using System.Collections;
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -66,11 +67,41 @@ public class SelectedBorder : PoolableMono
         var position = bounds.center;
         var size = owner.BeforeConvertedUnitInfo.ColliderBoundSize + new Vector3(0.1f, 0.1f, 0.1f);
 
-        //float cornerSize = _initCornerSize / (size.y >= 1 ? size.y + _cornerSizeOffset : size.y - _cornerSizeOffset);
-        //_material.SetFloat(_cornerSizeHash, cornerSize);
+
+        //float originMagnitude = new Vector3(0, 1, 1).magnitude;
+        float originMagnitude = 1f;
+        float currentMagnitude = size.y;
+        //float currentMagnitude = new Vector3(0, size.y,size.z).magnitude;
+        float percent = currentMagnitude / originMagnitude;
+        Debug.Log($"Percent: {percent}");
+        float offset = _initCornerSize * 0.5f;
+
+        if (percent > 1f)
+        {
+            percent = 1f - (percent - 1f);
+        }
+        else
+        {
+            percent = 1f + (1f - percent);
+        }
+
+        float cornerSize = _initCornerSize * percent + offset;
+
+        _material.SetFloat(_cornerSizeHash, cornerSize);
 
         transform.position = position;
         transform.localScale = size;
+    }
+
+    public void Setting(Collider collider)
+    {
+        var bounds = collider.bounds;
+        var position = bounds.center;
+        var size = collider.bounds.size;
+
+        transform.position = position;
+        transform.localScale = size;
+        SetAlpha(1);
     }
 
     public void Activate(bool active)
@@ -83,7 +114,7 @@ public class SelectedBorder : PoolableMono
         _active = active;
         CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), ActiveRoutine(active));
     }
-
+    
     public void SetAlpha(float alpha)
     {
         _material.SetFloat(_alphaProgressHash, alpha);
