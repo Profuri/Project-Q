@@ -28,11 +28,6 @@ public class ReciprocationObject : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        if (!Converter.Convertable)
-        {
-            return;
-        }
-
         var curPos = transform.localPosition;  
         var destPos = interactValue ? _destPos : _originPos;
 

@@ -21,7 +21,7 @@ namespace AxisConvertSystem
         [HideInInspector] public float checkOffset = 0.2f; 
         [HideInInspector] public bool useGravity = true;
 
-        protected UnitInfo OriginUnitInfo; 
+        protected UnitInfo OriginUnitInfo;
         protected UnitInfo UnitInfo;
         protected UnitInfo ConvertedInfo;
 
@@ -30,6 +30,7 @@ namespace AxisConvertSystem
         public Rigidbody Rigidbody { get; private set; }
         public UnitDepthHandler DepthHandler { get; private set; }
         public Section Section { get; protected set; }
+        public UnitInfo BeforeConvertedUnitInfo => UnitInfo;
         public bool IsHide { get; private set; }
         public bool OnGround => CheckStandObject(out var tempCollider, true);
         
@@ -106,6 +107,7 @@ namespace AxisConvertSystem
             OriginUnitInfo.LocalRot = transform.localRotation;
             OriginUnitInfo.LocalScale = transform.localScale;
             OriginUnitInfo.ColliderCenter = Collider.GetLocalCenter();
+            OriginUnitInfo.ColliderBoundSize = Collider.bounds.size;
             
             UnitInfo = OriginUnitInfo;
 
@@ -281,6 +283,7 @@ namespace AxisConvertSystem
             UnitInfo.LocalRot = transform.localRotation;
             UnitInfo.LocalScale = transform.localScale;
             UnitInfo.ColliderCenter = Collider.GetLocalCenter();
+            UnitInfo.ColliderBoundSize = Collider.bounds.size;
         }
 
         private void SynchronizePosition(AxisType axis)
@@ -556,7 +559,7 @@ namespace AxisConvertSystem
             if (_selectedBorder == null)
             {
                 _selectedBorder = SceneControlManager.Instance.AddObject("SelectedBorder") as SelectedBorder;
-                _selectedBorder.Setting(Collider);
+                _selectedBorder.Setting(this);
             }
         }
 

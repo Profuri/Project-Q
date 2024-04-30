@@ -39,6 +39,11 @@ namespace InteractableSystem
 
         protected void InteractAffectedObjects(bool value)
         {
+            if (Converter != null && !Converter.Convertable)
+            {
+                return;
+            }
+
             foreach (var obj in _affectedObjects)
             {
                 if (obj is null)
@@ -53,6 +58,11 @@ namespace InteractableSystem
 
         protected void CallToggleChangeEvents(bool value)
         {
+            if (Converter != null && !Converter.Convertable)
+            {
+                return;
+            }
+
             foreach (var toggleChangeEvent in _onToggleChangeEvents)
             {
                 if (toggleChangeEvent is null)
@@ -76,7 +86,6 @@ namespace InteractableSystem
         public override void OnDetectedEnter(ObjectUnit communicator = null)
         {
             base.OnDetectedEnter(communicator);
-            ShowSelectedBorder();
             ShowSelectedBorderInConnectedUnit();
         }
 
@@ -84,7 +93,6 @@ namespace InteractableSystem
         public override void OnDetectedLeave(ObjectUnit communicator = null)
         {
             base.OnDetectedLeave(communicator);
-            UnShowSelectedBorder();
             UnShowSelectedBorderInConnectedUnit();
         }
 
