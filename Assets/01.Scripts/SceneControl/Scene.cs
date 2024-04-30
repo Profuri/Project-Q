@@ -35,7 +35,6 @@ public class Scene : PoolableMono
         }
     }
 
-
     public override void OnPush()
     {
         PoolManager.Instance.Push(Player);

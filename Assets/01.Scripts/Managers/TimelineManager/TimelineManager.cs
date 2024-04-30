@@ -41,6 +41,7 @@ public class TimelineManager : BaseManager<TimelineManager>
             return _currentDirector.playableGraph.GetRootPlayable(0).GetTime() <= _currentDirector.duration;
         }
     }
+    public Action AllTimelineEnd;
 
     public override void Init()
     {
@@ -75,6 +76,7 @@ public class TimelineManager : BaseManager<TimelineManager>
     {
         if (_timelineQueue.Count <= 0)
         {
+            AllTimelineEnd?.Invoke();
             return;
         }
         
@@ -85,7 +87,6 @@ public class TimelineManager : BaseManager<TimelineManager>
         
         // 이거 문제
         CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), PlayRoutine(info.Callback));
-
         if (info.SkipOnStart)
         {
             _currentDirector.playableGraph.GetRootPlayable(0).SetTime(_currentDirector.duration - _skipOffset);
