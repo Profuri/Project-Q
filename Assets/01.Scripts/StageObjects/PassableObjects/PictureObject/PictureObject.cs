@@ -9,6 +9,7 @@ public class PictureObject : ObjectUnit, IPassable
 
     private List<PictureUnit> _units;
 
+    public bool PassableLastAxis { get; set; }
     public bool PassableAfterAxis { get; set; }
 
     public override void Awake()
@@ -16,6 +17,11 @@ public class PictureObject : ObjectUnit, IPassable
         base.Awake();
         _units = new List<PictureUnit>();
         transform.GetComponentsInChildren(_units);
+    }
+
+    public override void Init(AxisConverter converter)
+    {
+        base.Init(converter);
         foreach (var unit in _units)
         {
             unit.SetPictureUnit(this, _enableMat, _disableMat);
@@ -47,7 +53,13 @@ public class PictureObject : ObjectUnit, IPassable
             Dissolve(Collider.isTrigger ? 0.55f : 0f, 0.5f, false);
         }
     }
-    
+
+    public override void ApplyDepth()
+    {
+        base.ApplyDepth();
+        PassableLastAxis = PassableAfterAxis;
+    }
+
     public void PassableCheck(AxisType axis)
     {
         if (axis == AxisType.Y)

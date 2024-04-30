@@ -11,7 +11,8 @@ public class PictureUnit : ObjectUnit, IPassable
 
     private Material _enableMat;
     private Material _disableMat;
-    
+
+    public bool PassableLastAxis { get; set; }
     public bool PassableAfterAxis { get; set; }
 
     public void SetPictureUnit(PictureObject owner, Material enableMat, Material disableMat)
@@ -22,6 +23,10 @@ public class PictureUnit : ObjectUnit, IPassable
 
         _enableMat = enableMat;
         _disableMat = disableMat;
+        
+        _renderer.material = _disableMat;
+        MaterialResetUp();
+        Hide(false);
     }
 
     public void ChangeAxis(AxisType axis)
@@ -55,6 +60,7 @@ public class PictureUnit : ObjectUnit, IPassable
 
     public override void ApplyDepth()
     {
+        PassableLastAxis = PassableAfterAxis;
         Hide(Converter.AxisType == AxisType.None && PassableAfterAxis);
     }
 

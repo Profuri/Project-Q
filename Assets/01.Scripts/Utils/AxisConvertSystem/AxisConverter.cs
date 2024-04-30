@@ -1,7 +1,6 @@
 using System;
 using DG.Tweening;
 using UnityEngine;
-using System.Linq;
 
 namespace AxisConvertSystem
 {
@@ -34,14 +33,14 @@ namespace AxisConvertSystem
 
         public void ConvertDimension(AxisType nextAxis, Action callback = null)
         {
-            if (!Convertable || AxisType == nextAxis || (AxisType != AxisType.None && nextAxis != AxisType.None))
+            if (!Convertable)
             {
                 return;
             }
 
             _cancelConvert = false;
             Convertable = false;
-
+            
             foreach (var unit in _section.SectionUnits)
             {
                 if (unit is IPassable passable)
@@ -52,7 +51,20 @@ namespace AxisConvertSystem
 
             if(nextAxis == AxisType.None)
             {
-                SoundManager.Instance.PlaySFX("AxisControl", false);
+                if (!SafeConvertAxis(AxisType, out var front, out var back))
+                {
+                    var frontUnit = front.collider ? front.collider.GetComponent<ObjectUnit>() : null;
+                    if (frontUnit is IPassable { PassableLastAxis: true })
+                    {
+                        CancelChangeAxis(AxisType, frontUnit, null, () =>
+                        {
+                            Convertable = true;
+                            callback?.Invoke();
+                        });
+                        return;
+                    }
+                }
+                SoundManager.Instance.PlaySFX("AxisControl");
                 ChangeAxis(nextAxis);
             }
 
@@ -65,12 +77,16 @@ namespace AxisConvertSystem
                         var frontUnit = front.collider ? front.collider.GetComponent<ObjectUnit>() : null;
                         var backUnit = back.collider ? back.collider.GetComponent<ObjectUnit>() : null;
 
-                        HandleAxisConversionFailure(nextAxis, frontUnit, backUnit);
+                        HandleAxisConversionFailure(nextAxis, frontUnit, backUnit, () =>
+                        {
+                            Convertable = true;
+                            Player.Converter.ConvertDimension(AxisType.None);
+                            callback?.Invoke();
+                        });
                     }
 
                     if (_cancelConvert)
                     {
-                        SoundManager.Instance.PlaySFX("AxisControlFailure");
                         return;
                     }
                     
@@ -85,18 +101,17 @@ namespace AxisConvertSystem
                 });
             }
         }
-
-        private void HandleAxisConversionFailure(AxisType axis, ObjectUnit frontUnit, ObjectUnit backUnit)
+        
+        private void HandleAxisConversionFailure(AxisType axis, ObjectUnit frontUnit, ObjectUnit backUnit, Action onComplete = null)
         {
             Player.CheckStandObject(out var playerStandCol);
 
             // when y axis convert, already standing object
             if (axis == AxisType.Y && frontUnit is null && playerStandCol == backUnit.Collider)
             {
-                var unit = backUnit.GetComponent<ObjectUnit>();
-                if (!unit.climbableUnit)
+                if (!backUnit.climbableUnit)
                 {
-                    Player.StandingUnit = unit;
+                    Player.StandingUnit = backUnit;
                 }
             }
             else
@@ -107,13 +122,15 @@ namespace AxisConvertSystem
                     return;
                 }
 
-                CancelChangeAxis(axis, frontUnit, backUnit);
+                CancelChangeAxis(axis, frontUnit, backUnit, onComplete);
                 _cancelConvert = true;
             }
         }
 
-        private void CancelChangeAxis(AxisType canceledAxis, ObjectUnit frontUnit, ObjectUnit backUnit)
+        private void CancelChangeAxis(AxisType canceledAxis, ObjectUnit frontUnit, ObjectUnit backUnit, Action onComplete = null)
         {
+            SoundManager.Instance.PlaySFX("AxisControlFailure");
+
             var seq = DOTween.Sequence();
         
             var reverseAxisDir = Vector3ExtensionMethod.GetAxisDir(canceledAxis) - Vector3.one;
@@ -128,17 +145,10 @@ namespace AxisConvertSystem
             {
                 seq.Join(backUnit.transform.DOShakePosition(0.25f, shakeDir * 0.5f, 30));
             }
-        
+
             seq.OnComplete(() =>
             {
-                AxisType = canceledAxis;
-                Convertable = true;
-                foreach (var unit in _section.SectionUnits)
-                {
-                    unit.RewriteUnitInfo();
-                }
-                Player.Converter.ConvertDimension(AxisType.None);
-                InputManagerHelper.OnCancelingAxis();
+                onComplete?.Invoke();
             });
         }
 
