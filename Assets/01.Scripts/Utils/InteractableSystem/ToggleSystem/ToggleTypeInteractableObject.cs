@@ -70,7 +70,7 @@ namespace InteractableSystem
                 {
                     obj.interactableObject.ShowSelectedBorder();
                 }
-                obj.interactableObject.SelectedBorderActivate(value);
+                obj?.interactableObject?.SelectedBorderActivate(value);
                 
                 obj.Invoke(null, value);
             }

@@ -68,12 +68,10 @@ public class SelectedBorder : PoolableMono
         var size = owner.BeforeConvertedUnitInfo.ColliderBoundSize + new Vector3(0.1f, 0.1f, 0.1f);
 
 
-        //float originMagnitude = new Vector3(0, 1, 1).magnitude;
-        float originMagnitude = 1f;
-        float currentMagnitude = size.y;
-        //float currentMagnitude = new Vector3(0, size.y,size.z).magnitude;
+        float originMagnitude = Vector3.one.magnitude;
+        float currentMagnitude = size.magnitude;
         float percent = currentMagnitude / originMagnitude;
-        Debug.Log($"Percent: {percent}");
+
         float offset = _initCornerSize * 0.5f;
 
         if (percent > 1f)
