@@ -32,7 +32,7 @@ public class PlayerAxisControlState : PlayerBaseState
             InputManager.Instance.PlayerInputReader.OnAxisControlEvent += AxisControlHandle;
             InputManager.Instance.PlayerInputReader.OnClickEvent += SelectAxisHandle;
             
-            VolumeManager.Instance.SetAxisControlVolume(true, 0.2f);
+            VolumeManager.Instance.SetVolume(VolumeType.AxisControlling, 0.2f);
             ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(true);
         }
         else
@@ -56,7 +56,7 @@ public class PlayerAxisControlState : PlayerBaseState
         InputManager.Instance.PlayerInputReader.OnAxisControlEvent -= AxisControlHandle;
         InputManager.Instance.PlayerInputReader.OnClickEvent -= SelectAxisHandle;
         
-        VolumeManager.Instance.SetAxisControlVolume(false, 0.2f);
+        VolumeManager.Instance.SetVolume(VolumeType.Default, 0.2f);
         LightManager.Instance.SetAxisLight(AxisType.None);
 
         var currentCamController = CameraManager.Instance.CurrentCamController as SectionCamController;

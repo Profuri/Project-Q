@@ -156,7 +156,7 @@ namespace AxisConvertSystem
         {
             Player.Converter.UnShowClimbableEffect();
             CameraManager.Instance.ShakeCam(1f, 0.1f);
-            VolumeManager.Instance.Highlight(0.2f);
+            VolumeManager.Instance.SetVolume(VolumeType.HighLight, 0.2f, true);
             LightManager.Instance.SetShadow(nextAxis == AxisType.None ? LightShadows.Soft : LightShadows.None);
 
             foreach (var unit in _section.SectionUnits) unit.Convert(nextAxis);
