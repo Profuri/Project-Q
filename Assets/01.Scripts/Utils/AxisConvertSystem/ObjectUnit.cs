@@ -546,6 +546,36 @@ namespace AxisConvertSystem
             }
         }
 
+        public bool IsSuperiorUnit(ObjectUnit checkUnit)
+        {
+            if (!subUnit)
+            {
+                return false;
+            }
+            
+            var checkTrm = transform;
+            
+            while (checkTrm.parent != null)
+            {
+                var parent = checkTrm.parent;
+                var unit = parent.GetComponent<ObjectUnit>();
+
+                if (unit == checkUnit)
+                {
+                    return true;
+                }
+
+                if (unit != null && !unit.subUnit)
+                {
+                    break;
+                }
+                
+                checkTrm = parent;
+            }
+
+            return false;
+        }
+
         public ObjectUnit GetParentUnit()
         {
             if (!subUnit)
