@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Singleton
 {
-    public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
+    public class MonoSingleton<T> : ExtendedMono where T : MonoBehaviour
     {
         private static bool _shutDown = false;
         private static object _locker = new object();

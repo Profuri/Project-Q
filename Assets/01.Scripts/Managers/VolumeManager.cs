@@ -1,39 +1,55 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using ManagingSystem;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class VolumeManager : BaseManager<VolumeManager>
 {
-    [SerializeField] private Volume _mainVolume;
-    [SerializeField] private Volume _highlightVolume;
-    [SerializeField] private Volume _axisControlVolume;
-    
+    [SerializeField] private VolumeData _volumeData;
+
+    private Dictionary<VolumeType, Volume> _volumes;
+    private Volume _currentVolume;
+
+    public override void Init()
+    {
+        base.Init();
+
+        _volumes = new Dictionary<VolumeType, Volume>();
+        
+        var volumeParent = new GameObject("Volumes").transform;
+        volumeParent.SetParent(transform);
+
+        foreach (VolumeType type in Enum.GetValues(typeof(VolumeType)))
+        {
+            var volumeObjectName = $"{type}Volume";
+            
+            var newVolumeObject = new GameObject(volumeObjectName);
+            newVolumeObject.transform.SetParent(volumeParent);
+            
+            var volumeCompo = newVolumeObject.AddComponent<Volume>();
+            var profile = _volumeData.GetVolumeProfile(type);
+
+            volumeCompo.weight = 0f;
+            volumeCompo.profile = profile;
+            
+            _volumes[type] = volumeCompo;
+        }
+    }
+
     public override void StartManager()
     {
-        _mainVolume.weight = 1;
-        _highlightVolume.weight = 0;
-        _axisControlVolume.weight = 0;
+        SetVolume(VolumeType.Default, 0f);
     }
 
-    public void SetAxisControlVolume(bool enable, float time)
+    public void SetVolume(VolumeType type, float time, bool isReturnOrigin = false, float returningPoint = 0.5f)
     {
-        if (enable)
-        {
-            StartCoroutine(VolumeChangeRoutine(_mainVolume, _axisControlVolume, time));
-        }
-        else
-        {
-            StartCoroutine(VolumeChangeRoutine(_axisControlVolume, _mainVolume, time));
-        }
+        var nextVolume = _volumes[type];
+        StartSafeCoroutine("VolumeChangeRoutine", VolumeChangeRoutine(_currentVolume, nextVolume, time, isReturnOrigin, returningPoint));
     }
 
-    public void Highlight(float time)
-    {
-        StartCoroutine(VolumeChangeRoutine(_mainVolume, _highlightVolume, time, true));
-    }
-
-    private IEnumerator VolumeChangeRoutine(Volume prev, Volume next, float time, bool isReturn = false, float returnPoint = 0.5f)
+    private IEnumerator VolumeChangeRoutine(Volume prev, Volume next, float time, bool isReturnOrigin, float returningPoint)
     {
         var curTime = 0f;
         var percent = 0f;
@@ -42,27 +58,42 @@ public class VolumeManager : BaseManager<VolumeManager>
         {
             curTime += Time.deltaTime;
             percent = curTime / time;
+            var clampedPercent = Mathf.Clamp(percent, 0f, 01f);
 
-            if (isReturn)
+            if (isReturnOrigin)
             {
-                if (percent < returnPoint)
+                if (clampedPercent < returningPoint)
                 {
-                    prev.weight = 1f - percent * 2f;
-                    next.weight = percent * 2f;
+                    if (prev)
+                    {
+                        prev.weight = 1f - clampedPercent * 2f;
+                    }
+                    next.weight = clampedPercent * 2f;
                 }
                 else
                 {
-                    prev.weight = (percent - returnPoint) * 2f;
-                    next.weight = 1 - (percent - returnPoint) * 2f;
+                    if (prev)
+                    {
+                        prev.weight = (clampedPercent - returningPoint) * 2f;
+                    }
+                    next.weight = 1 - (clampedPercent - returningPoint) * 2f;
                 }
             }
             else
             {
-                prev.weight = 1f - percent;
-                next.weight = percent;
+                if (prev)
+                {
+                    prev.weight = 1f - clampedPercent;
+                }
+                next.weight = clampedPercent;
             }
 
             yield return null;
+        }
+
+        if (!isReturnOrigin)
+        {
+            _currentVolume = next;
         }
     }
 }

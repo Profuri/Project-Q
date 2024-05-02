@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using InputControl;
 using ManagingSystem;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -25,6 +26,8 @@ public class TimelineManager : BaseManager<TimelineManager>
 {
     [SerializeField] private TimelineClipSetList _timelineClipSetList;
     [SerializeField] private float _skipOffset;
+
+    [SerializeField] private float _speedMultiply;
 
     private Queue<TimelineQueueInfo> _timelineQueue;
     private PlayableDirector _currentDirector;
@@ -60,8 +63,12 @@ public class TimelineManager : BaseManager<TimelineManager>
         {
             _timelineQueue.Enqueue(_timelineQueue.Dequeue());
         }
+
+        // first timeline start
         if (!IsPlay)
         {
+            InputManager.Instance.TimelineInputReader.OnSpeedUpEvent += SpeedUpHandle;
+            InputManager.Instance.TimelineInputReader.CancelSpeedUpEvent += CancelSpeedUpHandle;
             PlayNextQueue();
         }
     }
@@ -73,18 +80,13 @@ public class TimelineManager : BaseManager<TimelineManager>
 
     private void PlayNextQueue()
     {
-        if (_timelineQueue.Count <= 0)
-        {
-            return;
-        }
-        
         var info = _timelineQueue.Dequeue();
         
         _currentDirector = info.Director;
         _currentDirector.playableAsset = _timelineClipSetList.GetAsset(info.AssetType);
         
         // 이거 문제
-        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), PlayRoutine(info.Callback));
+        StartSafeCoroutine("TimelinePlayRoutine", PlayRoutine(info.Callback));
 
         if (info.SkipOnStart)
         {
@@ -100,7 +102,29 @@ public class TimelineManager : BaseManager<TimelineManager>
         _currentDirector = null;
 
         onComplete?.Invoke();
+        
+        // complete last clip
+        if (_timelineQueue.Count <= 0)
+        {
+            InputManager.Instance.TimelineInputReader.OnSpeedUpEvent -= SpeedUpHandle;
+            InputManager.Instance.TimelineInputReader.CancelSpeedUpEvent -= CancelSpeedUpHandle;
+            VolumeManager.Instance.SetVolume(VolumeType.Default, 0.1f);
+        }
+        else
+        {
+            PlayNextQueue();
+        }
+    }
 
-        PlayNextQueue();
+    private void SpeedUpHandle()
+    {
+        VolumeManager.Instance.SetVolume(VolumeType.RetroSkip, 0.2f);
+        SetDirectorSpeed(_speedMultiply);
+    }
+
+    private void CancelSpeedUpHandle()
+    {
+        VolumeManager.Instance.SetVolume(VolumeType.Default, 0.1f);
+        SetDirectorSpeed(1f);
     }
 }

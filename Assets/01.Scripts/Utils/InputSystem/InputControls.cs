@@ -352,6 +352,34 @@ namespace InputControl
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Timeline"",
+            ""id"": ""c0265da2-9d46-4df9-a253-b917b0810a78"",
+            ""actions"": [
+                {
+                    ""name"": ""SpeedUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""86559dd8-49f7-4ca0-aef7-5ed64116dc2a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""71255516-8e33-40be-9d6e-ea43696ad6cd"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SpeedUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -392,6 +420,9 @@ namespace InputControl
             // Camera
             m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
             m_Camera_ZoomControl = m_Camera.FindAction("ZoomControl", throwIfNotFound: true);
+            // Timeline
+            m_Timeline = asset.FindActionMap("Timeline", throwIfNotFound: true);
+            m_Timeline_SpeedUp = m_Timeline.FindAction("SpeedUp", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -667,6 +698,52 @@ namespace InputControl
             }
         }
         public CameraActions @Camera => new CameraActions(this);
+
+        // Timeline
+        private readonly InputActionMap m_Timeline;
+        private List<ITimelineActions> m_TimelineActionsCallbackInterfaces = new List<ITimelineActions>();
+        private readonly InputAction m_Timeline_SpeedUp;
+        public struct TimelineActions
+        {
+            private @InputControls m_Wrapper;
+            public TimelineActions(@InputControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @SpeedUp => m_Wrapper.m_Timeline_SpeedUp;
+            public InputActionMap Get() { return m_Wrapper.m_Timeline; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(TimelineActions set) { return set.Get(); }
+            public void AddCallbacks(ITimelineActions instance)
+            {
+                if (instance == null || m_Wrapper.m_TimelineActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_TimelineActionsCallbackInterfaces.Add(instance);
+                @SpeedUp.started += instance.OnSpeedUp;
+                @SpeedUp.performed += instance.OnSpeedUp;
+                @SpeedUp.canceled += instance.OnSpeedUp;
+            }
+
+            private void UnregisterCallbacks(ITimelineActions instance)
+            {
+                @SpeedUp.started -= instance.OnSpeedUp;
+                @SpeedUp.performed -= instance.OnSpeedUp;
+                @SpeedUp.canceled -= instance.OnSpeedUp;
+            }
+
+            public void RemoveCallbacks(ITimelineActions instance)
+            {
+                if (m_Wrapper.m_TimelineActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(ITimelineActions instance)
+            {
+                foreach (var item in m_Wrapper.m_TimelineActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_TimelineActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public TimelineActions @Timeline => new TimelineActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -697,6 +774,10 @@ namespace InputControl
         public interface ICameraActions
         {
             void OnZoomControl(InputAction.CallbackContext context);
+        }
+        public interface ITimelineActions
+        {
+            void OnSpeedUp(InputAction.CallbackContext context);
         }
     }
 }

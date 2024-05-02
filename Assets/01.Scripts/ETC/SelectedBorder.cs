@@ -45,7 +45,7 @@ public class SelectedBorder : PoolableMono
         }
         
         _active = active;
-        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), ActiveRoutine(active));
+        StartSafeCoroutine("SelectedBorderActiveRoutine", ActiveRoutine(active));
     }
 
     private IEnumerator ActiveRoutine(bool active)

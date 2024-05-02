@@ -5,7 +5,7 @@ using UnityEngine;
 namespace VirtualCam
 {
     [RequireComponent(typeof(CinemachineVirtualCameraBase))]
-    public class VirtualCamComponent : MonoBehaviour, IVirtualCam
+    public class VirtualCamComponent : ExtendedMono, IVirtualCam
     {
         private CinemachineVirtualCamera _virtualCam;
         private float _originOrthoSize;
@@ -41,12 +41,12 @@ namespace VirtualCam
         public void Zoom(float zoomScale, float timer)
         {
             var targetCamSize = _originOrthoSize * zoomScale;
-            CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), OrthoSizeChangeRoutine(targetCamSize, timer, CameraManager.Instance.ZoomControlCurve));
+            StartSafeCoroutine("ZoomRoutine", OrthoSizeChangeRoutine(targetCamSize, timer, CameraManager.Instance.ZoomControlCurve));
         }
 
         public void ShakeCam(float intensity, float time)
         {
-            CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), ShakeSequence(intensity, time));
+           StartSafeCoroutine("ShakeCamRoutine", ShakeSequence(intensity, time));
         }
 
         public void SetAxisXValue(float value)
