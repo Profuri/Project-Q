@@ -1,10 +1,10 @@
-using UnityEngine;
 public abstract class PlayerBaseState : State
 {
-    protected static bool _isControllingAxis = false;
+    protected bool IsControllingAxis;
 
     public PlayerBaseState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
+        IsControllingAxis = false;
     }
 
     protected void JumpHandle()
@@ -19,7 +19,7 @@ public abstract class PlayerBaseState : State
             return;
         }
 
-        if (_isControllingAxis)
+        if (IsControllingAxis)
         {
             Player.Converter.UnShowClimbableEffect();
             Controller.ChangeState(typeof(PlayerIdleState));

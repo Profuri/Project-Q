@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public abstract class PoolableMono : MonoBehaviour
+public abstract class PoolableMono : ExtendedMono
 {
     public int poolingCnt = 5;
     [HideInInspector] public bool poolOut = false;
