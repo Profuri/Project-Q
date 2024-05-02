@@ -1,5 +1,5 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using AxisConvertSystem;
 using ManagingSystem;
 using UnityEngine;
@@ -7,6 +7,11 @@ using UnityEngine;
 public class LightManager : BaseManager<LightManager>
 {
     [SerializeField] private Light _directionalLight;
+    [SerializeField] private Light _axisDirectionalLight;
+
+    [Header("Axis Directional Light Section")] 
+    [SerializeField] private float _axisLightIntensity;
+    [SerializeField] private float _axisLightTurnOnTime;
     
     public override void StartManager()
     {
@@ -15,26 +20,46 @@ public class LightManager : BaseManager<LightManager>
 
     public void SetAxisLight(AxisType axis)
     {
-        var lightEulerAngle = new Vector3(50, -30, 0);
-        
-        switch (axis)
+        if (axis == AxisType.None && _axisDirectionalLight.enabled)
         {
-            case AxisType.X:
-                lightEulerAngle = new Vector3(0, -90, 0);
-                break;
-            case AxisType.Y:
-                lightEulerAngle = new Vector3(90, 0, 0);
-                break;
-            case AxisType.Z:
-                lightEulerAngle = new Vector3(0, 0, 0);
-                break;
+            StartSafeCoroutine("IntensityChangeRoutine",
+                IntensityChangeRoutine(_axisDirectionalLight, _axisLightIntensity, 0f, _axisLightTurnOnTime, () =>
+                {
+                    _axisDirectionalLight.enabled = false;
+                })
+            );
+        }
+        else if (axis != AxisType.None && !_axisDirectionalLight.enabled)
+        {
+            _axisDirectionalLight.enabled = true;
+            StartSafeCoroutine("IntensityChangeRoutine",
+                IntensityChangeRoutine(_axisDirectionalLight, 0f, _axisLightIntensity, _axisLightTurnOnTime));
         }
 
-        _directionalLight.transform.eulerAngles = lightEulerAngle;
+        var axisDirection = Vector3ExtensionMethod.GetAxisDir(axis);
+        _axisDirectionalLight.transform.rotation = Quaternion.LookRotation(-axisDirection);
     }
 
     public void SetShadow(LightShadows shadow)
     {
         _directionalLight.shadows = shadow;
+    }
+
+    private IEnumerator IntensityChangeRoutine(Light target, float from, float to, float time, Action callBack = null)
+    {
+        target.intensity = from;
+        var currentTime = 0f;
+
+        while (currentTime <= time)
+        {
+            currentTime += Time.deltaTime;
+            var percent = currentTime / time;
+            var intensity = Mathf.Lerp(from, to, percent);
+            target.intensity = intensity;
+            yield return null;
+        }
+
+        target.intensity = to;
+        callBack?.Invoke();
     }
 }
