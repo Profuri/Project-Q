@@ -11,8 +11,6 @@ public class TogglePlate : ToggleTypeInteractableObject
     
     private Transform _pressureMainTrm;
 
-    private bool _isToggle;
-
     private SoundEffectPlayer _soundEffectPlayer;
     public override void Awake()
     {
@@ -40,7 +38,6 @@ public class TogglePlate : ToggleTypeInteractableObject
         base.UpdateUnit();
         ToggleUpdate();
     }
-
     private void ToggleUpdate()
     {
         InteractAffectedObjects(_isToggle);

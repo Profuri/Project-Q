@@ -39,8 +39,6 @@ namespace AxisConvertSystem
         private LayerMask _climbLayerMask;
         private UnClimbableEffect _unClimbableEffect;
 
-        private SelectedBorder _selectedBorder;
-
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
         
@@ -454,7 +452,7 @@ namespace AxisConvertSystem
             return size > 0;
         }
         
-        public void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
+        public virtual void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
         {
             CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(),DissolveRoutine(value,time,useDissolve,callBack));
         }
@@ -480,6 +478,7 @@ namespace AxisConvertSystem
                 currentTime += Time.deltaTime;
                 var percent = currentTime / time;
                 var currentProgress = Mathf.Lerp(initVal,value,percent);
+
                 foreach (var material in _materials)
                 {
                     if (useDissolve)
@@ -521,42 +520,6 @@ namespace AxisConvertSystem
                 _unClimbableEffect = null;
             }
         }
-
-        public void ShowSelectedBorder()
-        {
-            if (_selectedBorder == null)
-            {
-                _selectedBorder = SceneControlManager.Instance.AddObject("SelectedBorder") as SelectedBorder;
-                _selectedBorder.Setting(this);
-            }
-        }
-
-        public void SetAlphaSelectedBorder(float alpha)
-        {
-            if(_selectedBorder != null)
-            {
-                _selectedBorder.SetAlpha(alpha);
-            }
-        }
-
-        public void UnShowSelectedBorder()
-        {
-            if (_selectedBorder is not null)
-            {
-                SelectedBorderActivate(false);
-                SceneControlManager.Instance.DeleteObject(_selectedBorder);
-                _selectedBorder = null;
-            }
-        }
-
-        public void SelectedBorderActivate(bool active)
-        {
-            if (_selectedBorder is not null)
-            {
-                _selectedBorder.Activate(active);
-            }
-        }
-
         public ObjectUnit GetParentUnit()
         {
             if (!subUnit)

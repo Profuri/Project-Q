@@ -46,6 +46,12 @@ public class InteractionMark : PoolableMono
         {
             offset = Vector3.up * 2f;
         }
+
+        if (collider == null)
+        {
+            SceneControlManager.Instance.DeleteObject(this);
+            return;
+        }
         transform.position = collider.bounds.center + offset;
     }
 }

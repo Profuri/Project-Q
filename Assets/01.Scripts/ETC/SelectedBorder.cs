@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 public class SelectedBorder : PoolableMono
 {
     [SerializeField] private float _activeTime = 0.25f;
-    //[SerializeField] private float _cornerSizeOffset = 0.5f;
 
     private Material _material;
 
@@ -67,7 +66,6 @@ public class SelectedBorder : PoolableMono
         var position = bounds.center;
         var size = owner.BeforeConvertedUnitInfo.ColliderBoundSize + new Vector3(0.1f, 0.1f, 0.1f);
 
-
         float originMagnitude = Vector3.one.magnitude;
         float currentMagnitude = size.magnitude;
         float percent = currentMagnitude / originMagnitude;
@@ -83,6 +81,7 @@ public class SelectedBorder : PoolableMono
             percent = 1f + (1f - percent);
         }
 
+
         float cornerSize = _initCornerSize * percent + offset;
 
         _material.SetFloat(_cornerSizeHash, cornerSize);
@@ -91,47 +90,31 @@ public class SelectedBorder : PoolableMono
         transform.localScale = size;
     }
 
-    public void Setting(Collider collider)
-    {
-        var bounds = collider.bounds;
-        var position = bounds.center;
-        var size = collider.bounds.size;
-
-        transform.position = position;
-        transform.localScale = size;
-        SetAlpha(1);
-    }
-
     public void Activate(bool active)
     {
         if (_active == active)
         {
             return;
         }
-        
         _active = active;
-        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), ActiveRoutine(active));
     }
     
-    public void SetAlpha(float alpha)
+    public void SetDistanceProgress(float alpha, bool activePower)
     {
-        _material.SetFloat(_alphaProgressHash, alpha);
-    }
-    
-    private IEnumerator ActiveRoutine(bool active)
-    {
-        var initProgress = _material.GetFloat(_activeProgressHash);
-        var targetProgress = active ? 1f : 0f;
-
-        var time = _activeTime * Mathf.Abs(targetProgress - initProgress);
-        var currentTime = 0f;
-            
-        while (currentTime <= time)
+        if (activePower)
         {
-            currentTime += Time.deltaTime;
-            var percent = currentTime / time;
-            _material.SetFloat(_activeProgressHash, Mathf.Lerp(initProgress, targetProgress, percent));
-            yield return null;
+            const float maxPower = 1f;
+
+            _material.SetFloat(_alphaProgressHash, maxPower);
+            _material.SetFloat(_activeProgressHash, maxPower);
+            return;
         }
+        else
+        {
+            _material.SetFloat(_activeProgressHash, 0f);
+            _material.SetFloat(_alphaProgressHash, 0f);
+        }
+        _material.SetFloat(_alphaProgressHash, alpha);
+
     }
 }

@@ -126,6 +126,7 @@ namespace AxisConvertSystem
             });
         }
 
+        public static Action OnSettingApplyInfoAll;
         private void ChangeAxis(AxisType axisType)
         {
             Player.Converter.UnShowClimbableEffect();
@@ -145,6 +146,7 @@ namespace AxisConvertSystem
             {
                 unit.ApplyUnitInfo(axisType);
             }
+            OnSettingApplyInfoAll?.Invoke();
             foreach (var unit in _section.SectionUnits)
             {
                 unit.ApplyDepth();
