@@ -37,7 +37,10 @@ public class LightManager : BaseManager<LightManager>
         }
 
         var axisDirection = Vector3ExtensionMethod.GetAxisDir(axis);
-        _axisDirectionalLight.transform.rotation = Quaternion.LookRotation(-axisDirection);
+        if (axisDirection.sqrMagnitude > 0)
+        {
+            _axisDirectionalLight.transform.rotation = Quaternion.LookRotation(-axisDirection);
+        }
     }
 
     public void SetShadow(LightShadows shadow)

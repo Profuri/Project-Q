@@ -13,7 +13,21 @@ public class PlayerUnit : ObjectUnit
     public Animator Animator { get; private set; }
     public ObjectHoldingHandler HoldingHandler { get; private set; }
     public PlayerInteractHandler InteractHandler { get; private set; }
-    public ObjectUnit StandingUnit { get; set; }
+
+    private ObjectUnit _standingUnit;
+    public ObjectUnit StandingUnit
+    {
+        get => _standingUnit;
+        set
+        {
+            if (value is not null)
+            {
+                value.Collider.excludeLayers |= 1 << gameObject.layer;
+            }
+            _standingUnit = value;
+        }
+    }
+
     public SoundEffectPlayer SoundEffectPlayer { get; private set; }
 
     private StateController _stateController;
@@ -138,8 +152,6 @@ public class PlayerUnit : ObjectUnit
 
     private void StandingCheck()
     {
-        StandingUnit.Collider.excludeLayers |= 1 << gameObject.layer;
-        
         if (!StandingUnit.Collider.bounds.Contains(Collider.bounds.center))
         {
             StandingUnit.Collider.excludeLayers ^= 1 << gameObject.layer;
