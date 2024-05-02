@@ -46,7 +46,7 @@ public class VolumeManager : BaseManager<VolumeManager>
     public void SetVolume(VolumeType type, float time, bool isReturnOrigin = false, float returningPoint = 0.5f)
     {
         var nextVolume = _volumes[type];
-        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), VolumeChangeRoutine(_currentVolume, nextVolume, time, isReturnOrigin, returningPoint));
+        StartSafeCoroutine("VolumeChangeRoutine", VolumeChangeRoutine(_currentVolume, nextVolume, time, isReturnOrigin, returningPoint));
     }
 
     private IEnumerator VolumeChangeRoutine(Volume prev, Volume next, float time, bool isReturnOrigin, float returningPoint)

@@ -453,7 +453,7 @@ namespace AxisConvertSystem
         
         public void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
         {
-            CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(),DissolveRoutine(value,time,useDissolve,callBack));
+            StartSafeCoroutine("DissolveRoutine",DissolveRoutine(value,time,useDissolve,callBack));
         }
 
         private IEnumerator DissolveRoutine(float value, float time, bool useDissolve = true, Action callBack = null)

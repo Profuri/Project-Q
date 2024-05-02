@@ -84,7 +84,7 @@ public class TimelineManager : BaseManager<TimelineManager>
         _currentDirector.playableAsset = _timelineClipSetList.GetAsset(info.AssetType);
         
         // 이거 문제
-        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), PlayRoutine(info.Callback));
+        StartSafeCoroutine("TimelinePlayRoutine", PlayRoutine(info.Callback));
 
         if (info.SkipOnStart)
         {

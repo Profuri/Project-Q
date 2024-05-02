@@ -27,13 +27,13 @@ public class SceneTransitionCanvas : PoolableMono
     /// <param name="Callback"></param>
     public void PresentTransition(float startValue, float endValue, float time, Action Callback = null)
     {
-        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), TransitionCoroutine(startValue, endValue, time, Callback));
+        StartSafeCoroutine("SceneTransitionRoutine", TransitionCoroutine(startValue, endValue, time, Callback));
 
     }
 
     public void PauseTransition(float time, Action Callback)
     {
-        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), DelayCoroutine(time, Callback));
+        StartSafeCoroutine("ScenePauseRoutine", DelayCoroutine(time, Callback));
     }
 
     private IEnumerator DelayCoroutine(float time, Action Callback)
