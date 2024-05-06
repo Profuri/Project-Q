@@ -45,7 +45,6 @@ public class PlayerUnit : ObjectUnit
         }
     }
 
-    //public bool CanJump => OnGround || IsCoyote;
     public bool CanJump => OnGround || IsCoyote;
 
     public void StartCoyoteTime()

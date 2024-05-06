@@ -9,7 +9,6 @@ public class LaserToggleObject : ToggleTypeInteractableObject
     private Light _pointLight;
 
     private const float ToggleCancelDelay = 0.1f;
-    private bool _isToggle;
     private float _lastToggleTime;
 
     private int _interactableIndex;

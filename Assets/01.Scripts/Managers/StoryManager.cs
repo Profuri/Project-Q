@@ -82,6 +82,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
     }
 
 
+
     public Action<SaveData> GetSaveAction()
     {
         return (saveData) =>

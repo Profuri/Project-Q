@@ -39,7 +39,14 @@ public class SceneControlManager : BaseManager<SceneControlManager>
             onSceneCreate?.Invoke();
             CurrentScene.onLoadScene?.Invoke();
             
-            CurrentScene.CreatePlayer();
+            if(!TimelineManager.Instance.IsPlay)
+            {
+                CurrentScene.CreatePlayer();
+            }
+            else
+            {
+                TimelineManager.Instance.AllTimelineEnd = CurrentScene.CreatePlayer;
+            }
 
             //위에 함수가 전부다 정상 작동 했을 경우 밑에 있는 것을 실행시켜주어야 함
             _currentCanvas.PauseTransition(_loadingTime, () =>
@@ -49,7 +56,6 @@ public class SceneControlManager : BaseManager<SceneControlManager>
                     onLoadedCallback?.Invoke();
                     PoolManager.Instance.Push(_currentCanvas);
                     _currentCanvas = null;
-
                 });
             });
 

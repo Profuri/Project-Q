@@ -44,6 +44,7 @@ public class TimelineManager : BaseManager<TimelineManager>
             return _currentDirector.playableGraph.GetRootPlayable(0).GetTime() <= _currentDirector.duration;
         }
     }
+    public Action AllTimelineEnd;
 
     public override void Init()
     {
@@ -80,11 +81,16 @@ public class TimelineManager : BaseManager<TimelineManager>
 
     private void PlayNextQueue()
     {
+        if (_timelineQueue.Count <= 0)
+        {
+            AllTimelineEnd?.Invoke();
+            return;
+        }
+
         var info = _timelineQueue.Dequeue();
         
         _currentDirector = info.Director;
         _currentDirector.playableAsset = _timelineClipSetList.GetAsset(info.AssetType);
-        
         // 이거 문제
         StartSafeCoroutine("TimelinePlayRoutine", PlayRoutine(info.Callback));
 

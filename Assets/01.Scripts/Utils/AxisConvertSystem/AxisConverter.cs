@@ -18,6 +18,8 @@ namespace AxisConvertSystem
 
         private bool _cancelConvert;
 
+        public event Action OnSettingApplyInfoAll;
+
         public void Init(Section section)
         {
             AxisType = AxisType.None;
@@ -163,6 +165,7 @@ namespace AxisConvertSystem
             foreach (var unit in _section.SectionUnits) unit.IntersectedUnits.Clear();
             foreach (var unit in _section.SectionUnits) unit.DepthHandler.CalcDepth(nextAxis);
             foreach (var unit in _section.SectionUnits) unit.ApplyUnitInfo(nextAxis);
+            OnSettingApplyInfoAll?.Invoke();
             foreach (var unit in _section.SectionUnits) unit.ApplyDepth();
 
             AxisType = nextAxis;
