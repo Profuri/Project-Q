@@ -24,6 +24,7 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
     [field:SerializeField] public PlayerInputReader PlayerInputReader { get; private set; }
     [field:SerializeField] public UIInputReader UIInputReader { get; private set; }
     [field:SerializeField] public CameraInputReader CameraInputReader { get; private set; }
+    [field:SerializeField] public TimelineInputReader TimelineInputReader { get; private set; }
 
 
     private Dictionary<EInputCategory, InputAction> _inputDictionary;
@@ -204,7 +205,7 @@ public static class InputManagerHelper
 {
     public static void OnControllingAxis()
     {
-        EInputCategory[] inputs = { EInputCategory.AxisControl, EInputCategory.Click };
+        EInputCategory[] inputs = { EInputCategory.AxisControl, EInputCategory.Click,  };
         InputManager.Instance.SetEnableInputWithout(inputs, true);
     }
     public static void OnCancelingAxis() => InputManager.Instance.SetEnableInputAll(true);

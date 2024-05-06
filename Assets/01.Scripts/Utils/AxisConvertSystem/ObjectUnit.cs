@@ -268,7 +268,6 @@ namespace AxisConvertSystem
             {
                 Dissolve(0f, dissolveTime, true, callBack);
                 Rigidbody.velocity = Vector3.zero;
-                //PlaySpawnVFX();
             }
         }
         
@@ -352,7 +351,7 @@ namespace AxisConvertSystem
             var depth = DepthHandler.GetDepth();
 
             var frontDepth = standUnit.DepthHandler.GetDepth();
-            var boundsSize = (standUnit.UnitInfo.LocalRot * standUnit.UnitInfo.LocalScale).GetAxisElement(axis);
+            var boundsSize = (standUnit.UnitInfo.LocalRot * standUnit.Collider.bounds.size).GetAxisElement(axis);
 
             // is in back unit
             if (depth > frontDepth || depth < frontDepth - boundsSize)
@@ -373,7 +372,8 @@ namespace AxisConvertSystem
                 }
 
                 var intersectedUnitDepthPoint = intersectedUnit.DepthHandler.GetDepthPoint(Converter.AxisType);
-                if (!dynamicDepthPoint.Intersect(intersectedUnitDepthPoint))
+                if (dynamicDepthPoint.Min.x < intersectedUnitDepthPoint.Min.x || dynamicDepthPoint.Min.x > intersectedUnitDepthPoint.Max.x &&
+                    dynamicDepthPoint.Max.x < intersectedUnitDepthPoint.Min.x || dynamicDepthPoint.Max.x > intersectedUnitDepthPoint.Max.x)
                 {
                     continue;
                 }
@@ -454,7 +454,7 @@ namespace AxisConvertSystem
         
         public virtual void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
         {
-            CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(),DissolveRoutine(value,time,useDissolve,callBack));
+            StartSafeCoroutine("DissolveRoutine",DissolveRoutine(value,time,useDissolve,callBack));
         }
 
         private IEnumerator DissolveRoutine(float value, float time, bool useDissolve = true, Action callBack = null)
@@ -520,6 +520,64 @@ namespace AxisConvertSystem
                 _unClimbableEffect = null;
             }
         }
+
+        public void ShowSelectedBorder()
+        {
+            if (_selectedBorder == null)
+            {
+                _selectedBorder = SceneControlManager.Instance.AddObject("SelectedBorder") as SelectedBorder;
+                _selectedBorder.Setting(Collider);
+            }
+        }
+
+        public void UnShowSelectedBorder()
+        {
+            if (_selectedBorder is not null)
+            {
+                SelectedBorderActivate(false);
+                SceneControlManager.Instance.DeleteObject(_selectedBorder);
+                _selectedBorder = null;
+            }
+        }
+
+        public void SelectedBorderActivate(bool active)
+        {
+            if (_selectedBorder is not null)
+            {
+                _selectedBorder.Activate(active);
+            }
+        }
+
+        public bool IsSuperiorUnit(ObjectUnit checkUnit)
+        {
+            if (!subUnit)
+            {
+                return false;
+            }
+            
+            var checkTrm = transform;
+            
+            while (checkTrm.parent != null)
+            {
+                var parent = checkTrm.parent;
+                var unit = parent.GetComponent<ObjectUnit>();
+
+                if (unit == checkUnit)
+                {
+                    return true;
+                }
+
+                if (unit != null && !unit.subUnit)
+                {
+                    break;
+                }
+                
+                checkTrm = parent;
+            }
+
+            return false;
+        }
+
         public ObjectUnit GetParentUnit()
         {
             if (!subUnit)

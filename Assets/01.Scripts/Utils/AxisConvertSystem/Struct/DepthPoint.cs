@@ -17,11 +17,18 @@ namespace AxisConvertSystem
             {
                 return false;
             }
+            
+            var isInsideOther = IsInsidePoint(Min, other.Min, other.Max) ||
+                               IsInsidePoint(Max, other.Min, other.Max) ||
+                               IsInsidePoint(new Vector2(Min.x, Max.y), other.Min, other.Max) ||
+                               IsInsidePoint(new Vector2(Max.x, Min.y), other.Min, other.Max);
+            
+            var isInsideThis = IsInsidePoint(other.Min, Min, Max) ||
+                              IsInsidePoint(other.Max, Min, Max) ||
+                              IsInsidePoint(new Vector2(other.Min.x, other.Max.y), Min, Max) ||
+                              IsInsidePoint(new Vector2(other.Max.x, other.Min.y), Min, Max);
 
-            return IsInsidePoint(Min, other.Min, other.Max) ||
-                   IsInsidePoint(Max, other.Min, other.Max) ||
-                   IsInsidePoint(new Vector2(Min.x, Max.y), other.Min, other.Max) ||
-                   IsInsidePoint(new Vector2(Max.x, Min.y), other.Min, other.Max);
+            return isInsideOther || isInsideThis;
         }
 
         private bool IsInsidePoint(Vector2 point, Vector2 min, Vector2 max)

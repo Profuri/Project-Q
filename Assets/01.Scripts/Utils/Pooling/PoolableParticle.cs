@@ -29,7 +29,7 @@ public class PoolableParticle : PoolableMono
 
     public void Play()
     {
-        CoroutineManager.Instance.StartSafeCoroutine(GetInstanceID(), PlayRoutine());
+        StartSafeCoroutine("ParticlePlayRoutine", PlayRoutine());
     }
 
     private IEnumerator PlayRoutine()

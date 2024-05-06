@@ -1,7 +1,7 @@
 using AxisConvertSystem;
 using UnityEngine;
 
-public class PictureUnit : ObjectUnit
+public class PictureUnit : ObjectUnit, IPassable
 {
     [SerializeField] private AxisType _enableAxis;
 
@@ -12,7 +12,8 @@ public class PictureUnit : ObjectUnit
     private Material _enableMat;
     private Material _disableMat;
 
-    private bool _isEnableUnit;
+    public bool PassableLastAxis { get; set; }
+    public bool PassableAfterAxis { get; set; }
 
     public void SetPictureUnit(PictureObject owner, Material enableMat, Material disableMat)
     {
@@ -22,6 +23,10 @@ public class PictureUnit : ObjectUnit
 
         _enableMat = enableMat;
         _disableMat = disableMat;
+        
+        _renderer.material = _disableMat;
+        MaterialResetUp();
+        Hide(false);
     }
 
     public void ChangeAxis(AxisType axis)
@@ -31,17 +36,13 @@ public class PictureUnit : ObjectUnit
             return;
         }
 
-        _isEnableUnit = false;
-
         if (axis == AxisType.None)
         {
-            _isEnableUnit = true;
             _renderer.material = _disableMat;
             MaterialResetUp();
         }
         else if (axis == _enableAxis)
         {
-            _isEnableUnit = true;
             _renderer.material = _enableMat;
             MaterialResetUp();
         }
@@ -49,7 +50,7 @@ public class PictureUnit : ObjectUnit
 
     public override void ApplyUnitInfo(AxisType axis)
     {
-        if (_isEnableUnit)
+        if (!PassableAfterAxis)
         {
             ConvertedInfo.LocalPos.SetAxisElement(axis, 0f);
         }
@@ -59,6 +60,19 @@ public class PictureUnit : ObjectUnit
 
     public override void ApplyDepth()
     {
-        Hide(!_isEnableUnit);
+        PassableLastAxis = PassableAfterAxis;
+        Hide(Converter.AxisType == AxisType.None && PassableAfterAxis);
+    }
+
+    public void PassableCheck(AxisType axis)
+    {
+        if (axis == AxisType.None || axis != _enableAxis)
+        {
+            PassableAfterAxis = true;
+        }
+        else
+        {
+            PassableAfterAxis = false;
+        }
     }
 }
