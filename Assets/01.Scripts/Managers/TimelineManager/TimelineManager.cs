@@ -44,7 +44,8 @@ public class TimelineManager : BaseManager<TimelineManager>
             return _currentDirector.playableGraph.GetRootPlayable(0).GetTime() <= _currentDirector.duration;
         }
     }
-    public Action AllTimelineEnd;
+    
+    public event Action AllTimelineEnd;
 
     public override void Init()
     {
@@ -81,13 +82,14 @@ public class TimelineManager : BaseManager<TimelineManager>
 
     private void PlayNextQueue()
     {
+        var info = _timelineQueue.Dequeue();
+        
         if (_timelineQueue.Count <= 0)
         {
             AllTimelineEnd?.Invoke();
+            AllTimelineEnd = null;
             return;
         }
-
-        var info = _timelineQueue.Dequeue();
         
         _currentDirector = info.Director;
         _currentDirector.playableAsset = _timelineClipSetList.GetAsset(info.AssetType);

@@ -521,33 +521,6 @@ namespace AxisConvertSystem
             }
         }
 
-        public void ShowSelectedBorder()
-        {
-            if (_selectedBorder == null)
-            {
-                _selectedBorder = SceneControlManager.Instance.AddObject("SelectedBorder") as SelectedBorder;
-                _selectedBorder.Setting(Collider);
-            }
-        }
-
-        public void UnShowSelectedBorder()
-        {
-            if (_selectedBorder is not null)
-            {
-                SelectedBorderActivate(false);
-                SceneControlManager.Instance.DeleteObject(_selectedBorder);
-                _selectedBorder = null;
-            }
-        }
-
-        public void SelectedBorderActivate(bool active)
-        {
-            if (_selectedBorder is not null)
-            {
-                _selectedBorder.Activate(active);
-            }
-        }
-
         public bool IsSuperiorUnit(ObjectUnit checkUnit)
         {
             if (!subUnit)

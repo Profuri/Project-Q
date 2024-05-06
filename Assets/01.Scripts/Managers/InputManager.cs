@@ -104,8 +104,7 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
             }
         }
     }
-    
-    
+
     public void SetEnableInputWithout(EInputCategory[] categories, bool enable)
     {
         foreach (EInputCategory category in Enum.GetValues(typeof(EInputCategory)))
@@ -119,8 +118,6 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
                 _inputDictionary[category].Disable();
         }
     }
-
-
 
     public void SetEnableInputWithout(EInputCategory cg, bool enable)
     {
