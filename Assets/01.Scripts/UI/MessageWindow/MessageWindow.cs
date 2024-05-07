@@ -10,6 +10,9 @@ public class MessageWindow : UIComponent
     private TextAnimator_TMP _textAnimator;
     private TypewriterByCharacter _typewriter;
 
+    private StoryData _storyData;
+    private int _currentIndex;
+
     protected override void Awake()
     {
         base.Awake();
@@ -25,20 +28,47 @@ public class MessageWindow : UIComponent
     {
         base.Appear(parentTrm, callback);
         _typewriter.onMessage.AddListener(OnTypewriterMessageHandle);
+
+        InputManager.Instance.UIInputReader.OnEnterClickEvent += NextStory;
     }
 
     public override void Disappear(Action callback = null)
     {
         base.Disappear(callback);
         _typewriter.onMessage.RemoveListener(OnTypewriterMessageHandle);
+        
+        InputManager.Instance.UIInputReader.OnEnterClickEvent -= NextStory;
     }
 
-    public void SetText(string message)
+    public void SetData(StoryData data)
+    {
+        _storyData = data;
+        _currentIndex = -1;
+        NextStory();
+    }
+    
+    private void NextStory()
+    {
+        ++_currentIndex;
+        if(_currentIndex >=  _storyData.contentList.Count)
+        {
+            Disappear();
+            return;
+        }
+        
+        var content = _storyData.contentList[_currentIndex];
+        var message = content.storyText;
+        
+        SetText(message);
+    }
+
+    private void SetText(string message)
     {
         if (_typewriter.isShowingText)
         {
             return;
         }
+        
         _typewriter.ShowText(message);
     }
     

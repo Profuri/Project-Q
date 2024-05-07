@@ -9,7 +9,7 @@ public class StoryPanel : UIComponent, IPointerClickHandler
     protected TextAnimator_TMP _textAnimator;
     protected TypewriterByCharacter _typeWriter;
 
-    protected StorySO _storySO;
+    protected StoryData StoryData;
     private int _currentIndex;
     private bool _isTyping;
 
@@ -28,27 +28,27 @@ public class StoryPanel : UIComponent, IPointerClickHandler
         _typeWriter = messageTrm.GetComponent<TypewriterByCharacter>();
     }
 
-    public void SettingStory(StorySO storySO,bool isTypingStory = false)
+    public void SettingStory(StoryData storyData,bool isTypingStory = false)
     {
-        _storySO = storySO;
+        StoryData = storyData;
         _currentIndex = 0;
         this._isTyping = isTypingStory;
 
-        string message = _storySO.contentList[_currentIndex].storyText;
+        string message = StoryData.contentList[_currentIndex].storyText;
         AppearMessage(message,isTypingStory);
     }
 
     private void NextStory()
     {
         ++_currentIndex;
-        if(_currentIndex >=  _storySO.contentList.Count)
+        if(_currentIndex >=  StoryData.contentList.Count)
         {
             // 스토리를 전부 본 상황
             // 안봤으면 어쩔건데 XX아
             Disappear();
             return;
         }
-        StoryContent content = _storySO.contentList[_currentIndex];
+        StoryContent content = StoryData.contentList[_currentIndex];
         string message = content.storyText;
         AppearMessage(message,_isTyping);
     }

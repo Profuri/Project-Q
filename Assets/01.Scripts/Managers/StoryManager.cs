@@ -5,26 +5,24 @@ using System;
 
 public enum ChapterCondition
 {
-    CHAPTER_ENTER = 0,
-    CHAPTER_EXIT,
+    STAGE_ENTER = 0,
+    STAGE_EXIT,
     CHAPTER_CLEAR,
 }
 
 public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 {
-    public StoryPanel CurrentPanel { get; private set; }    
-    public Canvas StoryCanvas { get; private set; }
+    private MessageWindow _messagePanel;    
     
-    [System.Serializable]
+    [Serializable]
     private class ChapterStory
     {
         public ChapterCondition condition;
         public ChapterType chapterType;
         public int stageIndex;
+        public StoryData storyData;
 
         [HideInInspector] public bool isShown;
-
-        public StorySO storySO;
     }
 
     [SerializeField] private List<ChapterStory> _storyList = new List<ChapterStory>();
@@ -53,16 +51,15 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 
     public void ResetMessage()
     {
-        CurrentPanel = null;
+        _messagePanel = null;
     }
 
-    public void StartStory(StorySO storySO,int storyIndex = 0,bool isTypingStory = false)
+    public void StartStory(StoryData storyData,int storyIndex = 0,bool isTypingStory = false)
     {
-        if (CurrentPanel != null) return;
+        if (_messagePanel != null) return;
 
-        CurrentPanel = UIManager.Instance.GenerateUI("StoryPanel") as StoryPanel;
-        CurrentPanel.ResetPosition();
-        CurrentPanel.SettingStory(storySO,isTypingStory);
+        _messagePanel = UIManager.Instance.GenerateUI("MessageWindow") as MessageWindow;
+        _messagePanel.SetData(storyData);
         DataManager.Instance.SaveData(this);
     }
 
@@ -72,12 +69,12 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 
         if (tuple == null) return false;
 
-        StorySO storySO = tuple.Item1.storySO;
+        StoryData storyData = tuple.Item1.storyData;
         int index = tuple.Item2;
 
         _storyList[index].isShown = true;
 
-        StartStory(storySO,index, true);
+        StartStory(storyData,index, true);
         return true;
     }
 

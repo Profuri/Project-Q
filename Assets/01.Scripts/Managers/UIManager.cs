@@ -130,7 +130,11 @@ public class UIManager : BaseManager<UIManager>
             parent = component.transform is RectTransform ? _mainCanvas2D.transform : _mainCanvas3D;
         }
 
+        var localPos = component.transform.localPosition;
+        var localRot = component.transform.localRotation;
         component.Appear(parent, callback);
+        component.transform.localPosition = localPos;
+        component.transform.localRotation = localRot;
         return component;
     }
 

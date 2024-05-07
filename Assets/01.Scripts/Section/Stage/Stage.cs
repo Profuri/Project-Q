@@ -62,13 +62,13 @@ public class Stage : Section
         {
             StageManager.Instance.ChangeToNextStage();
         }
-        StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_ENTER, _chapter, StageOrder);
+        StoryManager.Instance.StartStoryIfCan(ChapterCondition.STAGE_ENTER, _chapter, StageOrder);
     }
 
     public override void OnExit(PlayerUnit player)
     {
         base.OnExit(player);
-        StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_EXIT,_chapter, StageOrder);
+        StoryManager.Instance.StartStoryIfCan(ChapterCondition.STAGE_EXIT,_chapter, StageOrder);
     }
 
     public override void Disappear(float dissolveTime = 1.5f, Action Callback = null)

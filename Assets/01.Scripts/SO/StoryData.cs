@@ -5,11 +5,11 @@ using UnityEngine;
 [System.Serializable]
 public struct StoryContent
 {
-    [TextArea()] public string storyText;
+    [TextArea] public string storyText;
 }
 
 [CreateAssetMenu(menuName = "SO/Story")]
-public class StorySO : ScriptableObject
+public class StoryData : ScriptableObject
 {
     public List<StoryContent> contentList = new List<StoryContent>();
 }
