@@ -28,52 +28,40 @@ public class SlimeObjectUnit : ObjectUnit
         }
     }
 
+    public override void OnCameraSetting(AxisType axis)
+    {
+        base.OnCameraSetting(axis);
+        
+        Debug.Log($"AffactedCount: {_affectedUnits.Count}");
+        if(_affectedUnits.Count > 0)
+        { 
+            ApplyBounceEffect();
+        }
+    }
+
     public override void ApplyUnitInfo(AxisType axis)
     {
         base.ApplyUnitInfo(axis);
         
-        if(_affectedUnits.Count > 0)
-        {
-            ShowBounceEffect();
-        }
-            
         _prevAxisType = axis;
     }
-    
-    //이건 압축 해제되었을 때 팍 튕겨나가는거.
-    private void SlimeImpact(ObjectUnit unit)
+
+    private void ApplyBounceEffect()
     {
-        Vector3 bounceDirection = Vector3.up;
-        unit.SetVelocity(bounceDirection * _bouncePower, false);
-    }
-
-    private void ShowBounceEffect()
-    {
-        Vector3 originScale = transform.localScale;
-        Vector3 targetScale = transform.localScale * 1.2f;
-
-        transform.localScale = new Vector3(1,0.1f,1f);
-
-        Sequence seq = DOTween.Sequence();
-        seq.Append(transform.DOScale(targetScale, _bounceTime)).SetEase(Ease.InBounce);
-        seq.AppendCallback(() =>
+        foreach (var unit in _affectedUnits)
         {
-
-            foreach (var unit in _affectedUnits)
-            {
-                SlimeImpact(unit);
-            }
-            _affectedUnits.Clear();
-        });
-        seq.Append(transform.DOScale(originScale, _bounceTime)).SetEase(Ease.InBounce);
+            Vector3 bounceDirection = Vector3.up;
+            unit.SetVelocity(bounceDirection * _bouncePower, false);
+        }
+        _affectedUnits.Clear();
     }
-
+    
     private List<ObjectUnit> GetMovementUnit()
     {
         List<ObjectUnit> unitList = new List<ObjectUnit>();
 
         Vector3 checkCenterPos = Collider.bounds.center;
-        Vector3 halfExtents = Collider.bounds.size / 2f;
+        Vector3 halfExtents = Collider.bounds.extents;
         Quaternion rotation = transform.rotation;
 
         Collider[] cols = Physics.OverlapBox(checkCenterPos, halfExtents, rotation);
@@ -88,7 +76,6 @@ public class SlimeObjectUnit : ObjectUnit
                 }
             }
         }
-        
         return unitList;
     }
 

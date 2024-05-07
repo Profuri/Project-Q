@@ -18,8 +18,6 @@ namespace AxisConvertSystem
 
         private bool _cancelConvert;
 
-        public event Action OnSettingApplyInfoAll;
-
         public void Init(Section section)
         {
             AxisType = AxisType.None;
@@ -97,7 +95,11 @@ namespace AxisConvertSystem
                         SoundManager.Instance.PlaySFX("AxisControl");
                         ChangeAxis(nextAxis);
                     }
-                    
+
+                    foreach (var obj in _section.SectionUnits)
+                    {
+                        obj.OnCameraSetting(nextAxis);
+                    }
                     Convertable = true;
                     callback?.Invoke();
                 });
@@ -165,7 +167,6 @@ namespace AxisConvertSystem
             foreach (var unit in _section.SectionUnits) unit.IntersectedUnits.Clear();
             foreach (var unit in _section.SectionUnits) unit.DepthHandler.CalcDepth(nextAxis);
             foreach (var unit in _section.SectionUnits) unit.ApplyUnitInfo(nextAxis);
-            OnSettingApplyInfoAll?.Invoke();
             foreach (var unit in _section.SectionUnits) unit.ApplyDepth();
 
             AxisType = nextAxis;
