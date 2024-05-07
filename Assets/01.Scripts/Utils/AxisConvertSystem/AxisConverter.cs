@@ -17,7 +17,7 @@ namespace AxisConvertSystem
         private Section _section;
 
         private bool _cancelConvert;
-
+        
         public void Init(Section section)
         {
             AxisType = AxisType.None;
@@ -25,7 +25,8 @@ namespace AxisConvertSystem
             SetConvertable(section is Stage);
             section.SectionUnits.ForEach(unit => unit.Init(this));
         }
-
+        
+        
         public void SetConvertable(bool convertable)
         {
             Convertable = convertable;
@@ -67,7 +68,7 @@ namespace AxisConvertSystem
                 SoundManager.Instance.PlaySFX("AxisControl");
                 ChangeAxis(nextAxis);
             }
-
+            
             if (CameraManager.Instance.CurrentCamController is SectionCamController)
             {
                 ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(nextAxis, () =>

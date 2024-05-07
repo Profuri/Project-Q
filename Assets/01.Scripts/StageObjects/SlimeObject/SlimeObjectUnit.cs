@@ -32,7 +32,6 @@ public class SlimeObjectUnit : ObjectUnit
     {
         base.OnCameraSetting(axis);
         
-        Debug.Log($"AffactedCount: {_affectedUnits.Count}");
         if(_affectedUnits.Count > 0)
         { 
             ApplyBounceEffect();

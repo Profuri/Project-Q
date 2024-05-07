@@ -14,7 +14,7 @@ public abstract class PlayerBaseState : State
     
     protected void AxisControlHandle()
     {
-        if (!Player.Converter.Convertable)
+        if (!Player.Converter.Convertable || !Player.CanAxisControl)
         {
             return;
         }
