@@ -9,22 +9,6 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 
     [SerializeField] private List<StoryInfo> _storyList = new List<StoryInfo>();
 
-    private Tuple<StoryInfo,int> GetStory(StoryAppearType timing, ChapterType chapterType, int stageIndex = 7)
-    {
-        bool Predicate(StoryInfo cs)
-        {
-            return cs.stageIndex == stageIndex && cs.chapterType == chapterType && cs.appearType == timing;
-        }
-        
-        int index = _storyList.FindIndex(0, _storyList.Count, Predicate);
-        if (index != -1 && !_storyList[index].isShown)
-        {
-            return Tuple.Create(_storyList[index],index);
-        }
-        
-        return null;
-    }
-
     public override void StartManager()
     {
         DataManager.Instance.SettingDataProvidable(this, this);
@@ -36,31 +20,88 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
         _messagePanel = null;
     }
 
-    public void StartStory(StoryData storyData,int storyIndex = 0,bool isTypingStory = false)
+    public void StartStory(StoryData storyData)
     {
-        if (_messagePanel != null) return;
+        if (_messagePanel != null)
+        {
+            return;
+        }
 
         _messagePanel = UIManager.Instance.GenerateUI("MessageWindow") as MessageWindow;
         _messagePanel.SetData(storyData);
         DataManager.Instance.SaveData(this);
     }
 
-    public bool StartStoryIfCan(StoryAppearType condition, ChapterType chapterType, int stageIndex = 7)
+    public void ReleaseStory()
     {
-        var tuple = GetStory(condition,chapterType,stageIndex);
+        if (_messagePanel == null)
+        {
+            return;
+        }
+        
+        _messagePanel.Disappear();
+        _messagePanel = null;
+    }
 
-        if (tuple == null) return false;
+    public bool StartStoryIfCan(StoryAppearType appearType, params object[] objs)
+    {
+        StoryInfo info = null;
+        
+        if (objs.Length == 1)
+        {
+            if (objs[0] is SceneType sceneType)
+            {
+                info = GetStory(appearType, sceneType);
+            }
+            else if (objs[0] is TimelineType timelineType)
+            {
+                info = GetStory(appearType, timelineType);
+            }
+        }
+        else if (objs.Length == 2)
+        {
+            info = GetStory(appearType, (ChapterType)objs[0], (int)objs[1]);
+        }
 
-        StoryData storyData = tuple.Item1.storyData;
-        int index = tuple.Item2;
+        if (info == null)
+        {
+            return false;
+        }
 
-        _storyList[index].isShown = true;
-
-        StartStory(storyData,index, true);
+        info.isShown = true;
+        StartStory(info.storyData);
         return true;
     }
 
+    private StoryInfo GetStory(StoryAppearType appearType, SceneType sceneType)
+    {
+        var index = _storyList.FindIndex(0, _storyList.Count, story => story.Predicate(appearType, sceneType));
+        if (index != -1 && !_storyList[index].isShown)
+        {
+            return _storyList[index];
+        }
+        return null;
+    }
+    
+    private StoryInfo GetStory(StoryAppearType appearType, TimelineType timelineType)
+    {
+        var index = _storyList.FindIndex(0, _storyList.Count, story => story.Predicate(appearType, timelineType));
+        if (index != -1 && !_storyList[index].isShown)
+        {
+            return _storyList[index];
+        }
+        return null;
+    }
 
+    private StoryInfo GetStory(StoryAppearType appearType, ChapterType chapterType, int stageIndex)
+    {
+        var index = _storyList.FindIndex(0, _storyList.Count, story => story.Predicate(appearType, chapterType, stageIndex));
+        if (index != -1 && !_storyList[index].isShown)
+        {
+            return _storyList[index];
+        }
+        return null;
+    }
 
     public Action<SaveData> GetSaveAction()
     {

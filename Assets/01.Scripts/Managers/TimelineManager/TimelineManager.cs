@@ -30,7 +30,9 @@ public class TimelineManager : BaseManager<TimelineManager>
     [SerializeField] private float _speedMultiply;
 
     private Queue<TimelineQueueInfo> _timelineQueue;
+    
     private PlayableDirector _currentDirector;
+    private TimelineQueueInfo _currentPlayQueueInfo;
 
     public bool IsPlay
     {
@@ -87,14 +89,14 @@ public class TimelineManager : BaseManager<TimelineManager>
             return;
         }
         
-        var info = _timelineQueue.Dequeue();
+        _currentPlayQueueInfo = _timelineQueue.Dequeue();
 
-        _currentDirector = info.Director;
-        _currentDirector.playableAsset = _timelineClipSetList.GetAsset(info.AssetType);
+        _currentDirector = _currentPlayQueueInfo.Director;
+        _currentDirector.playableAsset = _timelineClipSetList.GetAsset(_currentPlayQueueInfo.AssetType);
         // 이거 문제
-        StartSafeCoroutine("TimelinePlayRoutine", PlayRoutine(info.Callback));
+        StartSafeCoroutine("TimelinePlayRoutine", PlayRoutine(_currentPlayQueueInfo.Callback));
 
-        if (info.SkipOnStart)
+        if (_currentPlayQueueInfo.SkipOnStart)
         {
             _currentDirector.playableGraph.GetRootPlayable(0).SetTime(_currentDirector.duration - _skipOffset);
         }
@@ -112,6 +114,7 @@ public class TimelineManager : BaseManager<TimelineManager>
         // complete last clip
         if (_timelineQueue.Count <= 0)
         {
+            StoryManager.Instance.StartStoryIfCan(StoryAppearType.CUTSCENE_END, _currentPlayQueueInfo.AssetType);
             AllTimelineEnd?.Invoke();
             AllTimelineEnd = null;
             InputManager.Instance.TimelineInputReader.OnSpeedUpEvent -= SpeedUpHandle;

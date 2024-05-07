@@ -34,10 +34,9 @@ public class MessageWindow : UIComponent
 
     public override void Disappear(Action callback = null)
     {
-        base.Disappear(callback);
         _typewriter.onMessage.RemoveListener(OnTypewriterMessageHandle);
-        
         InputManager.Instance.UIInputReader.OnEnterClickEvent -= NextStory;
+        base.Disappear(callback);
     }
 
     public void SetData(StoryData data)
@@ -52,7 +51,7 @@ public class MessageWindow : UIComponent
         ++_currentIndex;
         if(_currentIndex >=  _storyData.contentList.Count)
         {
-            Disappear();
+            StoryManager.Instance.ReleaseStory();
             return;
         }
         
