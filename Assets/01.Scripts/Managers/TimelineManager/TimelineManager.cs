@@ -82,15 +82,13 @@ public class TimelineManager : BaseManager<TimelineManager>
 
     private void PlayNextQueue()
     {
-        var info = _timelineQueue.Dequeue();
-        
         if (_timelineQueue.Count <= 0)
         {
-            AllTimelineEnd?.Invoke();
-            AllTimelineEnd = null;
             return;
         }
         
+        var info = _timelineQueue.Dequeue();
+
         _currentDirector = info.Director;
         _currentDirector.playableAsset = _timelineClipSetList.GetAsset(info.AssetType);
         // 이거 문제
@@ -114,6 +112,8 @@ public class TimelineManager : BaseManager<TimelineManager>
         // complete last clip
         if (_timelineQueue.Count <= 0)
         {
+            AllTimelineEnd?.Invoke();
+            AllTimelineEnd = null;
             InputManager.Instance.TimelineInputReader.OnSpeedUpEvent -= SpeedUpHandle;
             InputManager.Instance.TimelineInputReader.CancelSpeedUpEvent -= CancelSpeedUpHandle;
             VolumeManager.Instance.SetVolume(VolumeType.Default, 0.1f);
