@@ -38,6 +38,26 @@ namespace VirtualCam
             _virtualCam.LookAt = lookAtTarget;
         }
 
+        public void SetDamping(Vector3 damping)
+        {
+            var transposer = _virtualCam.GetCinemachineComponent<CinemachineTransposer>();
+            var framingTransposer = _virtualCam.GetCinemachineComponent<CinemachineFramingTransposer>();
+
+            if (transposer)
+            {
+                transposer.m_XDamping = damping.x;
+                transposer.m_YDamping = damping.y;
+                transposer.m_ZDamping = damping.z;
+            }
+
+            if (framingTransposer)
+            {
+                framingTransposer.m_XDamping = damping.x;
+                framingTransposer.m_YDamping = damping.y;
+                framingTransposer.m_ZDamping = damping.z;
+            }
+        }
+
         public void Zoom(float zoomScale, float timer)
         {
             var targetCamSize = _originOrthoSize * zoomScale;

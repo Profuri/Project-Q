@@ -75,9 +75,27 @@ public class MessageWindow : UIComponent
     {
         switch (eventMarker.name)
         {
-            case "someevent":
-                Debug.Log(eventMarker.parameters[0]);
+            case "camDampingChange":
+            {
+                var xDamping = Convert.ToSingle(eventMarker.parameters[0]);
+                var yDamping = Convert.ToSingle(eventMarker.parameters[1]);
+                var zDamping = Convert.ToSingle(eventMarker.parameters[2]);
+                CameraManager.Instance.ActiveVCam.SetDamping(new Vector3(xDamping, yDamping, zDamping));
                 break;
+            }
+            case "camFollowTargetChange":
+            {
+                var targetName = eventMarker.parameters[0];
+                CameraManager.Instance.ActiveVCam.SetFollowTarget(GameObject.Find(targetName).transform);
+                break;
+            }
+            case "camSizeChange":
+            {
+                var targetSize = Convert.ToSingle(eventMarker.parameters[0]);
+                var time = Convert.ToSingle(eventMarker.parameters[1]);
+                CameraManager.Instance.ActiveVCam.Zoom(targetSize, time);
+                break;
+            }
         }
     }
 }
