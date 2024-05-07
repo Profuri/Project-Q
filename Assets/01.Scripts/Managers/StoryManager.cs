@@ -3,35 +3,17 @@ using UnityEngine;
 using ManagingSystem;
 using System;
 
-public enum ChapterCondition
-{
-    STAGE_ENTER = 0,
-    STAGE_EXIT,
-    CHAPTER_CLEAR,
-}
-
 public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 {
-    private MessageWindow _messagePanel;    
-    
-    [Serializable]
-    private class ChapterStory
+    private MessageWindow _messagePanel;
+
+    [SerializeField] private List<StoryInfo> _storyList = new List<StoryInfo>();
+
+    private Tuple<StoryInfo,int> GetStory(StoryAppearType timing, ChapterType chapterType, int stageIndex = 7)
     {
-        public ChapterCondition condition;
-        public ChapterType chapterType;
-        public int stageIndex;
-        public StoryData storyData;
-
-        [HideInInspector] public bool isShown;
-    }
-
-    [SerializeField] private List<ChapterStory> _storyList = new List<ChapterStory>();
-
-    private Tuple<ChapterStory,int> GetStory(ChapterCondition condition,ChapterType chapterType,int stageIndex = 7)
-    {
-        bool Predicate(ChapterStory cs)
+        bool Predicate(StoryInfo cs)
         {
-            return cs.stageIndex == stageIndex && cs.chapterType == chapterType && cs.condition == condition;
+            return cs.stageIndex == stageIndex && cs.chapterType == chapterType && cs.appearType == timing;
         }
         
         int index = _storyList.FindIndex(0, _storyList.Count, Predicate);
@@ -63,7 +45,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
         DataManager.Instance.SaveData(this);
     }
 
-    public bool StartStoryIfCan(ChapterCondition condition, ChapterType chapterType, int stageIndex = 7)
+    public bool StartStoryIfCan(StoryAppearType condition, ChapterType chapterType, int stageIndex = 7)
     {
         var tuple = GetStory(condition,chapterType,stageIndex);
 
