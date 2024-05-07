@@ -93,7 +93,7 @@ public class TimelineManager : BaseManager<TimelineManager>
 
         _currentDirector = _currentPlayQueueInfo.Director;
         _currentDirector.playableAsset = _timelineClipSetList.GetAsset(_currentPlayQueueInfo.AssetType);
-        // 이거 문제
+
         StartSafeCoroutine("TimelinePlayRoutine", PlayRoutine(_currentPlayQueueInfo.Callback));
 
         if (_currentPlayQueueInfo.SkipOnStart)
