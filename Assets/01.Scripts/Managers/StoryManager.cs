@@ -27,9 +27,11 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
             return;
         }
 
-        _messagePanel = UIManager.Instance.GenerateUI("MessageWindow") as MessageWindow;
-        _messagePanel.SetData(storyData);
-        DataManager.Instance.SaveData(this);
+        _messagePanel = UIManager.Instance.GenerateUI("MessageWindow", null, () =>
+        {
+            _messagePanel.SetData(storyData);
+        }) as MessageWindow;
+        // DataManager.Instance.SaveData(this);
     }
 
     public void ReleaseStory()

@@ -33,8 +33,11 @@ public class UIComponent : PoolableMono
         if (tweenData)
         {
             IsTweening = true;
-            callback += () => IsTweening = false;
-            tweenData.appearAnimator?.Play(callback);
+            tweenData.appearAnimator?.Play(() =>
+            {
+                IsTweening = false;
+                callback?.Invoke();
+            });
         }
     }
 

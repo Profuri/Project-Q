@@ -17,19 +17,19 @@ public class MessageWindow : UIComponent
     {
         base.Awake();
         _bodyText = transform.Find("Canvas/BodyText").GetComponent<TextMeshPro>();
-        
+        _bodyText.text = "";
+
         _textAnimator = _bodyText.GetComponent<TextAnimator_TMP>();
         _textAnimator.typewriterStartsAutomatically = true;
-        
+
         _typewriter = _bodyText.GetComponent<TypewriterByCharacter>();
     }
 
     public override void Appear(Transform parentTrm, Action callback = null)
     {
-        base.Appear(parentTrm, callback);
         _typewriter.onMessage.AddListener(OnTypewriterMessageHandle);
-
         InputManager.Instance.UIInputReader.OnEnterClickEvent += NextStory;
+        base.Appear(parentTrm, callback);
     }
 
     public override void Disappear(Action callback = null)
@@ -48,8 +48,13 @@ public class MessageWindow : UIComponent
     
     private void NextStory()
     {
+        if (_typewriter.isShowingText)
+        {
+            return;
+        }
+        
         ++_currentIndex;
-        if(_currentIndex >=  _storyData.contentList.Count)
+        if(_currentIndex >= _storyData.contentList.Count)
         {
             StoryManager.Instance.ReleaseStory();
             return;
@@ -63,11 +68,6 @@ public class MessageWindow : UIComponent
 
     private void SetText(string message)
     {
-        if (_typewriter.isShowingText)
-        {
-            return;
-        }
-        
         _typewriter.ShowText(message);
     }
     
@@ -75,7 +75,8 @@ public class MessageWindow : UIComponent
     {
         switch (eventMarker.name)
         {
-            case "SomeEvent":
+            case "someevent":
+                Debug.Log(eventMarker.parameters[0]);
                 break;
         }
     }
