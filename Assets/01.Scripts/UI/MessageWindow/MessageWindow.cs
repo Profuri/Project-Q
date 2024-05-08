@@ -89,6 +89,15 @@ public class MessageWindow : UIComponent
                 CameraManager.Instance.ActiveVCam.SetFollowTarget(GameObject.Find(targetName).transform);
                 break;
             }
+            case "camOffsetChange":
+            {
+                var offsetX = Convert.ToSingle(eventMarker.parameters[0]);
+                var offsetY = Convert.ToSingle(eventMarker.parameters[1]);
+                var offsetZ = Convert.ToSingle(eventMarker.parameters[2]);
+                var offset = new Vector3(offsetX, offsetY, offsetZ);
+                CameraManager.Instance.ActiveVCam.SetOffset(offset);
+                break;
+            }
             case "camSizeChange":
             {
                 var targetSize = Convert.ToSingle(eventMarker.parameters[0]);

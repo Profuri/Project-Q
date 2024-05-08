@@ -33,6 +33,22 @@ namespace VirtualCam
             _virtualCam.Follow = followTarget;
         }
 
+        public void SetOffset(Vector3 offset)
+        {
+            var transposer = _virtualCam.GetCinemachineComponent<CinemachineTransposer>();
+            var framingTransposer = _virtualCam.GetCinemachineComponent<CinemachineFramingTransposer>();
+
+            if (transposer)
+            {
+                transposer.m_FollowOffset = offset;
+            }
+
+            if (framingTransposer)
+            {
+                framingTransposer.m_TrackedObjectOffset = offset;
+            }
+        }
+
         public void SetLookAtTarget(Transform lookAtTarget)
         {
             _virtualCam.LookAt = lookAtTarget;
