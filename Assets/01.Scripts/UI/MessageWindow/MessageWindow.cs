@@ -27,6 +27,7 @@ public class MessageWindow : UIComponent
 
     public override void Appear(Transform parentTrm, Action callback = null)
     {
+        _bodyText.text = "";
         _typewriter.onMessage.AddListener(OnTypewriterMessageHandle);
         InputManager.Instance.UIInputReader.OnEnterClickEvent += NextStory;
         base.Appear(parentTrm, callback);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Cinemachine;
 using UnityEngine;
@@ -20,6 +21,8 @@ namespace VirtualCam
         {
             this.gameObject.SetActive(true);
             _virtualCam.m_Priority = 10;
+            SetOffset(Vector3.zero);
+            _virtualCam.m_Lens.OrthographicSize = _originOrthoSize;
         }
 
         public void ExitCam()
@@ -134,6 +137,11 @@ namespace VirtualCam
         private IEnumerator OrthoSizeChangeRoutine(float targetSize, float timer, AnimationCurve customCurve = null)
         {
             var origin = _virtualCam.m_Lens.OrthographicSize;
+
+            if (Math.Abs(origin - targetSize) < 0.01f)
+            {
+                yield break;
+            }
 
             var time = 0f;
             var percent = 0f;

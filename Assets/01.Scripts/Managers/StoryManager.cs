@@ -15,11 +15,6 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
         DataManager.Instance.LoadData(this);
     }
 
-    public void ResetMessage()
-    {
-        _messagePanel = null;
-    }
-
     public void StartStory(StoryData storyData)
     {
         if (_messagePanel != null)
@@ -31,7 +26,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
         {
             _messagePanel.SetData(storyData);
         }) as MessageWindow;
-        // DataManager.Instance.SaveData(this);
+        DataManager.Instance.SaveData(this);
     }
 
     public void ReleaseStory()
@@ -47,6 +42,11 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 
     public bool StartStoryIfCan(StoryAppearType appearType, params object[] objs)
     {
+        if (_messagePanel != null)
+        {
+            return false;
+        }
+        
         StoryInfo info = null;
         
         if (objs.Length == 1)
@@ -77,7 +77,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 
     private StoryInfo GetStory(StoryAppearType appearType, SceneType sceneType)
     {
-        var index = _storyList.FindIndex(0, _storyList.Count, story => story.Predicate(appearType, sceneType));
+        var index = _storyList.FindIndex(story => story.Predicate(appearType, sceneType));
         if (index != -1 && !_storyList[index].isShown)
         {
             return _storyList[index];
@@ -87,7 +87,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
     
     private StoryInfo GetStory(StoryAppearType appearType, TimelineType timelineType)
     {
-        var index = _storyList.FindIndex(0, _storyList.Count, story => story.Predicate(appearType, timelineType));
+        var index = _storyList.FindIndex(story => story.Predicate(appearType, timelineType));
         if (index != -1 && !_storyList[index].isShown)
         {
             return _storyList[index];
@@ -97,7 +97,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 
     private StoryInfo GetStory(StoryAppearType appearType, ChapterType chapterType, int stageIndex)
     {
-        var index = _storyList.FindIndex(0, _storyList.Count, story => story.Predicate(appearType, chapterType, stageIndex));
+        var index = _storyList.FindIndex(story => story.Predicate(appearType, chapterType, stageIndex));
         if (index != -1 && !_storyList[index].isShown)
         {
             return _storyList[index];
