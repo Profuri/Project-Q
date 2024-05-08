@@ -13,7 +13,7 @@ namespace InteractableSystem
         [SerializeField] private List<AffectedObject> _affectedObjects;
         [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
 
-        private static Dictionary<int, SelectedBorder> s_selectedBorderDictionary = new Dictionary<int, SelectedBorder>();
+        private Dictionary<int, SelectedBorder> _selectedBorderDictionary = new Dictionary<int, SelectedBorder>();
 
         
         private bool _lastToggleState;
@@ -72,9 +72,10 @@ namespace InteractableSystem
         public override void UpdateUnit()
         {
             base.UpdateUnit();
+            
             if (_canFindBorders)
             {
-                List<SelectedBorder> selectedBorderList = s_selectedBorderDictionary.Values.ToList();
+                List<SelectedBorder> selectedBorderList = _selectedBorderDictionary.Values.ToList();
                 foreach (var selectedBorder in selectedBorderList)
                 {
                     selectedBorder.SetDistanceProgress(AlphaValue,LastToggleState);
@@ -93,12 +94,12 @@ namespace InteractableSystem
 
         public override void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
         {
-            List<SelectedBorder> borderList = s_selectedBorderDictionary.Values.ToList();
+            List<SelectedBorder> borderList = _selectedBorderDictionary.Values.ToList();
             if(borderList.Count > 0 )
             {
                 foreach (SelectedBorder selectedBorder in borderList)
                 {
-                    s_selectedBorderDictionary.Remove(selectedBorder.GetInstanceID());
+                    _selectedBorderDictionary.Remove(selectedBorder.GetInstanceID());
                     SceneControlManager.Instance.DeleteObject(selectedBorder);
                 }
             }
@@ -112,46 +113,36 @@ namespace InteractableSystem
             int instanceID = showObj.GetInstanceID();
             float alpha = AlphaValue;
 
-            if (s_selectedBorderDictionary.ContainsKey(instanceID) == false)
+            if (_selectedBorderDictionary.ContainsKey(instanceID) == false)
             {
                 var selectedBorder = SceneControlManager.Instance.AddObject("SelectedBorder") as SelectedBorder;
                 
                 selectedBorder.Setting(showObj);
                 selectedBorder.Activate(true);
-                s_selectedBorderDictionary.Add(instanceID, selectedBorder);
+                _selectedBorderDictionary.Add(instanceID, selectedBorder);
             }
-            s_selectedBorderDictionary[instanceID].Activate(true);
-            s_selectedBorderDictionary[instanceID].SetDistanceProgress(alpha,LastToggleState);
+            _selectedBorderDictionary[instanceID].Activate(true);
+            _selectedBorderDictionary[instanceID].SetDistanceProgress(alpha,LastToggleState);
             return true;
         }
 
         private bool UnShowSelectedBorder(int instanceID)
         {
             if (LastToggleState) return false;
-            if (s_selectedBorderDictionary.ContainsKey((instanceID)) == false) return false;
+            if (_selectedBorderDictionary.ContainsKey((instanceID)) == false) return false;
+
+            _selectedBorderDictionary[instanceID].Activate(false);
             
-            s_selectedBorderDictionary[instanceID].Activate(false);
-            
-            SelectedBorder selectedBorder = s_selectedBorderDictionary[instanceID];
-            s_selectedBorderDictionary.Remove(instanceID);
+            SelectedBorder selectedBorder = _selectedBorderDictionary[instanceID];
+            _selectedBorderDictionary.Remove(instanceID);
             SceneControlManager.Instance.DeleteObject(selectedBorder);
             return true;
         }
         
         public override void OnDetectedEnter(ObjectUnit communicator = null)
         {
-            _canFindBorders = true;
             base.OnDetectedEnter(communicator);
-            PlayerUnit player = SceneControlManager.Instance.Player;
-                
-            Vector3 playerPos = player.Collider.bounds.center;
-            Vector3 curPos = Collider.bounds.center;
-            playerPos.y = 0;
-            curPos.y = 0;
-                
-            float distance = Vector3.Distance(playerPos, curPos);
-            
-            Debug.Log($"Distance: {distance}");
+            _canFindBorders = true;
             ShowConnectedUnit();
         }
 

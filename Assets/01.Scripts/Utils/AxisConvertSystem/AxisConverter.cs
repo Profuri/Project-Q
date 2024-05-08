@@ -34,13 +34,14 @@ namespace AxisConvertSystem
 
         public void ConvertDimension(AxisType nextAxis, Action callback = null)
         {
-            if (!Convertable)
+            if (!Convertable || StageManager.Instance.IsClear)
             {
                 return;
             }
-
+            
             _cancelConvert = false;
             Convertable = false;
+            
             
             foreach (var unit in _section.SectionUnits)
             {
@@ -57,7 +58,7 @@ namespace AxisConvertSystem
                     var frontUnit = front.collider ? front.collider.GetComponent<ObjectUnit>() : null;
                     if (frontUnit is IPassable { PassableLastAxis: true })
                     {
-                        CancelChangeAxis(AxisType, frontUnit, null, () =>
+                        CancelChangeAxis(AxisType, frontUnit, null, () => 
                         {
                             Convertable = true;
                             callback?.Invoke();
