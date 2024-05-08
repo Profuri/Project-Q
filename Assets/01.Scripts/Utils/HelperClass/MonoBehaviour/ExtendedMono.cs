@@ -14,11 +14,7 @@ public class ExtendedMono : MonoBehaviour
             return null;
         }
             
-        if (_runningRoutines.ContainsKey(routineName) && _runningRoutines[routineName] != null)
-        {
-            StopCoroutine(_runningRoutines[routineName]);
-        }
-            
+        StopSafeCoroutine(routineName);
         _runningRoutines[routineName] = StartCoroutine(routine);
         return _runningRoutines[routineName];
     }
