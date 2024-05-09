@@ -73,7 +73,6 @@ public class SlimeObjectUnit : ObjectUnit
         Vector3 halfExtents = Collider.bounds.extents * 0.5f;
         Collider[] results = new Collider[_MAX_COLLIDER_CNT];
         Quaternion orientation = transform.rotation;
-        //LayerMask layerMask = LayerMask.NameToLayer("Player");
         
        int colCount = Physics.OverlapBoxNonAlloc(center,halfExtents,results,orientation);
        
