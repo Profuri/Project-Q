@@ -21,17 +21,31 @@ public enum EAUDIO_MIXER
 
 public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoad
 {
-    [SerializeField] private AudioClipSO _audioClipSO;
-    public AudioClipSO AudioClipSO => _audioClipSO;
-    [SerializeField] private AudioClipSO _bgmClipSO;
-    private AudioSource _audioSource;
+    #region Inspector Settings
+    [SerializeField] private float _defaultVolume = 0f;
 
+    [SerializeField] private AudioClipSO _audioClipSO;
+    [SerializeField] private AudioClipSO _bgmClipSO;
+    [SerializeField] private RandomAudioClipSO _stageClipSO;
+    [SerializeField] private RandomAudioClipSO _chapterClipSO;
+    #endregion
+    
+    #region PROPERTY
+    public RandomAudioClipSO StageClipSO => _stageClipSO;
+    public RandomAudioClipSO ChapterClipSO => _chapterClipSO;
+    #endregion
+
+    private RandomAudioClipSO _currentAudioClipSO;
+    
+    private AudioSource _audioSource;
+    
+    
+#region AudioMixer
     [SerializeField] private AudioMixer _masterMixer;
     [SerializeField] private AudioMixerGroup _bgmGroup;
     [SerializeField] private AudioMixerGroup _sfxGroup;
     public AudioMixerGroup SfxGroup => _sfxGroup;
-
-    [SerializeField] private float _defaultVolume = 0f;
+#endregion
 
     public float soundFadeOnTime;
 
@@ -66,7 +80,16 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     public override void StartManager()
     {
         DataManager.Instance.SettingDataProvidable(this, this);
-        //DataManager.Instance.LoadData(this);
+    }
+
+    public void PlayRandomBGM(RandomAudioClipSO randomSO)
+    {
+        if (_currentAudioClipSO != null)
+        {
+            Destroy(_currentAudioClipSO);
+        }
+        _currentAudioClipSO = randomSO.InstantiateClipSO();
+        _currentAudioClipSO.GetRandomClip();
     }
     
     public void PlaySFX(string clipName,bool loop = false, SoundEffectPlayer soundEffectPlayer = null)
@@ -74,6 +97,8 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
         AudioClip clip = _audioClipSO.GetAudioClip(clipName);
         Play(clip, SoundEnum.EFFECT,loop, soundEffectPlayer);
     }
+    
+    
 
     public void PlayBGM(string clipName)
     {
