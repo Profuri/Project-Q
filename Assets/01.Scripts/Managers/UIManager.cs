@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using ManagingSystem;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class UIManager : BaseManager<UIManager>
 {
