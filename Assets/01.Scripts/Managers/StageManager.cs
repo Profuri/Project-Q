@@ -102,6 +102,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
                 
         GenerateNextStage(_currentPlayChapterData.chapter, nextChapter);
         CurrentStage.IsClear = true;
+        Debug.Log($"CurrentStageClear: {CurrentStage},IsClear {CurrentStage.IsClear}");
     }
 
     public Action<SaveData> GetSaveAction()

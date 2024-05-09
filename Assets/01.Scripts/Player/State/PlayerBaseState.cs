@@ -14,7 +14,8 @@ public abstract class PlayerBaseState : State
     
     protected void AxisControlHandle()
     {
-        if (!Player.Converter.Convertable || !Player.CanAxisControl)
+        bool isClear = StageManager.Instance.CurrentStage.IsClear;
+        if (!Player.Converter.Convertable || !Player.CanAxisControl || isClear)
         {
             return;
         }

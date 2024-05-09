@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using AxisConvertSystem;
 using DG.Tweening;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+
 
 public class SlimeObjectUnit : ObjectUnit
 {
@@ -9,13 +12,14 @@ public class SlimeObjectUnit : ObjectUnit
     [SerializeField] private float _bouncePower = 5f;
     [SerializeField] private float _bounceTime = 0.5f;
 
-    private List<ObjectUnit> _affectedUnits;
+    private const int _MAX_COLLIDER_CNT = 8;
     private AxisType _prevAxisType = AxisType.None;
+    private bool _canApply = false;
 
-    public override void Awake()
+    public override void Init(AxisConverter converter)
     {
-        base.Awake();
-        _affectedUnits = new List<ObjectUnit>();
+        base.Init(converter);
+        _canApply = false;
     }
 
     public override void Convert(AxisType axis)
@@ -24,17 +28,17 @@ public class SlimeObjectUnit : ObjectUnit
 
         if (axis == AxisType.None && _prevAxisType == AxisType.Y)
         {
-            _affectedUnits = GetMovementUnit();
+            _canApply = true;
         }
     }
-
+    
     public override void OnCameraSetting(AxisType axis)
     {
         base.OnCameraSetting(axis);
         
-        if(_affectedUnits.Count > 0)
-        { 
-            ApplyBounceEffect();
+        if (_canApply)
+        {
+            ApplyBounceEffect(FindColliders());
         }
     }
 
@@ -45,41 +49,37 @@ public class SlimeObjectUnit : ObjectUnit
         _prevAxisType = axis;
     }
 
-    private void ApplyBounceEffect()
+    private void ApplyBounceEffect(Collider[] cols)
     {
-        foreach (var unit in _affectedUnits)
+        if (cols == null || cols.Length < 1) return;
+        
+        foreach (var col in cols)
         {
-            Vector3 bounceDirection = Vector3.up;
-            unit.SetVelocity(bounceDirection * _bouncePower, false);
-        }
-        _affectedUnits.Clear();
-    }
-    
-    private List<ObjectUnit> GetMovementUnit()
-    {
-        List<ObjectUnit> unitList = new List<ObjectUnit>();
-
-        Vector3 checkCenterPos = Collider.bounds.center;
-        Vector3 halfExtents = Collider.bounds.extents;
-        Quaternion rotation = transform.rotation;
-
-        Collider[] cols = Physics.OverlapBox(checkCenterPos, halfExtents, rotation);
-
-        foreach (Collider col in cols)
-        {
-            if (col.TryGetComponent(out ObjectUnit unit))
+            if (col != null)
             {
-                if (!unit.staticUnit)
+                if (col.TryGetComponent(out ObjectUnit unit))
                 {
-                    unitList.Add(unit);
+                    Vector3 bounceDirection = Vector3.up;
+                    unit.SetVelocity(bounceDirection * _bouncePower, false);
                 }
             }
         }
-        return unitList;
+        _canApply = false;
     }
 
-   
-
+    private Collider[] FindColliders()
+    {
+        Vector3 center = Collider.bounds.center + new Vector3(0,Collider.bounds.size.y  * 0.5f,0);
+        Vector3 halfExtents = Collider.bounds.extents * 0.5f;
+        Collider[] results = new Collider[_MAX_COLLIDER_CNT];
+        Quaternion orientation = transform.rotation;
+        //LayerMask layerMask = LayerMask.NameToLayer("Player");
+        
+       int colCount = Physics.OverlapBoxNonAlloc(center,halfExtents,results,orientation);
+       
+        return results;
+    }
+    
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
