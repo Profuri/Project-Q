@@ -9,9 +9,15 @@ public class UIComponent : PoolableMono
     
     public Transform ParentTrm { get; private set; }
     public bool IsTweening { get; private set; }
+
+    private Vector3 _originLocalPos;
+    private Quaternion _originLocalRot;
     
     protected virtual void Awake()
     {
+        _originLocalPos = transform.localPosition;
+        _originLocalRot = transform.localRotation;
+        
         if (tweenData)
         {
             tweenData.appearAnimator.Init(this);
@@ -23,18 +29,21 @@ public class UIComponent : PoolableMono
     {
         ParentTrm = parentTrm;
         transform.SetParent(parentTrm);
-        transform.localRotation = quaternion.identity;
+        transform.localRotation = _originLocalRot;
         transform.localScale = Vector3.one;
 
-        var localPos = transform.localPosition;
+        var localPos = _originLocalPos;
         localPos.z = 0;
         transform.localPosition = localPos;  
         
         if (tweenData)
         {
             IsTweening = true;
-            callback += () => IsTweening = false;
-            tweenData.appearAnimator?.Play(callback);
+            tweenData.appearAnimator?.Play(() =>
+            {
+                IsTweening = false;
+                callback?.Invoke();
+            });
         }
     }
 

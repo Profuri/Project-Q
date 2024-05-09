@@ -18,7 +18,7 @@ namespace AxisConvertSystem
         [HideInInspector] public float checkOffset = 0.2f; 
         [HideInInspector] public bool useGravity = true;
 
-        protected UnitInfo OriginUnitInfo; 
+        protected UnitInfo OriginUnitInfo;
         protected UnitInfo UnitInfo;
         protected UnitInfo ConvertedInfo;
 
@@ -27,6 +27,7 @@ namespace AxisConvertSystem
         public Rigidbody Rigidbody { get; private set; }
         public UnitDepthHandler DepthHandler { get; private set; }
         public Section Section { get; protected set; }
+        public UnitInfo BeforeConvertedUnitInfo => UnitInfo;
         public bool IsHide { get; private set; }
         public bool OnGround => CheckStandObject(out var tempCollider, true);
         
@@ -37,8 +38,6 @@ namespace AxisConvertSystem
 
         private LayerMask _climbLayerMask;
         private UnClimbableEffect _unClimbableEffect;
-
-        private SelectedBorder _selectedBorder;
 
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
@@ -103,6 +102,7 @@ namespace AxisConvertSystem
             OriginUnitInfo.LocalRot = transform.localRotation;
             OriginUnitInfo.LocalScale = transform.localScale;
             OriginUnitInfo.ColliderCenter = Collider.GetLocalCenter();
+            OriginUnitInfo.ColliderBoundSize = Collider.bounds.size;
             
             UnitInfo = OriginUnitInfo;
 
@@ -277,6 +277,7 @@ namespace AxisConvertSystem
             UnitInfo.LocalRot = transform.localRotation;
             UnitInfo.LocalScale = transform.localScale;
             UnitInfo.ColliderCenter = Collider.GetLocalCenter();
+            UnitInfo.ColliderBoundSize = Collider.bounds.size;
         }
 
         private void SynchronizePosition(AxisType axis)
@@ -451,7 +452,7 @@ namespace AxisConvertSystem
             return size > 0;
         }
         
-        public void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
+        public virtual void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
         {
             StartSafeCoroutine("DissolveRoutine",DissolveRoutine(value,time,useDissolve,callBack));
         }
@@ -477,6 +478,7 @@ namespace AxisConvertSystem
                 currentTime += Time.deltaTime;
                 var percent = currentTime / time;
                 var currentProgress = Mathf.Lerp(initVal,value,percent);
+
                 foreach (var material in _materials)
                 {
                     if (useDissolve)
@@ -519,31 +521,34 @@ namespace AxisConvertSystem
             }
         }
 
-        public void ShowSelectedBorder()
+        public bool IsSuperiorUnit(ObjectUnit checkUnit)
         {
-            if (_selectedBorder == null)
+            if (!subUnit)
             {
-                _selectedBorder = SceneControlManager.Instance.AddObject("SelectedBorder") as SelectedBorder;
-                _selectedBorder.Setting(Collider);
+                return false;
             }
-        }
+            
+            var checkTrm = transform;
+            
+            while (checkTrm.parent != null)
+            {
+                var parent = checkTrm.parent;
+                var unit = parent.GetComponent<ObjectUnit>();
 
-        public void UnShowSelectedBorder()
-        {
-            if (_selectedBorder is not null)
-            {
-                SelectedBorderActivate(false);
-                SceneControlManager.Instance.DeleteObject(_selectedBorder);
-                _selectedBorder = null;
-            }
-        }
+                if (unit == checkUnit)
+                {
+                    return true;
+                }
 
-        public void SelectedBorderActivate(bool active)
-        {
-            if (_selectedBorder is not null)
-            {
-                _selectedBorder.Activate(active);
+                if (unit != null && !unit.subUnit)
+                {
+                    break;
+                }
+                
+                checkTrm = parent;
             }
+
+            return false;
         }
 
         public ObjectUnit GetParentUnit()

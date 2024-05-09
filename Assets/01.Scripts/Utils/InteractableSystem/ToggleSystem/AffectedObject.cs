@@ -17,6 +17,12 @@ namespace InteractableSystem
             }
             
             interactableObject?.OnInteraction(communicator, interactValue);
+
+            if (interactValue)
+            {
+                //interactableObject?.ShowSelectedBorder();
+            }
+            //interactableObject?.SelectedBorderActivate(interactValue);
         }
     }
 }

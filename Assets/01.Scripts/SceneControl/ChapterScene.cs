@@ -64,6 +64,7 @@ public class ChapterScene : Scene, IProvideLoad
                 saveData.ChapterTimelineDictionary[ChapterType.Cpu] = true;
             }
             
+
             TimelineManager.Instance.ShowTimeline(_timelineDirector, TimelineType.AllChapterClear, alreadyShowCutScene);
             onAllChapterClear?.Invoke();
         }

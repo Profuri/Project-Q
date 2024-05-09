@@ -57,7 +57,7 @@ public class RedstoneObjectUnit : InteractableObject
             //EAxisType currentAxisType = (EAxisType)param[paramIndex];
 
             // This code can be fixed. because of get axisType method.
-            AxisType currentAxisType = GameManager.Instance.PlayerUnit.Converter.AxisType;
+            AxisType currentAxisType = SceneControlManager.Instance.CurrentScene.Player.Converter.AxisType;
 
             Debug.Log($"CurrentAxisType: {currentAxisType}");
 
@@ -78,7 +78,7 @@ public class RedstoneObjectUnit : InteractableObject
         }
         catch
         {
-            Debug.LogError($"Can't Load from CurrentAxisType: {GameManager.Instance.PlayerUnit.Converter}");
+            Debug.LogError($"Can't Load from CurrentAxisType: {SceneControlManager.Instance.CurrentScene.Player.Converter}");
             //Debug.LogError($"Can't convert params index: {paramIndex} to EAxisType");
         }
 

@@ -50,9 +50,9 @@ namespace AxisConvertSystem
             {
                 var isOwner = unit == _owner;
                 var isTransparent = unit.renderType == UnitRenderType.Transparent;
-                var isParentUnit = _owner.subUnit && _owner.GetParentUnit() == unit;
+                var isSuperior = _owner.subUnit && _owner.IsSuperiorUnit(unit);
                 
-                if (isOwner || isTransparent || isParentUnit)
+                if (isOwner || isTransparent || isSuperior)
                 {
                     continue;
                 }

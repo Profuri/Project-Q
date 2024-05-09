@@ -14,6 +14,8 @@ public class PlayerAxisControlState : PlayerBaseState
     public override void EnterState()
     {
         base.EnterState();
+        Player.SetActiveAnimation(false);
+        
         IsControllingAxis = true;
         InputManagerHelper.OnControllingAxis();
 
@@ -50,6 +52,8 @@ public class PlayerAxisControlState : PlayerBaseState
     public override void ExitState()
     {
         base.ExitState();
+        Player.SetActiveAnimation(true);
+        
         IsControllingAxis = false;
         InputManagerHelper.OnCancelingAxis();
 

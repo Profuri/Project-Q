@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Cinemachine;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace VirtualCam
         {
             this.gameObject.SetActive(true);
             _virtualCam.m_Priority = 10;
+            _virtualCam.m_Lens.OrthographicSize = _originOrthoSize;
         }
 
         public void ExitCam()
@@ -33,9 +35,45 @@ namespace VirtualCam
             _virtualCam.Follow = followTarget;
         }
 
+        public void SetOffset(Vector3 offset)
+        {
+            var transposer = _virtualCam.GetCinemachineComponent<CinemachineTransposer>();
+            var framingTransposer = _virtualCam.GetCinemachineComponent<CinemachineFramingTransposer>();
+
+            if (transposer)
+            {
+                transposer.m_FollowOffset = offset;
+            }
+
+            if (framingTransposer)
+            {
+                framingTransposer.m_TrackedObjectOffset = offset;
+            }
+        }
+
         public void SetLookAtTarget(Transform lookAtTarget)
         {
             _virtualCam.LookAt = lookAtTarget;
+        }
+
+        public void SetDamping(Vector3 damping)
+        {
+            var transposer = _virtualCam.GetCinemachineComponent<CinemachineTransposer>();
+            var framingTransposer = _virtualCam.GetCinemachineComponent<CinemachineFramingTransposer>();
+
+            if (transposer)
+            {
+                transposer.m_XDamping = damping.x;
+                transposer.m_YDamping = damping.y;
+                transposer.m_ZDamping = damping.z;
+            }
+
+            if (framingTransposer)
+            {
+                framingTransposer.m_XDamping = damping.x;
+                framingTransposer.m_YDamping = damping.y;
+                framingTransposer.m_ZDamping = damping.z;
+            }
         }
 
         public void Zoom(float zoomScale, float timer)
@@ -98,6 +136,11 @@ namespace VirtualCam
         private IEnumerator OrthoSizeChangeRoutine(float targetSize, float timer, AnimationCurve customCurve = null)
         {
             var origin = _virtualCam.m_Lens.OrthographicSize;
+
+            if (Math.Abs(origin - targetSize) < 0.01f)
+            {
+                yield break;
+            }
 
             var time = 0f;
             var percent = 0f;

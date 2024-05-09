@@ -43,7 +43,6 @@ public class FanObject : InteractableObject
         
         base.Awake();
     }
-
     public override void UpdateUnit()
     {
         base.UpdateUnit();

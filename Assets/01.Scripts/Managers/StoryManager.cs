@@ -3,47 +3,11 @@ using UnityEngine;
 using ManagingSystem;
 using System;
 
-public enum ChapterCondition
-{
-    CHAPTER_ENTER = 0,
-    CHAPTER_EXIT,
-    CHAPTER_CLEAR,
-}
-
 public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 {
-    public StoryPanel CurrentPanel { get; private set; }    
-    public Canvas StoryCanvas { get; private set; }
-    
-    [System.Serializable]
-    private class ChapterStory
-    {
-        public ChapterCondition condition;
-        public ChapterType chapterType;
-        public int stageIndex;
+    private MessageWindow _messagePanel;
 
-        [HideInInspector] public bool isShown;
-
-        public StorySO storySO;
-    }
-
-    [SerializeField] private List<ChapterStory> _storyList = new List<ChapterStory>();
-
-    private Tuple<ChapterStory,int> GetStory(ChapterCondition condition,ChapterType chapterType,int stageIndex = 7)
-    {
-        bool Predicate(ChapterStory cs)
-        {
-            return cs.stageIndex == stageIndex && cs.chapterType == chapterType && cs.condition == condition;
-        }
-        
-        int index = _storyList.FindIndex(0, _storyList.Count, Predicate);
-        if (index != -1 && !_storyList[index].isShown)
-        {
-            return Tuple.Create(_storyList[index],index);
-        }
-        
-        return null;
-    }
+    [SerializeField] private List<StoryInfo> _storyList = new List<StoryInfo>();
 
     public override void StartManager()
     {
@@ -51,36 +15,95 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
         DataManager.Instance.LoadData(this);
     }
 
-    public void ResetMessage()
+    public void StartStory(StoryData storyData)
     {
-        CurrentPanel = null;
-    }
+        if (_messagePanel != null)
+        {
+            return;
+        }
 
-    public void StartStory(StorySO storySO,int storyIndex = 0,bool isTypingStory = false)
-    {
-        if (CurrentPanel != null) return;
-
-        CurrentPanel = UIManager.Instance.GenerateUI("StoryPanel") as StoryPanel;
-        CurrentPanel.ResetPosition();
-        CurrentPanel.SettingStory(storySO,isTypingStory);
+        _messagePanel = UIManager.Instance.GenerateUI("MessageWindow", null, () =>
+        {
+            _messagePanel.SetData(storyData);
+        }) as MessageWindow;
         DataManager.Instance.SaveData(this);
     }
 
-    public bool StartStoryIfCan(ChapterCondition condition, ChapterType chapterType, int stageIndex = 7)
+    public void ReleaseStory()
     {
-        var tuple = GetStory(condition,chapterType,stageIndex);
+        if (_messagePanel == null)
+        {
+            return;
+        }
+        
+        _messagePanel.Disappear();
+        _messagePanel = null;
+    }
 
-        if (tuple == null) return false;
+    public bool StartStoryIfCan(StoryAppearType appearType, params object[] objs)
+    {
+        if (_messagePanel != null)
+        {
+            return false;
+        }
+        
+        StoryInfo info = null;
+        
+        if (objs.Length == 1)
+        {
+            if (objs[0] is SceneType sceneType)
+            {
+                info = GetStory(appearType, sceneType);
+            }
+            else if (objs[0] is TimelineType timelineType)
+            {
+                info = GetStory(appearType, timelineType);
+            }
+        }
+        else if (objs.Length == 2)
+        {
+            info = GetStory(appearType, (ChapterType)objs[0], (int)objs[1]);
+        }
 
-        StorySO storySO = tuple.Item1.storySO;
-        int index = tuple.Item2;
+        if (info == null)
+        {
+            return false;
+        }
 
-        _storyList[index].isShown = true;
-
-        StartStory(storySO,index, true);
+        info.isShown = true;
+        StartStory(info.storyData);
         return true;
     }
 
+    private StoryInfo GetStory(StoryAppearType appearType, SceneType sceneType)
+    {
+        var index = _storyList.FindIndex(story => story.Predicate(appearType, sceneType));
+        if (index != -1 && !_storyList[index].isShown)
+        {
+            return _storyList[index];
+        }
+        return null;
+    }
+    
+    private StoryInfo GetStory(StoryAppearType appearType, TimelineType timelineType)
+    {
+        var index = _storyList.FindIndex(story => story.Predicate(appearType, timelineType));
+        if (index != -1 && !_storyList[index].isShown)
+        {
+            return _storyList[index];
+        }
+        return null;
+    }
+
+    private StoryInfo GetStory(StoryAppearType appearType, ChapterType chapterType, int stageIndex)
+    {
+        var index = _storyList.FindIndex(story => story.Predicate(appearType, chapterType, stageIndex));
+        if (index != -1 && !_storyList[index].isShown)
+        {
+            return _storyList[index];
+        }
+        return null;
+    }
 
     public Action<SaveData> GetSaveAction()
     {

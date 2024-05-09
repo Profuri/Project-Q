@@ -13,7 +13,21 @@ public class PlayerUnit : ObjectUnit
     public Animator Animator { get; private set; }
     public ObjectHoldingHandler HoldingHandler { get; private set; }
     public PlayerInteractHandler InteractHandler { get; private set; }
-    public ObjectUnit StandingUnit { get; set; }
+
+    private ObjectUnit _standingUnit;
+    public ObjectUnit StandingUnit
+    {
+        get => _standingUnit;
+        set
+        {
+            if (value is not null)
+            {
+                value.Collider.excludeLayers |= 1 << gameObject.layer;
+            }
+            _standingUnit = value;
+        }
+    }
+
     public SoundEffectPlayer SoundEffectPlayer { get; private set; }
 
     private StateController _stateController;
@@ -31,7 +45,6 @@ public class PlayerUnit : ObjectUnit
         }
     }
 
-    //public bool CanJump => OnGround || IsCoyote;
     public bool CanJump => OnGround || IsCoyote;
 
     public void StartCoyoteTime()
@@ -99,7 +112,7 @@ public class PlayerUnit : ObjectUnit
         PlaySpawnVFX();
 
         Converter.ConvertDimension(AxisType.None);
-        Animator.SetBool(_activeHash, true);
+        SetActiveAnimation(true);
         _stateController.ChangeState(typeof(PlayerIdleState));
     }
 
@@ -108,13 +121,13 @@ public class PlayerUnit : ObjectUnit
         InputManager.Instance.PlayerInputReader.OnInteractionEvent += InteractHandler.OnInteraction;
         InputManager.Instance.PlayerInputReader.OnReloadClickEvent += RestartStage;
         _stateController.ChangeState(typeof(PlayerIdleState));
-        Animator.SetBool(_activeHash, true);
+        SetActiveAnimation(true);
     }
     
     public override void OnPush()
     {
         InputManager.Instance.PlayerInputReader.ClearInputEvent();
-        Animator.SetBool(_activeHash, false);
+        SetActiveAnimation(false);
     }
 
     private void RestartStage()
@@ -138,8 +151,6 @@ public class PlayerUnit : ObjectUnit
 
     private void StandingCheck()
     {
-        StandingUnit.Collider.excludeLayers |= 1 << gameObject.layer;
-        
         if (!StandingUnit.Collider.bounds.Contains(Collider.bounds.center))
         {
             StandingUnit.Collider.excludeLayers ^= 1 << gameObject.layer;
@@ -172,6 +183,11 @@ public class PlayerUnit : ObjectUnit
         spawnVFX.SetPositionAndRotation(position, Quaternion.identity);
         spawnVFX.SetScale(new Vector3(bounds.size.x, 1, bounds.size.z));
         spawnVFX.Play();
+    }
+
+    public void SetActiveAnimation(bool active)
+    {
+        Animator.SetBool(_activeHash, active);
     }
 
     //계속 실행되니까 OnGround가 바뀌었을 때는 체크 안함
