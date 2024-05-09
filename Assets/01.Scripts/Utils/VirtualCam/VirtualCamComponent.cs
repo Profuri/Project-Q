@@ -21,7 +21,6 @@ namespace VirtualCam
         {
             this.gameObject.SetActive(true);
             _virtualCam.m_Priority = 10;
-            SetOffset(Vector3.zero);
             _virtualCam.m_Lens.OrthographicSize = _originOrthoSize;
         }
 
