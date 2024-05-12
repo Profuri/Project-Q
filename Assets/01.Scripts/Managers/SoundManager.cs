@@ -81,7 +81,7 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     {
         DataManager.Instance.SettingDataProvidable(this, this);
     }
-
+    
     public void PlayRandomBGM(RandomAudioClipSO randomSO)
     {
         if (_currentAudioClipSO != null)
@@ -89,7 +89,8 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
             Destroy(_currentAudioClipSO);
         }
         _currentAudioClipSO = randomSO.InstantiateClipSO();
-        _currentAudioClipSO.GetRandomClip();
+        var clip = _currentAudioClipSO.GetRandomClip();
+        PlayBGM(clip.ToString());        
     }
     
     public void PlaySFX(string clipName,bool loop = false, SoundEffectPlayer soundEffectPlayer = null)
