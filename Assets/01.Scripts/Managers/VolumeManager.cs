@@ -47,6 +47,10 @@ public class VolumeManager : BaseManager<VolumeManager>
     {
         var nextVolume = _volumes[type];
         StartSafeCoroutine("VolumeChangeRoutine", VolumeChangeRoutine(_currentVolume, nextVolume, time, isReturnOrigin, returningPoint));
+        if (!isReturnOrigin)
+        {
+            _currentVolume = nextVolume;
+        }
     }
 
     private IEnumerator VolumeChangeRoutine(Volume prev, Volume next, float time, bool isReturnOrigin, float returningPoint)
@@ -66,9 +70,9 @@ public class VolumeManager : BaseManager<VolumeManager>
                 {
                     if (prev)
                     {
-                        prev.weight = 1f - clampedPercent * 2f;
+                        prev.weight = 1f - clampedPercent / returningPoint;
                     }
-                    next.weight = clampedPercent * 2f;
+                    next.weight = clampedPercent / returningPoint;
                 }
                 else
                 {
@@ -89,11 +93,6 @@ public class VolumeManager : BaseManager<VolumeManager>
             }
 
             yield return null;
-        }
-
-        if (!isReturnOrigin)
-        {
-            _currentVolume = next;
         }
     }
 }

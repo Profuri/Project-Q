@@ -59,6 +59,7 @@ public class SceneControlManager : BaseManager<SceneControlManager>
             {
                 _currentCanvas.PresentTransition(1.0f, 0.0f, _fadeTime, () =>
                 {
+                    StoryManager.Instance.StartStoryIfCan(StoryAppearType.SCENE_ENTER, type);
                     onLoadedCallback?.Invoke();
                     PoolManager.Instance.Push(_currentCanvas);
                     _currentCanvas = null;

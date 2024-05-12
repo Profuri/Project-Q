@@ -6,5 +6,5 @@ public class TutorialInfo : ScriptableObject
 {
     public VideoClip clip;
     public string mainText;
-    public string descText;
+    [TextArea] public string descText;
 }
