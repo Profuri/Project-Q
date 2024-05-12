@@ -158,6 +158,11 @@ namespace AxisConvertSystem
             Hide(DepthHandler.Hide);
         }
 
+        public virtual void OnCameraSetting(AxisType axis)
+        {
+                        
+        }
+
         private void ApplyInfo(UnitInfo info)
         {
             transform.localPosition = info.LocalPos;

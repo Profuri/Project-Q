@@ -26,7 +26,7 @@ public class LaserToggleObject : ToggleTypeInteractableObject
     {
         base.UpdateUnit();
         InteractAffectedObjects(_isToggle);
-        
+
         if(_isToggle)
         {
             if (_lastToggleTime + ToggleCancelDelay <= Time.time)

@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using AxisConvertSystem;
 using DG.Tweening;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+
 
 public class SlimeObjectUnit : ObjectUnit
 {
@@ -9,13 +12,14 @@ public class SlimeObjectUnit : ObjectUnit
     [SerializeField] private float _bouncePower = 5f;
     [SerializeField] private float _bounceTime = 0.5f;
 
-    private List<ObjectUnit> _affectedUnits;
+    private const int _MAX_COLLIDER_CNT = 8;
     private AxisType _prevAxisType = AxisType.None;
+    private bool _canApply = false;
 
-    public override void Awake()
+    public override void Init(AxisConverter converter)
     {
-        base.Awake();
-        _affectedUnits = new List<ObjectUnit>();
+        base.Init(converter);
+        _canApply = false;
     }
 
     public override void Convert(AxisType axis)
@@ -24,7 +28,17 @@ public class SlimeObjectUnit : ObjectUnit
 
         if (axis == AxisType.None && _prevAxisType == AxisType.Y)
         {
-            _affectedUnits = GetMovementUnit();
+            _canApply = true;
+        }
+    }
+    
+    public override void OnCameraSetting(AxisType axis)
+    {
+        base.OnCameraSetting(axis);
+        
+        if (_canApply)
+        {
+            ApplyBounceEffect(FindColliders());
         }
     }
 
@@ -32,68 +46,39 @@ public class SlimeObjectUnit : ObjectUnit
     {
         base.ApplyUnitInfo(axis);
         
-        if(_affectedUnits.Count > 0)
-        {
-            ShowBounceEffect();
-        }
-            
         _prevAxisType = axis;
     }
-    
-    //이건 압축 해제되었을 때 팍 튕겨나가는거.
-    private void SlimeImpact(ObjectUnit unit)
+
+    private void ApplyBounceEffect(Collider[] cols)
     {
-        Vector3 bounceDirection = Vector3.up;
-        unit.SetVelocity(bounceDirection * _bouncePower, false);
-    }
-
-    private void ShowBounceEffect()
-    {
-        Vector3 originScale = transform.localScale;
-        Vector3 targetScale = transform.localScale * 1.2f;
-
-        transform.localScale = new Vector3(1,0.1f,1f);
-
-        Sequence seq = DOTween.Sequence();
-        seq.Append(transform.DOScale(targetScale, _bounceTime)).SetEase(Ease.InBounce);
-        seq.AppendCallback(() =>
+        if (cols == null || cols.Length < 1) return;
+        
+        foreach (var col in cols)
         {
-
-            foreach (var unit in _affectedUnits)
+            if (col != null)
             {
-                SlimeImpact(unit);
-            }
-            _affectedUnits.Clear();
-        });
-        seq.Append(transform.DOScale(originScale, _bounceTime)).SetEase(Ease.InBounce);
-    }
-
-    private List<ObjectUnit> GetMovementUnit()
-    {
-        List<ObjectUnit> unitList = new List<ObjectUnit>();
-
-        Vector3 checkCenterPos = Collider.bounds.center;
-        Vector3 halfExtents = Collider.bounds.size / 2f;
-        Quaternion rotation = transform.rotation;
-
-        Collider[] cols = Physics.OverlapBox(checkCenterPos, halfExtents, rotation);
-
-        foreach (Collider col in cols)
-        {
-            if (col.TryGetComponent(out ObjectUnit unit))
-            {
-                if (!unit.staticUnit)
+                if (col.TryGetComponent(out ObjectUnit unit))
                 {
-                    unitList.Add(unit);
+                    Vector3 bounceDirection = Vector3.up;
+                    unit.SetVelocity(bounceDirection * _bouncePower, false);
                 }
             }
         }
-        
-        return unitList;
+        _canApply = false;
     }
 
-   
-
+    private Collider[] FindColliders()
+    {
+        Vector3 center = Collider.bounds.center + new Vector3(0,Collider.bounds.size.y  * 0.5f,0);
+        Vector3 halfExtents = Collider.bounds.extents * 0.5f;
+        Collider[] results = new Collider[_MAX_COLLIDER_CNT];
+        Quaternion orientation = transform.rotation;
+        
+       int colCount = Physics.OverlapBoxNonAlloc(center,halfExtents,results,orientation);
+       
+        return results;
+    }
+    
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

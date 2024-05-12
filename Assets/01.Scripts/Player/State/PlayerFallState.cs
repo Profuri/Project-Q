@@ -12,6 +12,7 @@ public class PlayerFallState : PlayerOnAirState
     public override void ExitState()
     {
         base.ExitState();
+        Player.CanAxisControl = true;
         InputManager.Instance.PlayerInputReader.OnJumpEvent -= JumpHandle;
     }
 }

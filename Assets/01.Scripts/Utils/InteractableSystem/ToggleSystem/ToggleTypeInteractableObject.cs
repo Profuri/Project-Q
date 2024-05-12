@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AxisConvertSystem;
@@ -12,133 +13,184 @@ namespace InteractableSystem
         [SerializeField] private List<AffectedObject> _affectedObjects;
         [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
 
-        protected static Dictionary<int, SelectedBorder> s_selectedBorderDictionary = new Dictionary<int, SelectedBorder>();
+        private Dictionary<int, SelectedBorder> _selectedBorderDictionary = new Dictionary<int, SelectedBorder>();
 
+        
         private bool _lastToggleState;
-
         protected bool LastToggleState
         {
             get => _lastToggleState;
             set
             {
                 _lastToggleState = value;
+                if (value)
+                {
+                    ShowConnectedUnit();
+                }
             }
         }
 
         protected bool _isToggle;
-        protected const float _standardValue = 1.2f;
-        public float AlphaValue
+        private bool _canFindBorders;
+        private static float s_standardValue = 1.1f;
+        
+        private float AlphaValue
         {
             get
             {
                 PlayerUnit player = SceneControlManager.Instance.Player;
+                
                 Vector3 playerPos = player.Collider.bounds.center;
                 Vector3 curPos = Collider.bounds.center;
-
-                float interactableRadius = player.Data.interactableRadius;
-
-                playerPos.y = curPos.y = 0;
-
-                return _standardValue - (Vector3.Distance(playerPos, curPos) / interactableRadius);
+                playerPos.y = 0;
+                curPos.y = 0;
+                
+                const float interactableRadius = 2f; 
+                //float interactableRadius = player.Data.interactableRadius;
+                float distance = Vector3.Distance(playerPos, curPos);
+                float returnValue = s_standardValue - (float)(distance / interactableRadius);
+                
+                return returnValue;
             }
         }
-        public bool IsInDistance
+                
+        private bool IsInDistance
         {
             get
             {
                 PlayerUnit player = SceneControlManager.Instance.Player;
                 Vector3 playerPos = player.Collider.bounds.center;
                 Vector3 curPos = Collider.bounds.center;
-                float interactableRadius = player.Data.interactableRadius;
+                //float interactableRadius = player.Data.interactableRadius;
+                const float interactableRadius = 2f;
 
                 return Vector3.Distance(playerPos, curPos) <= interactableRadius;
             }
         }
 
-        public override void Awake()
-        {
-            base.Awake();
-            _lastToggleState = false;
-        }
 
         public override void UpdateUnit()
         {
             base.UpdateUnit();
-            ShowSelectedBorderInConnectedUnit();
+            
+            if (_canFindBorders)
+            {
+                List<SelectedBorder> selectedBorderList = _selectedBorderDictionary.Values.ToList();
+                foreach (var selectedBorder in selectedBorderList)
+                {
+                    selectedBorder.SetDistanceProgress(AlphaValue,LastToggleState);
+                }
+            }
         }
+
         public override void Init(AxisConverter converter)
         {
             base.Init(converter);
             
             _lastToggleState = false;
-            s_selectedBorderDictionary = new Dictionary<int, SelectedBorder>();
+            _canFindBorders = false;
             CallToggleChangeEvents(_lastToggleState);
         }
 
         public override void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
         {
-            List<SelectedBorder> borderList = s_selectedBorderDictionary.Values.ToList();
+            List<SelectedBorder> borderList = _selectedBorderDictionary.Values.ToList();
             if(borderList.Count > 0 )
             {
                 foreach (SelectedBorder selectedBorder in borderList)
                 {
+                    _selectedBorderDictionary.Remove(selectedBorder.GetInstanceID());
                     SceneControlManager.Instance.DeleteObject(selectedBorder);
                 }
             }
-
-            s_selectedBorderDictionary.Clear();
             base.Dissolve(value, time, useDissolve, callBack);
         } 
 
-        protected void ShowSelectedBorder(ObjectUnit showObj)
+        private bool ShowSelectedBorder(ObjectUnit showObj)
         {
-            if (!IsInDistance || showObj == null) return;
+            if (!IsInDistance || showObj is null) return false;
 
             int instanceID = showObj.GetInstanceID();
             float alpha = AlphaValue;
 
-            if (s_selectedBorderDictionary.ContainsKey(instanceID) == false)
+            if (_selectedBorderDictionary.ContainsKey(instanceID) == false)
             {
                 var selectedBorder = SceneControlManager.Instance.AddObject("SelectedBorder") as SelectedBorder;
+                
                 selectedBorder.Setting(showObj);
                 selectedBorder.Activate(true);
-                s_selectedBorderDictionary.Add(instanceID, selectedBorder);
+                _selectedBorderDictionary.Add(instanceID, selectedBorder);
             }
-            s_selectedBorderDictionary[instanceID].Activate(true);
-            s_selectedBorderDictionary[instanceID].SetDistanceProgress(alpha,LastToggleState);
-        }
-
-        protected bool UnShowSelectedBorder(int instanceID)
-        {
-            if(!s_selectedBorderDictionary.ContainsKey(instanceID))
-            {
-                return false;
-            }
-
-            float alpha = AlphaValue;
-            s_selectedBorderDictionary[instanceID].SetDistanceProgress(alpha, LastToggleState);
+            _selectedBorderDictionary[instanceID].Activate(true);
+            _selectedBorderDictionary[instanceID].SetDistanceProgress(alpha,LastToggleState);
             return true;
         }
-        protected void InteractAffectedObjects(bool value)
-        {
-            if (Converter != null && !Converter.Convertable)
-            {
-                return;
-            }
 
+        private bool UnShowSelectedBorder(int instanceID)
+        {
+            if (LastToggleState) return false;
+            if (_selectedBorderDictionary.ContainsKey((instanceID)) == false) return false;
+
+            _selectedBorderDictionary[instanceID].Activate(false);
+            
+            SelectedBorder selectedBorder = _selectedBorderDictionary[instanceID];
+            _selectedBorderDictionary.Remove(instanceID);
+            SceneControlManager.Instance.DeleteObject(selectedBorder);
+            return true;
+        }
+        
+        public override void OnDetectedEnter(ObjectUnit communicator = null)
+        {
+            base.OnDetectedEnter(communicator);
+            _canFindBorders = true;
+            ShowConnectedUnit();
+        }
+
+        public override void OnDetectedLeave(ObjectUnit communicator = null)
+        {
+            base.OnDetectedLeave(communicator);
+            _canFindBorders = false;
+            UnShowConnectedUnit();
+        }
+
+        private void UnShowConnectedUnit()
+        {
             foreach (var obj in _affectedObjects)
             {
-                if (obj is not null)
+                UnShowSelectedBorder(obj.interactableObject.GetInstanceID());
+            }
+            
+            foreach (var toggleChangeEvent in _onToggleChangeEvents)
+            {
+                var curEvent = toggleChangeEvent.invokeEvent;
+                for (var index = 0; index < curEvent.GetPersistentEventCount(); index++)
                 {
-                    obj.Invoke(null, value);
+                    if(curEvent.GetPersistentTarget(index) is ObjectUnit unit)
+                    {
+                        UnShowSelectedBorder(unit.GetInstanceID());
+                    }                   
                 }
             }
         }
 
-        public override void OnDetectedEnter(ObjectUnit communicator = null)
+        private void ShowConnectedUnit()
         {
-            base.OnDetectedEnter(communicator);
-            ShowSelectedBorderInConnectedUnit();
+            foreach (var obj in _affectedObjects)
+            {
+                ShowSelectedBorder(obj.interactableObject);
+            }
+            
+            foreach (var toggleChangeEvent in _onToggleChangeEvents)
+            {
+                var curEvent = toggleChangeEvent.invokeEvent;
+                for (var index = 0; index < curEvent.GetPersistentEventCount(); index++)
+                {
+                    if(curEvent.GetPersistentTarget(index) is ObjectUnit unit)
+                    {
+                        ShowSelectedBorder(unit);
+                    }                   
+                }
+            }
         }
 
         protected void CallToggleChangeEvents(bool value)
@@ -170,44 +222,22 @@ namespace InteractableSystem
             }
         }
 
-        public void ShowSelectedBorderInConnectedUnit()
-        {
-            foreach (var obj in _affectedObjects)
-            {
-                Debug.Log($"Object: {obj}");
-                Debug.Log($"AffectedObject: {obj.interactableObject}");
-                ShowSelectedBorder(obj.interactableObject);
-            }
 
-            foreach (var toggleChangeEvent in _onToggleChangeEvents)
-            {
-                var curEvent = toggleChangeEvent.invokeEvent;
-                for (var index = 0; index < curEvent.GetPersistentEventCount(); index++)
-                {
-                    if(curEvent.GetPersistentTarget(index) is ObjectUnit unit)
-                    {
-                        UnShowSelectedBorder(unit.GetInstanceID());
-                    }                   
-                }
-            }
-        }
         
-        public void UnShowSelectedBorderInConnectedUnit()
+        
+        
+        protected void InteractAffectedObjects(bool value)
         {
-            foreach (var obj in _affectedObjects)
+            if (Converter != null && !Converter.Convertable)
             {
-                UnShowSelectedBorder(obj.interactableObject.GetInstanceID());
+                return;
             }
 
-            foreach (var toggleChangeEvent in _onToggleChangeEvents)
+            foreach (var obj in _affectedObjects)
             {
-                var curEvent = toggleChangeEvent.invokeEvent;
-                for (var index = 0; index < curEvent.GetPersistentEventCount(); index++)
+                if (obj is not null)
                 {
-                    if(curEvent.GetPersistentTarget(index) is ObjectUnit unit)
-                    {
-                        UnShowSelectedBorder(unit.GetInstanceID());
-                    }
+                    obj.Invoke(null, value);
                 }
             }
         }

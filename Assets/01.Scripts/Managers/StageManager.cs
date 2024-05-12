@@ -12,7 +12,11 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     {
         get
         {
-            if (CurrentStage == null) return false;
+            if (CurrentStage == null)
+            {
+                Debug.LogError($"CurrentStage is null");
+                return false;
+            }
             return CurrentStage.IsClear;
         }
     }
@@ -95,9 +99,10 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             SceneControlManager.Instance.LoadScene(SceneType.Chapter);
             return;
         }
-        
+                
         GenerateNextStage(_currentPlayChapterData.chapter, nextChapter);
         CurrentStage.IsClear = true;
+        Debug.Log($"CurrentStageClear: {CurrentStage},IsClear {CurrentStage.IsClear}");
     }
 
     public Action<SaveData> GetSaveAction()
