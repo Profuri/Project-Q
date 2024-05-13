@@ -29,6 +29,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 
     [SerializeField] private List<ChapterStory> _storyList = new List<ChapterStory>();
 
+    
     private Tuple<ChapterStory,int> GetStory(ChapterCondition condition,ChapterType chapterType,int stageIndex = 7)
     {
         bool Predicate(ChapterStory cs)

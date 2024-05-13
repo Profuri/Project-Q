@@ -28,12 +28,10 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     [SerializeField] private AudioClipSO _bgmClipSO;
     [SerializeField] private RandomAudioClipSO _stageClipSO;
     [SerializeField] private RandomAudioClipSO _chapterClipSO;
+    [SerializeField] private RandomAudioClipSO _titleClipSO;
+    [SerializeField] private RandomAudioClipSO _cpuClipSO;
     #endregion
     
-    #region PROPERTY
-    public RandomAudioClipSO StageClipSO => _stageClipSO;
-    public RandomAudioClipSO ChapterClipSO => _chapterClipSO;
-    #endregion
 
     private RandomAudioClipSO _currentAudioClipSO;
     
@@ -61,6 +59,11 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
         }
     }
 
+    private Dictionary<SceneType, RandomAudioClipSO> _BGMAudioDictionary =
+        new Dictionary<SceneType, RandomAudioClipSO>();
+
+    private Coroutine _keyFrameCoroutine;
+    
     public override void Init()
     {
         base.Init();
@@ -73,6 +76,10 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
             _audioSources[i].outputAudioMixerGroup = (soundNames[i] == "BGM" ? _bgmGroup : _sfxGroup);
             go.transform.SetParent(transform);
         }
+
+        _BGMAudioDictionary.Add(SceneType.Chapter,_chapterClipSO);
+        _BGMAudioDictionary.Add(SceneType.Stage,  _stageClipSO);
+        _BGMAudioDictionary.Add(SceneType.Title,  _titleClipSO);
         
         _audioSources[(int)SoundEnum.BGM].loop = true;
     }
@@ -81,16 +88,46 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     {
         DataManager.Instance.SettingDataProvidable(this, this);
     }
-    
-    public void PlayRandomBGM(RandomAudioClipSO randomSO)
+
+    private IEnumerator AudioKeyFrameRoutine(SceneType sceneType)
     {
-        if (_currentAudioClipSO != null)
+        AudioSource audioSource = _audioSources[(int)SoundEnum.BGM];
+        while (audioSource.isPlaying == true)
         {
-            Destroy(_currentAudioClipSO);
+            yield return null;
         }
-        _currentAudioClipSO = randomSO.InstantiateClipSO();
-        var clip = _currentAudioClipSO.GetRandomClip();
-        PlayBGM(clip.ToString());        
+        PlayCorrectBGM(sceneType);
+    }
+
+    public void PlayCorrectBGM(SceneType sceneType,bool isCpu = false)
+    {
+        if (_BGMAudioDictionary.ContainsKey(sceneType))
+        {
+            if (_currentAudioClipSO != null)
+            {
+                Destroy(_currentAudioClipSO);
+            }
+            
+            if (isCpu)
+            {
+                _currentAudioClipSO = _cpuClipSO.InstantiateClipSO();
+            }
+            else
+            {
+                _currentAudioClipSO = _BGMAudioDictionary[sceneType].InstantiateClipSO();
+            }
+
+            var clip  = _currentAudioClipSO.GetRandomClip();
+            
+            Debug.Log($"ClipName: {clip.ToString()}");
+            PlayBGM(clip.ToString());
+
+            if (_keyFrameCoroutine != null)
+            {
+                StopCoroutine(_keyFrameCoroutine);
+            }
+            _keyFrameCoroutine = StartCoroutine(AudioKeyFrameRoutine(sceneType));
+        }
     }
     
     public void PlaySFX(string clipName,bool loop = false, SoundEffectPlayer soundEffectPlayer = null)
@@ -99,8 +136,6 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
         Play(clip, SoundEnum.EFFECT,loop, soundEffectPlayer);
     }
     
-    
-
     public void PlayBGM(string clipName)
     {
         AudioClip clip = _bgmClipSO.GetAudioClip(clipName);

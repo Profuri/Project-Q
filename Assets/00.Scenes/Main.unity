@@ -755,6 +755,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _directionalLight: {fileID: 2066994573}
+  _axisDirectionalLight: {fileID: 0}
+  _axisLightIntensity: 0
+  _axisLightTurnOnTime: 0
 --- !u!1 &481047369
 GameObject:
   m_ObjectHideFlags: 3
@@ -1418,9 +1421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e3cb724d8e34b6aaec1b6c5db8115a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mainVolume: {fileID: 35255274}
-  _highlightVolume: {fileID: 62548777}
-  _axisControlVolume: {fileID: 1912740385}
+  _volumeData: {fileID: 0}
 --- !u!1 &892456910
 GameObject:
   m_ObjectHideFlags: 0
@@ -1688,6 +1689,7 @@ MonoBehaviour:
     type: 2}
   <CameraInputReader>k__BackingField: {fileID: 11400000, guid: 109b368ae02c7435d83e66567cb76d2a,
     type: 2}
+  <TimelineInputReader>k__BackingField: {fileID: 0}
 --- !u!1 &1424668819
 GameObject:
   m_ObjectHideFlags: 0
@@ -2555,6 +2557,7 @@ MonoBehaviour:
   _timelineClipSetList: {fileID: 11400000, guid: 65840cbd068044bc3ba013077172f7c4,
     type: 2}
   _skipOffset: 0.01
+  _speedMultiply: 0
 --- !u!1 &1959482071
 GameObject:
   m_ObjectHideFlags: 3
@@ -2666,14 +2669,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9216f3ba132e0e24cab84ead0fbdf464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _defaultVolume: 1
   _audioClipSO: {fileID: 11400000, guid: e2bd784e784bd8646b8cd059a0078e92, type: 2}
   _bgmClipSO: {fileID: 11400000, guid: 342654da3837b7749989bcaf46ff08f0, type: 2}
+  _stageClipSO: {fileID: 11400000, guid: fa9b0ce51e8dfb2439c115820ff7b51c, type: 2}
+  _chapterClipSO: {fileID: 11400000, guid: 496820ffbfef0b74fb9dfe5c8fb44310, type: 2}
+  _titleClipSO: {fileID: 11400000, guid: 909a628185ca8ca4bb447faae79ca463, type: 2}
   _masterMixer: {fileID: 24100000, guid: bf58892910c515242bbff4078b63f72c, type: 2}
   _bgmGroup: {fileID: -2617131699302258032, guid: bf58892910c515242bbff4078b63f72c,
     type: 2}
   _sfxGroup: {fileID: 617185436555260592, guid: bf58892910c515242bbff4078b63f72c,
     type: 2}
-  _defaultVolume: 1
   soundFadeOnTime: 0.3
 --- !u!1 &2066994570
 GameObject:
