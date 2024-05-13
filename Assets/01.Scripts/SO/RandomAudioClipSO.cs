@@ -10,11 +10,6 @@ public class RandomAudioClipSO : AudioClipSO
 {
     private const int c_shuffleCnt = 100;
     private int _currentIndex = 0;
-    
-    public RandomAudioClipSO InstantiateClipSO()
-    {
-        return Instantiate(this);
-    }
 
     private void OnEnable()
     {

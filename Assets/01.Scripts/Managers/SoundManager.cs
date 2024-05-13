@@ -4,6 +4,7 @@ using ManagingSystem;
 using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 public enum SoundEnum
 {
@@ -74,6 +75,7 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
             _audioSources[i] = go.AddComponent<AudioSource>();
             _audioSources[i].playOnAwake = false;
             _audioSources[i].outputAudioMixerGroup = (soundNames[i] == "BGM" ? _bgmGroup : _sfxGroup);
+            _audioSources[i].loop = false;
             go.transform.SetParent(transform);
         }
 
@@ -107,20 +109,15 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
             {
                 Destroy(_currentAudioClipSO);
             }
-            
+
             if (isCpu)
-            {
-                _currentAudioClipSO = _cpuClipSO.InstantiateClipSO();
-            }
+                _currentAudioClipSO = Instantiate(_cpuClipSO);
             else
-            {
-                _currentAudioClipSO = _BGMAudioDictionary[sceneType].InstantiateClipSO();
-            }
+                _currentAudioClipSO = Instantiate(_BGMAudioDictionary[sceneType]);
 
             var clip  = _currentAudioClipSO.GetRandomClip();
             
-            Debug.Log($"ClipName: {clip.ToString()}");
-            PlayBGM(clip.ToString());
+            PlayBGM(clip.name);
 
             if (_keyFrameCoroutine != null)
             {
@@ -182,7 +179,8 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
         foreach (var audioSource in _audioSources)
         {
             audioSource.clip = null;
-            audioSource.Stop();
+            StopAllCoroutines();
+            StartCoroutine(SoundFade(true, audioSource, 0.5f, 0f, SoundEnum.BGM));
         }
     }
     
@@ -190,6 +188,7 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     {
         _masterMixer.SetFloat(type.ToString().ToLower(), mute ? -80 : 0);
     }
+    
     
     IEnumerator SoundFade(bool fadeIn, AudioSource source, float duration, float endVolume, SoundEnum type)
     {

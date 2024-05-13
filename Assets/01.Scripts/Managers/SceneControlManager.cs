@@ -29,6 +29,7 @@ public class SceneControlManager : BaseManager<SceneControlManager>
 
         _currentCanvas.PresentTransition(0.0f, 1.0f, _fadeTime, () =>
         {
+            SoundManager.Instance.Stop();
             if (CurrentScene is not null)
             {
                 PoolManager.Instance.Push(CurrentScene);
