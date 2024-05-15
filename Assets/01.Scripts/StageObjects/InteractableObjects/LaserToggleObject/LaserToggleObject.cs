@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
@@ -16,10 +14,13 @@ public class LaserToggleObject : ToggleTypeInteractableObject
     public override void Awake()
     {
         base.Awake();
-        
         _pointLight = transform.Find("Point Light").GetComponent<Light>();
+    }
+
+    public override void Init(AxisConverter converter)
+    {
+        base.Init(converter);
         Toggled(false);
-        CallToggleChangeEvents(_isToggle);
     }
 
     public override void UpdateUnit()
@@ -27,20 +28,22 @@ public class LaserToggleObject : ToggleTypeInteractableObject
         base.UpdateUnit();
         InteractAffectedObjects(_isToggle);
 
-        if(_isToggle)
+        if(_isToggle && Converter.Convertable)
         {
             if (_lastToggleTime + ToggleCancelDelay <= Time.time)
             {
                 Toggled(false);
-                CallToggleChangeEvents(_isToggle);
             }
         }
     }
 
     private void Toggled(bool value)
     {
+        Debug.Log(value);
         _isToggle = value;
+        LastToggleState = value;
         _pointLight.enabled = value;
+        CallToggleChangeEvents(value);
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
@@ -49,7 +52,6 @@ public class LaserToggleObject : ToggleTypeInteractableObject
         if (!_isToggle)
         {
             Toggled(true);
-            CallToggleChangeEvents(_isToggle);
         }
     }
 }

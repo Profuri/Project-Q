@@ -1,8 +1,6 @@
 using UnityEngine;
-using AxisConvertSystem;
 using System;
 using DG.Tweening;
-using UnityEngine.InputSystem.Haptics;
 
 public class Stage : Section
 {

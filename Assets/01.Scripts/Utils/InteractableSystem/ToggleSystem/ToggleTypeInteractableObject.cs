@@ -222,10 +222,6 @@ namespace InteractableSystem
             }
         }
 
-
-        
-        
-        
         protected void InteractAffectedObjects(bool value)
         {
             if (Converter != null && !Converter.Convertable)
