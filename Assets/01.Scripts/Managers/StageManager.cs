@@ -38,7 +38,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         _currentPlayChapterData = chapterData;
         CurrentStage = SceneControlManager.Instance.AddObject(
             $"{chapterData.chapter.ToString().ToUpperFirstChar()}_Stage_0") as Stage;
-        CurrentStage.Generate(Vector3.zero, false, 1.5f);
+        CurrentStage.Generate(Vector3.zero, false, false);
         CurrentStage.IsClear = false;
     }
 
@@ -64,7 +64,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             CurrentStage.Disappear(dissolveTime, () =>
             {
                 CurrentStage = SceneControlManager.Instance.AddObject(stageName) as Stage;
-                CurrentStage.Generate(currentPos, true, dissolveTime);
+                CurrentStage.Generate(currentPos, true, false, dissolveTime);
                 player.SetSection(CurrentStage);
                 player.useGravity = true;
                 player.ReloadUnit(dissolveTime);
