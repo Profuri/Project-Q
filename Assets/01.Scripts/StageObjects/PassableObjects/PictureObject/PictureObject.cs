@@ -42,11 +42,6 @@ public class PictureObject : ObjectUnit, IPassable
     {
         base.ApplyUnitInfo(axis);
 
-        if (axis == AxisType.Y)
-        {
-            return;
-        }
-
         if (Collider.isTrigger != PassableAfterAxis)
         {
             Collider.isTrigger = PassableAfterAxis;
@@ -62,13 +57,6 @@ public class PictureObject : ObjectUnit, IPassable
 
     public void PassableCheck(AxisType axis)
     {
-        if (axis == AxisType.Y)
-        {
-            PassableAfterAxis = false;
-        }
-        else
-        {
-            PassableAfterAxis = axis != AxisType.None;
-        }
+        PassableAfterAxis = axis != AxisType.None;
     }
 }
