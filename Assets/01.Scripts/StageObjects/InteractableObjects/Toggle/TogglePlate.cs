@@ -12,6 +12,7 @@ public class TogglePlate : ToggleTypeInteractableObject
     private Transform _pressureMainTrm;
 
     private SoundEffectPlayer _soundEffectPlayer;
+    
     public override void Awake()
     {
         base.Awake();
@@ -22,6 +23,7 @@ public class TogglePlate : ToggleTypeInteractableObject
     {
         base.Init(converter);
         _isToggle = false;
+        LastToggleState = false;
 
         _soundEffectPlayer = new SoundEffectPlayer(this);
     }
@@ -29,6 +31,7 @@ public class TogglePlate : ToggleTypeInteractableObject
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         _isToggle = !_isToggle;
+        LastToggleState = _isToggle;
         SoundManager.Instance.PlaySFX("Toggle",false, _soundEffectPlayer);
         CallToggleChangeEvents(_isToggle);
     }
@@ -38,6 +41,7 @@ public class TogglePlate : ToggleTypeInteractableObject
         base.UpdateUnit();
         ToggleUpdate();
     }
+    
     private void ToggleUpdate()
     {
         InteractAffectedObjects(_isToggle);
