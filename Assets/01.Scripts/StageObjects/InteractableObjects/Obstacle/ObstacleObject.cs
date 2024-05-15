@@ -47,7 +47,7 @@ public class ObstacleObject : InteractableObject
                     }
                 }
                 
-                if (!unit.staticUnit)
+                if (!unit.staticUnit || (unit.Collider.excludeLayers & (1 << gameObject.layer)) == 0)
                 {
                     unit.ReloadUnit();
                 }

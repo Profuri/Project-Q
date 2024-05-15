@@ -114,7 +114,7 @@ public class RGBObjectUnit : InteractableObject, IPassable
         }
         else
         {
-            layer = LayerMask.GetMask("Player");
+            layer = LayerMask.GetMask("Player", "Obstacle");
             if(Rigidbody != null)
                 Rigidbody.isKinematic = false;
         }
