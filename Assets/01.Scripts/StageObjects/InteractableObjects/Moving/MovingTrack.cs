@@ -8,17 +8,17 @@ public class MovingTrack : ObjectUnit
     public AxisType MovingAxis => _movingAxis;
     [SerializeField] private float _movingDistance;
     
-    private MovingPlatform _movingPlatform;
+    private MovingPlatformHandler _movingPlatformHandler;
 
     public override void Awake()
     {
         base.Awake();
-        _movingPlatform = GetComponentInChildren<MovingPlatform>();
+        _movingPlatformHandler = GetComponentInChildren<MovingPlatformHandler>();
     }
 
     private void LateUpdate()
     {
-        _movingPlatform.ClampingPosition(_movingDistance / 2f);
+        _movingPlatformHandler.ClampingPosition(_movingDistance / 2f);
     }
 
     public override void ApplyUnitInfo(AxisType axis)
@@ -33,17 +33,13 @@ public class MovingTrack : ObjectUnit
         var lineTrm = transform.Find("TrackLine");
         lineTrm.localScale = new Vector3(_movingDistance, 0.01f, 1f);
         
-        var movingPlatformTrm = transform.Find("MovingPlatform");
-        
         if (_movingAxis == AxisType.X)
         {
             lineTrm.localRotation = Quaternion.Euler(0, 0, 0);
-            movingPlatformTrm.localRotation = Quaternion.Euler(0, 0, 0);
         }
         else if (_movingAxis == AxisType.Z)
         {
             lineTrm.localRotation = Quaternion.Euler(0, 90, 0);
-            movingPlatformTrm.localRotation = Quaternion.Euler(0, 90, 0);
         }
     }
 #endif

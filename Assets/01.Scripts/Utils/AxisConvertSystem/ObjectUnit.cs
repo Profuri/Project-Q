@@ -20,7 +20,7 @@ namespace AxisConvertSystem
 
         protected UnitInfo OriginUnitInfo;
         protected UnitInfo UnitInfo;
-        protected UnitInfo ConvertedInfo;
+        public UnitInfo ConvertedInfo;
 
         public AxisConverter Converter { get; protected set; }
         public Collider Collider { get; private set; }
@@ -41,6 +41,13 @@ namespace AxisConvertSystem
 
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
+        
+        // Events
+        public event Action<AxisConverter> OnInitEvent;
+        public event Action<AxisType> OnConvertEvent;
+        public event Action<AxisType> OnCalcDepthEvent;
+        public event Action<AxisType> OnApplyUnitInfoEvent;
+        public event Action OnApplyDepthEvent;
         
         public virtual void Awake()
         {
@@ -107,6 +114,8 @@ namespace AxisConvertSystem
             UnitInfo = OriginUnitInfo;
 
             DepthHandler.DepthCheckPointSetting();
+            
+            OnInitEvent?.Invoke(converter);
         }
 
         public virtual void Convert(AxisType axis)
@@ -124,6 +133,8 @@ namespace AxisConvertSystem
             
             SynchronizePosition(axis);
             ConvertedInfo = ConvertInfo(UnitInfo, axis);
+            
+            OnConvertEvent?.Invoke(axis);
         }
         
         public virtual void ApplyUnitInfo(AxisType axis)
@@ -145,6 +156,8 @@ namespace AxisConvertSystem
             {
                 Rigidbody.FreezeAxisPosition(axis);
             }
+            
+            OnApplyUnitInfoEvent?.Invoke(axis);
         }
 
 
@@ -156,6 +169,7 @@ namespace AxisConvertSystem
             }
 
             Hide(DepthHandler.Hide);
+            OnApplyDepthEvent?.Invoke();
         }
 
         public virtual void OnCameraSetting(AxisType axis)

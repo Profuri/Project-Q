@@ -39,7 +39,6 @@ public class LaserToggleObject : ToggleTypeInteractableObject
 
     private void Toggled(bool value)
     {
-        Debug.Log(value);
         _isToggle = value;
         LastToggleState = value;
         _pointLight.enabled = value;
