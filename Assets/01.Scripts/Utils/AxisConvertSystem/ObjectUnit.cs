@@ -8,6 +8,7 @@ namespace AxisConvertSystem
     public class ObjectUnit : PoolableMono
     {
         [HideInInspector] public CompressLayer compressLayer = CompressLayer.Platform;
+        [HideInInspector] public float offset = 0;
         [HideInInspector] public UnitRenderType renderType = UnitRenderType.Opaque;
         [HideInInspector] public bool climbableUnit = false;
         [HideInInspector] public bool staticUnit = true;
@@ -192,7 +193,7 @@ namespace AxisConvertSystem
                 return basic;
             }
 
-            var layerDepth = (int)compressLayer * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
+            var layerDepth = ((int)compressLayer + offset) * Vector3ExtensionMethod.GetAxisDir(axis).GetAxisElement(axis);
 
             if (!subUnit)
             {

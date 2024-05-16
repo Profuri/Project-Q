@@ -1,14 +1,8 @@
 using AxisConvertSystem;
-using System.Collections;
-using System.Drawing;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SelectedBorder : PoolableMono
 {
-    [SerializeField] private float _activeTime = 0.25f;
-
     private Material _material;
 
     private readonly int _cornerSizeHash = Shader.PropertyToID("_CornerSize");
