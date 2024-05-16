@@ -10,6 +10,11 @@ public class VideoSettingPanel : WindowPanel
     [SerializeField] private UIYesNoButton3D _fullScreenYesBtn;
     [SerializeField] private UIYesNoButton3D _fullScreenNoBtn;
 
+    private void OnDisable()
+    {
+        ReleasePanel();
+    }
+    
     public void GenerateResolutionDropdown()
     {
         UIManager.Instance.Interact3DButton = false;
@@ -87,7 +92,9 @@ public class VideoSettingPanel : WindowPanel
         }
         catch
         {
-            resolution = VideoManager.Instance.ResolutionList[VideoManager.Instance.ResolutionList.Count - 1];
+            var resolutionList = VideoManager.Instance.ResolutionList;
+            
+            resolution = resolutionList[resolutionList.Count - 1];
             string resolutionText = $"{resolution.width} X {resolution.height}";
             _resolutionBtn.Text = resolutionText;
         }
@@ -95,12 +102,14 @@ public class VideoSettingPanel : WindowPanel
         //Qaulity
         QualityType qualityType = saveData.DefaultQuality;
         _qualityBtn.Text = qualityType.ToString().ToUpper();
-
+        
         //FullScreen
         _fullScreenYesBtn.SettingActive(saveData.DefaultFullScreen);
         _fullScreenNoBtn.SettingActive(!saveData.DefaultFullScreen);
     }
-
+    
+    
+    
     public override void ReleasePanel()
     {
         base.ReleasePanel();

@@ -23,7 +23,9 @@ public enum EAUDIO_MIXER
 public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoad
 {
     #region Inspector Settings
-    [SerializeField] private float _defaultVolume = 0f;
+
+    [SerializeField] private float _defaultVolume = 1f;
+    [SerializeField] private float _defaultBGMVolume = 0.7f;
 
     [SerializeField] private AudioClipSO _audioClipSO;
     [SerializeField] private AudioClipSO _bgmClipSO;
@@ -78,6 +80,8 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
             _audioSources[i].loop = false;
             go.transform.SetParent(transform);
         }
+
+        _audioSources[(int)SoundEnum.BGM].volume = _defaultBGMVolume;
 
         _BGMAudioDictionary.Add(SceneType.Chapter,_chapterClipSO);
         _BGMAudioDictionary.Add(SceneType.Stage,  _stageClipSO);
