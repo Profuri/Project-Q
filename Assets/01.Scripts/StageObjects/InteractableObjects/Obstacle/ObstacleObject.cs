@@ -1,4 +1,3 @@
-using System;
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;

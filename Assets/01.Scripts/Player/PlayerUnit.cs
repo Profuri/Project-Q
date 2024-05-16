@@ -112,9 +112,10 @@ public class PlayerUnit : ObjectUnit
         });
         
         InputManagerHelper.OnDeadPlayer();
+        
+        Converter.ConvertDimension(AxisType.None);
         PlaySpawnVFX();
 
-        Converter.ConvertDimension(AxisType.None);
         SetActiveAnimation(true);
         _stateController.ChangeState(typeof(PlayerIdleState));
     }

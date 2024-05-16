@@ -22,6 +22,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
             return;
         }
 
+        InputManager.Instance.SetEnableInputAll(false);
         _messagePanel = UIManager.Instance.GenerateUI("MessageWindow", null, () =>
         {
             _messagePanel.SetData(storyData);
@@ -36,6 +37,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
             return;
         }
         
+        InputManager.Instance.SetEnableInputAll(true);
         _messagePanel.Disappear();
         _messagePanel = null;
     }
