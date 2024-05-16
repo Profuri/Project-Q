@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2171893904288002417}
   - component: {fileID: 6843703091050954333}
   - component: {fileID: 1450305374577514817}
-  - component: {fileID: 5214932713571602860}
   - component: {fileID: 6910559995557586271}
   m_Layer: 11
   m_Name: Lava
@@ -121,37 +120,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 5
+  poolOut: 0
   compressLayer: 1
+  offset: 0
+  renderType: 0
   climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
+  subUnit: 0
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
+  checkOffset: 0.2
   useGravity: 1
+  <Offset>k__BackingField: {x: 0, y: 0, z: 0}
   _interactType: 1
   _attribute: 0
   _damageableMask:
     serializedVersion: 2
     m_Bits: 1280
---- !u!114 &5214932713571602860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2751238682329851044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 5
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!114 &6910559995557586271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,11 +152,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolingCnt: 0
+  poolOut: 0
   compressLayer: 1
+  offset: 0
+  renderType: 0
   climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
+  subUnit: 0
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
+  checkOffset: 0.2
   useGravity: 1

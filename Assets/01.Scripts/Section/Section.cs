@@ -55,15 +55,19 @@ public class Section : PoolableMono
         }
     }
 
-    public void Generate(Vector3 position, bool moveRoutine = true, float dissolveTime = 1.5f, Action Callback = null)
+    public void Generate(Vector3 position, bool playDissolve = true, bool moveRoutine = true, float dissolveTime = 1.5f, Action Callback = null)
     {
         ReloadSectionUnits();
         CenterPosition = position;
         transform.position = CenterPosition;
 
-        if (moveRoutine)
+        if (playDissolve)
         {
             Dissolve(true, dissolveTime);
+        }
+
+        if (moveRoutine)
+        {
             transform.position = position - Vector3.up * _sectionData.sectionYDepth;
             Sequence seq = DOTween.Sequence();
             seq.Append(transform.DOMove(CenterPosition, 3f));

@@ -46,7 +46,8 @@ public class PlayerUnit : ObjectUnit
     }
 
     public bool CanJump => OnGround || IsCoyote;
-
+    public bool CanAxisControl { get; set; } = true;
+    
     public void StartCoyoteTime()
     {
         _coyoteTime = Time.time;
@@ -76,6 +77,8 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
 
         SoundEffectPlayer = new SoundEffectPlayer(this);
+
+        CanAxisControl = true;
     }
 
     public override void UpdateUnit()
@@ -109,9 +112,10 @@ public class PlayerUnit : ObjectUnit
         });
         
         InputManagerHelper.OnDeadPlayer();
+        
+        Converter.ConvertDimension(AxisType.None);
         PlaySpawnVFX();
 
-        Converter.ConvertDimension(AxisType.None);
         SetActiveAnimation(true);
         _stateController.ChangeState(typeof(PlayerIdleState));
     }

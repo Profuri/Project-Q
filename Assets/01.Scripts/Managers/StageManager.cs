@@ -12,7 +12,11 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     {
         get
         {
-            if (CurrentStage == null) return false;
+            if (CurrentStage == null)
+            {
+                Debug.LogError($"CurrentStage is null");
+                return false;
+            }
             return CurrentStage.IsClear;
         }
     }
@@ -34,7 +38,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         _currentPlayChapterData = chapterData;
         CurrentStage = SceneControlManager.Instance.AddObject(
             $"{chapterData.chapter.ToString().ToUpperFirstChar()}_Stage_0") as Stage;
-        CurrentStage.Generate(Vector3.zero, false, 1.5f);
+        CurrentStage.Generate(Vector3.zero, false, false);
         CurrentStage.IsClear = false;
     }
 
@@ -60,7 +64,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             CurrentStage.Disappear(dissolveTime, () =>
             {
                 CurrentStage = SceneControlManager.Instance.AddObject(stageName) as Stage;
-                CurrentStage.Generate(currentPos, true, dissolveTime);
+                CurrentStage.Generate(currentPos, true, false, dissolveTime);
                 player.SetSection(CurrentStage);
                 player.useGravity = true;
                 player.ReloadUnit(dissolveTime);
@@ -95,7 +99,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             SceneControlManager.Instance.LoadScene(SceneType.Chapter);
             return;
         }
-        
+                
         GenerateNextStage(_currentPlayChapterData.chapter, nextChapter);
         CurrentStage.IsClear = true;
     }

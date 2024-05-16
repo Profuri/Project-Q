@@ -35,8 +35,10 @@ public class PlayerJumpState : PlayerOnAirState
         Player.ResetCoyoteTime();
 
         SoundManager.Instance.PlaySFX("PlayerJump",false,Player.SoundEffectPlayer);
+        
+        Player.CanAxisControl = false;
     }
-
+    
     public override void UpdateState()
     {
         var movementInput = InputManager.Instance.PlayerInputReader.movementInput;

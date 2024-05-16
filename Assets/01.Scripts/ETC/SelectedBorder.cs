@@ -1,20 +1,15 @@
 using AxisConvertSystem;
-using System.Collections;
-using System.Drawing;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SelectedBorder : PoolableMono
 {
-    [SerializeField] private float _activeTime = 0.25f;
-
     private Material _material;
 
     private readonly int _cornerSizeHash = Shader.PropertyToID("_CornerSize");
     private readonly int _activeProgressHash = Shader.PropertyToID("_ActiveProgress");
     private readonly int _alphaProgressHash = Shader.PropertyToID("_Alpha");
-
+    
+    
     private ObjectUnit _owner;
     private bool _active = false;
 
@@ -81,7 +76,6 @@ public class SelectedBorder : PoolableMono
             percent = 1f + (1f - percent);
         }
 
-
         float cornerSize = _initCornerSize * percent + offset;
 
         _material.SetFloat(_cornerSizeHash, cornerSize);
@@ -92,10 +86,10 @@ public class SelectedBorder : PoolableMono
 
     public void Activate(bool active)
     {
-        if (_active == active)
-        {
-            return;
-        }
+        // if (_active == active)
+        // {
+        //     return;
+        // }
         _active = active;
     }
     

@@ -28,8 +28,16 @@ public class TutorialObjectUnit : InteractableObject
     public override void ApplyUnitInfo(AxisType axis)
     {
         base.ApplyUnitInfo(axis);
+        
+        bool active = 
+            axis is AxisType.None;
+        Activate(active);
+    }
 
-        if(axis != AxisType.None)
+    public override void Activate(bool active)
+    {
+        activeUnit = active;
+        if (!active)
         {
             if(_tutorialMark != null)
             {
@@ -47,7 +55,7 @@ public class TutorialObjectUnit : InteractableObject
     private void LoadTutorialMark()
     {
         _tutorialMark = SceneControlManager.Instance.AddObject("TutorialMark") as TutorialMark;
-
+        
         if (_markAppearTransform != null)
         {
             _tutorialMark.transform.position = _markAppearTransform.position;
@@ -64,6 +72,10 @@ public class TutorialObjectUnit : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
+        if (Converter.AxisType != AxisType.None)
+        {
+            return;
+        }
         if (!TutorialManager.Instance.OnTutorial)
         {
             TutorialManager.Instance.SetUpTutorial(_info);
@@ -85,6 +97,10 @@ public class TutorialObjectUnit : InteractableObject
     public override void OnDetectedEnter(ObjectUnit communicator = null)
     {
         base.OnDetectedEnter();
+        if (Converter.AxisType != AxisType.None)
+        {
+            return;
+        }
         if (_tutorialMark == null)
         {
             LoadTutorialMark();
@@ -94,7 +110,12 @@ public class TutorialObjectUnit : InteractableObject
     public override void OnDetectedLeave(ObjectUnit communicator = null)
     {
         base.OnDetectedLeave();
-
+        
+        if (Converter.AxisType != AxisType.None)
+        {
+            return;
+        }
+        
         if(_tutorialMark != null)
         {
             _tutorialMark.Off();

@@ -177,7 +177,8 @@ GameObject:
   - component: {fileID: 1896438697157931204}
   - component: {fileID: 8621916602108482258}
   - component: {fileID: 6400071254100663075}
-  - component: {fileID: 4274100702920243009}
+  - component: {fileID: 5650653582196537769}
+  - component: {fileID: 9105513257902623817}
   m_Layer: 6
   m_Name: MovingPlatform
   m_TagString: Untagged
@@ -234,9 +235,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec1fa82cee6346e9960fe7612cb7d1eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5650653582196537769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3315007420719610453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa3e009ef3c94dae8e3f3b200b10f1d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   poolingCnt: 5
   poolOut: 0
   compressLayer: 1
+  renderType: 0
   climbableUnit: 0
   staticUnit: 0
   activeUnit: 1
@@ -244,8 +258,9 @@ MonoBehaviour:
   canStandMask:
     serializedVersion: 2
     m_Bits: 576
+  checkOffset: 0.2
   useGravity: 0
---- !u!54 &4274100702920243009
+--- !u!54 &9105513257902623817
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -409,6 +424,7 @@ MonoBehaviour:
   poolingCnt: 5
   poolOut: 0
   compressLayer: 1
+  renderType: 0
   climbableUnit: 0
   staticUnit: 1
   activeUnit: 1
@@ -416,6 +432,7 @@ MonoBehaviour:
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
+  checkOffset: 0.2
   useGravity: 1
   _movingAxis: 1
   _movingDistance: 7
