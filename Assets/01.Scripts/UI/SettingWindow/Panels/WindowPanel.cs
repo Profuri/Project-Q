@@ -16,12 +16,10 @@ public abstract class WindowPanel : MonoBehaviour
     public virtual void LoadPanel()
     {
         gameObject.SetActive(true);
-        CursorManager.RegisterUI(this);
     }
 
     public virtual void ReleasePanel()
     {
         gameObject.SetActive(false);
-        CursorManager.UnRegisterUI(this);
     }
 }

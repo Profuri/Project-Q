@@ -32,7 +32,6 @@ public class LaserLauncherObject : ObjectUnit
         _laserInfos = new Queue<LaserInfo>();
         _soundEffectPlayer = new SoundEffectPlayer(this);
         DisableLaser();
-
     }
 
     public override void Init(AxisConverter converter)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using InputControl;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +22,8 @@ public class UIDropdown : UIComponent
 
     private int _maxShowOptionCount;
 
+    private InputReader.InputEventListener _prevPauseEvent;
+
     public string Title
     {
         get => _titleText.text;
@@ -41,6 +44,10 @@ public class UIDropdown : UIComponent
     public override void Appear(Transform parentTrm,  Action callback = null)
     {
         base.Appear(parentTrm, callback);
+
+        _prevPauseEvent = InputManager.Instance.UIInputReader.OnPauseClickEvent;
+        InputManager.Instance.UIInputReader.OnPauseClickEvent = () => Disappear();
+        
         _options.Clear();
         _cursorIndex = 0;
         _optionOffset = 0;
@@ -56,6 +63,7 @@ public class UIDropdown : UIComponent
         InputManager.Instance.UIInputReader.OnUpArrowClickEvent -= CursorUp;
         InputManager.Instance.UIInputReader.OnDownArrowClickEvent -= CursorDown;
         InputManager.Instance.UIInputReader.OnEnterClickEvent -= EnterOption;
+        InputManager.Instance.UIInputReader.OnPauseClickEvent = _prevPauseEvent;
         
         foreach (var option in _options)
         {

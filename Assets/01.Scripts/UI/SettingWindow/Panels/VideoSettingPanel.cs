@@ -21,7 +21,7 @@ public class VideoSettingPanel : WindowPanel
         
         var dropdown = UIManager.Instance.GenerateUI("DropdownPanel") as UIDropdown;
         dropdown.Title = "RESOLUTION";
-
+        
         for (var i = 0; i < VideoManager.Instance.ResolutionList.Count; i++)
         {
             var resolution = VideoManager.Instance.ResolutionList[i];
@@ -113,6 +113,8 @@ public class VideoSettingPanel : WindowPanel
     public override void ReleasePanel()
     {
         base.ReleasePanel();
+        
+        
         DataManager.Instance.LoadData(VideoManager.Instance);
         SettingUI(DataManager.sSaveData);
     }
