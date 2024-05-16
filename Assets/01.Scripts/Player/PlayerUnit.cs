@@ -102,20 +102,16 @@ public class PlayerUnit : ObjectUnit
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
     {
-        SoundManager.Instance.PlaySFX("PlayerDead");
-        Converter.ConvertDimension(AxisType.None);
-
         base.ReloadUnit(dissolveTime, () =>
         {
             callBack?.Invoke();
             InputManagerHelper.OnRevivePlayer();
         });
-        
         InputManagerHelper.OnDeadPlayer();
-        
-        Converter.ConvertDimension(AxisType.None);
-        PlaySpawnVFX();
 
+        SoundManager.Instance.PlaySFX("PlayerDead");
+        PlaySpawnVFX();
+        Converter.ConvertDimension(AxisType.None);
         SetActiveAnimation(true);
         _stateController.ChangeState(typeof(PlayerIdleState));
     }

@@ -19,7 +19,7 @@ namespace AxisConvertSystem
         [HideInInspector] public float checkOffset = 0.2f; 
         [HideInInspector] public bool useGravity = true;
 
-        protected UnitInfo OriginUnitInfo;
+        public UnitInfo OriginUnitInfo;
         protected UnitInfo UnitInfo;
         public UnitInfo ConvertedInfo;
 
