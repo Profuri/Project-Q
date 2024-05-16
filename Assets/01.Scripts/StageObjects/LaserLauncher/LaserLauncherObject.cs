@@ -11,6 +11,7 @@ public class LaserLauncherObject : ObjectUnit
     [SerializeField] private LayerMask _obstacleMask;
 
     [SerializeField] private float _laserDistance;
+    public float RemainDistance { get; private set; }
     
     [Header("Breath Setting")] 
     [SerializeField] private bool _isBreath;
@@ -37,7 +38,7 @@ public class LaserLauncherObject : ObjectUnit
     public override void Init(AxisConverter converter)
     {
         base.Init(converter);
-
+        
         if (_isBreath)
         {
             StartCoroutine(LaunchRoutine());
@@ -51,8 +52,7 @@ public class LaserLauncherObject : ObjectUnit
     public override void UpdateUnit()
     {
         base.UpdateUnit();
-
-
+        
         bool isClear = StageManager.Instance.IsClear;
         if(isClear)
         {
@@ -64,7 +64,7 @@ public class LaserLauncherObject : ObjectUnit
             Launch();
         }
     }
-
+    
     private IEnumerator LaunchRoutine()
     {
         var waitForRefresh = new WaitForSeconds(_refreshDelay);
@@ -98,8 +98,9 @@ public class LaserLauncherObject : ObjectUnit
     {
         var cnt = _laserInfos.Count * 2;
         _laserRenderer.positionCount = cnt;
-        AddLaser(new LaserInfo{ origin = Collider.bounds.center + transform.forward * _shotPointTrm.localPosition.z, dir = transform.forward });
-
+        RemainDistance = _laserDistance;
+        AddLaser(new LaserInfo{ origin = Collider.bounds.center + transform.forward * _shotPointTrm.localPosition.z, power = transform.forward * _laserDistance });
+        
         for (var i = 0; i < cnt; i += 2)
         {
             var info = _laserInfos.Peek();
@@ -112,7 +113,7 @@ public class LaserLauncherObject : ObjectUnit
             }
             else
             {
-                _laserRenderer.SetPosition(i + 1, info.origin + info.dir * _laserDistance);
+                _laserRenderer.SetPosition(i + 1, info.origin + info.power);
             }
             
             _laserInfos.Dequeue();
@@ -127,7 +128,8 @@ public class LaserLauncherObject : ObjectUnit
         {
             if (interactable.Attribute.HasFlag(EInteractableAttribute.AFFECTED_FROM_LASER))
             {
-                interactable.OnInteraction(this, interactValue, hit.point, hit.normal, lastLaser.dir);
+                var rayDistance = hit.distance;
+                interactable.OnInteraction(this, interactValue, hit.point, hit.normal, lastLaser.power, rayDistance);
                 return;
             }
         }
@@ -145,7 +147,7 @@ public class LaserLauncherObject : ObjectUnit
     {
         return Physics.Raycast(
             info.origin,
-            info.dir,
+            info.power,
             out hit,
             _laserDistance,
             _obstacleMask
@@ -155,6 +157,11 @@ public class LaserLauncherObject : ObjectUnit
     public void AddLaser(LaserInfo info)
     {
         _laserInfos.Enqueue(info);
+    }
+
+    public void SubtractDistance(float distance)
+    {
+        RemainDistance = Mathf.Clamp(RemainDistance - distance, 0f, _laserDistance);
     }
     
 #if UNITY_EDITOR
