@@ -46,7 +46,8 @@ public class PlayerUnit : ObjectUnit
     }
 
     public bool CanJump => OnGround || IsCoyote;
-
+    public bool CanAxisControl { get; set; } = true;
+    
     public void StartCoyoteTime()
     {
         _coyoteTime = Time.time;
@@ -76,6 +77,8 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
 
         SoundEffectPlayer = new SoundEffectPlayer(this);
+
+        CanAxisControl = true;
     }
 
     public override void UpdateUnit()
@@ -99,19 +102,16 @@ public class PlayerUnit : ObjectUnit
 
     public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
     {
-        SoundManager.Instance.PlaySFX("PlayerDead");
-        Converter.ConvertDimension(AxisType.None);
-
         base.ReloadUnit(dissolveTime, () =>
         {
             callBack?.Invoke();
             InputManagerHelper.OnRevivePlayer();
         });
-        
         InputManagerHelper.OnDeadPlayer();
-        PlaySpawnVFX();
 
         Converter.ConvertDimension(AxisType.None);
+        SoundManager.Instance.PlaySFX("PlayerDead");
+        PlaySpawnVFX();
         SetActiveAnimation(true);
         _stateController.ChangeState(typeof(PlayerIdleState));
     }

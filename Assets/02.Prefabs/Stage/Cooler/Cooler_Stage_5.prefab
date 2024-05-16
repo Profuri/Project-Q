@@ -278,6 +278,7 @@ MonoBehaviour:
   poolingCnt: 5
   poolOut: 0
   compressLayer: 1
+  offset: 0
   renderType: 0
   climbableUnit: 0
   staticUnit: 1
@@ -525,6 +526,7 @@ MonoBehaviour:
   poolingCnt: 5
   poolOut: 0
   compressLayer: 1
+  offset: 0
   renderType: 0
   climbableUnit: 0
   staticUnit: 1
@@ -797,6 +799,7 @@ MonoBehaviour:
   poolingCnt: 5
   poolOut: 0
   compressLayer: 1
+  offset: 0
   renderType: 0
   climbableUnit: 0
   staticUnit: 1
@@ -941,6 +944,7 @@ MonoBehaviour:
   poolingCnt: 5
   poolOut: 0
   compressLayer: 1
+  offset: 0
   renderType: 0
   climbableUnit: 1
   staticUnit: 0
@@ -1482,6 +1486,7 @@ MonoBehaviour:
   _enterPoint: {x: 0, y: -1, z: -6}
   _exitPoint: {x: 5.5, y: -1, z: -2}
   _playerResetPoint: {x: 0, y: -0.5, z: -4}
+  _playerResetPointInClear: {x: 0, y: 0, z: 0}
   _sectionData: {fileID: 11400000, guid: 02306878c371648a48d518abc435a287, type: 2}
   _setPlayerFollowCam: 1
   _chapter: 2
@@ -3389,6 +3394,7 @@ MonoBehaviour:
   poolingCnt: 5
   poolOut: 0
   compressLayer: 1
+  offset: 0
   renderType: 0
   climbableUnit: 0
   staticUnit: 1
@@ -4257,6 +4263,11 @@ PrefabInstance:
     - target: {fileID: 9051760982490156419, guid: 304d04c8bbe3da1468dc7cf2e2680b0e,
         type: 3}
       propertyPath: _affectedObjects.Array.data[0].InteractableObject
+      value: 
+      objectReference: {fileID: 2861047832348016847}
+    - target: {fileID: 9051760982490156419, guid: 304d04c8bbe3da1468dc7cf2e2680b0e,
+        type: 3}
+      propertyPath: _affectedObjects.Array.data[0].interactableObject
       value: 
       objectReference: {fileID: 2861047832348016847}
     m_RemovedComponents: []
@@ -5858,6 +5869,11 @@ PrefabInstance:
         type: 3}
       propertyPath: staticUnit
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330861601001660856, guid: f7ec77ea9682a2048863ca537a74b640,
+        type: 3}
+      propertyPath: _bouncePower
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 5330861601001660856, guid: f7ec77ea9682a2048863ca537a74b640,
         type: 3}

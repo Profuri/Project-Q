@@ -1,6 +1,5 @@
 using AxisConvertSystem;
 using InteractableSystem;
-using UnityEngine;
 
 public class QuitButton : InteractableObject
 {

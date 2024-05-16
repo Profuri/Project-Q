@@ -12,7 +12,11 @@ public class Section : PoolableMono
     [SerializeField] private Vector3 _enterPoint;
     [SerializeField] private Vector3 _exitPoint;
     [SerializeField] private Vector3 _playerResetPoint;
+    [SerializeField] private Vector3 _playerResetPointInClear;
+    
     public Vector3 PlayerResetPoint => _playerResetPoint;
+    public Vector3 PlayerResetPointInClear => _playerResetPointInClear;
+    
     [SerializeField] private SectionData _sectionData;
     public SectionData SectionData => _sectionData;
 
@@ -55,15 +59,19 @@ public class Section : PoolableMono
         }
     }
 
-    public void Generate(Vector3 position, bool moveRoutine = true, float dissolveTime = 1.5f, Action Callback = null)
+    public void Generate(Vector3 position, bool playDissolve = true, bool moveRoutine = true, float dissolveTime = 1.5f, Action Callback = null)
     {
         ReloadSectionUnits();
         CenterPosition = position;
         transform.position = CenterPosition;
 
-        if (moveRoutine)
+        if (playDissolve)
         {
             Dissolve(true, dissolveTime);
+        }
+
+        if (moveRoutine)
+        {
             transform.position = position - Vector3.up * _sectionData.sectionYDepth;
             Sequence seq = DOTween.Sequence();
             seq.Append(transform.DOMove(CenterPosition, 3f));
@@ -209,6 +217,9 @@ public class Section : PoolableMono
         
         Gizmos.color = new Color(0, 1, 0, 0.75f);
         Gizmos.DrawSphere(_playerResetPoint, 0.3f);
+        
+        Gizmos.color = new Color(1, 1, 0, 0.75f);
+        Gizmos.DrawSphere(_playerResetPointInClear, 0.3f);
     }
 #endif
 }

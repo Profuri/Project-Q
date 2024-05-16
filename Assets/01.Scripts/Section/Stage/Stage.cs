@@ -1,8 +1,6 @@
 using UnityEngine;
-using AxisConvertSystem;
 using System;
 using DG.Tweening;
-using UnityEngine.InputSystem.Haptics;
 
 public class Stage : Section
 {
@@ -11,19 +9,7 @@ public class Stage : Section
     [SerializeField] private int _stageOrder;
     public int StageOrder => _stageOrder;
 
-    public bool IsClear
-    {
-        get => _isClear;
-        set
-        {
-            _isClear = value;
-            if(value)
-            {
-                StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_CLEAR,_chapter,StageOrder);
-            }
-        }
-    }
-    private bool _isClear = false;
+    public bool IsClear { get; set; } = false;
 
     public override void OnPop()
     {
@@ -62,13 +48,13 @@ public class Stage : Section
         {
             StageManager.Instance.ChangeToNextStage();
         }
-        StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_ENTER, _chapter, StageOrder);
+        StoryManager.Instance.StartStoryIfCan(StoryAppearType.STAGE_ENTER, _chapter, StageOrder);
     }
 
     public override void OnExit(PlayerUnit player)
     {
         base.OnExit(player);
-        StoryManager.Instance.StartStoryIfCan(ChapterCondition.CHAPTER_EXIT,_chapter, StageOrder);
+        StoryManager.Instance.StartStoryIfCan(StoryAppearType.STAGE_EXIT,_chapter, StageOrder);
     }
 
     public override void Disappear(float dissolveTime = 1.5f, Action Callback = null)

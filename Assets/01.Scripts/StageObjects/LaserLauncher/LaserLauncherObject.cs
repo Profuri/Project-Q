@@ -126,7 +126,7 @@ public class LaserLauncherObject : ObjectUnit
         
         if (col.TryGetComponent<InteractableObject>(out var interactable))
         {
-            if (interactable.Attribute.HasFlag(EInteractableAttribute.AFFECTED_FROM_LASER))
+            if (interactable.Attribute.HasFlag(EInteractableAttribute.AFFECTED_FROM_LASER) || (interactable.Collider.excludeLayers & (1 << gameObject.layer)) == 0)
             {
                 var rayDistance = hit.distance;
                 interactable.OnInteraction(this, interactValue, hit.point, hit.normal, lastLaser.power, rayDistance);
@@ -136,7 +136,7 @@ public class LaserLauncherObject : ObjectUnit
         
         if (col.TryGetComponent<ObjectUnit>(out var unit))
         {
-            if (!unit.staticUnit)
+            if (!unit.staticUnit || (unit.Collider.excludeLayers & (1 << gameObject.layer)) == 0)
             {
                 unit.ReloadUnit();
             }

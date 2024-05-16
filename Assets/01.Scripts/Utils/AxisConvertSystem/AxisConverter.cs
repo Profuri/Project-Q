@@ -17,9 +17,7 @@ namespace AxisConvertSystem
         private Section _section;
 
         private bool _cancelConvert;
-
-        public event Action OnSettingApplyInfoAll;
-
+        
         public void Init(Section section)
         {
             AxisType = AxisType.None;
@@ -27,7 +25,8 @@ namespace AxisConvertSystem
             SetConvertable(section is Stage);
             section.SectionUnits.ForEach(unit => unit.Init(this));
         }
-
+        
+        
         public void SetConvertable(bool convertable)
         {
             Convertable = convertable;
@@ -35,13 +34,15 @@ namespace AxisConvertSystem
 
         public void ConvertDimension(AxisType nextAxis, Action callback = null)
         {
-            if (!Convertable)
+            Stage stage = StageManager.Instance.CurrentStage;
+            if (!Convertable || stage is null  || stage.IsClear)
             {
                 return;
             }
-
+            
             _cancelConvert = false;
             Convertable = false;
+            
             
             foreach (var unit in _section.SectionUnits)
             {
@@ -58,7 +59,7 @@ namespace AxisConvertSystem
                     var frontUnit = front.collider ? front.collider.GetComponent<ObjectUnit>() : null;
                     if (frontUnit is IPassable { PassableLastAxis: true })
                     {
-                        CancelChangeAxis(AxisType, frontUnit, null, () =>
+                        CancelChangeAxis(AxisType, frontUnit, null, () => 
                         {
                             Convertable = true;
                             callback?.Invoke();
@@ -69,7 +70,7 @@ namespace AxisConvertSystem
                 SoundManager.Instance.PlaySFX("AxisControl");
                 ChangeAxis(nextAxis);
             }
-
+            
             if (CameraManager.Instance.CurrentCamController is SectionCamController)
             {
                 ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(nextAxis, () =>
@@ -97,7 +98,11 @@ namespace AxisConvertSystem
                         SoundManager.Instance.PlaySFX("AxisControl");
                         ChangeAxis(nextAxis);
                     }
-                    
+
+                    foreach (var obj in _section.SectionUnits)
+                    {
+                        obj.OnCameraSetting(nextAxis);
+                    }
                     Convertable = true;
                     callback?.Invoke();
                 });
@@ -165,7 +170,6 @@ namespace AxisConvertSystem
             foreach (var unit in _section.SectionUnits) unit.IntersectedUnits.Clear();
             foreach (var unit in _section.SectionUnits) unit.DepthHandler.CalcDepth(nextAxis);
             foreach (var unit in _section.SectionUnits) unit.ApplyUnitInfo(nextAxis);
-            OnSettingApplyInfoAll?.Invoke();
             foreach (var unit in _section.SectionUnits) unit.ApplyDepth();
 
             AxisType = nextAxis;

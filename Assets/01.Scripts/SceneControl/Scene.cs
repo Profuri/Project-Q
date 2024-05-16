@@ -62,8 +62,8 @@ public class Scene : PoolableMono
             return;
         }
         
-        Player = AddObject("Player") as PlayerUnit;
         InputManager.Instance.SetEnableInputAll(false);
+        Player = AddObject("Player") as PlayerUnit;
         Player.transform.localPosition = initSection.PlayerResetPoint;
 
         Player.ModelTrm.localPosition += Vector3.up * 5;
@@ -73,8 +73,11 @@ public class Scene : PoolableMono
             var landParticle = SceneControlManager.Instance.AddObject("PlayerLandParticle") as PoolableParticle;
             landParticle.SetPositionAndRotation(Player.transform.position, Quaternion.identity);
             landParticle.Play();
-            InputManager.Instance.SetEnableInputAll(true);
             SoundManager.Instance.PlaySFX("PlayerAfterJump");
+            if (!StoryManager.Instance.IsPlay)
+            {
+                InputManager.Instance.SetEnableInputAll(true);
+            }
         });
     }
 
