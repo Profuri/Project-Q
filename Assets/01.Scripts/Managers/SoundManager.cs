@@ -4,6 +4,7 @@ using ManagingSystem;
 using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 public enum SoundEnum
 {
@@ -21,17 +22,31 @@ public enum EAUDIO_MIXER
 
 public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoad
 {
-    [SerializeField] private AudioClipSO _audioClipSO;
-    public AudioClipSO AudioClipSO => _audioClipSO;
-    [SerializeField] private AudioClipSO _bgmClipSO;
-    private AudioSource _audioSource;
+    #region Inspector Settings
 
+    [SerializeField] private float _defaultVolume = 1f;
+    [SerializeField] private float _defaultBGMVolume = 0.7f;
+
+    [SerializeField] private AudioClipSO _audioClipSO;
+    [SerializeField] private AudioClipSO _bgmClipSO;
+    [SerializeField] private RandomAudioClipSO _stageClipSO;
+    [SerializeField] private RandomAudioClipSO _chapterClipSO;
+    [SerializeField] private RandomAudioClipSO _titleClipSO;
+    [SerializeField] private RandomAudioClipSO _cpuClipSO;
+    #endregion
+    
+
+    private RandomAudioClipSO _currentAudioClipSO;
+    
+    private AudioSource _audioSource;
+    
+    
+#region AudioMixer
     [SerializeField] private AudioMixer _masterMixer;
     [SerializeField] private AudioMixerGroup _bgmGroup;
     [SerializeField] private AudioMixerGroup _sfxGroup;
     public AudioMixerGroup SfxGroup => _sfxGroup;
-
-    [SerializeField] private float _defaultVolume = 0f;
+#endregion
 
     public float soundFadeOnTime;
 
@@ -47,6 +62,11 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
         }
     }
 
+    private Dictionary<SceneType, RandomAudioClipSO> _BGMAudioDictionary =
+        new Dictionary<SceneType, RandomAudioClipSO>();
+
+    private Coroutine _keyFrameCoroutine;
+    
     public override void Init()
     {
         base.Init();
@@ -57,8 +77,15 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
             _audioSources[i] = go.AddComponent<AudioSource>();
             _audioSources[i].playOnAwake = false;
             _audioSources[i].outputAudioMixerGroup = (soundNames[i] == "BGM" ? _bgmGroup : _sfxGroup);
+            _audioSources[i].loop = false;
             go.transform.SetParent(transform);
         }
+
+        _audioSources[(int)SoundEnum.BGM].volume = _defaultBGMVolume;
+
+        _BGMAudioDictionary.Add(SceneType.Chapter,_chapterClipSO);
+        _BGMAudioDictionary.Add(SceneType.Stage,  _stageClipSO);
+        _BGMAudioDictionary.Add(SceneType.Title,  _titleClipSO);
         
         _audioSources[(int)SoundEnum.BGM].loop = true;
     }
@@ -66,7 +93,42 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     public override void StartManager()
     {
         DataManager.Instance.SettingDataProvidable(this, this);
-        //DataManager.Instance.LoadData(this);
+    }
+
+    private IEnumerator AudioKeyFrameRoutine(SceneType sceneType)
+    {
+        AudioSource audioSource = _audioSources[(int)SoundEnum.BGM];
+        while (audioSource.isPlaying == true)
+        {
+            yield return null;
+        }
+        PlayCorrectBGM(sceneType);
+    }
+
+    public void PlayCorrectBGM(SceneType sceneType,bool isCpu = false)
+    {
+        if (_BGMAudioDictionary.ContainsKey(sceneType))
+        {
+            if (_currentAudioClipSO != null)
+            {
+                Destroy(_currentAudioClipSO);
+            }
+
+            if (isCpu)
+                _currentAudioClipSO = Instantiate(_cpuClipSO);
+            else
+                _currentAudioClipSO = Instantiate(_BGMAudioDictionary[sceneType]);
+
+            var clip  = _currentAudioClipSO.GetRandomClip();
+            
+            PlayBGM(clip.name);
+
+            if (_keyFrameCoroutine != null)
+            {
+                StopCoroutine(_keyFrameCoroutine);
+            }
+            _keyFrameCoroutine = StartCoroutine(AudioKeyFrameRoutine(sceneType));
+        }
     }
     
     public void PlaySFX(string clipName,bool loop = false, SoundEffectPlayer soundEffectPlayer = null)
@@ -74,7 +136,7 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
         AudioClip clip = _audioClipSO.GetAudioClip(clipName);
         Play(clip, SoundEnum.EFFECT,loop, soundEffectPlayer);
     }
-
+    
     public void PlayBGM(string clipName)
     {
         AudioClip clip = _bgmClipSO.GetAudioClip(clipName);
@@ -121,7 +183,8 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
         foreach (var audioSource in _audioSources)
         {
             audioSource.clip = null;
-            audioSource.Stop();
+            StopAllCoroutines();
+            StartCoroutine(SoundFade(true, audioSource, 0.5f, 0f, SoundEnum.BGM));
         }
     }
     
@@ -129,6 +192,7 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     {
         _masterMixer.SetFloat(type.ToString().ToLower(), mute ? -80 : 0);
     }
+    
     
     IEnumerator SoundFade(bool fadeIn, AudioSource source, float duration, float endVolume, SoundEnum type)
     {

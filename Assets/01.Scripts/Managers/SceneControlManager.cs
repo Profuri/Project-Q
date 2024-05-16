@@ -22,13 +22,14 @@ public class SceneControlManager : BaseManager<SceneControlManager>
     public void LoadScene(SceneType type, Action onSceneCreate = null, Action onLoadedCallback = null, bool loading = true)
     {
         if (_currentCanvas != null) return;
-
+        
         _currentCanvas = PoolManager.Instance.Pop("SceneTransitionCanvas") as SceneTransitionCanvas;
         CursorManager.ClearUIHash();
         CursorManager.ReloadCursor();
 
         _currentCanvas.PresentTransition(0.0f, 1.0f, _fadeTime, () =>
         {
+            SoundManager.Instance.Stop();
             if (CurrentScene is not null)
             {
                 PoolManager.Instance.Push(CurrentScene);
@@ -47,7 +48,7 @@ public class SceneControlManager : BaseManager<SceneControlManager>
             {
                 TimelineManager.Instance.AllTimelineEnd += CurrentScene.CreatePlayer;
             }
-
+            
             //위에 함수가 전부다 정상 작동 했을 경우 밑에 있는 것을 실행시켜주어야 함
             _currentCanvas.PauseTransition(_loadingTime, () =>
             {
@@ -55,6 +56,8 @@ public class SceneControlManager : BaseManager<SceneControlManager>
                 {
                     StoryManager.Instance.StartStoryIfCan(StoryAppearType.SCENE_ENTER, type);
                     onLoadedCallback?.Invoke();
+                    
+                    SoundManager.Instance.PlayCorrectBGM(type);
                     PoolManager.Instance.Push(_currentCanvas);
                     _currentCanvas = null;
                 });

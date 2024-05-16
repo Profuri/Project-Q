@@ -61,6 +61,7 @@ public class PauseWindow : UIComponent
           if (_settingWindow is not null && _settingWindow.poolOut)
           {
                _settingWindow.Disappear();
+               _settingWindow = null;
           }
           else
           {

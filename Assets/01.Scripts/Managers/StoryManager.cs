@@ -8,7 +8,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
     private MessageWindow _messagePanel;
     public bool IsPlay => _messagePanel is not null;
 
-    [SerializeField] private List<StoryInfo> _storyList = new List<StoryInfo>();
+    [SerializeField] private List<ChapterStory> _storyList = new List<ChapterStory>();
 
     public override void StartManager()
     {
