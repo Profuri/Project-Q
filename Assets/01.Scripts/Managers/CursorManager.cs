@@ -4,10 +4,10 @@ using UnityEngine;
 
 public static class CursorManager
 {
-    private static HashSet<UIComponent> _uiHashSet = new HashSet<UIComponent>();
+    private static HashSet<MonoBehaviour> _uiHashSet = new HashSet<MonoBehaviour>();
     public static int CurrentCnt => _uiHashSet.Count;
 
-    public static void RegisterUI(UIComponent component)
+    public static void RegisterUI(MonoBehaviour component)
     {
         if (_uiHashSet.Contains(component)) return;
 
@@ -15,7 +15,7 @@ public static class CursorManager
         ReloadCursor();
     }
 
-    public static void UnRegisterUI(UIComponent component)
+    public static void UnRegisterUI(MonoBehaviour component)
     {
         if(_uiHashSet.Contains(component))
         {

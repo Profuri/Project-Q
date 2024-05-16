@@ -8,6 +8,28 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
     private MessageWindow _messagePanel;
 
     [SerializeField] private List<StoryInfo> _storyList = new List<StoryInfo>();
+    [HideInInspector] public bool isShown;
+
+    public StorySO storySO;
+
+    [SerializeField] private List<ChapterStory> _storyList = new List<ChapterStory>();
+
+    
+    private Tuple<ChapterStory,int> GetStory(ChapterCondition condition,ChapterType chapterType,int stageIndex = 7)
+    {
+        bool Predicate(ChapterStory cs)
+        {
+            return cs.stageIndex == stageIndex && cs.chapterType == chapterType && cs.condition == condition;
+        }
+        
+        int index = _storyList.FindIndex(0, _storyList.Count, Predicate);
+        if (index != -1 && !_storyList[index].isShown)
+        {
+            return Tuple.Create(_storyList[index],index);
+        }
+        
+        return null;
+    }
 
     public override void StartManager()
     {

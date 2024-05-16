@@ -35,7 +35,8 @@ public class Chapter : InteractableObject
         {
             return;
         }
-
+        
+        
         SceneControlManager.Instance.LoadScene(SceneType.Stage, 
             () =>
             { 
@@ -45,6 +46,7 @@ public class Chapter : InteractableObject
             () =>
             {
                 var chapterInfoPanel = UIManager.Instance.GenerateUI("ChapterInfoPanel") as ChapterInfoPanel;
+                SoundManager.Instance.PlayCorrectBGM(SceneType.Stage,Data.chapter == ChapterType.Cpu);
                 chapterInfoPanel.SetPosition(new Vector3(0, 0));
                 chapterInfoPanel.SetUp(Data.chapter);
             }

@@ -32,7 +32,7 @@ public class SaveData
     public List<bool> StoryShowList;
 
     public bool DefaultFullScreen;
-    public QualityType DefaultQuality;
+    public QualityType DefaultQuality = QualityType.High;
     public uint ResolutionIndex;
 
     public string KeyBinding;
