@@ -45,6 +45,7 @@ public class PlayerAxisControlState : PlayerBaseState
 
     public override void UpdateState()
     {
+        Player.StopImmediately(false);
         CalcCurrentControlAxis();
         LightManager.Instance.SetAxisLight(_controllingAxis);
     }
