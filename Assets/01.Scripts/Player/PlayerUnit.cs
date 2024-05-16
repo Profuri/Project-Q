@@ -109,9 +109,9 @@ public class PlayerUnit : ObjectUnit
         });
         InputManagerHelper.OnDeadPlayer();
 
+        Converter.ConvertDimension(AxisType.None);
         SoundManager.Instance.PlaySFX("PlayerDead");
         PlaySpawnVFX();
-        Converter.ConvertDimension(AxisType.None);
         SetActiveAnimation(true);
         _stateController.ChangeState(typeof(PlayerIdleState));
     }
