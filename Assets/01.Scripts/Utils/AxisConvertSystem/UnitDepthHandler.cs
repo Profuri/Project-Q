@@ -66,7 +66,6 @@ namespace AxisConvertSystem
                 var isDynamic = !unit.staticUnit;
                 if (!isDynamic && _depthCheckPoint[axis].Block(unit.DepthHandler._depthCheckPoint[axis]))
                 {
-                    Debug.Log($"{_owner.gameObject.name} {unit.gameObject.name}");
                     Depth = 0f;
                     break;
                 }

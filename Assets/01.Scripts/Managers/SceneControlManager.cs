@@ -38,20 +38,14 @@ public class SceneControlManager : BaseManager<SceneControlManager>
             
             onSceneCreate?.Invoke();
             CurrentScene.onLoadScene?.Invoke();
-            InputManager.Instance.SetEnableInputAll(false);
             
             if(!TimelineManager.Instance.IsPlay)
             {
                 CurrentScene.CreatePlayer();
-                InputManager.Instance.SetEnableInputAll(true);
             }
             else
             {
-                TimelineManager.Instance.AllTimelineEnd += () =>
-                {
-                    CurrentScene.CreatePlayer();
-                    InputManager.Instance.SetEnableInputAll(true);
-                };
+                TimelineManager.Instance.AllTimelineEnd += CurrentScene.CreatePlayer;
             }
 
             //위에 함수가 전부다 정상 작동 했을 경우 밑에 있는 것을 실행시켜주어야 함

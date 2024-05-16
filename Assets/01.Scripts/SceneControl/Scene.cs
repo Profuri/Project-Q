@@ -62,8 +62,8 @@ public class Scene : PoolableMono
             return;
         }
         
-        Player = AddObject("Player") as PlayerUnit;
         InputManager.Instance.SetEnableInputAll(false);
+        Player = AddObject("Player") as PlayerUnit;
         Player.transform.localPosition = initSection.PlayerResetPoint;
 
         Player.ModelTrm.localPosition += Vector3.up * 5;

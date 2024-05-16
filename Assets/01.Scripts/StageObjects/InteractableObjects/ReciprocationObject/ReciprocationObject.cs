@@ -21,30 +21,26 @@ public class ReciprocationObject : InteractableObject
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
     }
 
-    public override void ApplyUnitInfo(AxisType axis)
-    {
-        base.ApplyUnitInfo(axis);
-    }
-
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         var curPos = transform.localPosition;  
         var destPos = interactValue ? _destPos : _originPos;
+        var destPosOnConvert = destPos;
 
         if (!subUnit)
         {
             var layerDepth = (float)compressLayer * Vector3ExtensionMethod.GetAxisDir(Converter.AxisType).GetAxisElement(Converter.AxisType);
-            destPos.SetAxisElement(Converter.AxisType, layerDepth);
+            destPosOnConvert.SetAxisElement(Converter.AxisType, layerDepth);
         }
 
-        if (Vector3.Distance(curPos, destPos) <= 0.01f)
+        if (Vector3.Distance(curPos, destPosOnConvert) <= 0.01f)
         {
-            transform.localPosition = destPos;
+            transform.localPosition = destPosOnConvert;
             InterEnd = true;
             return;
         }
         
-        var lerpPos = Vector3.Lerp(curPos, destPos, _reciprocationSpeed * Time.deltaTime);
+        var lerpPos = Vector3.Lerp(curPos, destPosOnConvert, _reciprocationSpeed * Time.deltaTime);
 
         transform.localPosition = lerpPos;
         
