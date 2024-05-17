@@ -4,9 +4,12 @@ using UnityEngine;
 
 public abstract class WindowPanel : MonoBehaviour
 {
+    protected SettingWindow _settingWindow;
+    
     public virtual void Init(SettingWindow settingWindow)
     {
         gameObject.SetActive(false);
+        _settingWindow = settingWindow;
     }
     
 

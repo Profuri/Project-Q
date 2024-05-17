@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections;
-using DG.Tweening;
 
 public class SceneTransitionCanvas : PoolableMono
 {

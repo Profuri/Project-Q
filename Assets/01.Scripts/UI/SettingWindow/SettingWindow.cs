@@ -37,7 +37,6 @@ public class SettingWindow : UIComponent
         }
     }
 
-
     public override void Appear(Transform parentTrm, Action callback = null)
     {
         _currentPanel?.ReleasePanel();
@@ -59,8 +58,13 @@ public class SettingWindow : UIComponent
 
     public override void Disappear(Action callback = null)
     {
-        base.Disappear(callback);
+        _currentPanel?.ReleasePanel();
+        _currentPanel = _panels[(int)SettingType.None];
+        _currentPanel.LoadPanel();
+        
         CursorManager.UnRegisterUI(this);
+        
+        base.Disappear(callback);
     }
     
     [VisibleEnum(typeof(SettingType))]

@@ -42,8 +42,7 @@ namespace AxisConvertSystem
             
             _cancelConvert = false;
             Convertable = false;
-            
-            
+
             foreach (var unit in _section.SectionUnits)
             {
                 if (unit is IPassable passable)
@@ -83,6 +82,7 @@ namespace AxisConvertSystem
                         HandleAxisConversionFailure(nextAxis, frontUnit, backUnit, () =>
                         {
                             Convertable = true;
+                            AxisType = nextAxis;
                             Player.Converter.ConvertDimension(AxisType.None);
                             callback?.Invoke();
                         });

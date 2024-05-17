@@ -6,9 +6,9 @@ using UnityEngine;
 
 public enum QualityType
 {
-    Low = 0,
+    High = 0,
     Medium = 1,
-    High = 2
+    Low = 2,
 }
 
 public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
@@ -47,7 +47,7 @@ public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
             }
             else
             {
-                    ResolutionList.Add(resolution);
+                ResolutionList.Add(resolution);
             }
         }
 
@@ -69,7 +69,7 @@ public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
         var resolution = ResolutionList[correctIndex];
         var width = resolution.width;
         var height = resolution.height;
-
+        
         Screen.SetResolution(width, height, Screen.fullScreen);
         CameraManager.Instance.FixedCameraRectWithResolution(width, height);
     }
@@ -82,7 +82,8 @@ public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
 
     public void SetQuality(QualityType type)
     {
-        QualitySettings.SetQualityLevel((int)type);
+        int qualityType = (int)QualityType.Low - (int)type;
+        QualitySettings.SetQualityLevel(qualityType);
         _quality = type;
     }
 
