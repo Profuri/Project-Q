@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -569,6 +570,17 @@ namespace AxisConvertSystem
             }
 
             return false;
+        }
+
+        public bool IsChildUnit(ObjectUnit checkUnit)
+        {
+            if (subUnit)
+            {
+                return false;
+            }
+
+            var children = transform.GetComponentsInChildren<ObjectUnit>().ToList();
+            return children.Contains(checkUnit);
         }
 
         public ObjectUnit GetParentUnit()
