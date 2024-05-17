@@ -60,6 +60,11 @@ public class PictureUnit : ObjectUnit, IPassable
 
     public override void ApplyDepth()
     {
+        if (!activeUnit)
+        {
+            return;
+        }
+        
         PassableLastAxis = PassableAfterAxis;
         Hide(Converter.AxisType == AxisType.None && PassableAfterAxis);
     }
