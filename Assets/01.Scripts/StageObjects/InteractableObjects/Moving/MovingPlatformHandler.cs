@@ -44,6 +44,13 @@ public class MovingPlatformHandler : MonoBehaviour
                 _owner.ConvertedInfo.ColliderCenter.GetAxisElement(_track.MovingAxis) - transform.localPosition.GetAxisElement(_track.MovingAxis)
             );
         }
+        else if (axis == AxisType.Y)
+        {
+            _owner.ConvertedInfo.ColliderCenter.SetAxisElement(
+                AxisType.Y,
+                _owner.ConvertedInfo.ColliderCenter.GetAxisElement(AxisType.Y) - transform.localPosition.GetAxisElement(AxisType.Y)    
+            );
+        }
     }
 
     private void ApplyUnitInfoHandle(AxisType axis)
