@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -20,7 +21,7 @@ namespace AxisConvertSystem
         [HideInInspector] public bool useGravity = true;
 
         public UnitInfo OriginUnitInfo;
-        protected UnitInfo UnitInfo;
+        public UnitInfo UnitInfo;
         public UnitInfo ConvertedInfo;
 
         public AxisConverter Converter { get; protected set; }
@@ -569,6 +570,17 @@ namespace AxisConvertSystem
             }
 
             return false;
+        }
+
+        public bool IsChildUnit(ObjectUnit checkUnit)
+        {
+            if (subUnit)
+            {
+                return false;
+            }
+
+            var children = transform.GetComponentsInChildren<ObjectUnit>().ToList();
+            return children.Contains(checkUnit);
         }
 
         public ObjectUnit GetParentUnit()
