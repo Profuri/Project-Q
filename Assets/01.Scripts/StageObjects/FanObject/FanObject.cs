@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
@@ -27,6 +28,7 @@ public class FanObject : InteractableObject
 
     private bool _enabled;
 
+    private List<ObjectUnit> _lastAffectedUnits;
     private List<ObjectUnit> _affectedUnits;
 
     private SoundEffectPlayer _soundEffectPlayer;
@@ -37,6 +39,7 @@ public class FanObject : InteractableObject
         _fanTrm = model.Find("Fan");
         _airParticle = _fanTrm.Find("AirParticle").GetComponent<ParticleSystem>();
 
+        _lastAffectedUnits = new List<ObjectUnit>();
         _affectedUnits = new List<ObjectUnit>();
 
         _soundEffectPlayer = new SoundEffectPlayer(this);
@@ -151,25 +154,29 @@ public class FanObject : InteractableObject
                 unit.StopImmediately(false);
                 unit.useGravity = true;
             }
-            _affectedUnits.Clear();
-            return;
         }
+        
+        _affectedUnits.Clear();
 
         foreach (var col in cols)
         {
             if (col.TryGetComponent(out ObjectUnit unit))
             {
-                if (_affectedUnits.Contains(unit))
-                {
-                    continue;
-                }
-                
-                if (!unit.staticUnit)
+                if (!unit.staticUnit && (_lastAffectedUnits.Count <= 0 || _lastAffectedUnits.Contains(unit)))
                 {
                     _affectedUnits.Add(unit);
+                    _lastAffectedUnits.Remove(unit);
                 }
             }
         }
+
+        foreach (var lastAffectedUnit in _lastAffectedUnits)
+        {
+            lastAffectedUnit.StopImmediately(false);
+            lastAffectedUnit.useGravity = true;
+        }
+
+        _lastAffectedUnits = _affectedUnits.ToList();
     }
 
     private void FloatingUnits()
