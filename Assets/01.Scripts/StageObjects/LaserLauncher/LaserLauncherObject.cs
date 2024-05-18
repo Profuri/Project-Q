@@ -106,7 +106,7 @@ public class LaserLauncherObject : ObjectUnit
             var info = _laserInfos.Peek();
             _laserRenderer.SetPosition(i, info.origin);
             
-            if (ObstacleCheck(info, out var hit))
+            if (ObstacleCheck(info, out var hit) && (hit.collider.excludeLayers & LayerMask.GetMask("Laser")) == 0)
             {
                 _laserRenderer.SetPosition(i + 1, hit.point);
                 InteractOther(hit, info, true);
@@ -123,10 +123,10 @@ public class LaserLauncherObject : ObjectUnit
     private void InteractOther(RaycastHit hit, LaserInfo lastLaser, bool interactValue)
     {
         var col = hit.collider;
-        
+
         if (col.TryGetComponent<InteractableObject>(out var interactable))
         {
-            if (interactable.Attribute.HasFlag(EInteractableAttribute.AFFECTED_FROM_LASER) || (interactable.Collider.excludeLayers & (1 << gameObject.layer)) == 0)
+            if (interactable.Attribute.HasFlag(EInteractableAttribute.AFFECTED_FROM_LASER))
             {
                 var rayDistance = hit.distance;
                 interactable.OnInteraction(this, interactValue, hit.point, hit.normal, lastLaser.power, rayDistance);
@@ -136,7 +136,7 @@ public class LaserLauncherObject : ObjectUnit
         
         if (col.TryGetComponent<ObjectUnit>(out var unit))
         {
-            if (!unit.staticUnit || (unit.Collider.excludeLayers & (1 << gameObject.layer)) == 0)
+            if (!unit.staticUnit)
             {
                 unit.ReloadUnit();
             }
