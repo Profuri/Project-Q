@@ -50,7 +50,7 @@ public class PlayerInteractHandler : MonoBehaviour
                 var dir = (cols[i].bounds.center - _player.Collider.bounds.center).normalized;
                 var isHit = Physics.Raycast(_player.Collider.bounds.center - dir, dir, out var hit, Mathf.Infinity,
                     _player.canStandMask);
-
+                
                 if ((isHit && cols[i] != hit.collider) || !interactable.activeUnit)
                 {
                     continue;

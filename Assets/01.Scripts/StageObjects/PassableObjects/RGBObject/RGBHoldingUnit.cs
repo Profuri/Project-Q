@@ -1,6 +1,6 @@
 using AxisConvertSystem;
 
-public class RGBHodlingUnit : RGBObjectUnit, IHoldable
+public class RGBHoldingUnit : RGBObjectUnit, IHoldable
 {
     private ObjectHoldingHandler _holdingHandler;
 
