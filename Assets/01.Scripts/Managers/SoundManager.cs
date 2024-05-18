@@ -109,20 +109,16 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     {
         if (_BGMAudioDictionary.ContainsKey(sceneType))
         {
-            if (_currentAudioClipSO != null)
+            var clipSO = isCpu ? _cpuClipSO : _BGMAudioDictionary[sceneType];
+            if(_currentAudioClipSO == null || !_currentAudioClipSO.Equals(clipSO))
             {
-                Destroy(_currentAudioClipSO);
+                clipSO.ShuffleClip();
             }
-
-            if (isCpu)
-                _currentAudioClipSO = Instantiate(_cpuClipSO);
-            else
-                _currentAudioClipSO = Instantiate(_BGMAudioDictionary[sceneType]);
-
-            var clip  = _currentAudioClipSO.GetRandomClip();
+            _currentAudioClipSO = clipSO;
             
+            var clip  = _currentAudioClipSO.GetRandomClip();
             PlayBGM(clip.name);
-
+            
             if (_keyFrameCoroutine != null)
             {
                 StopCoroutine(_keyFrameCoroutine);

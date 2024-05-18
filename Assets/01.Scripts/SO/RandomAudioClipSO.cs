@@ -1,7 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using Random = UnityEngine.Random;
 
 [CreateAssetMenu(menuName = "SO/Audio/RandomAudioClip")]
@@ -11,13 +10,12 @@ public class RandomAudioClipSO : AudioClipSO
     private const int c_shuffleCnt = 100;
     private int _currentIndex = 0;
 
-    private void OnEnable()
+    private List<AudioClip> _garbageClipList = new List<AudioClip>();
+    
+    public void ShuffleClip()
     {
-        ShuffleClip();
-    }
+        _garbageClipList = clipList.ToList();
 
-    private void ShuffleClip()
-    {
         _currentIndex = 0;
         for (int i = 0; i < c_shuffleCnt; i++)
         {
@@ -25,7 +23,7 @@ public class RandomAudioClipSO : AudioClipSO
             int index2 = Random.Range(0,clipList.Count);
 
             if (index == index2) continue;
-            clipList.Swap(index,index2);
+            _garbageClipList.Swap(index,index2);
         }
     }
 
@@ -34,6 +32,6 @@ public class RandomAudioClipSO : AudioClipSO
         if (_currentIndex >= clipList.Count)
             ShuffleClip();
             
-        return clipList[_currentIndex++];
+        return _garbageClipList[_currentIndex++];
     }
 }
