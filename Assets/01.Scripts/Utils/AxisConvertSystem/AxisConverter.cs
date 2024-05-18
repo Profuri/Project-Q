@@ -56,14 +56,17 @@ namespace AxisConvertSystem
                 if (!SafeConvertAxis(AxisType, out var front, out var back))
                 {
                     var frontUnit = front.collider ? front.collider.GetComponent<ObjectUnit>() : null;
-                    if (frontUnit is IPassable { PassableLastAxis: true })
+                    if (frontUnit is IPassable passable)
                     {
-                        CancelChangeAxis(AxisType, frontUnit, null, () => 
+                        if (passable.IsPassableLastAxis())
                         {
-                            Convertable = true;
-                            callback?.Invoke();
-                        });
-                        return;
+                            CancelChangeAxis(AxisType, frontUnit, null, () => 
+                            {
+                                Convertable = true;
+                                callback?.Invoke();
+                            });
+                            return;
+                        }
                     }
                 }
                 SoundManager.Instance.PlaySFX("AxisControl");

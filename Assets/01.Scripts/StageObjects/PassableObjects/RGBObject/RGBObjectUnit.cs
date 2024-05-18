@@ -84,7 +84,12 @@ public class RGBObjectUnit : InteractableObject, IPassable
 
         PassableAfterAxis = !MatchRGB;
     }
-    
+
+    public bool IsPassableLastAxis()
+    {
+        return PassableLastAxis;
+    }
+
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
     }
