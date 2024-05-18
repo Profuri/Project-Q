@@ -21,7 +21,7 @@ namespace AxisConvertSystem
         [HideInInspector] public bool useGravity = true;
 
         public UnitInfo OriginUnitInfo;
-        protected UnitInfo UnitInfo;
+        public UnitInfo UnitInfo;
         public UnitInfo ConvertedInfo;
 
         public AxisConverter Converter { get; protected set; }
