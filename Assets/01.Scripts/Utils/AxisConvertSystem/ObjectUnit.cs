@@ -277,7 +277,7 @@ namespace AxisConvertSystem
             Rigidbody.velocity = withYAxis ? Vector3.zero : new Vector3(0, Rigidbody.velocity.y, 0);
         }
 
-        public virtual void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
+        public virtual void ReloadUnit(bool useDissolve = false, float dissolveTime = 2f, Action callBack = null)
         {
             UnitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
@@ -287,8 +287,8 @@ namespace AxisConvertSystem
 
             if (!staticUnit)
             {
-                Dissolve(0f, dissolveTime, true, callBack);
                 Rigidbody.velocity = Vector3.zero;
+                Dissolve(0f, useDissolve ? dissolveTime : 0f, true, callBack);
             }
         }
         
