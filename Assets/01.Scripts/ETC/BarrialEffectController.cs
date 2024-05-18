@@ -10,6 +10,7 @@ public class BarrialEffectController : MonoBehaviour
 
     private readonly int _thresholdHash = Shader.PropertyToID("_Threshold");
     private readonly int _opacityHash = Shader.PropertyToID("_Opacity");
+    private Sequence _sequence;
 
     [SerializeField] private float _destroyPracTime;
     [SerializeField] private float _destroyTime;
@@ -37,21 +38,22 @@ public class BarrialEffectController : MonoBehaviour
             return;
         }
 
-        var seq = DOTween.Sequence();
-        seq.Join(DOTween.To(
+        _sequence?.Kill();
+        _sequence = DOTween.Sequence();
+        _sequence.Join(DOTween.To(
             () => _material.GetFloat(_thresholdHash),
             threshold => _material.SetFloat(_thresholdHash, threshold),
             _originThreshold, _appearTime
         ));
-        seq.Join(DOTween.To(
+        _sequence.Join(DOTween.To(
             () => _material.GetFloat(_opacityHash),
             opacity => _material.SetFloat(_opacityHash, opacity),
             1f, _appearTime
         ));
-        seq.OnComplete(() => _collider.enabled = true);
+        _sequence.OnComplete(() => _collider.enabled = true);
         SoundManager.Instance.PlaySFX("Barrier", true, _soundEffectPlayer);
     }
-
+    
     public void Destroy()
     {
         if (!Application.isPlaying)
@@ -61,23 +63,24 @@ public class BarrialEffectController : MonoBehaviour
 
         Debug.Log("Destroy");
         
-        var seq = DOTween.Sequence();
-        seq.Join(DOTween.To(
+        _sequence?.Kill();
+        _sequence = DOTween.Sequence();
+        _sequence.Join(DOTween.To(
             () => _material.GetFloat(_thresholdHash),
             threshold => _material.SetFloat(_thresholdHash, threshold),
             0, _destroyPracTime
         ));
-        seq.Append(DOTween.To(
+        _sequence.Append(DOTween.To(
             () => _material.GetFloat(_thresholdHash),
             threshold => _material.SetFloat(_thresholdHash, threshold),
             1f, _destroyTime
         ));
-        seq.Join(DOTween.To(
+        _sequence.Join(DOTween.To(
             () => _material.GetFloat(_opacityHash),
             opacity => _material.SetFloat(_opacityHash, opacity),
             0f, _destroyTime
         ));
-        seq.OnComplete(() => _collider.enabled = false);
+        _sequence.OnComplete(() => _collider.enabled = false);
         _soundEffectPlayer.Stop();
     }
 }
