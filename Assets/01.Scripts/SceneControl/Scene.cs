@@ -46,7 +46,15 @@ public class Scene : PoolableMono
         
         while (_objects.Count > 0)
         {
-            DeleteObject(_objects.First());
+            var firstObj = _objects.First();
+            if (firstObj is Stage stage)
+            {
+                SafeDeleteObject(stage);
+            }
+            else
+            {
+                DeleteObject(firstObj);
+            }
         }
         _objects.Clear();
         
