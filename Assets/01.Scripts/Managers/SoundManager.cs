@@ -33,12 +33,13 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     [SerializeField] private RandomAudioClipSO _chapterClipSO;
     [SerializeField] private RandomAudioClipSO _titleClipSO;
     [SerializeField] private RandomAudioClipSO _cpuClipSO;
+    
     #endregion
     
-
-    private RandomAudioClipSO _currentAudioClipSO;
-    
     private AudioSource _audioSource;
+    
+    private RandomClip _currentRandomClip;
+    private RandomAudioClipSO _currentRandomClipSO;
     
     
 #region AudioMixer
@@ -102,7 +103,7 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
         {
             yield return null;
         }
-        PlayCorrectBGM(sceneType);
+        //PlayCorrectBGM(sceneType);
     }
 
     public void PlayCorrectBGM(SceneType sceneType,bool isCpu = false)
@@ -110,13 +111,14 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
         if (_BGMAudioDictionary.ContainsKey(sceneType))
         {
             var clipSO = isCpu ? _cpuClipSO : _BGMAudioDictionary[sceneType];
-            if(_currentAudioClipSO == null || !_currentAudioClipSO.Equals(clipSO))
+
+            if(_currentRandomClipSO == null || !_currentRandomClipSO.Equals(clipSO))
             {
-                clipSO.ShuffleClip();
+                _currentRandomClipSO = clipSO;
+                _currentRandomClip = clipSO.ShuffleClip();
             }
-            _currentAudioClipSO = clipSO;
             
-            var clip  = _currentAudioClipSO.GetRandomClip();
+            AudioClip clip = _currentRandomClip.GetRandomClip();
             PlayBGM(clip.name);
             
             if (_keyFrameCoroutine != null)
