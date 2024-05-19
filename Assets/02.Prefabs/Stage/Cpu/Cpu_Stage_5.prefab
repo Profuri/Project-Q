@@ -54,7 +54,7 @@ MonoBehaviour:
   _enterPoint: {x: -3, y: -1, z: -6.91}
   _exitPoint: {x: 3, y: -1, z: 6.87}
   _playerResetPoint: {x: 0, y: -0.5, z: -3}
-  _playerResetPointInClear: {x: 0, y: 0, z: 0}
+  _playerResetPointInClear: {x: 0, y: -0.5, z: -3}
   _sectionData: {fileID: 11400000, guid: 02306878c371648a48d518abc435a287, type: 2}
   _setPlayerFollowCam: 1
   _chapter: 5
@@ -120,7 +120,7 @@ Transform:
   m_GameObject: {fileID: 2246563039455347182}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -4, y: 3, z: 3.8799999}
+  m_LocalPosition: {x: -4.27, y: 3, z: 3.88}
   m_LocalScale: {x: 0.80000013, y: 0.8, z: 0.80000013}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -449,7 +449,7 @@ Transform:
   m_GameObject: {fileID: 8408521519957771086}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: -3, y: 1, z: 4.78603}
+  m_LocalPosition: {x: -3, y: 1, z: 5.06}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -869,6 +869,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2207380333259892381}
+    - targetCorrespondingSourceObject: {fileID: 3935040746942101424, guid: 2534879bead7a45c186b9d2356b9d113,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2936423771480797221}
   m_SourcePrefab: {fileID: 100100000, guid: 2534879bead7a45c186b9d2356b9d113, type: 3}
 --- !u!4 &1497165048626058197 stripped
 Transform:
@@ -900,14 +904,14 @@ MonoBehaviour:
   offset: 0
   renderType: 0
   climbableUnit: 0
-  staticUnit: 1
+  staticUnit: 0
   activeUnit: 1
   subUnit: 0
   canStandMask:
     serializedVersion: 2
     m_Bits: 0
   checkOffset: 0.2
-  useGravity: 1
+  useGravity: 0
   <Offset>k__BackingField: {x: 0, y: 0, z: 0}
   _interactType: 0
   _attribute: 0
@@ -917,6 +921,33 @@ MonoBehaviour:
   _checkCollisionLayer:
     serializedVersion: 2
     m_Bits: 0
+--- !u!54 &2936423771480797221
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2348129058536888644}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &3145753020446676060
 PrefabInstance:
   m_ObjectHideFlags: 0
