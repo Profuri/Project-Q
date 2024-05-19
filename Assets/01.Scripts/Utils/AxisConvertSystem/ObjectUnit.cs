@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -20,7 +21,7 @@ namespace AxisConvertSystem
         [HideInInspector] public bool useGravity = true;
 
         public UnitInfo OriginUnitInfo;
-        protected UnitInfo UnitInfo;
+        public UnitInfo UnitInfo;
         public UnitInfo ConvertedInfo;
 
         public AxisConverter Converter { get; protected set; }
@@ -276,7 +277,7 @@ namespace AxisConvertSystem
             Rigidbody.velocity = withYAxis ? Vector3.zero : new Vector3(0, Rigidbody.velocity.y, 0);
         }
 
-        public virtual void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
+        public virtual void ReloadUnit(bool useDissolve = false, float dissolveTime = 2f, Action callBack = null)
         {
             UnitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
@@ -286,8 +287,8 @@ namespace AxisConvertSystem
 
             if (!staticUnit)
             {
-                Dissolve(0f, dissolveTime, true, callBack);
                 Rigidbody.velocity = Vector3.zero;
+                Dissolve(0f, useDissolve ? dissolveTime : 0f, true, callBack);
             }
         }
         
@@ -569,6 +570,17 @@ namespace AxisConvertSystem
             }
 
             return false;
+        }
+
+        public bool IsChildUnit(ObjectUnit checkUnit)
+        {
+            if (subUnit)
+            {
+                return false;
+            }
+
+            var children = transform.GetComponentsInChildren<ObjectUnit>().ToList();
+            return children.Contains(checkUnit);
         }
 
         public ObjectUnit GetParentUnit()

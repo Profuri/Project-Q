@@ -39,17 +39,23 @@ public class MovingPlatformHandler : MonoBehaviour
     {
         if(axis == _track.MovingAxis)
         {
+            var originColliderCenter = _owner.UnitInfo.LocalRot * _owner.ConvertedInfo.ColliderCenter;
+            _owner.ConvertedInfo.ColliderCenter = _owner.UnitInfo.LocalRot * _owner.ConvertedInfo.ColliderCenter;
             _owner.ConvertedInfo.ColliderCenter.SetAxisElement(
                 _track.MovingAxis,
-                _owner.ConvertedInfo.ColliderCenter.GetAxisElement(_track.MovingAxis) - transform.localPosition.GetAxisElement(_track.MovingAxis)
+                originColliderCenter.GetAxisElement(_track.MovingAxis) - transform.localPosition.GetAxisElement(_track.MovingAxis)
             );
+            _owner.ConvertedInfo.ColliderCenter = Quaternion.Inverse(_owner.UnitInfo.LocalRot) * _owner.ConvertedInfo.ColliderCenter;
         }
         else if (axis == AxisType.Y)
         {
+            var originColliderCenter = _owner.UnitInfo.LocalRot * _owner.ConvertedInfo.ColliderCenter;
+            _owner.ConvertedInfo.ColliderCenter = _owner.UnitInfo.LocalRot * _owner.ConvertedInfo.ColliderCenter;
             _owner.ConvertedInfo.ColliderCenter.SetAxisElement(
                 AxisType.Y,
-                _owner.ConvertedInfo.ColliderCenter.GetAxisElement(AxisType.Y) - transform.localPosition.GetAxisElement(AxisType.Y)    
+                originColliderCenter.GetAxisElement(AxisType.Y) - transform.localPosition.GetAxisElement(AxisType.Y)    
             );
+            _owner.ConvertedInfo.ColliderCenter = Quaternion.Inverse(_owner.UnitInfo.LocalRot) * _owner.ConvertedInfo.ColliderCenter;
         }
     }
 

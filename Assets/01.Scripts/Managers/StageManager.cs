@@ -67,7 +67,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
                 CurrentStage.Generate(currentPos, true, false, dissolveTime);
                 player.SetSection(CurrentStage);
                 player.useGravity = true;
-                player.ReloadUnit(dissolveTime);
+                player.ReloadUnit(true, dissolveTime);
             });
         }
     }
