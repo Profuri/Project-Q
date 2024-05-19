@@ -14,7 +14,6 @@ namespace InteractableSystem
         [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
 
         private Dictionary<int, SelectedBorder> _selectedBorderDictionary = new Dictionary<int, SelectedBorder>();
-
         
         private bool _lastToggleState;
         protected bool LastToggleState
