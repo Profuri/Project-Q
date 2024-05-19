@@ -80,4 +80,9 @@ public class PictureUnit : ObjectUnit, IPassable
             PassableAfterAxis = false;
         }
     }
+
+    public bool IsPassableLastAxis()
+    {
+        return PassableLastAxis;
+    }
 }

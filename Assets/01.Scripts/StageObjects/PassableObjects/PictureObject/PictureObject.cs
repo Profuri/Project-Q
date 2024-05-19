@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using AxisConvertSystem;
 using UnityEngine;
 
@@ -58,5 +59,28 @@ public class PictureObject : ObjectUnit, IPassable
     public void PassableCheck(AxisType axis)
     {
         PassableAfterAxis = axis != AxisType.None;
+    }
+
+    public bool IsPassableLastAxis()
+    {
+        if (PassableLastAxis)
+        {
+            if (Converter.AxisType != AxisType.Y)
+            {
+                return true;
+            }
+
+            foreach (var unit in _units)
+            {
+                if (!unit.IsPassableLastAxis())
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        
+        return false;
     }
 }

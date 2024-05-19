@@ -100,9 +100,9 @@ public class PlayerUnit : ObjectUnit
         InteractHandler.UpdateHandler();
     }
 
-    public override void ReloadUnit(float dissolveTime = 2f, Action callBack = null)
+    public override void ReloadUnit(bool useDissolve = false, float dissolveTime = 2f, Action callBack = null)
     {
-        base.ReloadUnit(dissolveTime, () =>
+        base.ReloadUnit(true, dissolveTime, () =>
         {
             callBack?.Invoke();
             InputManagerHelper.OnRevivePlayer();

@@ -20,7 +20,7 @@ public class ObstacleObject : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        if(!activeUnit)
+        if(!activeUnit || !Converter.Convertable)
         {
             return;
         }
