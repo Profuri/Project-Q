@@ -99,8 +99,13 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     private IEnumerator AudioKeyFrameRoutine(SceneType sceneType)
     {
         AudioSource audioSource = _audioSources[(int)SoundEnum.BGM];
-        while (audioSource.isPlaying == true)
+        while (audioSource.isPlaying == true || !Application.isFocused)
         {
+            if (Application.genuine)
+            
+            {
+                
+            }
             yield return null;
         }
         //PlayCorrectBGM(sceneType);
