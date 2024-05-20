@@ -32,7 +32,8 @@ public class SceneControlManager : BaseManager<SceneControlManager>
             SoundManager.Instance.Stop();
             if (CurrentScene is not null)
             {
-                PoolManager.Instance.Push(CurrentScene);
+                CurrentScene.OnPush();
+                Destroy(CurrentScene.gameObject);
             }
 
             CurrentScene = PoolManager.Instance.Pop($"{type}Scene") as Scene;
