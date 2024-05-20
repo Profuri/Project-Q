@@ -17,7 +17,7 @@ public class StoryInfo
     public int stageIndex;
     
     public StoryData storyData;
-    [HideInInspector] public bool isShown;
+    [HideInInspector] public int index;
 
     public bool Predicate(StoryAppearType appearType, SceneType sceneType)
     {
