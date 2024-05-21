@@ -3,7 +3,7 @@ using UnityEngine;
 using ManagingSystem;
 using System;
 
-public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
+public class StoryManager : BaseManager<StoryManager>,IProvideSave
 {
     private MessageWindow _messagePanel;
     public bool IsPlay => _messagePanel is not null;
@@ -12,8 +12,12 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
 
     public override void StartManager()
     {
-        DataManager.Instance.SettingDataProvidable(this, this);
-        DataManager.Instance.LoadData(this);
+        for (var i = 0; i < _storyList.Count; i++)
+        {
+            _storyList[i].index = i;
+        }
+        
+        DataManager.Instance.SettingDataProvidable(this, null);
     }
 
     public void StartStory(StoryData storyData)
@@ -73,7 +77,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
             return false;
         }
 
-        info.isShown = true;
+        DataManager.sSaveData.StoryShowList[info.index] = true;
         StartStory(info.storyData);
         return true;
     }
@@ -81,7 +85,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
     private StoryInfo GetStory(StoryAppearType appearType, SceneType sceneType)
     {
         var index = _storyList.FindIndex(story => story.Predicate(appearType, sceneType));
-        if (index != -1 && !_storyList[index].isShown)
+        if (index != -1 && !DataManager.sSaveData.StoryShowList[index])
         {
             return _storyList[index];
         }
@@ -91,7 +95,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
     private StoryInfo GetStory(StoryAppearType appearType, TimelineType timelineType)
     {
         var index = _storyList.FindIndex(story => story.Predicate(appearType, timelineType));
-        if (index != -1 && !_storyList[index].isShown)
+        if (index != -1 && !DataManager.sSaveData.StoryShowList[index])
         {
             return _storyList[index];
         }
@@ -101,7 +105,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
     private StoryInfo GetStory(StoryAppearType appearType, ChapterType chapterType, int stageIndex)
     {
         var index = _storyList.FindIndex(story => story.Predicate(appearType, chapterType, stageIndex));
-        if (index != -1 && !_storyList[index].isShown)
+        if (index != -1 && !DataManager.sSaveData.StoryShowList[index])
         {
             return _storyList[index];
         }
@@ -112,30 +116,11 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave,IProvideLoad
     {
         return (saveData) =>
         {
-            for(int i =0; i < _storyList.Count; i++)
+            for(int i = 0; i < _storyList.Count; i++)
             {
                 if(saveData.StoryShowList.Count <= i)
                 {
-                    saveData.StoryShowList.Add(_storyList[i].isShown);
-                }
-                saveData.StoryShowList[i] = _storyList[i].isShown;
-            }
-        };
-    }
-
-    public Action<SaveData> GetLoadAction()
-    {
-        return (saveData) =>
-        {
-            for (int i = 0; i < _storyList.Count; i++)
-            {
-                try
-                {
-                    _storyList[i].isShown = saveData.StoryShowList[i];
-                }
-                catch
-                {
-                    _storyList[i].isShown = false;
+                    saveData.StoryShowList.Add(false);
                 }
             }
         };
