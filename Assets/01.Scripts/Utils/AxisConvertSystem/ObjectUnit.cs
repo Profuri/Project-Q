@@ -143,7 +143,6 @@ namespace AxisConvertSystem
         {
             ApplyInfo(ConvertedInfo);
 
-
             if (DepthHandler.Hide)
             {
                 return;
