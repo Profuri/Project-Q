@@ -96,7 +96,7 @@ public class TutorialObjectUnit : InteractableObject
     
     public override void OnDetectedEnter(ObjectUnit communicator = null)
     {
-        base.OnDetectedEnter();
+        base.OnDetectedEnter(communicator);
         if (Converter.AxisType != AxisType.None)
         {
             return;

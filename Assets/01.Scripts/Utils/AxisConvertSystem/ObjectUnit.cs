@@ -29,7 +29,6 @@ namespace AxisConvertSystem
         public Rigidbody Rigidbody { get; private set; }
         public UnitDepthHandler DepthHandler { get; private set; }
         public Section Section { get; protected set; }
-        public UnitInfo BeforeConvertedUnitInfo => UnitInfo;
         public bool IsHide { get; private set; }
         public bool OnGround => CheckStandObject(out var tempCollider, true);
         
@@ -51,6 +50,14 @@ namespace AxisConvertSystem
         public event Action<AxisType> OnApplyUnitInfoEvent;
         public event Action OnApplyDepthEvent;
         
+        public override void OnPop()
+        {
+        }
+
+        public override void OnPush()
+        {
+        }
+        
         public virtual void Awake()
         {
             IsHide = false;
@@ -70,8 +77,16 @@ namespace AxisConvertSystem
             
             _materials = new List<Material>();
             _renderers = new List<Renderer>();
-            transform.GetComponentsInChildren<Renderer>(_renderers);
+            transform.GetComponentsInChildren(_renderers);
             MaterialResetUp();
+            
+            OriginUnitInfo.LocalPos = transform.localPosition;
+            OriginUnitInfo.LocalRot = transform.localRotation;
+            OriginUnitInfo.LocalScale = transform.localScale;
+            OriginUnitInfo.ColliderCenter = Collider.GetLocalCenter();
+            OriginUnitInfo.ColliderBoundSize = Collider.bounds.size;
+            
+            UnitInfo = OriginUnitInfo;
             
             Activate(activeUnit);
         }
@@ -106,15 +121,7 @@ namespace AxisConvertSystem
         public virtual void Init(AxisConverter converter)
         {
             Converter ??= converter;
-
-            OriginUnitInfo.LocalPos = transform.localPosition;
-            OriginUnitInfo.LocalRot = transform.localRotation;
-            OriginUnitInfo.LocalScale = transform.localScale;
-            OriginUnitInfo.ColliderCenter = Collider.GetLocalCenter();
-            OriginUnitInfo.ColliderBoundSize = Collider.bounds.size;
             
-            UnitInfo = OriginUnitInfo;
-
             DepthHandler.DepthCheckPointSetting();
             
             OnInitEvent?.Invoke(converter);
@@ -510,14 +517,6 @@ namespace AxisConvertSystem
                 yield return null;
             }
             callBack?.Invoke();
-        }
-
-        public override void OnPop()
-        {
-        }
-
-        public override void OnPush()
-        {
         }
 
         public void ShowUnClimbableEffect()

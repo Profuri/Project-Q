@@ -56,7 +56,11 @@ public class PlayerInteractHandler : MonoBehaviour
                     continue;
                 }
 
-                interactable.OnDetectedEnter(_player);
+                if (!_lastFindInteractableObjects.Contains(interactable))
+                {
+                    interactable.OnDetectedEnter(_player);
+                }
+                
                 tempList.Add(interactable);
             }
         }
