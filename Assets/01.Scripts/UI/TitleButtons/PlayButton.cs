@@ -5,6 +5,11 @@ public class PlayButton : InteractableObject
 {
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        SceneControlManager.Instance.LoadScene(SceneType.Chapter);  
+        PlayButtonCall();
+    }
+    
+    public void PlayButtonCall()
+    {
+        SceneControlManager.Instance.LoadScene(SceneType.Chapter);
     }
 }
