@@ -65,6 +65,7 @@ namespace AxisConvertSystem
             _climbLayerMask = LayerMask.GetMask("Player") | LayerMask.GetMask("Platform");
 
             Section = GetComponentInParent<Section>();
+            
             Collider = GetComponent<Collider>();
             if (!staticUnit)
             {
