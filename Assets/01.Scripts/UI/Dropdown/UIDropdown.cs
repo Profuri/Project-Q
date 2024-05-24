@@ -45,6 +45,8 @@ public class UIDropdown : UIComponent
     {
         base.Appear(parentTrm, callback);
 
+        UIManager.Instance.Interact3DButton = false;
+        
         _prevPauseEvent = InputManager.Instance.UIInputReader.OnPauseClickEvent;
         InputManager.Instance.UIInputReader.OnPauseClickEvent = () => Disappear();
         
@@ -60,6 +62,8 @@ public class UIDropdown : UIComponent
 
     public override void Disappear(Action callback = null)
     {
+        UIManager.Instance.Interact3DButton = true;
+        
         InputManager.Instance.UIInputReader.OnUpArrowClickEvent -= CursorUp;
         InputManager.Instance.UIInputReader.OnDownArrowClickEvent -= CursorDown;
         InputManager.Instance.UIInputReader.OnEnterClickEvent -= EnterOption;
