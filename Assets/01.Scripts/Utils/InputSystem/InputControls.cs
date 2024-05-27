@@ -254,6 +254,15 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TutorialOut"",
+                    ""type"": ""Button"",
+                    ""id"": ""aef87256-6208-4996-8f6a-6f084caff0c6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -314,12 +323,67 @@ namespace InputControl
                 },
                 {
                     ""name"": """",
+                    ""id"": ""90f272e2-9c1d-4dce-b92d-f27256866ecc"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3642fe2b-f046-4776-ad8b-e03386cce0f1"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""ce074dae-954e-4ac3-bf2c-e5df8cb364b7"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f8aecf60-800d-4ccc-bc67-9dbc17164d12"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TutorialOut"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4d82f0b7-66b3-4e3b-9bc2-5a8ed7a09840"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TutorialOut"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""291f57a5-5a3b-4ddb-aac8-f6e1bd58b803"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TutorialOut"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -417,6 +481,7 @@ namespace InputControl
             m_UI_DownArrow = m_UI.FindAction("DownArrow", throwIfNotFound: true);
             m_UI_Enter = m_UI.FindAction("Enter", throwIfNotFound: true);
             m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
+            m_UI_TutorialOut = m_UI.FindAction("TutorialOut", throwIfNotFound: true);
             // Camera
             m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
             m_Camera_ZoomControl = m_Camera.FindAction("ZoomControl", throwIfNotFound: true);
@@ -576,6 +641,7 @@ namespace InputControl
         private readonly InputAction m_UI_DownArrow;
         private readonly InputAction m_UI_Enter;
         private readonly InputAction m_UI_Pause;
+        private readonly InputAction m_UI_TutorialOut;
         public struct UIActions
         {
             private @InputControls m_Wrapper;
@@ -586,6 +652,7 @@ namespace InputControl
             public InputAction @DownArrow => m_Wrapper.m_UI_DownArrow;
             public InputAction @Enter => m_Wrapper.m_UI_Enter;
             public InputAction @Pause => m_Wrapper.m_UI_Pause;
+            public InputAction @TutorialOut => m_Wrapper.m_UI_TutorialOut;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -613,6 +680,9 @@ namespace InputControl
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @TutorialOut.started += instance.OnTutorialOut;
+                @TutorialOut.performed += instance.OnTutorialOut;
+                @TutorialOut.canceled += instance.OnTutorialOut;
             }
 
             private void UnregisterCallbacks(IUIActions instance)
@@ -635,6 +705,9 @@ namespace InputControl
                 @Pause.started -= instance.OnPause;
                 @Pause.performed -= instance.OnPause;
                 @Pause.canceled -= instance.OnPause;
+                @TutorialOut.started -= instance.OnTutorialOut;
+                @TutorialOut.performed -= instance.OnTutorialOut;
+                @TutorialOut.canceled -= instance.OnTutorialOut;
             }
 
             public void RemoveCallbacks(IUIActions instance)
@@ -770,6 +843,7 @@ namespace InputControl
             void OnDownArrow(InputAction.CallbackContext context);
             void OnEnter(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
+            void OnTutorialOut(InputAction.CallbackContext context);
         }
         public interface ICameraActions
         {
