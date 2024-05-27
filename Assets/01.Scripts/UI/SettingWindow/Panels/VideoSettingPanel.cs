@@ -17,7 +17,6 @@ public class VideoSettingPanel : WindowPanel
     
     public void GenerateResolutionDropdown()
     {
-        UIManager.Instance.Interact3DButton = false;
         
         var dropdown = UIManager.Instance.GenerateUI("DropdownPanel") as UIDropdown;
         dropdown.Title = "RESOLUTION";
@@ -34,7 +33,6 @@ public class VideoSettingPanel : WindowPanel
                 _resolutionBtn.Text = $"{width}x{height}";
                 VideoManager.Instance.SetResolution(index);
                 VideoManager.Instance.SetFullScreen(Screen.fullScreen);
-                UIManager.Instance.Interact3DButton = true;
             });
         }
         
@@ -54,8 +52,6 @@ public class VideoSettingPanel : WindowPanel
     
     public void GenerateQualityDropdown()
     {
-        UIManager.Instance.Interact3DButton = false;
-        
         var dropdown = UIManager.Instance.GenerateUI("DropdownPanel") as UIDropdown;
         dropdown.Title = "QUALITY";
 
@@ -67,7 +63,6 @@ public class VideoSettingPanel : WindowPanel
             {
                 _qualityBtn.Text = qualityName.ToUpper();
                VideoManager.Instance.SetQuality(quality); 
-               UIManager.Instance.Interact3DButton = true;
             });
         }
         

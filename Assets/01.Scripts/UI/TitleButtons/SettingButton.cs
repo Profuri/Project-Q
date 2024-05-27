@@ -9,6 +9,11 @@ public class SettingButton : InteractableObject
     
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
+        SettingButtonCall();
+    }
+
+    public void SettingButtonCall()
+    {
         if (_settingWindow is null || !_settingWindow.poolOut)
         {
             _settingWindow = UIManager.Instance.GenerateUI("SettingWindow", _titleCanvasTrm) as SettingWindow;

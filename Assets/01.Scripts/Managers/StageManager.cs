@@ -23,6 +23,8 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
 
     private ChapterData _currentPlayChapterData;
 
+    public event Action<ChapterType, int> OnStageClear;
+
     public AxisType CurrentStageAxis => SceneControlManager.Instance.Player.Converter.AxisType;
     public override void StartManager()
     {
@@ -102,6 +104,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         }
                 
         GenerateNextStage(_currentPlayChapterData.chapter, nextChapter);
+        OnStageClear?.Invoke(_currentPlayChapterData.chapter,nextChapter);
         CurrentStage.IsClear = true;
     }
 

@@ -65,6 +65,7 @@ namespace AxisConvertSystem
             _climbLayerMask = LayerMask.GetMask("Player") | LayerMask.GetMask("Platform");
 
             Section = GetComponentInParent<Section>();
+            
             Collider = GetComponent<Collider>();
             if (!staticUnit)
             {
@@ -378,7 +379,7 @@ namespace AxisConvertSystem
             var depth = DepthHandler.GetDepth();
 
             var frontDepth = standUnit.DepthHandler.GetDepth();
-            var boundsSize = (standUnit.UnitInfo.LocalRot * standUnit.Collider.bounds.size).GetAxisElement(axis);
+            var boundsSize = (standUnit.UnitInfo.LocalRot * standUnit.UnitInfo.ColliderBoundSize).GetAxisElement(axis);
 
             // is in back unit
             if (depth > frontDepth || depth < frontDepth - boundsSize)

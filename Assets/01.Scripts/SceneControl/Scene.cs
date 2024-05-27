@@ -17,6 +17,8 @@ public class Scene : PoolableMono
     public UnityEvent onLoadScene = null;
     public UnityEvent onDestroyScene = null;
 
+    private UIComponent _keyInfoPanel;
+
     protected virtual void Awake()
     {
         _objects = new List<PoolableMono>();
@@ -37,6 +39,7 @@ public class Scene : PoolableMono
 
     public override void OnPush()
     {
+        _keyInfoPanel.Disappear();
         PoolManager.Instance.Push(Player);
         Player = null;
         
@@ -82,6 +85,8 @@ public class Scene : PoolableMono
             landParticle.SetPositionAndRotation(Player.transform.position, Quaternion.identity);
             landParticle.Play();
             SoundManager.Instance.PlaySFX("PlayerAfterJump");
+            _keyInfoPanel = UIManager.Instance.GenerateUI($"{_type}KeyInfoPanel");
+            _keyInfoPanel.ResetPosition();
             if (!StoryManager.Instance.IsPlay)
             {
                 InputManager.Instance.SetEnableInputAll(true);
