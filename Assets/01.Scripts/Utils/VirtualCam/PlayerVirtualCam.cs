@@ -29,7 +29,7 @@ namespace VirtualCam
                 return;
             }
 
-            StartSafeCoroutine("CamRotateRoutine", CamRotateRoutine(CameraManager.Instance.LastRotateValue - CameraManager.Instance.RotateValue + 5f, CameraManager.Instance.RotateTime));
+            RotateCam(CameraManager.Instance.LastRotateValue - CameraManager.Instance.RotateValue + 5f, CameraManager.Instance.RotateTime);
             LightManager.Instance.RotateDefaultDirectionalLight(CameraManager.Instance.LastRotateValue - (CameraManager.Instance.RotateValue - 15f), CameraManager.Instance.RotateTime);
             CameraManager.Instance.LastRotateValue -= CameraManager.Instance.RotateValue;
         }
@@ -41,7 +41,7 @@ namespace VirtualCam
                 return;
             }
             
-            StartSafeCoroutine("CamRotateRoutine", CamRotateRoutine(CameraManager.Instance.LastRotateValue + CameraManager.Instance.RotateValue - 5f, CameraManager.Instance.RotateTime));
+            RotateCam(CameraManager.Instance.LastRotateValue + CameraManager.Instance.RotateValue - 5f, CameraManager.Instance.RotateTime);
             LightManager.Instance.RotateDefaultDirectionalLight(CameraManager.Instance.LastRotateValue + (CameraManager.Instance.RotateValue + 15f), CameraManager.Instance.RotateTime);
             CameraManager.Instance.LastRotateValue += CameraManager.Instance.RotateValue;
         }
