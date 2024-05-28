@@ -51,14 +51,16 @@ public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
             }
         }
 
-        LoadToDataManager();
+        DataManager.Instance.SettingDataProvidable(this,this);
     }
 
     public override void StartManager()
     {
         SetResolution(ResolutionList.Count - 1);
-        SetFullScreen(_fullScreen);
+        //SetFullScreen(_fullScreen);
         SetQuality(_quality);
+
+        DataManager.Instance.LoadData(this);
     }
 
     public void SetResolution(int index)
@@ -73,25 +75,17 @@ public class VideoManager : BaseManager<VideoManager>, IProvideSave,IProvideLoad
         Screen.SetResolution(width, height, Screen.fullScreen);
         CameraManager.Instance.FixedCameraRectWithResolution(width, height);
     }
-
     public void SetFullScreen(bool fullScreen)
     {
         Screen.fullScreen = fullScreen;
         _fullScreen = fullScreen;
     }
-
     public void SetQuality(QualityType type)
     {
         int qualityType = (int)QualityType.Low - (int)type;
         QualitySettings.SetQualityLevel(qualityType);
         _quality = type;
     }
-
-    public void LoadToDataManager()
-    {
-        DataManager.Instance.SettingDataProvidable(this,this);
-    }
-
     public Action<SaveData> GetSaveAction()
     {
         return (saveData) =>
