@@ -26,11 +26,12 @@ public class CameraManager : BaseManager<CameraManager>
 
     [InspectorLabel("Cam Rotation Setting")]
     [field:SerializeField] public float InitRotateValue { get; private set; } = -45f;
+    [field: SerializeField] public float MinRotateValue { get; private set; } = -90f;
+    [field: SerializeField] public float MaxRotateValue { get; private set; } = 0f;
     [field:SerializeField] public float RotateValue { get; private set; } = 45f;
     [field:SerializeField] public float RotateTime { get; private set; } = 0.5f; 
     public float LastRotateValue { get; set; }
-
-
+    
     public override void StartManager()
     {
         _vCamControllers = new Dictionary<VirtualCamType, VirtualCamController>();

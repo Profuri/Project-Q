@@ -40,7 +40,8 @@ namespace VirtualCam
 
         private void CamRotateRight()
         {
-            if (SceneControlManager.Instance.CurrentScene.Type != SceneType.Stage)
+            if (SceneControlManager.Instance.CurrentScene.Type != SceneType.Stage ||
+                CameraManager.Instance.LastRotateValue - CameraManager.Instance.RotateValue < CameraManager.Instance.MinRotateValue)
             {
                 return;
             }
@@ -52,7 +53,8 @@ namespace VirtualCam
         
         private void CamRotateLeft()
         {
-            if (SceneControlManager.Instance.CurrentScene.Type != SceneType.Stage)
+            if (SceneControlManager.Instance.CurrentScene.Type != SceneType.Stage || 
+                CameraManager.Instance.LastRotateValue + CameraManager.Instance.RotateValue > CameraManager.Instance.MaxRotateValue)
             {
                 return;
             }
