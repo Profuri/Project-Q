@@ -3,7 +3,6 @@ using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using ManagingSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 using VirtualCam;
 
@@ -24,7 +23,6 @@ public class CameraManager : BaseManager<CameraManager>
     [SerializeField] private float _zoomControlTimer;
     [field:SerializeField] public AnimationCurve ZoomControlCurve { get; private set; }
 
-    [InspectorLabel("Cam Rotation Setting")]
     [field:SerializeField] public float InitRotateValue { get; private set; } = -45f;
     [field: SerializeField] public float MinRotateValue { get; private set; } = -90f;
     [field: SerializeField] public float MaxRotateValue { get; private set; } = 0f;
