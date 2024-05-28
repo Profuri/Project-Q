@@ -10,7 +10,6 @@ public class TutorialObjectUnit : InteractableObject
 
     private TutorialMark _tutorialMark;
     
-
     public override void Init(AxisConverter converter)
     {
         base.Init(converter);
@@ -73,7 +72,6 @@ public class TutorialObjectUnit : InteractableObject
     private void Reset()
     {
         TutorialManager.Instance.StopTutorial();
-
         if (_tutorialMark == null)
         {
             LoadTutorialMark();
@@ -88,13 +86,12 @@ public class TutorialObjectUnit : InteractableObject
         {
             return;
         }
+
         if (!TutorialManager.Instance.OnTutorial)
         {
             TutorialManager.Instance.SetUpTutorial(_info);
-            InputManager.Instance.UIInputReader.OnTutorialOutEvent += Reset;
-
             
-            _tutorialMark?.Off();
+            _tutorialMark?.Off(() => InputManager.Instance.UIInputReader.OnTutorialOutEvent += Reset);
             _tutorialMark = null;
         }
         else
