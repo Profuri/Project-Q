@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using AxisConvertSystem;
 using ManagingSystem;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class LightManager : BaseManager<LightManager>
     [Header("Axis Directional Light Section")] 
     [SerializeField] private float _axisLightIntensity;
     [SerializeField] private float _axisLightTurnOnTime;
+    [SerializeField] private List<Color> _axisLightColors;
     
     public override void StartManager()
     {
@@ -41,6 +43,9 @@ public class LightManager : BaseManager<LightManager>
         {
             _axisDirectionalLight.transform.rotation = Quaternion.LookRotation(-axisDirection);
         }
+
+        var axisColor = _axisLightColors[(int)axis];
+        _axisDirectionalLight.color = axisColor;
     }
 
     public void SetShadow(LightShadows shadow)
