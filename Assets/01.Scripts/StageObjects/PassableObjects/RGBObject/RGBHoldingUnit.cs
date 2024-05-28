@@ -33,7 +33,7 @@ public class RGBHoldingUnit : RGBObjectUnit, IHoldable
     
     public void Attach(ObjectHoldingHandler handler)
     {
-        _holdingHandler = handler;    
+        _holdingHandler = handler;
         useGravity = false;
         StopImmediately(true);
     }

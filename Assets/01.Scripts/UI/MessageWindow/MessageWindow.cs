@@ -30,6 +30,8 @@ public class MessageWindow : UIComponent
         _bodyText.text = "";
         _typewriter.onMessage.AddListener(OnTypewriterMessageHandle);
         InputManager.Instance.UIInputReader.OnEnterClickEvent += NextStory;
+        
+        
         base.Appear(parentTrm, callback);
     }
 

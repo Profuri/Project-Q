@@ -12,7 +12,6 @@ public enum EInputCategory
     Movement,
     Jump,
     Interaction,
-    Click,
     AxisControl,
     ZoomOut,
     RotateCamRight,
@@ -46,7 +45,6 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
             { EInputCategory.Movement,          PlayerInputReader.Actions.Movement },
             { EInputCategory.Jump,              PlayerInputReader.Actions.Jump },
             { EInputCategory.Interaction,       PlayerInputReader.Actions.Interaction },
-            { EInputCategory.Click,             PlayerInputReader.Actions.Click },
             { EInputCategory.AxisControl,       PlayerInputReader.Actions.AxisControl },
             { EInputCategory.Reload,            PlayerInputReader.Actions.Reload },
             { EInputCategory.ZoomOut,           CameraInputReader.Actions.ZoomControl },
@@ -205,7 +203,7 @@ public static class InputManagerHelper
 {
     public static void OnControllingAxis()
     {
-        EInputCategory[] inputs = { EInputCategory.AxisControl, EInputCategory.Click,  };
+        EInputCategory[] inputs = { EInputCategory.AxisControl,  };
         InputManager.Instance.SetEnableInputWithout(inputs, true);
     }
     public static void OnCancelingAxis() => InputManager.Instance.SetEnableInputAll(true);

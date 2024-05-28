@@ -17,7 +17,6 @@ public class VideoSettingPanel : WindowPanel
     
     public void GenerateResolutionDropdown()
     {
-        
         var dropdown = UIManager.Instance.GenerateUI("DropdownPanel") as UIDropdown;
         dropdown.Title = "RESOLUTION";
         
@@ -48,6 +47,7 @@ public class VideoSettingPanel : WindowPanel
     public void FullScreenSetting(bool fullScreen)
     {
         VideoManager.Instance.SetFullScreen(fullScreen);
+        DataManager.sSaveData.DefaultFullScreen = fullScreen;
     }
     
     public void GenerateQualityDropdown()
@@ -108,7 +108,6 @@ public class VideoSettingPanel : WindowPanel
     public override void ReleasePanel()
     {
         base.ReleasePanel();
-        
         
         DataManager.Instance.LoadData(VideoManager.Instance);
         SettingUI(DataManager.sSaveData);

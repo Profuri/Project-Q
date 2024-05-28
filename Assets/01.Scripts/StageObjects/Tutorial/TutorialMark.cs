@@ -60,7 +60,7 @@ public class TutorialMark : PoolableMono
         seq.Join(_projectionConeTrm.DOScale(new Vector3(10f, 10f, 10f), _time));
     }
 
-    public void Off()
+    public void Off(Action Callback = null)
     {
         var seq = DOTween.Sequence();
 
@@ -73,7 +73,11 @@ public class TutorialMark : PoolableMono
         //seq.Join(DOTween.To(() => _tutMat.GetFloat("_time"), value => _tutMat.SetFloat("_time", value), 0f, _time));
         seq.Join(_visualTrm.DOScale(new Vector3(0f, 0f, 0f), _time));
         seq.Join(_projectionConeTrm.DOScale(new Vector3(10f, 0f, 10f), _time));
-        seq.AppendCallback(() => SceneControlManager.Instance.DeleteObject(this));
+        seq.AppendCallback(() => 
+        {
+            SceneControlManager.Instance.DeleteObject(this);
+            Callback?.Invoke();
+        });
     }
 
     private IEnumerator RotateCoroutine()
