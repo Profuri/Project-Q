@@ -100,9 +100,12 @@ public class PlayerUnit : ObjectUnit
 
     public override void ReloadUnit(bool useDissolve = false, float dissolveTime = 2f, Action callBack = null)
     {
+        if (HoldingHandler.IsHold)
+            HoldingHandler.Detach();
         base.ReloadUnit(true, dissolveTime, () =>
         {
             callBack?.Invoke();
+            InputManagerHelper.OnRevivePlayer();
             InputManagerHelper.OnRevivePlayer();
         });
         InputManagerHelper.OnDeadPlayer();
@@ -112,6 +115,8 @@ public class PlayerUnit : ObjectUnit
         PlaySpawnVFX();
         SetActiveAnimation(true);
         _stateController.ChangeState(typeof(PlayerIdleState));
+
+        
     }
 
     public override void OnPop()
