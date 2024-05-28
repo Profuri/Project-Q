@@ -78,15 +78,8 @@ public class PlayerUnit : ObjectUnit
         _stateController.RegisterState(new PlayerAxisControlState(_stateController));
 
         SoundEffectPlayer = new SoundEffectPlayer(this);
-
         CanAxisControl = true;
-    }
-    public override void Convert(AxisType axis)
-    {
-        base.Convert(axis);
-        
-    }
-    public override void UpdateUnit()
+    }    public override void UpdateUnit()
     {
         base.UpdateUnit();
 

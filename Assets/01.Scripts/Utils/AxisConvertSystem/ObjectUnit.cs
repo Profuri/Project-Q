@@ -110,9 +110,11 @@ namespace AxisConvertSystem
 
         protected virtual void OnDisable()
         {
+            return;
             if(_unClimbableEffect != null)
             {
-                SceneControlManager.Instance.DeleteObject(_unClimbableEffect);
+                if(SceneControlManager.Instance != null)
+                    SceneControlManager.Instance?.DeleteObject(_unClimbableEffect);
             }
         }
 
@@ -134,10 +136,11 @@ namespace AxisConvertSystem
             DepthHandler.DepthCheckPointSetting();
             
             OnInitEvent?.Invoke(converter);
+
             if(CanAppearClimbable() && Section is Stage)
             {
-                _unClimbableEffect ??= SceneControlManager.Instance.AddObject("UnClimbableEffect") as UnClimbableEffect;
-                _unClimbableEffect.Setting(this);
+                _unClimbableEffect = SceneControlManager.Instance.AddObject("UnClimbableEffect") as UnClimbableEffect;
+                _unClimbableEffect?.Setting(this);
             }
         }
 
