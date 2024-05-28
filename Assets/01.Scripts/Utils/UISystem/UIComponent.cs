@@ -12,11 +12,13 @@ public class UIComponent : PoolableMono
 
     private Vector3 _originLocalPos;
     private Quaternion _originLocalRot;
+    private Vector3 _originScale;
     
     protected virtual void Awake()
     {
         _originLocalPos = transform.localPosition;
         _originLocalRot = transform.localRotation;
+        _originScale = transform.localScale;
         
         if (tweenData)
         {
@@ -30,7 +32,7 @@ public class UIComponent : PoolableMono
         ParentTrm = parentTrm;
         transform.SetParent(parentTrm);
         transform.localRotation = _originLocalRot;
-        transform.localScale = Vector3.one;
+        transform.localScale = _originScale;
 
         var localPos = _originLocalPos;
         localPos.z = 0;

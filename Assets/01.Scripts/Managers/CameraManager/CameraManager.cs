@@ -1,4 +1,4 @@
-                                                                            using System;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
@@ -22,6 +22,13 @@ public class CameraManager : BaseManager<CameraManager>
     [SerializeField] private float _zoomOutScale = 1f;
     [SerializeField] private float _zoomControlTimer;
     [field:SerializeField] public AnimationCurve ZoomControlCurve { get; private set; }
+
+    [field:SerializeField] public float InitRotateValue { get; private set; } = -45f;
+    [field: SerializeField] public float MinRotateValue { get; private set; } = -90f;
+    [field: SerializeField] public float MaxRotateValue { get; private set; } = 0f;
+    [field:SerializeField] public float RotateValue { get; private set; } = 45f;
+    [field:SerializeField] public float RotateTime { get; private set; } = 0.5f; 
+    public float LastRotateValue { get; set; }
     
     public override void StartManager()
     {
@@ -29,6 +36,8 @@ public class CameraManager : BaseManager<CameraManager>
         CurrentCamController = null;
         ActiveVCam = null;
         MainCam = Camera.main;
+
+        LastRotateValue = InitRotateValue;
 
         foreach (VirtualCamType camType in Enum.GetValues(typeof(VirtualCamType)))
         {
@@ -45,6 +54,8 @@ public class CameraManager : BaseManager<CameraManager>
 
     public void InitCamera()
     {
+        LastRotateValue = InitRotateValue;
+        LightManager.Instance.RotateDefaultDirectionalLight(InitRotateValue + 15f, 0f);
         _vCamControllers.Values.ToList().ForEach(camController =>
         {
             camController.ResetCamera();

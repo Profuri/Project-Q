@@ -14,6 +14,8 @@ public enum EInputCategory
     Interaction,
     AxisControl,
     ZoomOut,
+    RotateCamRight,
+    RotateCamLeft,
     Reload,
     Escape,
 }
@@ -24,7 +26,6 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
     [field:SerializeField] public UIInputReader UIInputReader { get; private set; }
     [field:SerializeField] public CameraInputReader CameraInputReader { get; private set; }
     [field:SerializeField] public TimelineInputReader TimelineInputReader { get; private set; }
-
 
     private Dictionary<EInputCategory, InputAction> _inputDictionary;
 
@@ -47,6 +48,8 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
             { EInputCategory.AxisControl,       PlayerInputReader.Actions.AxisControl },
             { EInputCategory.Reload,            PlayerInputReader.Actions.Reload },
             { EInputCategory.ZoomOut,           CameraInputReader.Actions.ZoomControl },
+            { EInputCategory.RotateCamRight,    CameraInputReader.Actions.RotateRight },
+            { EInputCategory.RotateCamLeft,     CameraInputReader.Actions.RotateLeft },
         };
     }
 

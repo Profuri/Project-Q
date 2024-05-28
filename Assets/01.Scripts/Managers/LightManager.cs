@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using AxisConvertSystem;
 using ManagingSystem;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class LightManager : BaseManager<LightManager>
     [Header("Axis Directional Light Section")] 
     [SerializeField] private float _axisLightIntensity;
     [SerializeField] private float _axisLightTurnOnTime;
+    [SerializeField] private List<Color> _axisLightColors;
     
     public override void StartManager()
     {
@@ -41,6 +43,9 @@ public class LightManager : BaseManager<LightManager>
         {
             _axisDirectionalLight.transform.rotation = Quaternion.LookRotation(-axisDirection);
         }
+
+        var axisColor = _axisLightColors[(int)axis];
+        _axisDirectionalLight.color = axisColor;
     }
 
     public void SetShadow(LightShadows shadow)
@@ -64,5 +69,31 @@ public class LightManager : BaseManager<LightManager>
 
         target.intensity = to;
         callBack?.Invoke();
+    }
+
+    public void RotateDefaultDirectionalLight(float value, float rotateTime)
+    {
+        StartSafeCoroutine("LightRotateRoutine", LightRotateRoutine(value, rotateTime));
+    }
+    
+    private IEnumerator LightRotateRoutine(float rotateValue, float time)
+    {
+        var currentRot = _directionalLight.transform.localRotation;
+
+        var localEulerAngle = _directionalLight.transform.localEulerAngles;
+        var targetRot = Quaternion.Euler(localEulerAngle.x, rotateValue, localEulerAngle.z);
+
+        var currentTime = 0f;
+        while (currentTime <= time)
+        {
+            currentTime += Time.deltaTime;
+            var percent = currentTime / time;
+
+            var rot = Quaternion.Lerp(currentRot, targetRot, percent);
+            _directionalLight.transform.localRotation = rot;
+            yield return null;
+        }
+
+        _directionalLight.transform.localRotation = targetRot;
     }
 }
