@@ -77,7 +77,7 @@ public class Scene : PoolableMono
         InputManager.Instance.SetEnableInputAll(false);
         Player = AddObject("Player") as PlayerUnit;
         Player.transform.localPosition = initSection.PlayerResetPoint;
-
+        
         Player.ModelTrm.localPosition += Vector3.up * 5;
         Player.ModelTrm.DOLocalMove(Vector3.zero, 0.5f).SetEase(Ease.InBack)
         .OnComplete(() =>
@@ -104,13 +104,21 @@ public class Scene : PoolableMono
 
     public void DeleteObject(PoolableMono obj)
     {
-        PoolManager.Instance.Push(obj);
         _objects.Remove(obj);
+        
+        if (!obj.poolOut)
+        {
+            return;
+        }
+        
+        PoolManager.Instance.Push(obj);
     }
 
     public void SafeDeleteObject(PoolableMono obj)
     {
         Destroy(obj.gameObject);
+        
+        
         _objects.Remove(obj);
     }
 

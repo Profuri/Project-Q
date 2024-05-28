@@ -52,11 +52,14 @@ namespace AxisConvertSystem
         
         public override void OnPop()
         {
+            
         }
 
         public override void OnPush()
         {
+
         }
+        
         
         public virtual void Awake()
         {
@@ -106,8 +109,7 @@ namespace AxisConvertSystem
             
             Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
         }
-
-
+        
         public virtual void UpdateUnit()
         {
             if (!staticUnit)
@@ -126,6 +128,20 @@ namespace AxisConvertSystem
             DepthHandler.DepthCheckPointSetting();
             
             OnInitEvent?.Invoke(converter);
+
+            if(CanAppearClimbable() && Section is Stage)
+            {
+                _unClimbableEffect = PoolManager.Instance.Pop("UnClimbableEffect") as UnClimbableEffect;
+                _unClimbableEffect?.Setting(this);
+            }
+        }
+
+        public void DeleteClimbableEffect()
+        {
+            if (_unClimbableEffect != null)
+            {
+                PoolManager.Instance.Push(_unClimbableEffect);
+            }
         }
 
         public virtual void Convert(AxisType axis)
@@ -145,6 +161,7 @@ namespace AxisConvertSystem
             ConvertedInfo = ConvertInfo(UnitInfo, axis);
             
             OnConvertEvent?.Invoke(axis);
+            _unClimbableEffect?.SetAlpha(0f);
         }
         
         public virtual void ApplyUnitInfo(AxisType axis)
@@ -297,6 +314,7 @@ namespace AxisConvertSystem
                 Rigidbody.velocity = Vector3.zero;
                 Dissolve(0f, useDissolve ? dissolveTime : 0f, true, callBack);
             }
+
         }
         
         public void RewriteUnitInfo()
@@ -422,7 +440,7 @@ namespace AxisConvertSystem
         {
             var origin = Collider.bounds.center;
             var triggerInteraction = ignoreTriggered ? QueryTriggerInteraction.Ignore : QueryTriggerInteraction.Collide;
-
+            
             var size = 0;
             var cols = new Collider[10];
 
@@ -519,28 +537,6 @@ namespace AxisConvertSystem
             }
             callBack?.Invoke();
         }
-
-        public void ShowUnClimbableEffect()
-        {
-            if (CanAppearClimbable())
-            {
-                if(_unClimbableEffect == null)
-                {
-                    _unClimbableEffect = SceneControlManager.Instance.AddObject("UnClimbableEffect") as UnClimbableEffect;
-                    _unClimbableEffect.Setting(Collider);
-                }
-            }
-        }
-
-        public void UnShowClimbableEffect()
-        {
-            if(_unClimbableEffect != null)
-            {
-                SceneControlManager.Instance.DeleteObject(_unClimbableEffect);
-                _unClimbableEffect = null;
-            }
-        }
-
         public bool IsSuperiorUnit(ObjectUnit checkUnit)
         {
             if (!subUnit)

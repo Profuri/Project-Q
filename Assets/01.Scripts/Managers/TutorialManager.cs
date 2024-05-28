@@ -1,4 +1,5 @@
 using Singleton;
+using UnityEngine;
 
 public class TutorialManager : MonoSingleton<TutorialManager>
 {
@@ -31,6 +32,7 @@ public class TutorialManager : MonoSingleton<TutorialManager>
         _tutorialWindow.Disappear();
         InputManager.Instance.SetEnableInputAll(true);
         OnTutorial = false;
+
     }
 
 }

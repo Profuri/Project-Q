@@ -199,18 +199,12 @@ namespace AxisConvertSystem
 
         public void ShowClimbableEffect()
         {
-            foreach (ObjectUnit unit in _section.SectionUnits)
-            {
-                unit.ShowUnClimbableEffect();
-            }
+
         }
 
         public void UnShowClimbableEffect()
         {
-            foreach (ObjectUnit unit in _section.SectionUnits)
-            {
-                unit.UnShowClimbableEffect();
-            }
+
         }
     }
 }

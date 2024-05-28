@@ -9,7 +9,7 @@ public class TutorialObjectUnit : InteractableObject
     [SerializeField] private Transform _markAppearTransform;
 
     private TutorialMark _tutorialMark;
-
+    
     public override void Init(AxisConverter converter)
     {
         base.Init(converter);
@@ -69,6 +69,16 @@ public class TutorialObjectUnit : InteractableObject
         _tutorialMark.On();
     }
 
+    private void Reset()
+    {
+        TutorialManager.Instance.StopTutorial();
+        if (_tutorialMark == null)
+        {
+            LoadTutorialMark();
+        }
+        InputManager.Instance.UIInputReader.OnTutorialOutEvent -= Reset;
+    }
+
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
@@ -76,21 +86,17 @@ public class TutorialObjectUnit : InteractableObject
         {
             return;
         }
+
         if (!TutorialManager.Instance.OnTutorial)
         {
             TutorialManager.Instance.SetUpTutorial(_info);
-
-            _tutorialMark?.Off();
+            
+            _tutorialMark?.Off(() => InputManager.Instance.UIInputReader.OnTutorialOutEvent += Reset);
             _tutorialMark = null;
         }
         else
         {
-            TutorialManager.Instance.StopTutorial();
-
-            if (_tutorialMark == null)
-            {
-                LoadTutorialMark();
-            }
+            Reset();
         }
     }
     
@@ -122,4 +128,5 @@ public class TutorialObjectUnit : InteractableObject
             _tutorialMark = null;
         }
     }
+    
 }
