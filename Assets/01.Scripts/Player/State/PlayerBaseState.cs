@@ -2,7 +2,7 @@ public abstract class PlayerBaseState : State
 {
     protected bool IsControllingAxis;
 
-    public PlayerBaseState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
+    protected PlayerBaseState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
         IsControllingAxis = false;
     }
@@ -14,8 +14,7 @@ public abstract class PlayerBaseState : State
     
     protected void AxisControlHandle()
     {
-        bool isClear = StageManager.Instance.CurrentStage.IsClear;
-        if (!Player.Converter.Convertable || !Player.CanAxisControl || isClear)
+        if (!Player.Converter.Convertable || !Player.CanAxisControl || StageManager.Instance.CurrentStage.IsClear)
         {
             return;
         }
