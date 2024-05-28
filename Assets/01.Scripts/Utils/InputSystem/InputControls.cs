@@ -254,6 +254,24 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftArrow"",
+                    ""type"": ""Button"",
+                    ""id"": ""77b9013f-5c90-4c1f-a31e-1be3e898f79e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightArrow"",
+                    ""type"": ""Button"",
+                    ""id"": ""6a931581-5323-4db3-af0b-21bd9f01f45a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -320,6 +338,50 @@ namespace InputControl
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""78395f9d-758e-4098-a90a-650f34b3b984"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""LeftArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eb936b7c-6eb2-4c06-a9cf-7e1001d0340c"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""LeftArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ac18bcb0-f64c-4b45-b4a9-7dad910713e2"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RightArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e07b3ea-4520-4d1e-9198-1e5c359db7a0"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RightArrow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -457,6 +519,8 @@ namespace InputControl
             m_UI_DownArrow = m_UI.FindAction("DownArrow", throwIfNotFound: true);
             m_UI_Enter = m_UI.FindAction("Enter", throwIfNotFound: true);
             m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
+            m_UI_LeftArrow = m_UI.FindAction("LeftArrow", throwIfNotFound: true);
+            m_UI_RightArrow = m_UI.FindAction("RightArrow", throwIfNotFound: true);
             // Camera
             m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
             m_Camera_ZoomControl = m_Camera.FindAction("ZoomControl", throwIfNotFound: true);
@@ -618,6 +682,8 @@ namespace InputControl
         private readonly InputAction m_UI_DownArrow;
         private readonly InputAction m_UI_Enter;
         private readonly InputAction m_UI_Pause;
+        private readonly InputAction m_UI_LeftArrow;
+        private readonly InputAction m_UI_RightArrow;
         public struct UIActions
         {
             private @InputControls m_Wrapper;
@@ -628,6 +694,8 @@ namespace InputControl
             public InputAction @DownArrow => m_Wrapper.m_UI_DownArrow;
             public InputAction @Enter => m_Wrapper.m_UI_Enter;
             public InputAction @Pause => m_Wrapper.m_UI_Pause;
+            public InputAction @LeftArrow => m_Wrapper.m_UI_LeftArrow;
+            public InputAction @RightArrow => m_Wrapper.m_UI_RightArrow;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -655,6 +723,12 @@ namespace InputControl
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @LeftArrow.started += instance.OnLeftArrow;
+                @LeftArrow.performed += instance.OnLeftArrow;
+                @LeftArrow.canceled += instance.OnLeftArrow;
+                @RightArrow.started += instance.OnRightArrow;
+                @RightArrow.performed += instance.OnRightArrow;
+                @RightArrow.canceled += instance.OnRightArrow;
             }
 
             private void UnregisterCallbacks(IUIActions instance)
@@ -677,6 +751,12 @@ namespace InputControl
                 @Pause.started -= instance.OnPause;
                 @Pause.performed -= instance.OnPause;
                 @Pause.canceled -= instance.OnPause;
+                @LeftArrow.started -= instance.OnLeftArrow;
+                @LeftArrow.performed -= instance.OnLeftArrow;
+                @LeftArrow.canceled -= instance.OnLeftArrow;
+                @RightArrow.started -= instance.OnRightArrow;
+                @RightArrow.performed -= instance.OnRightArrow;
+                @RightArrow.canceled -= instance.OnRightArrow;
             }
 
             public void RemoveCallbacks(IUIActions instance)
@@ -828,6 +908,8 @@ namespace InputControl
             void OnDownArrow(InputAction.CallbackContext context);
             void OnEnter(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
+            void OnLeftArrow(InputAction.CallbackContext context);
+            void OnRightArrow(InputAction.CallbackContext context);
         }
         public interface ICameraActions
         {

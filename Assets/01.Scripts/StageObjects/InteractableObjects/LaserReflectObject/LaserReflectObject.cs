@@ -2,12 +2,25 @@ using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
 using System.Collections;
-using System;
+using DG.Tweening;
 
 public class LaserReflectObject : InteractableObject
 {
     private const float RotateValue = 45f;
-    private Coroutine _rotateSequence;
+
+    private MeshRenderer _reflectPanel;
+    private MeshRenderer _tempReflectPanel;
+
+    private float _currentRotate;
+    private bool _isControlRotate;
+
+    public override void Awake()
+    {
+        base.Awake();
+
+        _reflectPanel = GetComponent<MeshRenderer>();
+        _tempReflectPanel = transform.parent.Find("TempLaserReflectPlate").GetComponent<MeshRenderer>();
+    }
 
     public override void ApplyUnitInfo(AxisType axis)
     {
@@ -20,13 +33,26 @@ public class LaserReflectObject : InteractableObject
     {
         if(communicator is PlayerUnit)
         {
-            if(_rotateSequence == null)
+            if (_isControlRotate)
             {
-                _rotateSequence = StartCoroutine(RotateSequence(1f,RotateValue,() =>
-                {
-                    _rotateSequence = null;
-                }));
+                return;
             }
+
+            _isControlRotate = true;
+            _reflectPanel.enabled = false;
+            _tempReflectPanel.enabled = true;
+
+            _tempReflectPanel.transform.localRotation = _reflectPanel.transform.localRotation;
+            _currentRotate = _tempReflectPanel.transform.localEulerAngles.y;
+            _tempReflectPanel.transform.DOScale((Converter.AxisType == AxisType.None ? OriginUnitInfo.LocalScale : ConvertedInfo.LocalScale) * 1.25f, 0.25f);
+            _tempReflectPanel.transform.DOLocalMoveY(0.15f, 0.25f);
+            
+            InputManager.Instance.UIInputReader.OnLeftArrowClickEvent += RotateLeftHandle;
+            InputManager.Instance.UIInputReader.OnRightArrowClickEvent += RotateRightHandle;
+            InputManager.Instance.UIInputReader.OnEnterClickEvent += EnterRotateEditHandle;
+            InputManager.Instance.PlayerInputReader.OnInteractionEvent += EnterRotateEditHandle;
+            
+            InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, false);
         }
         else if(communicator is LaserLauncherObject laser)
         {
@@ -42,23 +68,56 @@ public class LaserReflectObject : InteractableObject
         }
     }
 
-    private IEnumerator RotateSequence(float rotateTime,float rotateValue,Action Callback = null)
+    private void RotateRightHandle()
+    {
+        StartSafeCoroutine("ReflectPanelRotateSequence", RotateSequence(0.25f, -RotateValue));
+    }
+
+    private void RotateLeftHandle()
+    {
+        StartSafeCoroutine("ReflectPanelRotateSequence", RotateSequence(0.25f, RotateValue));
+    }
+
+    private void EnterRotateEditHandle()
+    {
+        _tempReflectPanel.transform.DOLocalMoveY(0f, 0.25f);
+        _tempReflectPanel.transform.DOScale(Converter.AxisType == AxisType.None ? OriginUnitInfo.LocalScale : ConvertedInfo.LocalScale, 0.25f)
+            .OnComplete(() =>
+            {
+                _reflectPanel.enabled = true;
+                _tempReflectPanel.enabled = false;
+            });
+
+        _reflectPanel.transform.localRotation = Quaternion.Euler(Vector3.up * _currentRotate);
+        UnitInfo.LocalRot = _reflectPanel.transform.localRotation;
+        
+        InputManager.Instance.UIInputReader.OnLeftArrowClickEvent -= RotateLeftHandle;
+        InputManager.Instance.UIInputReader.OnRightArrowClickEvent -= RotateRightHandle;
+        InputManager.Instance.UIInputReader.OnEnterClickEvent -= EnterRotateEditHandle;
+        InputManager.Instance.PlayerInputReader.OnInteractionEvent -= EnterRotateEditHandle;
+        
+        InputManager.Instance.SetEnableInputAll(true);
+
+        _isControlRotate = false;
+    }
+
+    private IEnumerator RotateSequence(float rotateTime, float rotateValue)
     {
         float timer = 0f;
         float percent = timer / rotateTime;
-        Quaternion originRotation = transform.rotation;
-        Quaternion targetRotation = originRotation * Quaternion.Euler(Vector3.up * rotateValue);
+
+        _currentRotate += rotateValue;
+        
+        Quaternion originRotation = _tempReflectPanel.transform.rotation;
+        Quaternion targetRotation = Quaternion.Euler(Vector3.up * _currentRotate);
         
         while (percent < 1f)
         {
             timer += Time.deltaTime;
             percent = timer / rotateTime;
 
-            transform.rotation = Quaternion.Lerp(originRotation, targetRotation, percent);
+            _tempReflectPanel.transform.rotation = Quaternion.Lerp(originRotation, targetRotation, percent);
             yield return null;
         }
-        
-        UnitInfo.LocalRot = transform.localRotation;
-        Callback?.Invoke();
     }
 }
