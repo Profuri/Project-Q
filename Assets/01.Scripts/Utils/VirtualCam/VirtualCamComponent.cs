@@ -11,20 +11,20 @@ namespace VirtualCam
         private CinemachineVirtualCamera _virtualCam;
         private float _originOrthoSize;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _virtualCam = GetComponent<CinemachineVirtualCamera>();
             _originOrthoSize = _virtualCam.m_Lens.OrthographicSize;
         }
 
-        public void EnterCam()
+        public virtual void EnterCam()
         {
             this.gameObject.SetActive(true);
             _virtualCam.m_Priority = 10;
             _virtualCam.m_Lens.OrthographicSize = _originOrthoSize;
         }
 
-        public void ExitCam()
+        public virtual void ExitCam()
         {
             this.gameObject.SetActive(false);
             _virtualCam.m_Priority = 0;
@@ -159,6 +159,42 @@ namespace VirtualCam
                 
                 yield return null;
             }
+        }
+
+        public void RotateCam(float rotateValue, float time, Action callBack = null)
+        {
+            if (time <= 0f)
+            {
+                var localEulerAngle = transform.localEulerAngles;
+                transform.localRotation = Quaternion.Euler(localEulerAngle.x, rotateValue, localEulerAngle.z);
+                callBack?.Invoke();
+            }
+            else
+            {
+                StartSafeCoroutine("CamRotateRoutine", CamRotateRoutine(rotateValue, time, callBack));
+            }
+        }
+        
+        private IEnumerator CamRotateRoutine(float rotateValue, float time, Action callBack)
+        {
+            var currentRot = transform.localRotation;
+
+            var localEulerAngle = transform.localEulerAngles;
+            var targetRot = Quaternion.Euler(localEulerAngle.x, rotateValue, localEulerAngle.z);
+
+            var currentTime = 0f;
+            while (currentTime < time)
+            {
+                currentTime += Time.deltaTime;
+                var percent = currentTime / time;
+
+                var rot = Quaternion.Lerp(currentRot, targetRot, percent);
+                transform.localRotation = rot;
+                yield return null;
+            }
+
+            transform.localRotation = targetRot;
+            callBack?.Invoke();
         }
     }
 }

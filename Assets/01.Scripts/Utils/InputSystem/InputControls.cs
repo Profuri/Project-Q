@@ -154,7 +154,7 @@ namespace InputControl
                 {
                     ""name"": """",
                     ""id"": ""3697c80f-d747-4b78-8fd3-45d1ddd08ce1"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -337,6 +337,24 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""194f5afa-6436-4b28-8f83-0d2049bc3d21"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""1fea7cb6-ad44-44d3-bd01-c815836a5357"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -348,6 +366,28 @@ namespace InputControl
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""ZoomControl"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6507981a-0057-42ac-b555-68a7d63d773f"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RotateRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7d50d0e4-c6b2-446f-b8c4-68b9b3d689f7"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RotateLeft"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -420,6 +460,8 @@ namespace InputControl
             // Camera
             m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
             m_Camera_ZoomControl = m_Camera.FindAction("ZoomControl", throwIfNotFound: true);
+            m_Camera_RotateRight = m_Camera.FindAction("RotateRight", throwIfNotFound: true);
+            m_Camera_RotateLeft = m_Camera.FindAction("RotateLeft", throwIfNotFound: true);
             // Timeline
             m_Timeline = asset.FindActionMap("Timeline", throwIfNotFound: true);
             m_Timeline_SpeedUp = m_Timeline.FindAction("SpeedUp", throwIfNotFound: true);
@@ -657,11 +699,15 @@ namespace InputControl
         private readonly InputActionMap m_Camera;
         private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
         private readonly InputAction m_Camera_ZoomControl;
+        private readonly InputAction m_Camera_RotateRight;
+        private readonly InputAction m_Camera_RotateLeft;
         public struct CameraActions
         {
             private @InputControls m_Wrapper;
             public CameraActions(@InputControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @ZoomControl => m_Wrapper.m_Camera_ZoomControl;
+            public InputAction @RotateRight => m_Wrapper.m_Camera_RotateRight;
+            public InputAction @RotateLeft => m_Wrapper.m_Camera_RotateLeft;
             public InputActionMap Get() { return m_Wrapper.m_Camera; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -674,6 +720,12 @@ namespace InputControl
                 @ZoomControl.started += instance.OnZoomControl;
                 @ZoomControl.performed += instance.OnZoomControl;
                 @ZoomControl.canceled += instance.OnZoomControl;
+                @RotateRight.started += instance.OnRotateRight;
+                @RotateRight.performed += instance.OnRotateRight;
+                @RotateRight.canceled += instance.OnRotateRight;
+                @RotateLeft.started += instance.OnRotateLeft;
+                @RotateLeft.performed += instance.OnRotateLeft;
+                @RotateLeft.canceled += instance.OnRotateLeft;
             }
 
             private void UnregisterCallbacks(ICameraActions instance)
@@ -681,6 +733,12 @@ namespace InputControl
                 @ZoomControl.started -= instance.OnZoomControl;
                 @ZoomControl.performed -= instance.OnZoomControl;
                 @ZoomControl.canceled -= instance.OnZoomControl;
+                @RotateRight.started -= instance.OnRotateRight;
+                @RotateRight.performed -= instance.OnRotateRight;
+                @RotateRight.canceled -= instance.OnRotateRight;
+                @RotateLeft.started -= instance.OnRotateLeft;
+                @RotateLeft.performed -= instance.OnRotateLeft;
+                @RotateLeft.canceled -= instance.OnRotateLeft;
             }
 
             public void RemoveCallbacks(ICameraActions instance)
@@ -774,6 +832,8 @@ namespace InputControl
         public interface ICameraActions
         {
             void OnZoomControl(InputAction.CallbackContext context);
+            void OnRotateRight(InputAction.CallbackContext context);
+            void OnRotateLeft(InputAction.CallbackContext context);
         }
         public interface ITimelineActions
         {

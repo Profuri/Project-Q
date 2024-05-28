@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
-using Unity.VisualScripting;
 
 public class FractureObject : InteractableObject
 {
@@ -21,6 +20,8 @@ public class FractureObject : InteractableObject
     public MeshRenderer MeshRenderer => _meshRenderer;
 
     private SoundEffectPlayer _soundEffectPlayer;
+
+    private List<FracturePart> _fractureParts;
     
     public override void Awake()
     {
@@ -29,18 +30,42 @@ public class FractureObject : InteractableObject
         _meshFilter = GetComponent<MeshFilter>();
 
         _soundEffectPlayer = new SoundEffectPlayer(this);
+
+        _fractureParts = new List<FracturePart>();
+    }
+
+    private void Start()
+    {
+        CreateFracturePart();
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         SoundManager.Instance.PlaySFX("GlassBroke",false,_soundEffectPlayer);
-        
+        Broke();
+    }
+
+    private void Broke()
+    {
+        foreach (var part in _fractureParts)
+        {
+            part.transform.SetParent(null);
+            part.gameObject.SetActive(true);
+
+            var explosionForce = part.Bounds.center * _explodeForce;
+            part.Broke(this, explosionForce);
+        }
+
+        Activate(false);
+    }
+
+    private void CreateFracturePart()
+    {
         var originalMesh = _meshFilter.mesh;
         originalMesh.RecalculateBounds();
-        var parts = new List<FracturePart>();
         var subParts = new List<FracturePart>();
 
-        var mainPart = SceneControlManager.Instance.AddObject("FracturePart") as FracturePart;
+        var mainPart = PoolManager.Instance.Pop("FracturePart") as FracturePart;
         mainPart.UV = originalMesh.uv;
         mainPart.Vertices = originalMesh.vertices;
         mainPart.Normal = originalMesh.normals;
@@ -52,11 +77,11 @@ public class FractureObject : InteractableObject
             mainPart.Triangle[i] = originalMesh.GetTriangles(i);
         }
 
-        parts.Add(mainPart);
+        _fractureParts.Add(mainPart);
 
         for (var c = 0; c < _cutCascades; c++)
         {
-            foreach (var part in parts)
+            foreach (var part in _fractureParts)
             {
                 var bounds = part.Bounds;
                 bounds.Expand(0.5f);
@@ -71,25 +96,24 @@ public class FractureObject : InteractableObject
                 subParts.Add(GenerateMesh(part, plane, true));
                 subParts.Add(GenerateMesh(part, plane, false));
                 
-                SceneControlManager.Instance.DeleteObject(part);
+                PoolManager.Instance.Push(part);
             }
             
-            parts = new List<FracturePart>(subParts);
+            _fractureParts = new List<FracturePart>(subParts);
             subParts.Clear();
         }
 
-        foreach (var part in parts)
+        foreach (var part in _fractureParts)
         {
-            part.Setting(this);
-            part.AddForce(part.Bounds.center * _explodeForce, transform.position);
+            part.CreateMesh(this);
+            part.transform.SetParent(transform);
+            part.gameObject.SetActive(false);
         }
-
-        Activate(false);
     }
 
     private FracturePart GenerateMesh(FracturePart original, Plane planeUnit, bool left)
     {
-        var partMesh = SceneControlManager.Instance.AddObject("FracturePart") as FracturePart;
+        var partMesh = PoolManager.Instance.Pop("FracturePart") as FracturePart;
         var ray1 = new Ray();
         var ray2 = new Ray();
         
