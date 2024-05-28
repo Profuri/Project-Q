@@ -8,6 +8,8 @@ using UnityEngine;
 public class SectionCamController : VirtualCamController
 {
     private Vector3 _originPos;
+    private Quaternion _originRot;
+    
     private readonly Dictionary<AxisType, VirtualCamComponent> _virtualCamDiction =
         new Dictionary<AxisType, VirtualCamComponent>();
 
@@ -40,6 +42,7 @@ public class SectionCamController : VirtualCamController
             _virtualCamPosDictionary.Add(kvp.Value,originPos);
         }
         _originPos = _virtualCamDiction[AxisType.None].transform.position;
+        _originRot = _virtualCamDiction[AxisType.None].transform.rotation;
     }
 
     public void SetAxisControlCam(bool value, Action callBack = null)
@@ -87,6 +90,8 @@ public class SectionCamController : VirtualCamController
             _virtualCamDiction[kvp.Key].transform.position = _originPos;
             _virtualCamDiction[kvp.Key].enabled = true;
         }
+
+        _virtualCamDiction[AxisType.None].transform.rotation = _originRot;
         ChangeCameraAxis(AxisType.None);
     }
 }

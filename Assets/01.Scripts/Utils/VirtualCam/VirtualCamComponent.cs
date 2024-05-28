@@ -11,7 +11,7 @@ namespace VirtualCam
         private CinemachineVirtualCamera _virtualCam;
         private float _originOrthoSize;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _virtualCam = GetComponent<CinemachineVirtualCamera>();
             _originOrthoSize = _virtualCam.m_Lens.OrthographicSize;
@@ -159,6 +159,27 @@ namespace VirtualCam
                 
                 yield return null;
             }
+        }
+        
+        protected IEnumerator CamRotateRoutine(float rotateValue, float time)
+        {
+            var currentRot = transform.localRotation;
+
+            var localEulerAngle = transform.localEulerAngles;
+            var targetRot = Quaternion.Euler(localEulerAngle.x, rotateValue, localEulerAngle.z);
+
+            var currentTime = 0f;
+            while (currentTime < time)
+            {
+                currentTime += Time.deltaTime;
+                var percent = currentTime / time;
+
+                var rot = Quaternion.Lerp(currentRot, targetRot, percent);
+                transform.localRotation = rot;
+                yield return null;
+            }
+
+            transform.localRotation = targetRot;
         }
     }
 }
