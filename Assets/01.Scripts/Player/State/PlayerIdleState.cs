@@ -9,6 +9,7 @@ public class PlayerIdleState : PlayerOnGroundState
     public override void EnterState()
     {
         base.EnterState();
+        Player.CanAxisControl = true;
         Player.StopImmediately(false);
     }
 
