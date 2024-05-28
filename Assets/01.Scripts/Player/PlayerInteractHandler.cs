@@ -12,11 +12,27 @@ public class PlayerInteractHandler : MonoBehaviour
     {
         _player = GetComponent<PlayerUnit>();
         _lastFindInteractableObjects = new List<InteractableObject>();
+        StageManager.Instance.OnStageClear += ResetInteractable;
     }
 
     public void UpdateHandler()
     {
+        if (StageManager.Instance != null)
+        {
+            Stage curStage = StageManager.Instance.CurrentStage;
+            if (curStage != null && curStage.IsClear)
+            {
+                return;
+            }
+        }
         FindInteractable();
+    }
+
+    private void ResetInteractable(ChapterType type,int stageIndex)
+    {
+        _lastFindInteractableObjects.ForEach(i => i.OnDetectedLeave());
+        _player.HoldingHandler.Detach();
+        _lastFindInteractableObjects.Clear();
     }
     
     public void OnInteraction()
@@ -51,12 +67,20 @@ public class PlayerInteractHandler : MonoBehaviour
                 var isHit = Physics.Raycast(_player.Collider.bounds.center - dir, dir, out var hit, Mathf.Infinity,
                     _player.canStandMask);
 
-                if ((isHit && cols[i] != hit.collider) || !interactable.activeUnit)
+                
+                
+                if ((isHit && cols[i] != hit.collider) 
+                    || !interactable.activeUnit 
+                    || (_player.Section is Stage && interactable.Section.GetHashCode() != _player.Section.GetHashCode()))
                 {
                     continue;
                 }
 
-                interactable.OnDetectedEnter(_player);
+                if (!_lastFindInteractableObjects.Contains(interactable))
+                {
+                    interactable.OnDetectedEnter(_player);
+                }
+                
                 tempList.Add(interactable);
             }
         }

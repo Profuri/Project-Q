@@ -1,12 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using InputControl;
 using ManagingSystem;
 using UnityEngine;
 using UnityEngine.Playables;
 
-public class TimelineQueueInfo
+public class TimelineQueueInfo : IPriorityComparer<TimelineQueueInfo>
 {
     public readonly PlayableDirector Director;
     public readonly TimelineType AssetType;
@@ -20,6 +19,11 @@ public class TimelineQueueInfo
         SkipOnStart = skipOnStart;
         Callback = callback;
     }
+
+    public bool Compare(TimelineQueueInfo other)
+    {
+        return !SkipOnStart && other.SkipOnStart;
+    }
 }
 
 public class TimelineManager : BaseManager<TimelineManager>
@@ -29,7 +33,7 @@ public class TimelineManager : BaseManager<TimelineManager>
 
     [SerializeField] private float _speedMultiply;
 
-    private Queue<TimelineQueueInfo> _timelineQueue;
+    private PriorityQueue<TimelineQueueInfo> _timelineQueue;
     
     private PlayableDirector _currentDirector;
     private TimelineQueueInfo _currentPlayQueueInfo;
@@ -52,7 +56,7 @@ public class TimelineManager : BaseManager<TimelineManager>
     public override void Init()
     {
         base.Init();
-        _timelineQueue = new Queue<TimelineQueueInfo>();
+        _timelineQueue = new PriorityQueue<TimelineQueueInfo>();
     }
 
     public override void StartManager()
@@ -63,10 +67,6 @@ public class TimelineManager : BaseManager<TimelineManager>
     public void ShowTimeline(PlayableDirector director, TimelineType type, bool skipOnStart = false, Action onComplete = null)
     {
         _timelineQueue.Enqueue(new TimelineQueueInfo(director, type, skipOnStart, onComplete));
-        while (skipOnStart && !_timelineQueue.Peek().SkipOnStart)
-        {
-            _timelineQueue.Enqueue(_timelineQueue.Dequeue());
-        }
 
         // first timeline start
         if (!IsPlay)

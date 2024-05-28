@@ -67,7 +67,6 @@ public class SettingWindow : UIComponent
         base.Disappear(callback);
     }
     
-    [VisibleEnum(typeof(SettingType))]
     public void ChangePanel(int type)
     {
         PlayTapSound();

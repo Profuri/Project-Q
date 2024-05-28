@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AxisConvertSystem;
+using SingularityGroup.HotReload;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -14,7 +15,6 @@ namespace InteractableSystem
         [SerializeField] private List<ToggleChangeEvent> _onToggleChangeEvents;
 
         private Dictionary<int, SelectedBorder> _selectedBorderDictionary = new Dictionary<int, SelectedBorder>();
-
         
         private bool _lastToggleState;
         protected bool LastToggleState
@@ -94,15 +94,11 @@ namespace InteractableSystem
 
         public override void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)
         {
-            List<SelectedBorder> borderList = _selectedBorderDictionary.Values.ToList();
-            if(borderList.Count > 0 )
+            foreach (var border in _selectedBorderDictionary.Values)
             {
-                foreach (SelectedBorder selectedBorder in borderList)
-                {
-                    _selectedBorderDictionary.Remove(selectedBorder.GetInstanceID());
-                    SceneControlManager.Instance.DeleteObject(selectedBorder);
-                }
+                SceneControlManager.Instance.DeleteObject(border);
             }
+            _selectedBorderDictionary.Clear();
             base.Dissolve(value, time, useDissolve, callBack);
         } 
 
@@ -113,15 +109,14 @@ namespace InteractableSystem
             int instanceID = showObj.GetInstanceID();
             float alpha = AlphaValue;
 
-            if (_selectedBorderDictionary.ContainsKey(instanceID) == false)
+            if (_selectedBorderDictionary.ContainsKey(instanceID) == false || _selectedBorderDictionary[instanceID] == null)
             {
                 var selectedBorder = SceneControlManager.Instance.AddObject("SelectedBorder") as SelectedBorder;
                 
                 selectedBorder.Setting(showObj);
-                selectedBorder.Activate(true);
-                _selectedBorderDictionary.Add(instanceID, selectedBorder);
+                _selectedBorderDictionary[instanceID] = selectedBorder;
             }
-            _selectedBorderDictionary[instanceID].Activate(true);
+            
             _selectedBorderDictionary[instanceID].SetDistanceProgress(alpha,LastToggleState);
             return true;
         }
@@ -129,9 +124,7 @@ namespace InteractableSystem
         private bool UnShowSelectedBorder(int instanceID)
         {
             if (LastToggleState) return false;
-            if (_selectedBorderDictionary.ContainsKey((instanceID)) == false) return false;
-
-            _selectedBorderDictionary[instanceID].Activate(false);
+            if (_selectedBorderDictionary.ContainsKey(instanceID) == false) return false;
             
             SelectedBorder selectedBorder = _selectedBorderDictionary[instanceID];
             _selectedBorderDictionary.Remove(instanceID);

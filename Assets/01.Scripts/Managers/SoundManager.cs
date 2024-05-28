@@ -33,12 +33,13 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     [SerializeField] private RandomAudioClipSO _chapterClipSO;
     [SerializeField] private RandomAudioClipSO _titleClipSO;
     [SerializeField] private RandomAudioClipSO _cpuClipSO;
+    
     #endregion
     
-
-    private RandomAudioClipSO _currentAudioClipSO;
-    
     private AudioSource _audioSource;
+    
+    private RandomClip _currentRandomClip;
+    private RandomAudioClipSO _currentRandomClipSO;
     
     
 #region AudioMixer
@@ -98,31 +99,33 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     private IEnumerator AudioKeyFrameRoutine(SceneType sceneType)
     {
         AudioSource audioSource = _audioSources[(int)SoundEnum.BGM];
-        while (audioSource.isPlaying == true)
+        while (audioSource.isPlaying == true || !Application.isFocused)
         {
+            if (Application.genuine)
+            
+            {
+                
+            }
             yield return null;
         }
-        PlayCorrectBGM(sceneType);
+        //PlayCorrectBGM(sceneType);
     }
 
     public void PlayCorrectBGM(SceneType sceneType,bool isCpu = false)
     {
         if (_BGMAudioDictionary.ContainsKey(sceneType))
         {
-            if (_currentAudioClipSO != null)
+            var clipSO = isCpu ? _cpuClipSO : _BGMAudioDictionary[sceneType];
+
+            if(_currentRandomClipSO == null || !_currentRandomClipSO.Equals(clipSO))
             {
-                Destroy(_currentAudioClipSO);
+                _currentRandomClipSO = clipSO;
+                _currentRandomClip = clipSO.ShuffleClip();
             }
-
-            if (isCpu)
-                _currentAudioClipSO = Instantiate(_cpuClipSO);
-            else
-                _currentAudioClipSO = Instantiate(_BGMAudioDictionary[sceneType]);
-
-            var clip  = _currentAudioClipSO.GetRandomClip();
             
+            AudioClip clip = _currentRandomClip.GetRandomClip();
             PlayBGM(clip.name);
-
+            
             if (_keyFrameCoroutine != null)
             {
                 StopCoroutine(_keyFrameCoroutine);

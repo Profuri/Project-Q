@@ -25,8 +25,7 @@ namespace AxisConvertSystem
             SetConvertable(section is Stage);
             section.SectionUnits.ForEach(unit => unit.Init(this));
         }
-        
-        
+
         public void SetConvertable(bool convertable)
         {
             Convertable = convertable;

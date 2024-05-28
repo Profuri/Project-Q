@@ -7,7 +7,7 @@ public static class RigidbodyExtensionMethod
     {
         if (clearConstraints)
         {
-            rigid.constraints &= RigidbodyConstraints.FreezeRotation;
+            rigid.constraints = RigidbodyConstraints.FreezeRotation;
         }
         
         if (axis == AxisType.X)
