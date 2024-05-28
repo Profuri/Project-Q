@@ -82,6 +82,24 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""55ef40cb-f6e8-44f2-a341-9dd952f691b8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MouseDelta"",
+                    ""type"": ""Value"",
+                    ""id"": ""63db4243-4569-4381-9581-ce6b2b5fb8df"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -192,6 +210,28 @@ namespace InputControl
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1cf90bd9-ecf3-45ef-9ffe-56d71aaebf9c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""06727e26-29b7-45e9-878d-24455cfca08e"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""MouseDelta"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -511,6 +551,8 @@ namespace InputControl
             m_Player_AxisControl = m_Player.FindAction("AxisControl", throwIfNotFound: true);
             m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
             m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
+            m_Player_Rotate = m_Player.FindAction("Rotate", throwIfNotFound: true);
+            m_Player_MouseDelta = m_Player.FindAction("MouseDelta", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_LeftClick = m_UI.FindAction("LeftClick", throwIfNotFound: true);
@@ -596,6 +638,8 @@ namespace InputControl
         private readonly InputAction m_Player_AxisControl;
         private readonly InputAction m_Player_Click;
         private readonly InputAction m_Player_Reload;
+        private readonly InputAction m_Player_Rotate;
+        private readonly InputAction m_Player_MouseDelta;
         public struct PlayerActions
         {
             private @InputControls m_Wrapper;
@@ -606,6 +650,8 @@ namespace InputControl
             public InputAction @AxisControl => m_Wrapper.m_Player_AxisControl;
             public InputAction @Click => m_Wrapper.m_Player_Click;
             public InputAction @Reload => m_Wrapper.m_Player_Reload;
+            public InputAction @Rotate => m_Wrapper.m_Player_Rotate;
+            public InputAction @MouseDelta => m_Wrapper.m_Player_MouseDelta;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -633,6 +679,12 @@ namespace InputControl
                 @Reload.started += instance.OnReload;
                 @Reload.performed += instance.OnReload;
                 @Reload.canceled += instance.OnReload;
+                @Rotate.started += instance.OnRotate;
+                @Rotate.performed += instance.OnRotate;
+                @Rotate.canceled += instance.OnRotate;
+                @MouseDelta.started += instance.OnMouseDelta;
+                @MouseDelta.performed += instance.OnMouseDelta;
+                @MouseDelta.canceled += instance.OnMouseDelta;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -655,6 +707,12 @@ namespace InputControl
                 @Reload.started -= instance.OnReload;
                 @Reload.performed -= instance.OnReload;
                 @Reload.canceled -= instance.OnReload;
+                @Rotate.started -= instance.OnRotate;
+                @Rotate.performed -= instance.OnRotate;
+                @Rotate.canceled -= instance.OnRotate;
+                @MouseDelta.started -= instance.OnMouseDelta;
+                @MouseDelta.performed -= instance.OnMouseDelta;
+                @MouseDelta.canceled -= instance.OnMouseDelta;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -899,6 +957,8 @@ namespace InputControl
             void OnAxisControl(InputAction.CallbackContext context);
             void OnClick(InputAction.CallbackContext context);
             void OnReload(InputAction.CallbackContext context);
+            void OnRotate(InputAction.CallbackContext context);
+            void OnMouseDelta(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

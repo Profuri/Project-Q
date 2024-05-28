@@ -2,7 +2,7 @@ public abstract class PlayerBaseState : State
 {
     protected bool IsControllingAxis;
 
-    public PlayerBaseState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
+    protected PlayerBaseState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
         IsControllingAxis = false;
     }
