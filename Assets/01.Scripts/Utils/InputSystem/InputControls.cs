@@ -82,6 +82,24 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""55ef40cb-f6e8-44f2-a341-9dd952f691b8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MouseDelta"",
+                    ""type"": ""Value"",
+                    ""id"": ""63db4243-4569-4381-9581-ce6b2b5fb8df"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -194,6 +212,28 @@ namespace InputControl
                     ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1cf90bd9-ecf3-45ef-9ffe-56d71aaebf9c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""06727e26-29b7-45e9-878d-24455cfca08e"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""MouseDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -250,6 +290,24 @@ namespace InputControl
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""20e4fd6f-ff4c-4699-8810-f2daacc6051c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftArrow"",
+                    ""type"": ""Button"",
+                    ""id"": ""77b9013f-5c90-4c1f-a31e-1be3e898f79e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightArrow"",
+                    ""type"": ""Button"",
+                    ""id"": ""6a931581-5323-4db3-af0b-21bd9f01f45a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -320,6 +378,50 @@ namespace InputControl
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""78395f9d-758e-4098-a90a-650f34b3b984"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""LeftArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eb936b7c-6eb2-4c06-a9cf-7e1001d0340c"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""LeftArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ac18bcb0-f64c-4b45-b4a9-7dad910713e2"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RightArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e07b3ea-4520-4d1e-9198-1e5c359db7a0"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RightArrow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -449,6 +551,8 @@ namespace InputControl
             m_Player_AxisControl = m_Player.FindAction("AxisControl", throwIfNotFound: true);
             m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
             m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
+            m_Player_Rotate = m_Player.FindAction("Rotate", throwIfNotFound: true);
+            m_Player_MouseDelta = m_Player.FindAction("MouseDelta", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_LeftClick = m_UI.FindAction("LeftClick", throwIfNotFound: true);
@@ -457,6 +561,8 @@ namespace InputControl
             m_UI_DownArrow = m_UI.FindAction("DownArrow", throwIfNotFound: true);
             m_UI_Enter = m_UI.FindAction("Enter", throwIfNotFound: true);
             m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
+            m_UI_LeftArrow = m_UI.FindAction("LeftArrow", throwIfNotFound: true);
+            m_UI_RightArrow = m_UI.FindAction("RightArrow", throwIfNotFound: true);
             // Camera
             m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
             m_Camera_ZoomControl = m_Camera.FindAction("ZoomControl", throwIfNotFound: true);
@@ -532,6 +638,8 @@ namespace InputControl
         private readonly InputAction m_Player_AxisControl;
         private readonly InputAction m_Player_Click;
         private readonly InputAction m_Player_Reload;
+        private readonly InputAction m_Player_Rotate;
+        private readonly InputAction m_Player_MouseDelta;
         public struct PlayerActions
         {
             private @InputControls m_Wrapper;
@@ -542,6 +650,8 @@ namespace InputControl
             public InputAction @AxisControl => m_Wrapper.m_Player_AxisControl;
             public InputAction @Click => m_Wrapper.m_Player_Click;
             public InputAction @Reload => m_Wrapper.m_Player_Reload;
+            public InputAction @Rotate => m_Wrapper.m_Player_Rotate;
+            public InputAction @MouseDelta => m_Wrapper.m_Player_MouseDelta;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -569,6 +679,12 @@ namespace InputControl
                 @Reload.started += instance.OnReload;
                 @Reload.performed += instance.OnReload;
                 @Reload.canceled += instance.OnReload;
+                @Rotate.started += instance.OnRotate;
+                @Rotate.performed += instance.OnRotate;
+                @Rotate.canceled += instance.OnRotate;
+                @MouseDelta.started += instance.OnMouseDelta;
+                @MouseDelta.performed += instance.OnMouseDelta;
+                @MouseDelta.canceled += instance.OnMouseDelta;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -591,6 +707,12 @@ namespace InputControl
                 @Reload.started -= instance.OnReload;
                 @Reload.performed -= instance.OnReload;
                 @Reload.canceled -= instance.OnReload;
+                @Rotate.started -= instance.OnRotate;
+                @Rotate.performed -= instance.OnRotate;
+                @Rotate.canceled -= instance.OnRotate;
+                @MouseDelta.started -= instance.OnMouseDelta;
+                @MouseDelta.performed -= instance.OnMouseDelta;
+                @MouseDelta.canceled -= instance.OnMouseDelta;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -618,6 +740,8 @@ namespace InputControl
         private readonly InputAction m_UI_DownArrow;
         private readonly InputAction m_UI_Enter;
         private readonly InputAction m_UI_Pause;
+        private readonly InputAction m_UI_LeftArrow;
+        private readonly InputAction m_UI_RightArrow;
         public struct UIActions
         {
             private @InputControls m_Wrapper;
@@ -628,6 +752,8 @@ namespace InputControl
             public InputAction @DownArrow => m_Wrapper.m_UI_DownArrow;
             public InputAction @Enter => m_Wrapper.m_UI_Enter;
             public InputAction @Pause => m_Wrapper.m_UI_Pause;
+            public InputAction @LeftArrow => m_Wrapper.m_UI_LeftArrow;
+            public InputAction @RightArrow => m_Wrapper.m_UI_RightArrow;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -655,6 +781,12 @@ namespace InputControl
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @LeftArrow.started += instance.OnLeftArrow;
+                @LeftArrow.performed += instance.OnLeftArrow;
+                @LeftArrow.canceled += instance.OnLeftArrow;
+                @RightArrow.started += instance.OnRightArrow;
+                @RightArrow.performed += instance.OnRightArrow;
+                @RightArrow.canceled += instance.OnRightArrow;
             }
 
             private void UnregisterCallbacks(IUIActions instance)
@@ -677,6 +809,12 @@ namespace InputControl
                 @Pause.started -= instance.OnPause;
                 @Pause.performed -= instance.OnPause;
                 @Pause.canceled -= instance.OnPause;
+                @LeftArrow.started -= instance.OnLeftArrow;
+                @LeftArrow.performed -= instance.OnLeftArrow;
+                @LeftArrow.canceled -= instance.OnLeftArrow;
+                @RightArrow.started -= instance.OnRightArrow;
+                @RightArrow.performed -= instance.OnRightArrow;
+                @RightArrow.canceled -= instance.OnRightArrow;
             }
 
             public void RemoveCallbacks(IUIActions instance)
@@ -819,6 +957,8 @@ namespace InputControl
             void OnAxisControl(InputAction.CallbackContext context);
             void OnClick(InputAction.CallbackContext context);
             void OnReload(InputAction.CallbackContext context);
+            void OnRotate(InputAction.CallbackContext context);
+            void OnMouseDelta(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
@@ -828,6 +968,8 @@ namespace InputControl
             void OnDownArrow(InputAction.CallbackContext context);
             void OnEnter(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
+            void OnLeftArrow(InputAction.CallbackContext context);
+            void OnRightArrow(InputAction.CallbackContext context);
         }
         public interface ICameraActions
         {

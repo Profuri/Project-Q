@@ -24,24 +24,26 @@ namespace VirtualCam
         
         private void CamRotateRight()
         {
-            if (SceneControlManager.Instance.CurrentScene.Type != SceneType.Stage)
+            if (SceneControlManager.Instance.CurrentScene.Type != SceneType.Stage ||
+                CameraManager.Instance.LastRotateValue - CameraManager.Instance.RotateValue < CameraManager.Instance.MinRotateValue)
             {
                 return;
             }
 
-            RotateCam(CameraManager.Instance.LastRotateValue - CameraManager.Instance.RotateValue + 5f, CameraManager.Instance.RotateTime);
+            RotateCam(CameraManager.Instance.LastRotateValue - CameraManager.Instance.RotateValue, CameraManager.Instance.RotateTime);
             LightManager.Instance.RotateDefaultDirectionalLight(CameraManager.Instance.LastRotateValue - (CameraManager.Instance.RotateValue - 15f), CameraManager.Instance.RotateTime);
             CameraManager.Instance.LastRotateValue -= CameraManager.Instance.RotateValue;
         }
         
         private void CamRotateLeft()
         {
-            if (SceneControlManager.Instance.CurrentScene.Type != SceneType.Stage)
+            if (SceneControlManager.Instance.CurrentScene.Type != SceneType.Stage || 
+                CameraManager.Instance.LastRotateValue + CameraManager.Instance.RotateValue > CameraManager.Instance.MaxRotateValue)
             {
                 return;
             }
             
-            RotateCam(CameraManager.Instance.LastRotateValue + CameraManager.Instance.RotateValue - 5f, CameraManager.Instance.RotateTime);
+            RotateCam(CameraManager.Instance.LastRotateValue + CameraManager.Instance.RotateValue, CameraManager.Instance.RotateTime);
             LightManager.Instance.RotateDefaultDirectionalLight(CameraManager.Instance.LastRotateValue + (CameraManager.Instance.RotateValue + 15f), CameraManager.Instance.RotateTime);
             CameraManager.Instance.LastRotateValue += CameraManager.Instance.RotateValue;
         }
