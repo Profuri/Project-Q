@@ -17,14 +17,14 @@ namespace VirtualCam
             _originOrthoSize = _virtualCam.m_Lens.OrthographicSize;
         }
 
-        public void EnterCam()
+        public virtual void EnterCam()
         {
             this.gameObject.SetActive(true);
             _virtualCam.m_Priority = 10;
             _virtualCam.m_Lens.OrthographicSize = _originOrthoSize;
         }
 
-        public void ExitCam()
+        public virtual void ExitCam()
         {
             this.gameObject.SetActive(false);
             _virtualCam.m_Priority = 0;
