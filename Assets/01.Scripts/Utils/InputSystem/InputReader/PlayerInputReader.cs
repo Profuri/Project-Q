@@ -10,7 +10,7 @@ namespace InputControl
         public event InputEventListener OnInteractionEvent = null;
         public event InputEventListener OnAxisControlEvent = null;
         public event InputEventListener OnReloadClickEvent = null;
-        public event InputEventListener OnClickEvent = null;
+        public event InputEventListener OnAxisConvertEvent = null;
         [HideInInspector] public Vector3 movementInput;
         
         public InputControls.PlayerActions Actions { get; private set; }
@@ -49,9 +49,13 @@ namespace InputControl
 
         public void OnAxisControl(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.started)
             {
                 OnAxisControlEvent?.Invoke();   
+            }
+            else if(context.canceled)
+            {
+                OnAxisConvertEvent?.Invoke();
             }
         }
         
@@ -63,21 +67,13 @@ namespace InputControl
             }
         }
 
-        public void OnClick(InputAction.CallbackContext context)
-        {
-            if (context.started)
-            {
-                OnClickEvent?.Invoke();
-            }
-        }
-
         public override void ClearInputEvent()
         {
             OnJumpEvent = null;
             OnInteractionEvent = null;
             OnAxisControlEvent = null;
             OnReloadClickEvent = null;
-            OnClickEvent = null;
+            OnAxisConvertEvent = null;
         }
     }
 }

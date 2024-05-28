@@ -66,15 +66,6 @@ namespace InputControl
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Click"",
-                    ""type"": ""Button"",
-                    ""id"": ""3481214d-470b-4f3b-a361-2157ce0688c3"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Reload"",
                     ""type"": ""Button"",
                     ""id"": ""bf275e9e-5ea1-40de-b5f6-2cd982452ecf"",
@@ -170,17 +161,6 @@ namespace InputControl
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""AxisControl"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a95ba4d4-15e5-444e-bed8-08a697c923b5"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -471,7 +451,6 @@ namespace InputControl
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
             m_Player_AxisControl = m_Player.FindAction("AxisControl", throwIfNotFound: true);
-            m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
             m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -553,7 +532,6 @@ namespace InputControl
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Interaction;
         private readonly InputAction m_Player_AxisControl;
-        private readonly InputAction m_Player_Click;
         private readonly InputAction m_Player_Reload;
         public struct PlayerActions
         {
@@ -563,7 +541,6 @@ namespace InputControl
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
             public InputAction @AxisControl => m_Wrapper.m_Player_AxisControl;
-            public InputAction @Click => m_Wrapper.m_Player_Click;
             public InputAction @Reload => m_Wrapper.m_Player_Reload;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
@@ -586,9 +563,6 @@ namespace InputControl
                 @AxisControl.started += instance.OnAxisControl;
                 @AxisControl.performed += instance.OnAxisControl;
                 @AxisControl.canceled += instance.OnAxisControl;
-                @Click.started += instance.OnClick;
-                @Click.performed += instance.OnClick;
-                @Click.canceled += instance.OnClick;
                 @Reload.started += instance.OnReload;
                 @Reload.performed += instance.OnReload;
                 @Reload.canceled += instance.OnReload;
@@ -608,9 +582,6 @@ namespace InputControl
                 @AxisControl.started -= instance.OnAxisControl;
                 @AxisControl.performed -= instance.OnAxisControl;
                 @AxisControl.canceled -= instance.OnAxisControl;
-                @Click.started -= instance.OnClick;
-                @Click.performed -= instance.OnClick;
-                @Click.canceled -= instance.OnClick;
                 @Reload.started -= instance.OnReload;
                 @Reload.performed -= instance.OnReload;
                 @Reload.canceled -= instance.OnReload;
@@ -832,7 +803,6 @@ namespace InputControl
             void OnJump(InputAction.CallbackContext context);
             void OnInteraction(InputAction.CallbackContext context);
             void OnAxisControl(InputAction.CallbackContext context);
-            void OnClick(InputAction.CallbackContext context);
             void OnReload(InputAction.CallbackContext context);
         }
         public interface IUIActions

@@ -32,7 +32,7 @@ public class PlayerAxisControlState : PlayerBaseState
         if (Player.Converter.AxisType == AxisType.None)
         {
             InputManager.Instance.PlayerInputReader.OnAxisControlEvent += AxisControlHandle;
-            InputManager.Instance.PlayerInputReader.OnClickEvent += SelectAxisHandle;
+            InputManager.Instance.PlayerInputReader.OnAxisConvertEvent += SelectAxisHandle;
             
             VolumeManager.Instance.SetVolume(VolumeType.AxisControlling, 0.2f);
             ((SectionCamController)CameraManager.Instance.CurrentCamController).SetAxisControlCam(true);
@@ -59,7 +59,7 @@ public class PlayerAxisControlState : PlayerBaseState
         InputManagerHelper.OnCancelingAxis();
 
         InputManager.Instance.PlayerInputReader.OnAxisControlEvent -= AxisControlHandle;
-        InputManager.Instance.PlayerInputReader.OnClickEvent -= SelectAxisHandle;
+        InputManager.Instance.PlayerInputReader.OnAxisConvertEvent -= SelectAxisHandle;
         
         VolumeManager.Instance.SetVolume(VolumeType.Default, 0.2f);
         LightManager.Instance.SetAxisLight(AxisType.None);
