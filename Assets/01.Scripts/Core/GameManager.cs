@@ -34,7 +34,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void Pause()
     {
-        if (InPause || TutorialManager.Instance.OnTutorial || StageManager.Instance.CurrentStageAxis != AxisType.None)
+        if (InPause || TimelineManager.Instance.IsPlay || TutorialManager.Instance.OnTutorial || StageManager.Instance.CurrentStageAxis != AxisType.None)
         {
             return;
         }

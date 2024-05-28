@@ -57,7 +57,7 @@ public class SceneControlManager : BaseManager<SceneControlManager>
                 {
                     StoryManager.Instance.StartStoryIfCan(StoryAppearType.SCENE_ENTER, type);
                     onLoadedCallback?.Invoke();
-                    
+                                        
                     SoundManager.Instance.PlayCorrectBGM(type);
                     PoolManager.Instance.Push(_currentCanvas);
                     _currentCanvas = null;

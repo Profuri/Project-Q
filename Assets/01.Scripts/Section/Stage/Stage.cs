@@ -17,6 +17,18 @@ public class Stage : Section
         IsClear = false;
     }
 
+    public override void OnPush()
+    {
+        foreach (var unit in SectionUnits)
+        {
+            if (!unit.climbableUnit)
+            {
+                unit.DeleteClimbableEffect();
+            }
+        }
+        base.OnPush();
+    }
+
     protected override void FixedUpdate()
     {
         if (Active)
