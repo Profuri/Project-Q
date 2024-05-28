@@ -47,7 +47,8 @@ public class PlayerUnit : ObjectUnit
 
     public bool CanJump => OnGround || IsCoyote;
     public bool CanAxisControl { get; set; } = true;
-    
+    public bool IsControllingAxis => _stateController.CurrentState is PlayerAxisControlState;
+
     public void StartCoyoteTime()
     {
         _coyoteTime = Time.time;
@@ -80,7 +81,11 @@ public class PlayerUnit : ObjectUnit
 
         CanAxisControl = true;
     }
-
+    public override void Convert(AxisType axis)
+    {
+        base.Convert(axis);
+        
+    }
     public override void UpdateUnit()
     {
         base.UpdateUnit();

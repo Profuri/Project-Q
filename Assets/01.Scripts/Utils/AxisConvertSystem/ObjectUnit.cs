@@ -52,6 +52,7 @@ namespace AxisConvertSystem
         
         public override void OnPop()
         {
+            
         }
 
         public override void OnPush()
@@ -107,6 +108,13 @@ namespace AxisConvertSystem
             Rigidbody.AddForce(Physics.gravity * GameManager.Instance.CoreData.gravityScale, ForceMode.Acceleration);
         }
 
+        protected virtual void OnDisable()
+        {
+            if(_unClimbableEffect != null)
+            {
+                SceneControlManager.Instance.DeleteObject(_unClimbableEffect);
+            }
+        }
 
         public virtual void UpdateUnit()
         {
@@ -126,6 +134,11 @@ namespace AxisConvertSystem
             DepthHandler.DepthCheckPointSetting();
             
             OnInitEvent?.Invoke(converter);
+            if(CanAppearClimbable() && Section is Stage)
+            {
+                _unClimbableEffect ??= SceneControlManager.Instance.AddObject("UnClimbableEffect") as UnClimbableEffect;
+                _unClimbableEffect.Setting(this);
+            }
         }
 
         public virtual void Convert(AxisType axis)
@@ -145,6 +158,7 @@ namespace AxisConvertSystem
             ConvertedInfo = ConvertInfo(UnitInfo, axis);
             
             OnConvertEvent?.Invoke(axis);
+            _unClimbableEffect?.SetAlpha(0f);
         }
         
         public virtual void ApplyUnitInfo(AxisType axis)
@@ -519,28 +533,6 @@ namespace AxisConvertSystem
             }
             callBack?.Invoke();
         }
-
-        public void ShowUnClimbableEffect()
-        {
-            if (CanAppearClimbable())
-            {
-                if(_unClimbableEffect == null)
-                {
-                    _unClimbableEffect = SceneControlManager.Instance.AddObject("UnClimbableEffect") as UnClimbableEffect;
-                    _unClimbableEffect.Setting(Collider);
-                }
-            }
-        }
-
-        public void UnShowClimbableEffect()
-        {
-            if(_unClimbableEffect != null)
-            {
-                SceneControlManager.Instance.DeleteObject(_unClimbableEffect);
-                _unClimbableEffect = null;
-            }
-        }
-
         public bool IsSuperiorUnit(ObjectUnit checkUnit)
         {
             if (!subUnit)
