@@ -11,7 +11,11 @@ namespace InputControl
         public event InputEventListener OnAxisControlEvent = null;
         public event InputEventListener OnReloadClickEvent = null;
         public event InputEventListener OnAxisConvertEvent = null;
+        public event InputEventListener OnPlayerRotateEnterEvent = null;
+        public event InputEventListener OnPlayerRotateExitEvent = null;
+        
         [HideInInspector] public Vector3 movementInput;
+        [HideInInspector] public Vector2 mouseDelta;
         
         public InputControls.PlayerActions Actions { get; private set; }
 
@@ -67,6 +71,23 @@ namespace InputControl
             }
         }
 
+        public void OnRotate(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                OnPlayerRotateEnterEvent?.Invoke();
+            }
+            else if (context.canceled)
+            {
+                OnPlayerRotateExitEvent?.Invoke();
+            }
+        }
+
+        public void OnMouseDelta(InputAction.CallbackContext context)
+        {
+            mouseDelta = context.ReadValue<Vector2>();
+        }
+
         public override void ClearInputEvent()
         {
             OnJumpEvent = null;
@@ -74,6 +95,8 @@ namespace InputControl
             OnAxisControlEvent = null;
             OnReloadClickEvent = null;
             OnAxisConvertEvent = null;
+            OnPlayerRotateEnterEvent = null;
+            OnPlayerRotateExitEvent = null;
         }
     }
 }
