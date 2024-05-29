@@ -73,6 +73,24 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""0bcd6052-e180-4b2e-a43a-ce2c1759f58d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MouseDelta"",
+                    ""type"": ""Value"",
+                    ""id"": ""c3d6ee2c-b32c-4106-a2aa-6f69bdd16ebf"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -145,7 +163,7 @@ namespace InputControl
                 {
                     ""name"": """",
                     ""id"": ""3697c80f-d747-4b78-8fd3-45d1ddd08ce1"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
@@ -172,6 +190,28 @@ namespace InputControl
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""058aa659-2a2c-46bd-86c9-7ce7ecbfe220"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d22168b4-fedf-420a-80f4-19d6a20ef253"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""MouseDelta"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -239,6 +279,24 @@ namespace InputControl
                     ""name"": ""TutorialOut"",
                     ""type"": ""Button"",
                     ""id"": ""aef87256-6208-4996-8f6a-6f084caff0c6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightArrow"",
+                    ""type"": ""Button"",
+                    ""id"": ""f2529c6f-754d-4d5a-a07f-42ad29a24c4f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftArrow"",
+                    ""type"": ""Button"",
+                    ""id"": ""f073bf88-2d06-47ae-8406-6bd5c2ff87c6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -366,6 +424,50 @@ namespace InputControl
                     ""action"": ""TutorialOut"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50375a16-3816-4663-9ef0-11323f05a6e2"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RightArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f00b032b-3345-49f6-8a8d-13136642829f"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RightArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41262ae3-094d-426f-b91b-90a4bfc935d0"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""LeftArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""84aa2c9c-accc-4025-8163-1ed6a2ffd82c"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""LeftArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -381,6 +483,24 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""b7a34f27-b9ab-442a-a334-19b84ccaba38"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""05288991-4660-471a-8696-3fce7587233a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -392,6 +512,28 @@ namespace InputControl
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""ZoomControl"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2df5023b-965a-4c16-9792-d2439bed6dcf"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RotateRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e07a8573-a735-4ae0-b3e7-9bb88588fa22"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""RotateLeft"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -452,6 +594,8 @@ namespace InputControl
             m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
             m_Player_AxisControl = m_Player.FindAction("AxisControl", throwIfNotFound: true);
             m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
+            m_Player_Rotate = m_Player.FindAction("Rotate", throwIfNotFound: true);
+            m_Player_MouseDelta = m_Player.FindAction("MouseDelta", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_LeftClick = m_UI.FindAction("LeftClick", throwIfNotFound: true);
@@ -461,9 +605,13 @@ namespace InputControl
             m_UI_Enter = m_UI.FindAction("Enter", throwIfNotFound: true);
             m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
             m_UI_TutorialOut = m_UI.FindAction("TutorialOut", throwIfNotFound: true);
+            m_UI_RightArrow = m_UI.FindAction("RightArrow", throwIfNotFound: true);
+            m_UI_LeftArrow = m_UI.FindAction("LeftArrow", throwIfNotFound: true);
             // Camera
             m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
             m_Camera_ZoomControl = m_Camera.FindAction("ZoomControl", throwIfNotFound: true);
+            m_Camera_RotateRight = m_Camera.FindAction("RotateRight", throwIfNotFound: true);
+            m_Camera_RotateLeft = m_Camera.FindAction("RotateLeft", throwIfNotFound: true);
             // Timeline
             m_Timeline = asset.FindActionMap("Timeline", throwIfNotFound: true);
             m_Timeline_SpeedUp = m_Timeline.FindAction("SpeedUp", throwIfNotFound: true);
@@ -533,6 +681,8 @@ namespace InputControl
         private readonly InputAction m_Player_Interaction;
         private readonly InputAction m_Player_AxisControl;
         private readonly InputAction m_Player_Reload;
+        private readonly InputAction m_Player_Rotate;
+        private readonly InputAction m_Player_MouseDelta;
         public struct PlayerActions
         {
             private @InputControls m_Wrapper;
@@ -542,6 +692,8 @@ namespace InputControl
             public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
             public InputAction @AxisControl => m_Wrapper.m_Player_AxisControl;
             public InputAction @Reload => m_Wrapper.m_Player_Reload;
+            public InputAction @Rotate => m_Wrapper.m_Player_Rotate;
+            public InputAction @MouseDelta => m_Wrapper.m_Player_MouseDelta;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -566,6 +718,12 @@ namespace InputControl
                 @Reload.started += instance.OnReload;
                 @Reload.performed += instance.OnReload;
                 @Reload.canceled += instance.OnReload;
+                @Rotate.started += instance.OnRotate;
+                @Rotate.performed += instance.OnRotate;
+                @Rotate.canceled += instance.OnRotate;
+                @MouseDelta.started += instance.OnMouseDelta;
+                @MouseDelta.performed += instance.OnMouseDelta;
+                @MouseDelta.canceled += instance.OnMouseDelta;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -585,6 +743,12 @@ namespace InputControl
                 @Reload.started -= instance.OnReload;
                 @Reload.performed -= instance.OnReload;
                 @Reload.canceled -= instance.OnReload;
+                @Rotate.started -= instance.OnRotate;
+                @Rotate.performed -= instance.OnRotate;
+                @Rotate.canceled -= instance.OnRotate;
+                @MouseDelta.started -= instance.OnMouseDelta;
+                @MouseDelta.performed -= instance.OnMouseDelta;
+                @MouseDelta.canceled -= instance.OnMouseDelta;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -613,6 +777,8 @@ namespace InputControl
         private readonly InputAction m_UI_Enter;
         private readonly InputAction m_UI_Pause;
         private readonly InputAction m_UI_TutorialOut;
+        private readonly InputAction m_UI_RightArrow;
+        private readonly InputAction m_UI_LeftArrow;
         public struct UIActions
         {
             private @InputControls m_Wrapper;
@@ -624,6 +790,8 @@ namespace InputControl
             public InputAction @Enter => m_Wrapper.m_UI_Enter;
             public InputAction @Pause => m_Wrapper.m_UI_Pause;
             public InputAction @TutorialOut => m_Wrapper.m_UI_TutorialOut;
+            public InputAction @RightArrow => m_Wrapper.m_UI_RightArrow;
+            public InputAction @LeftArrow => m_Wrapper.m_UI_LeftArrow;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -654,6 +822,12 @@ namespace InputControl
                 @TutorialOut.started += instance.OnTutorialOut;
                 @TutorialOut.performed += instance.OnTutorialOut;
                 @TutorialOut.canceled += instance.OnTutorialOut;
+                @RightArrow.started += instance.OnRightArrow;
+                @RightArrow.performed += instance.OnRightArrow;
+                @RightArrow.canceled += instance.OnRightArrow;
+                @LeftArrow.started += instance.OnLeftArrow;
+                @LeftArrow.performed += instance.OnLeftArrow;
+                @LeftArrow.canceled += instance.OnLeftArrow;
             }
 
             private void UnregisterCallbacks(IUIActions instance)
@@ -679,6 +853,12 @@ namespace InputControl
                 @TutorialOut.started -= instance.OnTutorialOut;
                 @TutorialOut.performed -= instance.OnTutorialOut;
                 @TutorialOut.canceled -= instance.OnTutorialOut;
+                @RightArrow.started -= instance.OnRightArrow;
+                @RightArrow.performed -= instance.OnRightArrow;
+                @RightArrow.canceled -= instance.OnRightArrow;
+                @LeftArrow.started -= instance.OnLeftArrow;
+                @LeftArrow.performed -= instance.OnLeftArrow;
+                @LeftArrow.canceled -= instance.OnLeftArrow;
             }
 
             public void RemoveCallbacks(IUIActions instance)
@@ -701,11 +881,15 @@ namespace InputControl
         private readonly InputActionMap m_Camera;
         private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
         private readonly InputAction m_Camera_ZoomControl;
+        private readonly InputAction m_Camera_RotateRight;
+        private readonly InputAction m_Camera_RotateLeft;
         public struct CameraActions
         {
             private @InputControls m_Wrapper;
             public CameraActions(@InputControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @ZoomControl => m_Wrapper.m_Camera_ZoomControl;
+            public InputAction @RotateRight => m_Wrapper.m_Camera_RotateRight;
+            public InputAction @RotateLeft => m_Wrapper.m_Camera_RotateLeft;
             public InputActionMap Get() { return m_Wrapper.m_Camera; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -718,6 +902,12 @@ namespace InputControl
                 @ZoomControl.started += instance.OnZoomControl;
                 @ZoomControl.performed += instance.OnZoomControl;
                 @ZoomControl.canceled += instance.OnZoomControl;
+                @RotateRight.started += instance.OnRotateRight;
+                @RotateRight.performed += instance.OnRotateRight;
+                @RotateRight.canceled += instance.OnRotateRight;
+                @RotateLeft.started += instance.OnRotateLeft;
+                @RotateLeft.performed += instance.OnRotateLeft;
+                @RotateLeft.canceled += instance.OnRotateLeft;
             }
 
             private void UnregisterCallbacks(ICameraActions instance)
@@ -725,6 +915,12 @@ namespace InputControl
                 @ZoomControl.started -= instance.OnZoomControl;
                 @ZoomControl.performed -= instance.OnZoomControl;
                 @ZoomControl.canceled -= instance.OnZoomControl;
+                @RotateRight.started -= instance.OnRotateRight;
+                @RotateRight.performed -= instance.OnRotateRight;
+                @RotateRight.canceled -= instance.OnRotateRight;
+                @RotateLeft.started -= instance.OnRotateLeft;
+                @RotateLeft.performed -= instance.OnRotateLeft;
+                @RotateLeft.canceled -= instance.OnRotateLeft;
             }
 
             public void RemoveCallbacks(ICameraActions instance)
@@ -804,6 +1000,8 @@ namespace InputControl
             void OnInteraction(InputAction.CallbackContext context);
             void OnAxisControl(InputAction.CallbackContext context);
             void OnReload(InputAction.CallbackContext context);
+            void OnRotate(InputAction.CallbackContext context);
+            void OnMouseDelta(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
@@ -814,10 +1012,14 @@ namespace InputControl
             void OnEnter(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
             void OnTutorialOut(InputAction.CallbackContext context);
+            void OnRightArrow(InputAction.CallbackContext context);
+            void OnLeftArrow(InputAction.CallbackContext context);
         }
         public interface ICameraActions
         {
             void OnZoomControl(InputAction.CallbackContext context);
+            void OnRotateRight(InputAction.CallbackContext context);
+            void OnRotateLeft(InputAction.CallbackContext context);
         }
         public interface ITimelineActions
         {
