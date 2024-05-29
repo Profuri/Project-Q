@@ -22,7 +22,12 @@ public class UnClimbableEffect : PoolableMono
     {
         PlayerUnit playerUnit = SceneControlManager.Instance.Player;
 
-        if(playerUnit != null && playerUnit.IsControllingAxis)
+        if (playerUnit == null)
+        {
+            return;
+        }
+        
+        if(playerUnit.IsControllingAxis)
         {
             SetAlpha(1f);
             return;

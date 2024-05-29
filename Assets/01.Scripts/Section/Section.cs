@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AxisConvertSystem;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(SectionCollisionChecker))]
 public class Section : PoolableMono
@@ -24,7 +24,7 @@ public class Section : PoolableMono
 
     private List<BridgeObject> _bridgeObjects;
     public List<ObjectUnit> SectionUnits { get; private set; }
-
+ 
     public bool Active { get; set; }
     public bool Lock { get; set; }
     public Vector3 CenterPosition { get; private set; }
@@ -95,10 +95,8 @@ public class Section : PoolableMono
 
     public void ReloadSectionUnits()
     {
-        //�̰� �÷��̾� �ι� ��
-        //player two
         SectionUnits.Clear();
-        transform.GetComponentsInChildren(SectionUnits);
+        SectionUnits = transform.GetComponentsInChildren<ObjectUnit>(true).ToList();
     }
 
     public virtual void OnEnter(PlayerUnit player)

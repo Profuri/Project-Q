@@ -59,8 +59,7 @@ namespace AxisConvertSystem
         {
 
         }
-        
-        
+
         public virtual void Awake()
         {
             IsHide = false;
@@ -91,7 +90,7 @@ namespace AxisConvertSystem
             OriginUnitInfo.ColliderBoundSize = Collider.bounds.size;
             
             UnitInfo = OriginUnitInfo;
-            
+
             Activate(activeUnit);
         }
 
@@ -131,6 +130,7 @@ namespace AxisConvertSystem
 
             if(CanAppearClimbable() && Section is Stage)
             {
+                DeleteClimbableEffect();
                 _unClimbableEffect = PoolManager.Instance.Pop("UnClimbableEffect") as UnClimbableEffect;
                 _unClimbableEffect?.Setting(this);
             }
