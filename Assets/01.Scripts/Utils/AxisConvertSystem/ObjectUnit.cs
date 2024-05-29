@@ -161,12 +161,16 @@ namespace AxisConvertSystem
             ConvertedInfo = ConvertInfo(UnitInfo, axis);
             
             OnConvertEvent?.Invoke(axis);
-            _unClimbableEffect?.SetAlpha(0f);
         }
         
         public virtual void ApplyUnitInfo(AxisType axis)
         {
             ApplyInfo(ConvertedInfo);
+
+            if (!climbableUnit)
+            {
+                _unClimbableEffect.SetAlpha(0f);
+            }
 
             if (DepthHandler.Hide)
             {
