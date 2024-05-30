@@ -21,6 +21,14 @@ public class ReciprocationObject : InteractableObject
         _destPos = _originPos + _reciprocationDir * _reciprocationDistance;
     }
 
+    public override void ApplyUnitInfo(AxisType axis)
+    {
+        var localPos = transform.localPosition;
+        localPos.SetAxisElement(Converter.AxisType, ConvertedInfo.LocalPos.GetAxisElement(Converter.AxisType));
+        ConvertedInfo.LocalPos = localPos;
+        base.ApplyUnitInfo(axis);
+    }
+
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         var curPos = transform.localPosition;  
@@ -43,7 +51,6 @@ public class ReciprocationObject : InteractableObject
         var lerpPos = Vector3.Lerp(curPos, destPosOnConvert, _reciprocationSpeed * Time.deltaTime);
 
         transform.localPosition = lerpPos;
-        
 
         float yDiff = transform.localPosition.y - lerpPos.y;
 

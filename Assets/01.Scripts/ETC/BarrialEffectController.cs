@@ -61,8 +61,6 @@ public class BarrialEffectController : MonoBehaviour
             return;
         }
 
-        Debug.Log("Destroy");
-        
         _sequence?.Kill();
         _sequence = DOTween.Sequence();
         _sequence.Join(DOTween.To(

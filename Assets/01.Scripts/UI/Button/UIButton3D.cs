@@ -7,7 +7,7 @@ public class UIButton3D : UIComponent, IClickHandler, IHoverHandler
 {
     public UnityEvent OnClickEvent;
 
-    protected Vector3 _originScale;
+    protected Vector3 OriginScale;
     protected Modular3DText _3dText;
 
     public string Text
@@ -19,7 +19,7 @@ public class UIButton3D : UIComponent, IClickHandler, IHoverHandler
     protected override void Awake()
     {
         base.Awake();
-        _originScale = transform.localScale;
+        OriginScale = transform.localScale;
         _3dText = GetComponentInChildren<Modular3DText>();
     }
 
@@ -30,11 +30,11 @@ public class UIButton3D : UIComponent, IClickHandler, IHoverHandler
 
     public virtual void OnHoverHandle()
     {
-        transform.DOScale(_originScale * 1.2f, 0.2f).SetUpdate(true);
+        transform.DOScale(OriginScale * 1.2f, 0.2f).SetUpdate(true);
     }
 
     public virtual void OnHoverCancelHandle()
     {
-        transform.DOScale(_originScale, 0.2f).SetUpdate(true);
+        transform.DOScale(OriginScale, 0.2f).SetUpdate(true);
     }
 }
