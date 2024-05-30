@@ -7,6 +7,8 @@ public class UnClimbableEffect : PoolableMono
     private readonly int _alphaHash = Shader.PropertyToID("_Alpha"); 
     private Renderer _renderer;
 
+    private ObjectUnit _owner;
+
     public override void OnPop()
     {
         _renderer = GetComponent<Renderer>();
@@ -33,6 +35,11 @@ public class UnClimbableEffect : PoolableMono
             return;
         }
         
+        if (_owner.Converter.AxisType != AxisType.Y || _owner is IPassable { PassableLastAxis: true })
+        {
+            return;
+        }
+        
         float percent = CalculateDistancePercent(playerUnit.Collider.bounds.center);
         SetAlpha(percent);
     }
@@ -50,6 +57,8 @@ public class UnClimbableEffect : PoolableMono
 
     public void Setting(ObjectUnit owner)
     {
+        _owner = owner;
+        
         Collider col = owner.Collider;
         const float yOffset = 0.1f;
 
