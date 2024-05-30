@@ -88,7 +88,7 @@ public class PlayerUnit : ObjectUnit
             StandingCheck();
         }
 
-        if(Input.GetKeyDown(KeyCode.C))
+        if(Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.C))
         {
             StageManager.Instance.StageClear(this);
         }
