@@ -167,7 +167,7 @@ namespace AxisConvertSystem
         {
             ApplyInfo(ConvertedInfo);
 
-            if (CanAppearClimbable())
+            if (CanAppearClimbable() && _unClimbableEffect != null)
             {
                 _unClimbableEffect.SetAlpha(0f);
             }
