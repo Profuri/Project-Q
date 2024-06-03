@@ -30,6 +30,7 @@ public class MessageWindow : UIComponent
         _bodyText.text = "";
         _typewriter.onMessage.AddListener(OnTypewriterMessageHandle);
         InputManager.Instance.UIInputReader.OnEnterClickEvent += NextStory;
+        InputManager.Instance.UIInputReader.OnLeftClickEventWithOutParameter += NextStory;
         
         
         base.Appear(parentTrm, callback);
@@ -39,6 +40,7 @@ public class MessageWindow : UIComponent
     {
         _typewriter.onMessage.RemoveListener(OnTypewriterMessageHandle);
         InputManager.Instance.UIInputReader.OnEnterClickEvent -= NextStory;
+        InputManager.Instance.UIInputReader.OnLeftClickEventWithOutParameter -= NextStory;
         base.Disappear(callback);
     }
 
