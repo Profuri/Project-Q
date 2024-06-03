@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -398,9 +399,9 @@ namespace AxisConvertSystem
             }
         
             var axis = Converter.AxisType;
-            var depth = DepthHandler.GetDepth();
+            var depth = DepthHandler.GetDepth(Converter.AxisType);
 
-            var frontDepth = standUnit.DepthHandler.GetDepth();
+            var frontDepth = standUnit.DepthHandler.GetDepth(Converter.AxisType);
             var boundsSize = (standUnit.UnitInfo.LocalRot * standUnit.UnitInfo.ColliderBoundSize).GetAxisElement(axis);
 
             // is in back unit
@@ -412,6 +413,7 @@ namespace AxisConvertSystem
             // is in front unit
             var backUnit = standUnit;
             var dynamicDepthPoint = Collider.GetDepthPoint(Converter.AxisType);
+            var dynamicVirtualDepth = DepthHandler.GetDepth(AxisType.Y) - Collider.bounds.size.y; 
             
             // find back unit
             foreach (var intersectedUnit in standUnit.IntersectedUnits)
@@ -427,9 +429,15 @@ namespace AxisConvertSystem
                 {
                     continue;
                 }
-                
-                var currentUnitDepth = backUnit.DepthHandler.GetDepth();
-                var intersectedUnitDepth = intersectedUnit.DepthHandler.GetDepth();
+
+                var intersectedUnitVerticalDepth = intersectedUnit.DepthHandler.GetDepth(AxisType.Y);
+                if (Mathf.Abs(intersectedUnitVerticalDepth - dynamicVirtualDepth) > checkOffset)
+                {
+                    continue;
+                }
+
+                var currentUnitDepth = backUnit.DepthHandler.GetDepth(Converter.AxisType);
+                var intersectedUnitDepth = intersectedUnit.DepthHandler.GetDepth(Converter.AxisType);
 
                 if (currentUnitDepth >= intersectedUnitDepth)
                 {
@@ -492,7 +500,7 @@ namespace AxisConvertSystem
                         continue;
                     }
                     
-                    if (unit.DepthHandler.GetDepth() <= otherUnit.DepthHandler.GetDepth())
+                    if (unit.DepthHandler.GetDepth(Converter.AxisType) <= otherUnit.DepthHandler.GetDepth(Converter.AxisType))
                     {
                         col = cols[i];
                     }
