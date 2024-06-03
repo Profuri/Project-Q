@@ -23,9 +23,12 @@ public class ReciprocationObject : InteractableObject
 
     public override void ApplyUnitInfo(AxisType axis)
     {
-        var localPos = transform.localPosition;
-        localPos.SetAxisElement(Converter.AxisType, ConvertedInfo.LocalPos.GetAxisElement(Converter.AxisType));
-        ConvertedInfo.LocalPos = localPos;
+        if (axis == AxisType.None)
+        {
+            var localPos = transform.localPosition;
+            localPos.SetAxisElement(Converter.AxisType, UnitInfo.LocalPos.GetAxisElement(Converter.AxisType));
+            ConvertedInfo.LocalPos = localPos;
+        }
         base.ApplyUnitInfo(axis);
     }
 
