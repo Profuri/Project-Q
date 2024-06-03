@@ -29,10 +29,6 @@ public class MessageWindow : UIComponent
     {
         _bodyText.text = "";
         _typewriter.onMessage.AddListener(OnTypewriterMessageHandle);
-        InputManager.Instance.UIInputReader.OnEnterClickEvent += NextStory;
-        InputManager.Instance.UIInputReader.OnLeftClickEventWithOutParameter += NextStory;
-        
-        
         base.Appear(parentTrm, callback);
     }
 
@@ -49,6 +45,8 @@ public class MessageWindow : UIComponent
         _storyData = data;
         _currentIndex = -1;
         NextStory();
+        InputManager.Instance.UIInputReader.OnEnterClickEvent += NextStory;
+        InputManager.Instance.UIInputReader.OnLeftClickEventWithOutParameter += NextStory;
     }
     
     private void NextStory()
