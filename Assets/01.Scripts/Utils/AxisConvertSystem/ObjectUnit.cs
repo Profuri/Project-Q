@@ -422,8 +422,8 @@ namespace AxisConvertSystem
                 }
 
                 var intersectedUnitDepthPoint = intersectedUnit.DepthHandler.GetDepthPoint(Converter.AxisType);
-                if (dynamicDepthPoint.Min.x < intersectedUnitDepthPoint.Min.x || dynamicDepthPoint.Min.x > intersectedUnitDepthPoint.Max.x &&
-                    dynamicDepthPoint.Max.x < intersectedUnitDepthPoint.Min.x || dynamicDepthPoint.Max.x > intersectedUnitDepthPoint.Max.x)
+                if ((dynamicDepthPoint.Min.x < intersectedUnitDepthPoint.Min.x && dynamicDepthPoint.Max.x < intersectedUnitDepthPoint.Min.x) ||
+                    (dynamicDepthPoint.Min.x > intersectedUnitDepthPoint.Max.x && dynamicDepthPoint.Max.x > intersectedUnitDepthPoint.Max.x))
                 {
                     continue;
                 }
