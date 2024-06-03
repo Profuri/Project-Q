@@ -88,7 +88,7 @@ public class PlayerUnit : ObjectUnit
             StandingCheck();
         }
 
-        if(Input.GetKeyDown(KeyCode.C))
+        if(Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.C))
         {
             StageManager.Instance.StageClear(this);
         }
@@ -135,14 +135,6 @@ public class PlayerUnit : ObjectUnit
 
     private void RestartStage()
     {
-        if (Converter.AxisType != AxisType.None)
-        {
-            Converter.ConvertDimension(AxisType.None, () =>
-            {
-                StageManager.Instance.RestartStage(this);
-            });
-            return;
-        }
         StageManager.Instance.RestartStage(this);
     }
 

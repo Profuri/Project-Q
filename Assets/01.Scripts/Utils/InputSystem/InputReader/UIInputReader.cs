@@ -9,9 +9,10 @@ namespace InputControl
         public event InputEventListener<Vector2> OnLeftClickEvent = null;
         public event InputEventListener<Vector2> OnLeftClickUpEvent = null;
         public event InputEventListener<Vector2> OnMouseMoveEvent = null;
-        
         public event InputEventListener OnUpArrowClickEvent = null;
         public event InputEventListener OnDownArrowClickEvent = null;
+        public event InputEventListener OnRightArrowClickEvent = null;
+        public event InputEventListener OnLeftArrowClickEvent = null;
         public event InputEventListener OnEnterClickEvent = null;
         public event InputEventListener OnTutorialOutEvent = null;
         
@@ -86,7 +87,22 @@ namespace InputControl
             if (context.performed)
             {
                 OnTutorialOutEvent?.Invoke();
-                Debug.Log("OnTutorialOut");
+            }
+        }
+
+        public void OnRightArrow(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                OnRightArrowClickEvent?.Invoke();
+            }
+        }
+
+        public void OnLeftArrow(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                OnLeftArrowClickEvent?.Invoke();
             }
         }
 
@@ -97,6 +113,8 @@ namespace InputControl
             OnMouseMoveEvent = null;
             OnUpArrowClickEvent = null;
             OnDownArrowClickEvent = null;
+            OnRightArrowClickEvent = null;
+            OnLeftArrowClickEvent = null;
             OnEnterClickEvent = null;
             OnPauseClickEvent = null;
         }

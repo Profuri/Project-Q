@@ -24,11 +24,11 @@ public class UIYesNoButton3D : UIButton3D
     
     public override void OnHoverHandle()
     {
-        transform.DOScaleY(_originScale.y * 1.75f, 0.2f).SetUpdate(true);
+        transform.DOScaleY(OriginScale.y * 1.75f, 0.2f).SetUpdate(true);
     }
 
     public override void OnHoverCancelHandle()
     {
-        transform.DOScaleY(_originScale.y, 0.2f).SetUpdate(true);
+        transform.DOScaleY(OriginScale.y, 0.2f).SetUpdate(true);
     }
 }

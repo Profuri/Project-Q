@@ -9,16 +9,16 @@ public class IconButton3D : UIButton3D
     {
         base.Awake();
         _iconTrm = transform.Find("Icon");
-        _originScale = _iconTrm.localScale;
+        OriginScale = _iconTrm.localScale;
     }
 
     public override void OnHoverHandle()
     {
-        _iconTrm.DOScale(_originScale * 1.1f, 0.2f).SetUpdate(true);
+        _iconTrm.DOScale(OriginScale * 1.1f, 0.2f).SetUpdate(true);
     }
 
     public override void OnHoverCancelHandle()
     {
-        _iconTrm.DOScale(_originScale, 0.2f).SetUpdate(true);
+        _iconTrm.DOScale(OriginScale, 0.2f).SetUpdate(true);
     }
 }

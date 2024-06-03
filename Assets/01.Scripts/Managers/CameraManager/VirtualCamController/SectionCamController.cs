@@ -58,7 +58,7 @@ public class SectionCamController : VirtualCamController
                 CurrentSelectedCam = _axisControlCam;
                 SetCurrentCam(callBack);
             });
-            CameraManager.Instance.LastRotateValue = CameraManager.Instance.InitRotateValue;
+            // CameraManager.Instance.LastRotateValue = CameraManager.Instance.InitRotateValue;
         }
         else
         {
