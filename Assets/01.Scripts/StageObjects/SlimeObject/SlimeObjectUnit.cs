@@ -7,7 +7,7 @@ public class SlimeObjectUnit : ObjectUnit
 {
     [Header("SlimeSettings")]
     [SerializeField] private Transform _targetTrm;
-    [SerializeField] private float _jumpPower = 8f;
+    [SerializeField] private float _jumpPower = 4f;
     [SerializeField] private float _bounceTime = 0.5f;
 
     private const int _MAX_COLLIDER_CNT = 8;
