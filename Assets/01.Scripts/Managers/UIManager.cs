@@ -71,7 +71,7 @@ public class UIManager : BaseManager<UIManager>
 
         if (!isHit)
         {
-            if (_handleUI is not null)
+            if (_handleUI != null)
             {
                 _handleUI.OnHoverCancelHandle();
                 _handleUI = null;
@@ -81,7 +81,7 @@ public class UIManager : BaseManager<UIManager>
 
         if (hit.collider.TryGetComponent<UIButton3D>(out var component))
         {
-            if (_handleUI is not null)
+            if (_handleUI != null)
             {
                 _handleUI.OnHoverCancelHandle();
             }

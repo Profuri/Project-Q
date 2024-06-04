@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using UnityEngine;
 using UnityEngine.Video;
 
 public class TutorialWindow : UIComponent
@@ -17,10 +18,16 @@ public class TutorialWindow : UIComponent
         _descText = canvasTrm.Find("DescTutText").GetComponent<TextMeshPro>();
     }
 
+    public override void Appear(Transform parentTrm, Action callback = null)
+    {
+        base.Appear(parentTrm, callback);
+        SoundManager.Instance.PlaySFX("PanelAppear", false);
+    }
     public override void Disappear(Action callback = null)
     {
         _videoPlayer.Stop();
         base.Disappear(callback);
+        SoundManager.Instance.PlaySFX("PanelAppear", false);
     }
 
     public void SettingTutorial(TutorialInfo info)

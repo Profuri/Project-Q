@@ -12,7 +12,7 @@ public class PauseWindow : UIComponent
           InputManager.Instance.UIInputReader.OnPauseClickEvent += OnPauseKeyClickHandle;
         SoundManager.Instance.PlaySFX("PanelAppear", false);
           CursorManager.RegisterUI(this);
-     }
+    }
 
     public override void Disappear(Action callback = null)
     {

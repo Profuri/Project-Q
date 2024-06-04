@@ -55,28 +55,32 @@ public class TutorialObjectUnit : InteractableObject
     private void LoadTutorialMark()
     {
         _tutorialMark = SceneControlManager.Instance.AddObject("TutorialMark") as TutorialMark;
-        
+
+        _tutorialMark.transform.position = Vector3.zero;
         if (_markAppearTransform != null)
         {
             _tutorialMark.transform.position = _markAppearTransform.position;
         }
         else
         {
-            _tutorialMark.transform.position = Collider.bounds.center + Vector3.up * 2.0f;
+            if(Collider != null)
+            {
+                _tutorialMark.transform.position = Collider.bounds.center + Vector3.up * 2.0f;
+            }
         }
 
         _tutorialMark.transform.SetParent(Section.transform);
         _tutorialMark.On();
     }
 
-    private void Reset()
+    private void ResetUI()
     {
         TutorialManager.Instance.StopTutorial();
         if (_tutorialMark == null)
         {
             LoadTutorialMark();
         }
-        InputManager.Instance.UIInputReader.OnTutorialOutEvent -= Reset;
+        InputManager.Instance.UIInputReader.OnTutorialOutEvent -= ResetUI;
     }
 
 
@@ -91,12 +95,12 @@ public class TutorialObjectUnit : InteractableObject
         {
             TutorialManager.Instance.SetUpTutorial(_info);
             
-            _tutorialMark?.Off(() => InputManager.Instance.UIInputReader.OnTutorialOutEvent += Reset);
+            _tutorialMark?.Off(() => InputManager.Instance.UIInputReader.OnTutorialOutEvent += ResetUI);
             _tutorialMark = null;
         }
         else
         {
-            Reset();
+            ResetUI();
         }
     }
     
