@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2910719805825807890}
   - component: {fileID: 902451930023373715}
   m_Layer: 0
-  m_Name: Tutorial_Stage_0
+  m_Name: Mainboard_Stage_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,14 +51,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolingCnt: 1
   poolOut: 0
-  _enterPoint: {x: 0, y: 0, z: 0}
+  _enterPoint: {x: 3, y: -1, z: -5.5}
   _exitPoint: {x: 3, y: -1, z: 5.5}
-  _playerResetPoint: {x: 0, y: -0.5, z: -3}
-  _playerResetPointInClear: {x: 0, y: -0.5, z: -3}
+  _playerResetPoint: {x: 3, y: -0.5, z: -3}
+  _playerResetPointInClear: {x: 3, y: -0.5, z: -3}
   _sectionData: {fileID: 11400000, guid: 02306878c371648a48d518abc435a287, type: 2}
   _setPlayerFollowCam: 1
   _chapter: 0
-  _stageOrder: 0
+  _stageOrder: 3
 --- !u!65 &2910719805825807890
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -78,8 +78,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
+  m_Size: {x: 27, y: 10, z: 10}
+  m_Center: {x: -8.5, y: 2, z: 0}
 --- !u!114 &902451930023373715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f00dd1a8a81c9c438f0aff022a89935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _boundSize: {x: 10, y: 10, z: 10}
+  _boundSize: {x: 27, y: 10, z: 10}
 --- !u!1 &8866280989450288258
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,10 +168,15 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1860375232473354209}
     m_Modifications:
+    - target: {fileID: 6234101738252885399, guid: b0786620807924a6c98e4b86a3b87d8b,
+        type: 3}
+      propertyPath: _playerResetOnClear
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6407262744059891528, guid: b0786620807924a6c98e4b86a3b87d8b,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4
+      value: -18
       objectReference: {fileID: 0}
     - target: {fileID: 6407262744059891528, guid: b0786620807924a6c98e4b86a3b87d8b,
         type: 3}
@@ -260,7 +265,7 @@ PrefabInstance:
     - target: {fileID: 201773475085057313, guid: 2534879bead7a45c186b9d2356b9d113,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3
+      value: -18
       objectReference: {fileID: 0}
     - target: {fileID: 201773475085057313, guid: 2534879bead7a45c186b9d2356b9d113,
         type: 3}
@@ -359,7 +364,7 @@ PrefabInstance:
     - target: {fileID: 201773475085057313, guid: 2534879bead7a45c186b9d2356b9d113,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3
+      value: -2.4
       objectReference: {fileID: 0}
     - target: {fileID: 201773475085057313, guid: 2534879bead7a45c186b9d2356b9d113,
         type: 3}
@@ -616,7 +621,7 @@ PrefabInstance:
     - target: {fileID: 2487633527005760768, guid: bf30dcdc1660a7e489c52bcbe2e5df0d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2
+      value: -2.78
       objectReference: {fileID: 0}
     - target: {fileID: 2487633527005760768, guid: bf30dcdc1660a7e489c52bcbe2e5df0d,
         type: 3}
@@ -626,7 +631,7 @@ PrefabInstance:
     - target: {fileID: 2487633527005760768, guid: bf30dcdc1660a7e489c52bcbe2e5df0d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4
+      value: 2.88
       objectReference: {fileID: 0}
     - target: {fileID: 2487633527005760768, guid: bf30dcdc1660a7e489c52bcbe2e5df0d,
         type: 3}
@@ -672,7 +677,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _info
       value: 
-      objectReference: {fileID: 11400000, guid: a027ce816342626409c7a515816c0353,
+      objectReference: {fileID: 11400000, guid: e6c5f2d60600a48f5b18da6db9a6fc1a,
         type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
