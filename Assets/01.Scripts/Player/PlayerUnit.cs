@@ -79,7 +79,9 @@ public class PlayerUnit : ObjectUnit
 
         SoundEffectPlayer = new SoundEffectPlayer(this);
         CanAxisControl = true;
-    }    public override void UpdateUnit()
+    }    
+    
+    public override void UpdateUnit()
     {
         base.UpdateUnit();
 
@@ -96,6 +98,20 @@ public class PlayerUnit : ObjectUnit
         _stateController.UpdateState();
         HoldingHandler.UpdateHandler();
         InteractHandler.UpdateHandler();
+    }
+
+    public override void ApplyUnitInfo(AxisType axis)
+    {
+        base.ApplyUnitInfo(axis);
+
+        if (axis == AxisType.Z)
+        {
+            Rotate(Quaternion.LookRotation(Vector3.right), 1f);
+        }
+        else if (axis == AxisType.X)
+        {
+            Rotate(Quaternion.LookRotation(Vector3.forward), 1f);
+        }
     }
 
     public override void ReloadUnit(bool useDissolve = false, float dissolveTime = 2f, Action callBack = null)
@@ -115,8 +131,6 @@ public class PlayerUnit : ObjectUnit
         PlaySpawnVFX();
         SetActiveAnimation(true);
         _stateController.ChangeState(typeof(PlayerIdleState));
-
-        
     }
 
     public override void OnPop()

@@ -361,17 +361,6 @@ namespace InputControl
                 },
                 {
                     ""name"": """",
-                    ""id"": ""90f272e2-9c1d-4dce-b92d-f27256866ecc"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Enter"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""3642fe2b-f046-4776-ad8b-e03386cce0f1"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -407,17 +396,6 @@ namespace InputControl
                     ""name"": """",
                     ""id"": ""4d82f0b7-66b3-4e3b-9bc2-5a8ed7a09840"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TutorialOut"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""291f57a5-5a3b-4ddb-aac8-f6e1bd58b803"",
-                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

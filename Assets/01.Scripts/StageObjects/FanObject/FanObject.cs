@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using InteractableSystem;
 using AxisConvertSystem;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public class FanObject : InteractableObject
 {
@@ -14,7 +12,6 @@ public class FanObject : InteractableObject
     [SerializeField] private float _airMaxHeight;
     [SerializeField] private float _airPower;
     [SerializeField] private LayerMask _effectedMask;
-
     
     [Header("Fan Settings")]
     [SerializeField] private float _fanMaxSpeed;
@@ -203,20 +200,50 @@ public class FanObject : InteractableObject
             {
                 player.CanAxisControl = true;
             }
+            
             unit.SetGravity(false);
             unit.SetVelocity(velocity, false);
+            unit.UnitInfo.LocalPos.SetAxisElement(Converter.AxisType, UnitInfo.LocalPos.GetAxisElement(Converter.AxisType));
         }
     }
 
-    private bool CheckCollision(out Collider[] cols)
+    private bool CheckCollision(out Collider[] cols, float plusHeight = 0f)
     {
-        var center = Collider.bounds.center + GetAirDir() * (_airMaxHeight / 2f);
+        var airHeight = _airMaxHeight + plusHeight;
+        
+        var center = Collider.bounds.center + GetAirDir() * (airHeight / 2f);
         var colSize = Vector3.one * _collisionSize;
-        colSize.SetAxisElement(GetAirNormalAxis(), _airMaxHeight);
+        colSize.SetAxisElement(GetAirNormalAxis(), airHeight);
 
         cols = Physics.OverlapBox(center, colSize / 2f, Quaternion.identity, _effectedMask);
         
         return cols.Length > 0;
+    }
+
+    private List<ObjectUnit> FindAffectedUnits()
+    {
+        var newUnitList = new List<ObjectUnit>();
+        var plusHeight = _airAxis == FanAirAxisType.Y ? 0.5f : 0f;
+        
+        if (!CheckCollision(out var cols, plusHeight))
+        {
+            return newUnitList; 
+        }
+        
+        foreach (var col in cols)
+        {
+            if (!col.TryGetComponent(out ObjectUnit unit))
+            {
+                continue;
+            }
+
+            if (!unit.staticUnit)
+            {
+                newUnitList.Add(unit);
+            }
+        }
+
+        return newUnitList;
     }
 
     private void RotateFan()
