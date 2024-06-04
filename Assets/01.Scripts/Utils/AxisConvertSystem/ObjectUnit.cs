@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 namespace AxisConvertSystem
@@ -47,9 +46,7 @@ namespace AxisConvertSystem
         // Events
         public event Action<AxisConverter> OnInitEvent;
         public event Action<AxisType> OnConvertEvent;
-        public event Action<AxisType> OnCalcDepthEvent;
         public event Action<AxisType> OnApplyUnitInfoEvent;
-        public event Action OnApplyDepthEvent;
         
         public override void OnPop()
         {
@@ -160,12 +157,19 @@ namespace AxisConvertSystem
             
             SynchronizePosition(axis);
             ConvertedInfo = ConvertInfo(UnitInfo, axis);
-            
+
             OnConvertEvent?.Invoke(axis);
         }
         
         public virtual void ApplyUnitInfo(AxisType axis)
         {
+            if (axis == AxisType.None)
+            {
+                var localPos = transform.localPosition;
+                localPos.SetAxisElement(Converter.AxisType, UnitInfo.LocalPos.GetAxisElement(Converter.AxisType));
+                ConvertedInfo.LocalPos = localPos;
+            }
+            
             ApplyInfo(ConvertedInfo);
 
             if (CanAppearClimbable() && _unClimbableEffect != null)
@@ -200,7 +204,6 @@ namespace AxisConvertSystem
             }
 
             Hide(DepthHandler.Hide);
-            OnApplyDepthEvent?.Invoke();
         }
 
         public virtual void OnCameraSetting(AxisType axis)
@@ -319,7 +322,6 @@ namespace AxisConvertSystem
                 Rigidbody.velocity = Vector3.zero;
                 Dissolve(0f, useDissolve ? dissolveTime : 0f, true, callBack);
             }
-
         }
         
         public void RewriteUnitInfo()
