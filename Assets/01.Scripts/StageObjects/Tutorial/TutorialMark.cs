@@ -83,7 +83,7 @@ public class TutorialMark : PoolableMono
     private IEnumerator RotateCoroutine()
     {
         Transform rotateTarget = _rotateTarget;
-        Transform lookAtTrm = Define.MainCam.transform;
+        Transform lookAtTrm = Core.Define.MainCam.transform;
         while(true)
         {
             rotateTarget.LookAt(lookAtTrm.position);
