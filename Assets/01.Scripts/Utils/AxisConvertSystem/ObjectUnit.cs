@@ -163,7 +163,7 @@ namespace AxisConvertSystem
         
         public virtual void ApplyUnitInfo(AxisType axis)
         {
-            if (axis == AxisType.None)
+            if (!staticUnit && axis == AxisType.None && Converter.AxisType != AxisType.None)
             {
                 var localPos = transform.localPosition;
                 localPos.SetAxisElement(Converter.AxisType, UnitInfo.LocalPos.GetAxisElement(Converter.AxisType));
@@ -311,6 +311,7 @@ namespace AxisConvertSystem
 
         public virtual void ReloadUnit(bool useDissolve = false, float dissolveTime = 2f, Action callBack = null)
         {
+            Debug.Log(OriginUnitInfo.LocalPos);
             UnitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
             ConvertedInfo = ConvertInfo(UnitInfo, Converter.AxisType);

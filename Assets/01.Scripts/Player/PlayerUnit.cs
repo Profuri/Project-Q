@@ -118,12 +118,13 @@ public class PlayerUnit : ObjectUnit
     {
         if (HoldingHandler.IsHold)
             HoldingHandler.Detach();
+        
         base.ReloadUnit(true, dissolveTime, () =>
         {
             callBack?.Invoke();
             InputManagerHelper.OnRevivePlayer();
-            InputManagerHelper.OnRevivePlayer();
         });
+        
         InputManagerHelper.OnDeadPlayer();
 
         Converter.ConvertDimension(AxisType.None);
