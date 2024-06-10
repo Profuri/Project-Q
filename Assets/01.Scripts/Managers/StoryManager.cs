@@ -77,7 +77,10 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
             return false;
         }
 
-        DataManager.sSaveData.StoryShowList[info.index] = true;
+        if (info.recordPlayed)
+        {
+            DataManager.sSaveData.StoryShowList[info.index] = true;
+        }
         StartStory(info.storyData);
         return true;
     }

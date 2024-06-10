@@ -85,7 +85,7 @@ namespace Core
             CameraManager.Instance.ActiveVCam.SetOffset(offset);
         }
 
-        private static void CamSizeChangeHandle(Febucci.UI.Core.Parsing.EventMarker eventMarker)
+        private static void CamSizeChangeHandle(EventMarker eventMarker)
         {
             var targetSize = Convert.ToSingle(eventMarker.parameters[0]);
             var time = Convert.ToSingle(eventMarker.parameters[1]);
