@@ -1,4 +1,5 @@
 using AxisConvertSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovementState : PlayerOnGroundState
@@ -23,8 +24,26 @@ public class PlayerMovementState : PlayerOnGroundState
             Controller.ChangeState(typeof(PlayerIdleState));
             return;
         }
-        
+
+
+
         Player.Rotate(Quaternion.LookRotation(dir), Player.Converter.AxisType is AxisType.None or AxisType.Y ? Player.Data.rotationSpeed : 1f);
         Player.SetVelocity(dir * Player.Data.walkSpeed);
+
+        RaycastHit hit;
+
+        if (Player.IsStairOnNextStep(out hit))
+        {
+            //var originPos = Player.transform.position;
+            //originPos.y = hit.collider.bounds.max.y;
+            //Player.transform.position = originPos;
+            Vector3 velocity = Player.Rigidbody.velocity;
+            velocity.y += 0.15f;
+            Player.SetVelocity(velocity);
+            Debug.Log("true");
+        }
+
     }
+
+
 }

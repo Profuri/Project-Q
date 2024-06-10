@@ -1,6 +1,7 @@
 using System;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 
 namespace AxisConvertSystem
 {
@@ -177,22 +178,18 @@ namespace AxisConvertSystem
             AxisType = nextAxis;
         }
 
+
         private bool SafeConvertAxis(AxisType axis, out RaycastHit front, out RaycastHit back)
         {
-            var capsuleCol = (CapsuleCollider)Player.Collider;
+            var boxCol = (BoxCollider)Player.Collider;
 
-            var boundsCenter = capsuleCol.bounds.center + Vector3.up * _underOffset;
-            var center = capsuleCol.center;
-            var dir = Vector3ExtensionMethod.GetAxisDir(axis); 
+            var center = boxCol.bounds.center + Vector3.up * _underOffset;
 
-            var radius = capsuleCol.radius;
-            var height = capsuleCol.height;
-            
-            var p1 = boundsCenter + center + Vector3.up * (-height * 0.5F);
-            var p2 = p1 + Vector3.up * radius;
+            Vector3 halfExtents = boxCol.bounds.extents;
+            var dir = Vector3ExtensionMethod.GetAxisDir(axis);
 
-            var isHit1 = Physics.CapsuleCast(p1-dir, p2-dir, radius, dir, out front, Mathf.Infinity, _objectMask);
-            var isHit2 = Physics.CapsuleCast(p1+dir, p2+dir, radius, -dir, out back, Mathf.Infinity, _objectMask);
+            var isHit2 = Physics.BoxCast(center + dir, halfExtents, -dir, out back, Quaternion.identity, Mathf.Infinity, _objectMask);
+            var isHit1 = Physics.BoxCast(center - dir, halfExtents, dir, out front, Quaternion.identity, Mathf.Infinity, _objectMask);
 
             return !(isHit1 || isHit2);
         }

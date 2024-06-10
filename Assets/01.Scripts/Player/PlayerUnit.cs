@@ -49,6 +49,10 @@ public class PlayerUnit : ObjectUnit
     public bool CanAxisControl { get; set; } = true;
     public bool IsControllingAxis => _stateController.CurrentState is PlayerAxisControlState;
 
+
+    [SerializeField] private float _stepY = 0.05f;
+    [SerializeField] private float _stepOffset = 0.55f;
+
     public void StartCoyoteTime()
     {
         _coyoteTime = Time.time;
@@ -79,10 +83,10 @@ public class PlayerUnit : ObjectUnit
 
         SoundEffectPlayer = new SoundEffectPlayer(this);
         CanAxisControl = true;
-    }    public override void UpdateUnit()
+    }    
+    public override void UpdateUnit()
     {
         base.UpdateUnit();
-
         if (StandingUnit)
         {
             StandingCheck();
@@ -195,5 +199,34 @@ public class PlayerUnit : ObjectUnit
         }        
         
         useGravity = useGravityParam;
+    }
+
+    public bool IsStairOnNextStep(out RaycastHit hit, float distance = 0.05f)
+    {
+        Vector3 center = Collider.bounds.center;
+        center.y = center.y - Collider.bounds.size.y * _stepOffset;
+        center.z = center.z + Collider.bounds.size.z * 0.65f;
+
+        Vector3 halfExtents = Collider.bounds.extents;
+        halfExtents.y = 0.05f;
+
+        Vector3 forward = transform.forward;
+        int layer = 1 << LayerMask.NameToLayer("Ground");
+        return Physics.BoxCast(center, halfExtents, forward, out hit, Quaternion.identity, _stepY, layer);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (Collider == null) return;
+
+
+        Vector3 center = Collider.bounds.center;
+        center.y = center.y - Collider.bounds.size.y * _stepOffset;
+        center.z = center.z + Collider.bounds.size.z * 0.65f;
+        Vector3 halfExtents = Collider.bounds.extents;
+        halfExtents.y = 0.05f;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(center,halfExtents);
     }
 }
