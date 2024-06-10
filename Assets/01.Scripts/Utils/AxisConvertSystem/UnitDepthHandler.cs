@@ -19,10 +19,8 @@ namespace AxisConvertSystem
             InitDepth();
         }
 
-        public float GetDepth()
+        public float GetDepth(AxisType axis)
         {
-            var axis = _owner.Converter.AxisType;
-
             if (axis == AxisType.None)
             {
                 return 0;
