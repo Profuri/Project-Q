@@ -42,6 +42,12 @@ namespace Core
                 case "setTutorialProps":
                     SetTutorialPropsHandle(eventMarker);
                     break;
+                case "PlayVideo":
+                    PlayVideo(eventMarker);
+                    break;
+                case "StopVideo":
+                    StopVideo();
+                    break;
             }
         }
 
@@ -90,6 +96,25 @@ namespace Core
             var targetSize = Convert.ToSingle(eventMarker.parameters[0]);
             var time = Convert.ToSingle(eventMarker.parameters[1]);
             CameraManager.Instance.ActiveVCam.Zoom(targetSize, time);
+        }
+
+        private static void PlayVideo(EventMarker eventMarker)
+        {
+            var clipName = eventMarker.parameters[0];
+            var storyData = StoryManager.Instance.CurrentPlayStoryData;
+
+            if (storyData == null)
+            {
+                return;
+            }
+
+            var clip = storyData.videoClips.Find(clip => clip.name == clipName);
+            StoryManager.Instance.PlayMessageVideo(clip);
+        }
+
+        private static void StopVideo()
+        {
+            StoryManager.Instance.StopMessageVideo();
         }
     }
 }

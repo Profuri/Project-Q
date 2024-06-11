@@ -13,6 +13,8 @@ public class MessageWindow : UIComponent
     private StoryData _storyData;
     private int _currentIndex;
 
+    public StoryData StoryData => _storyData;
+
     protected override void Awake()
     {
         base.Awake();
