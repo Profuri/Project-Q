@@ -53,6 +53,7 @@ public class MessageWindow : UIComponent
     {
         if (_typewriter.isShowingText)
         {
+            _typewriter.SkipTypewriter();
             return;
         }
         
