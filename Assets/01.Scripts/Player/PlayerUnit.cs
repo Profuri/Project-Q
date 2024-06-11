@@ -119,15 +119,18 @@ public class PlayerUnit : ObjectUnit
         if (HoldingHandler.IsHold)
             HoldingHandler.Detach();
         
+        Converter.ConvertDimension(AxisType.None);
+        
         base.ReloadUnit(true, dissolveTime, () =>
         {
             callBack?.Invoke();
-            InputManagerHelper.OnRevivePlayer();
+            if (!StoryManager.Instance.IsPlay)
+            {
+                InputManagerHelper.OnRevivePlayer();
+            }
         });
         
         InputManagerHelper.OnDeadPlayer();
-
-        Converter.ConvertDimension(AxisType.None);
         SoundManager.Instance.PlaySFX("PlayerDead");
         PlaySpawnVFX();
         SetActiveAnimation(true);

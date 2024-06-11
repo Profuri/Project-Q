@@ -311,7 +311,6 @@ namespace AxisConvertSystem
 
         public virtual void ReloadUnit(bool useDissolve = false, float dissolveTime = 2f, Action callBack = null)
         {
-            Debug.Log(OriginUnitInfo.LocalPos);
             UnitInfo = OriginUnitInfo;
             DepthHandler.CalcDepth(Converter.AxisType);
             ConvertedInfo = ConvertInfo(UnitInfo, Converter.AxisType);

@@ -29,6 +29,9 @@ public class Section : PoolableMono
     public bool Lock { get; set; }
     public Vector3 CenterPosition { get; private set; }
 
+    public event Action OnEnterSectionEvent = null;
+    public event Action OnExitSectionEvent = null;
+
     public virtual void Awake()
     {
         Active = false;
@@ -107,6 +110,8 @@ public class Section : PoolableMono
         CameraManager.Instance.ChangeVCamController(VirtualCamType.SECTION);
         ((SectionCamController)CameraManager.Instance.CurrentCamController).SetPlayer(_setPlayerFollowCam ? player : null);
         ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(AxisType.None);
+        
+        OnEnterSectionEvent?.Invoke();
     }
 
     public virtual void OnExit(PlayerUnit player)
@@ -114,6 +119,8 @@ public class Section : PoolableMono
         CameraManager.Instance.ChangeVCamController(VirtualCamType.PLAYER);
         ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetPlayer(_setPlayerFollowCam ? player : null);
         ((PlayerCamController)CameraManager.Instance.CurrentCamController).SetCurrentCam();
+        
+        OnExitSectionEvent?.Invoke();
     }
     
     public void ConnectOtherSection(Section other)
@@ -203,6 +210,9 @@ public class Section : PoolableMono
     {
         Active = false;
         SectionUnits.Clear();
+
+        OnEnterSectionEvent = null;
+        OnExitSectionEvent = null;
     }
 
 #if UNITY_EDITOR
