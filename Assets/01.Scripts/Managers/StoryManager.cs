@@ -2,13 +2,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using ManagingSystem;
 using System;
+using UnityEngine.Video;
 
 public class StoryManager : BaseManager<StoryManager>,IProvideSave
 {
     private MessageWindow _messagePanel;
     public bool IsPlay => _messagePanel is not null;
 
+    private MessageVideoWindow _messageVideoWindow;
+    public bool IsPlayMessageVideo => IsPlay && _messageVideoWindow is not null;
+    
+    public StoryData CurrentPlayStoryData => IsPlay ? _messagePanel.StoryData : null;
+
     [SerializeField] private List<StoryInfo> _storyList = new List<StoryInfo>();
+
+    public event Action OnStoryRealesed = null;
 
     public override void StartManager()
     {
@@ -42,9 +50,41 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
             return;
         }
         
+        StopMessageVideo();
+        
         InputManager.Instance.SetEnableInputAll(true);
         _messagePanel.Disappear();
         _messagePanel = null;
+        
+        OnStoryRealesed?.Invoke();
+        OnStoryRealesed = null;
+    }
+
+    public void PlayMessageVideo(VideoClip clip)
+    {
+        if (IsPlayMessageVideo)
+        {
+            _messageVideoWindow.SettingVideo(clip);
+            _messageVideoWindow.Play();
+            return;
+        }
+
+        _messageVideoWindow = UIManager.Instance.GenerateUI("MessageVideoWindow") as MessageVideoWindow;
+        _messageVideoWindow.SettingVideo(clip);
+        _messageVideoWindow.Play();
+    }
+
+    public void StopMessageVideo()
+    {
+        if (!IsPlayMessageVideo)
+        {
+            return;
+        }
+
+        _messageVideoWindow.Disappear(() =>
+        {
+            _messageVideoWindow = null;
+        });
     }
 
     public bool StartStoryIfCan(StoryAppearType appearType, params object[] objs)

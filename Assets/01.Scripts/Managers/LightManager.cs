@@ -70,30 +70,4 @@ public class LightManager : BaseManager<LightManager>
         target.intensity = to;
         callBack?.Invoke();
     }
-
-    public void RotateDefaultDirectionalLight(float value, float rotateTime)
-    {
-        StartSafeCoroutine("LightRotateRoutine", LightRotateRoutine(value, rotateTime));
-    }
-    
-    private IEnumerator LightRotateRoutine(float rotateValue, float time)
-    {
-        var currentRot = _directionalLight.transform.localRotation;
-
-        var localEulerAngle = _directionalLight.transform.localEulerAngles;
-        var targetRot = Quaternion.Euler(localEulerAngle.x, rotateValue, localEulerAngle.z);
-
-        var currentTime = 0f;
-        while (currentTime <= time)
-        {
-            currentTime += Time.deltaTime;
-            var percent = currentTime / time;
-
-            var rot = Quaternion.Lerp(currentRot, targetRot, percent);
-            _directionalLight.transform.localRotation = rot;
-            yield return null;
-        }
-
-        _directionalLight.transform.localRotation = targetRot;
-    }
 }

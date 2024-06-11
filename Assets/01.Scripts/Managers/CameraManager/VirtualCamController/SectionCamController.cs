@@ -17,8 +17,6 @@ public class SectionCamController : VirtualCamController
 
     private VirtualCamComponent _axisControlCam;
 
-    [SerializeField] private float _changeAxisConvertCamDelay = 0.25f;
-
     public override void Init()
     {
         base.Init();
@@ -51,14 +49,10 @@ public class SectionCamController : VirtualCamController
     {
         if (value)
         {
-            CurrentSelectedCam.RotateCam(CameraManager.Instance.InitRotateValue, _changeAxisConvertCamDelay, () =>
-            {
-                _axisControlCam.SetAxisXValue(-45f);
-                _axisControlCam.SetAxisYValue(45f);
-                CurrentSelectedCam = _axisControlCam;
-                SetCurrentCam(callBack);
-            });
-            // CameraManager.Instance.LastRotateValue = CameraManager.Instance.InitRotateValue;
+            _axisControlCam.SetAxisXValue(-45f);
+            _axisControlCam.SetAxisYValue(45f);
+            CurrentSelectedCam = _axisControlCam;
+            SetCurrentCam(callBack);
         }
         else
         {

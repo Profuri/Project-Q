@@ -1,0 +1,202 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9202293200791972196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c92f31ee738b4266a661e67b477c77ef, type: 3}
+  m_Name: UIDissolveClip
+  m_EditorClassIdentifier: 
+  duration: 0.5
+  ease: 0
+  targetTrmPath: 
+  joinPrevAnimation: 1
+  dissolve: 0
+--- !u!114 &-8551663290330720008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6c902545fb43e0ab385629a8002f3c, type: 3}
+  m_Name: UIScalingClip
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  ease: 0
+  targetTrmPath: Canvas/DescTutText
+  joinPrevAnimation: 1
+  fromScale: {x: 1, y: 0, z: 1}
+  toScale: {x: 1, y: 1, z: 1}
+--- !u!114 &-8137053440318994203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b80fb6561d5b4f38927fef63623daf01, type: 3}
+  m_Name: UIMovementClip3D
+  m_EditorClassIdentifier: 
+  duration: 0.7
+  ease: 0
+  targetTrmPath: 
+  joinPrevAnimation: 0
+  fromPosition: {x: 8, y: -0.5, z: 0}
+  toPosition: {x: 8, y: 0, z: 0}
+--- !u!114 &-1366870749832615453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6c902545fb43e0ab385629a8002f3c, type: 3}
+  m_Name: UIScalingClip
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  ease: 0
+  targetTrmPath: Canvas/DescTutText
+  joinPrevAnimation: 1
+  fromScale: {x: 1, y: 1, z: 1}
+  toScale: {x: 1, y: 0, z: 1}
+--- !u!114 &-891798633337849729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c92f31ee738b4266a661e67b477c77ef, type: 3}
+  m_Name: UIDissolveClip
+  m_EditorClassIdentifier: 
+  duration: 0.5
+  ease: 0
+  targetTrmPath: 
+  joinPrevAnimation: 0
+  dissolve: 1
+--- !u!114 &-208752646294738662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6c902545fb43e0ab385629a8002f3c, type: 3}
+  m_Name: UIScalingClip
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  ease: 0
+  targetTrmPath: Canvas/InfoText
+  joinPrevAnimation: 1
+  fromScale: {x: 1, y: 1, z: 1}
+  toScale: {x: 1, y: 0, z: 1}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16534c4049b84d44a9b3de6594bbdb8e, type: 3}
+  m_Name: MessageVideoWindowTweenData
+  m_EditorClassIdentifier: 
+  appearAnimator:
+    clips:
+    - {fileID: -8137053440318994203}
+    - {fileID: -9202293200791972196}
+    - {fileID: 7400919644582647677}
+    - {fileID: 1464274579408542027}
+  disappearAnimator:
+    clips:
+    - {fileID: -891798633337849729}
+    - {fileID: -208752646294738662}
+--- !u!114 &1464274579408542027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6c902545fb43e0ab385629a8002f3c, type: 3}
+  m_Name: UIScalingClip
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  ease: 0
+  targetTrmPath: Canvas/InfoText
+  joinPrevAnimation: 1
+  fromScale: {x: 1, y: 0, z: 1}
+  toScale: {x: 1, y: 1, z: 1}
+--- !u!114 &1633202497383762626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6c902545fb43e0ab385629a8002f3c, type: 3}
+  m_Name: UIScalingClip
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  ease: 0
+  targetTrmPath: Canvas/MainTutText
+  joinPrevAnimation: 1
+  fromScale: {x: 1, y: 0, z: 1}
+  toScale: {x: 1, y: 1, z: 1}
+--- !u!114 &4792643994166910671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6c902545fb43e0ab385629a8002f3c, type: 3}
+  m_Name: UIScalingClip
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  ease: 0
+  targetTrmPath: Canvas/MainTutText
+  joinPrevAnimation: 1
+  fromScale: {x: 1, y: 1, z: 1}
+  toScale: {x: 1, y: 0, z: 1}
+--- !u!114 &7400919644582647677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46c6f691822e4df1bd241e4806c412b6, type: 3}
+  m_Name: UIRotationClip
+  m_EditorClassIdentifier: 
+  duration: 0.5
+  ease: 15
+  targetTrmPath: 
+  joinPrevAnimation: 1
+  fromEuler: {x: -10, y: 230, z: -190}
+  toEuler: {x: -85, y: 230, z: -215}
