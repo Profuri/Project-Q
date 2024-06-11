@@ -14,8 +14,6 @@ public enum EInputCategory
     Interaction,
     AxisControl,
     ZoomOut,
-    RotateCamRight,
-    RotateCamLeft,
     Reload,
     Escape,
 }
@@ -48,8 +46,6 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
             { EInputCategory.AxisControl,       PlayerInputReader.Actions.AxisControl },
             { EInputCategory.Reload,            PlayerInputReader.Actions.Reload },
             { EInputCategory.ZoomOut,           CameraInputReader.Actions.ZoomControl },
-            { EInputCategory.RotateCamRight,    CameraInputReader.Actions.RotateRight },
-            { EInputCategory.RotateCamLeft,     CameraInputReader.Actions.RotateLeft },
         };
     }
 
