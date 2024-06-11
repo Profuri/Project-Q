@@ -16,6 +16,8 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
 
     [SerializeField] private List<StoryInfo> _storyList = new List<StoryInfo>();
 
+    public event Action OnStoryRealesed = null;
+
     public override void StartManager()
     {
         for (var i = 0; i < _storyList.Count; i++)
@@ -53,6 +55,9 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
         InputManager.Instance.SetEnableInputAll(true);
         _messagePanel.Disappear();
         _messagePanel = null;
+        
+        OnStoryRealesed?.Invoke();
+        OnStoryRealesed = null;
     }
 
     public void PlayMessageVideo(VideoClip clip)
