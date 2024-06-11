@@ -203,17 +203,16 @@ public class PlayerUnit : ObjectUnit
 
     public bool IsStairOnNextStep(out RaycastHit hit, float distance = 0.05f)
     {
-        Vector3 dir = transform.forward;
+        Vector3 dir = ModelTrm.forward;
         dir.y = 0f;
-        Vector3 origin = Collider.bounds.center + dir;
+
+        Vector3 origin = Collider.bounds.center;
         origin.y = Collider.bounds.min.y;
 
-        Vector3 topCenter = origin  + Vector3.up * _stepY * 1.5f -dir * _stepX;
-        Vector3 bottomCenter = origin + Vector3.up * _stepY * 0.5f -dir * _stepX;
+        Vector3 topCenter = origin  + Vector3.up * _stepY * 1.5f + dir * -_stepX;
+        Vector3 bottomCenter = origin + Vector3.up * _stepY * 0.5f + dir * -_stepX;
         Vector3 halfExtents = Collider.bounds.extents;
-
         halfExtents.y = _stepY * 0.5f;
-        halfExtents.z = _stepX * 0.5f;
 
         int layer      = 1 << LayerMask.NameToLayer("Ground");
         bool topHit    = Physics.BoxCast(topCenter,halfExtents,dir,Quaternion.identity,_stepX,layer);
@@ -225,22 +224,22 @@ public class PlayerUnit : ObjectUnit
     private void OnDrawGizmos()
     {
         if (Collider == null) return;
-        Vector3 dir = transform.forward;
+
+        Vector3 dir = ModelTrm.forward;
         dir.y = 0f;
 
-        Vector3 origin = Collider.bounds.center + dir * 0.5f;
+        Vector3 origin = Collider.bounds.center;
         origin.y = Collider.bounds.min.y;
 
-        Vector3 size = Collider.bounds.extents * 2f;
-        size.y = _stepY ;
-        size.z = _stepX ;
+        Vector3 topCenter = origin + Vector3.up * _stepY * 1.5f    + dir * -_stepX;
+        Vector3 bottomCenter = origin + Vector3.up * _stepY * 0.5f + dir * -_stepX;
+        Vector3 halfExtents = Collider.bounds.extents;
+        halfExtents.y = _stepY * 0.5f;
 
-        Vector3 topCenter    = origin + Vector3.up * _stepY * 1.5f -dir * _stepX;
-        Vector3 bottomCenter = origin + Vector3.up * _stepY * 0.5f -dir * _stepX;
 
         Gizmos.color = Color.red;
-        Gizmos.DrawCube(topCenter,size);
+        Gizmos.DrawCube(topCenter,halfExtents);
         Gizmos.color = Color.green;
-        Gizmos.DrawCube(bottomCenter,size);
+        Gizmos.DrawCube(bottomCenter,halfExtents);
     }
 }
