@@ -19,10 +19,8 @@ namespace AxisConvertSystem
             InitDepth();
         }
 
-        public float GetDepth()
+        public float GetDepth(AxisType axis)
         {
-            var axis = _owner.Converter.AxisType;
-
             if (axis == AxisType.None)
             {
                 return 0;
@@ -52,8 +50,9 @@ namespace AxisConvertSystem
                 var isTransparent = unit.renderType == UnitRenderType.Transparent;
                 var isSuperior = _owner.subUnit && _owner.IsSuperiorUnit(unit);
                 var isChild = !_owner.subUnit && _owner.IsChildUnit(unit);
+                var activeUnit = unit.activeUnit;
                 
-                if (isOwner || isTransparent || isSuperior || isChild)
+                if (isOwner || isTransparent || isSuperior || isChild || !activeUnit)
                 {
                     continue;
                 }

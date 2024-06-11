@@ -6,6 +6,7 @@ namespace InputControl
     [CreateAssetMenu(menuName = "SO/InputReader/UI")]
     public class UIInputReader : InputReader, InputControls.IUIActions
     {
+        public event InputEventListener OnLeftClickEventWithOutParameter = null;
         public event InputEventListener<Vector2> OnLeftClickEvent = null;
         public event InputEventListener<Vector2> OnLeftClickUpEvent = null;
         public event InputEventListener<Vector2> OnMouseMoveEvent = null;
@@ -15,8 +16,7 @@ namespace InputControl
         public event InputEventListener OnLeftArrowClickEvent = null;
         public event InputEventListener OnEnterClickEvent = null;
         public event InputEventListener OnTutorialOutEvent = null;
-        
-        
+
         public InputEventListener OnPauseClickEvent = null;
         [HideInInspector] public Vector2 mouseScreenPoint;
         
@@ -36,6 +36,7 @@ namespace InputControl
         {
             if (context.started)
             {
+                OnLeftClickEventWithOutParameter?.Invoke();
                 OnLeftClickEvent?.Invoke(mouseScreenPoint);
             }
             else if (context.canceled)
@@ -108,6 +109,7 @@ namespace InputControl
 
         public override void ClearInputEvent()
         {
+            OnLeftClickEventWithOutParameter = null;
             OnLeftClickEvent = null;
             OnLeftClickUpEvent = null;
             OnMouseMoveEvent = null;

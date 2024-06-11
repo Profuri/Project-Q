@@ -19,6 +19,8 @@ public class StoryInfo
     public StoryData storyData;
     [HideInInspector] public int index;
 
+    public bool recordPlayed = true;
+
     public bool Predicate(StoryAppearType appearType, SceneType sceneType)
     {
         return this.appearType == appearType && this.sceneType == sceneType;

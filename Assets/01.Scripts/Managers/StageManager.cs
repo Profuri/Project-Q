@@ -81,15 +81,17 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             CurrentStage.RemoveBridge();
         }
 
-        //sIsClear = false;
         CurrentStage = NextStage;
         CurrentStage.IsClear = false;
     }
 
     public void StageClear(PlayerUnit player)
     {
-        if(CurrentStage is null || IsClear) return;
-        //IsClear = true;
+        if (CurrentStage is null || IsClear)
+        {
+            return;
+        }
+        
         CurrentStage.Lock = false;
         player.OriginUnitInfo.LocalPos = CurrentStage.PlayerResetPointInClear;
         player.Converter.ConvertDimension(AxisType.None);

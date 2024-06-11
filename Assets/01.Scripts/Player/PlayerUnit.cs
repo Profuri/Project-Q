@@ -102,25 +102,41 @@ public class PlayerUnit : ObjectUnit
         InteractHandler.UpdateHandler();
     }
 
+    public override void ApplyUnitInfo(AxisType axis)
+    {
+        base.ApplyUnitInfo(axis);
+
+        if (axis == AxisType.Z)
+        {
+            Rotate(Quaternion.LookRotation(Vector3.right), 1f);
+        }
+        else if (axis == AxisType.X)
+        {
+            Rotate(Quaternion.LookRotation(Vector3.forward), 1f);
+        }
+    }
+
     public override void ReloadUnit(bool useDissolve = false, float dissolveTime = 2f, Action callBack = null)
     {
         if (HoldingHandler.IsHold)
             HoldingHandler.Detach();
+        
+        Converter.ConvertDimension(AxisType.None);
+        
         base.ReloadUnit(true, dissolveTime, () =>
         {
             callBack?.Invoke();
-            InputManagerHelper.OnRevivePlayer();
-            InputManagerHelper.OnRevivePlayer();
+            if (!StoryManager.Instance.IsPlay)
+            {
+                InputManagerHelper.OnRevivePlayer();
+            }
         });
+        
         InputManagerHelper.OnDeadPlayer();
-
-        Converter.ConvertDimension(AxisType.None);
         SoundManager.Instance.PlaySFX("PlayerDead");
         PlaySpawnVFX();
         SetActiveAnimation(true);
         _stateController.ChangeState(typeof(PlayerIdleState));
-
-        
     }
 
     public override void OnPop()

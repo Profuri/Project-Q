@@ -6,6 +6,7 @@ public class Stage : Section
 {
     [Header("Chapter Setting")]
     [SerializeField] private ChapterType _chapter;
+    public ChapterType ChapterType => _chapter;
     [SerializeField] private int _stageOrder;
     public int StageOrder => _stageOrder;
 
