@@ -1,10 +1,12 @@
 using AxisConvertSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovementState : PlayerOnGroundState
 {
     public PlayerMovementState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
+
     }
     
     public override void UpdateState()
@@ -23,8 +25,23 @@ public class PlayerMovementState : PlayerOnGroundState
             Controller.ChangeState(typeof(PlayerIdleState));
             return;
         }
-        
+
         Player.Rotate(Quaternion.LookRotation(dir), Player.Converter.AxisType is AxisType.None or AxisType.Y ? Player.Data.rotationSpeed : 1f);
         Player.SetVelocity(dir * Player.Data.walkSpeed);
+        
+        RaycastHit hit;
+
+        if (Player.IsStairOnNextStep(out hit))
+        {
+            if(hit.collider is BoxCollider)
+            {
+                Vector3 originPos = Player.transform.position;
+                originPos.y = hit.point.y + 0.025f;
+                Player.transform.position = originPos;
+            }
+        }
+
     }
+
+
 }

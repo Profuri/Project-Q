@@ -32,11 +32,6 @@ public class ControlSettingPanel : WindowPanel
         ChangeKeyBinding(_zoomOutBtn, EInputCategory.ZoomOut);
     }
     
-    public void ChangeStageResetKeyBinding()
-    {
-        ChangeKeyBinding(_stageResetBtn, EInputCategory.Reload);
-    }
-    
     private void ChangeKeyBinding(UIButton3D caller, EInputCategory category, int bindingIndex = 0)
     {
         UIManager.Instance.Interact3DButton = false;
@@ -84,7 +79,7 @@ public class ControlSettingPanel : WindowPanel
         } 
 
         _zoomOutBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.ZoomOut);
-        _stageResetBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.Reload);
+        //_stageResetBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.Reload);
         _interactionBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.Interaction);
         _jumpBtn.Text = InputManager.Instance.GetBindingKeyName(EInputCategory.Jump);
     }

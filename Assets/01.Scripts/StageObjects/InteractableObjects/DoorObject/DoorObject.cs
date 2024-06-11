@@ -16,8 +16,9 @@ public class DoorObject : InteractableObject
 
     private Vector3 _originPos;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         _originPos = transform.position;
     }
 

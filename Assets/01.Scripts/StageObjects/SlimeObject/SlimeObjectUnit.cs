@@ -1,11 +1,13 @@
 using AxisConvertSystem;
 using UnityEngine;
+using DG.Tweening;
 
 
 public class SlimeObjectUnit : ObjectUnit
 {
     [Header("SlimeSettings")]
-    [SerializeField] private float _bouncePower = 5f;
+    [SerializeField] private Transform _targetTrm;
+    [SerializeField] private float _jumpPower = 4f;
     [SerializeField] private float _bounceTime = 0.5f;
 
     private const int _MAX_COLLIDER_CNT = 8;
@@ -55,12 +57,17 @@ public class SlimeObjectUnit : ObjectUnit
             {
                 if (col.TryGetComponent(out ObjectUnit unit))
                 {
-                    Vector3 bounceDirection = Vector3.up;
-                    unit.SetVelocity(bounceDirection * _bouncePower, false);
+                    MoveToTargetPos(unit);
                 }
             }
         }
         _canApply = false;
+    }
+
+    private void MoveToTargetPos(ObjectUnit unit)
+    {
+        if (_targetTrm == null || unit.transform.Equals(transform)) return;
+        unit.transform.DOJump(_targetTrm.position,_jumpPower,1,_bounceTime).SetEase(Ease.OutSine);
     }
 
     private Collider[] FindColliders()

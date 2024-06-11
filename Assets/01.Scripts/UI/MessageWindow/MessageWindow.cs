@@ -31,6 +31,14 @@ public class MessageWindow : UIComponent
     {
         _bodyText.text = "";
         _typewriter.onMessage.AddListener(OnTypewriterMessageHandle);
+        InputManager.Instance.UIInputReader.OnEnterClickEvent += NextStory;
+
+
+        callback += () =>
+        {
+            SoundManager.Instance.PlaySFX("PanelAppear", false);
+        };
+
         base.Appear(parentTrm, callback);
     }
 
@@ -38,6 +46,8 @@ public class MessageWindow : UIComponent
     {
         _typewriter.onMessage.RemoveListener(OnTypewriterMessageHandle);
         InputManager.Instance.UIInputReader.OnEnterClickEvent -= NextStory;
+        SoundManager.Instance.PlaySFX("PanelAppear", false);
+
         InputManager.Instance.UIInputReader.OnLeftClickEventWithOutParameter -= NextStory;
         base.Disappear(callback);
     }
