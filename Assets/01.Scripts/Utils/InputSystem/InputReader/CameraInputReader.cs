@@ -8,8 +8,6 @@ namespace InputControl
     {
         public InputEventListener OnZoomOutEvent = null;
         public InputEventListener OnZoomInEvent = null;
-        public InputEventListener OnRotateRightEvent = null;
-        public InputEventListener OnRotateLeftEvent = null;
         
         public InputControls.CameraActions Actions { get; private set; }
 
@@ -35,28 +33,10 @@ namespace InputControl
             }
         }
 
-        public void OnRotateRight(InputAction.CallbackContext context)
-        {
-            if (context.performed)
-            {
-                OnRotateRightEvent?.Invoke();
-            }
-        }
-
-        public void OnRotateLeft(InputAction.CallbackContext context)
-        {
-            if (context.performed)
-            {
-                OnRotateLeftEvent?.Invoke();
-            }
-        }
-
         public override void ClearInputEvent()
         {
             OnZoomOutEvent = null;
             OnZoomInEvent = null;
-            OnRotateRightEvent = null;
-            OnRotateLeftEvent = null;
         }
     }
 }
