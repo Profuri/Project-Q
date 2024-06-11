@@ -46,7 +46,7 @@ namespace AxisConvertSystem
         // Events
         public event Action<AxisConverter> OnInitEvent;
         public event Action<AxisType> OnConvertEvent;
-        public event Action<AxisType> OnCalcDepthEvent;
+        //public event Action<AxisType> OnCalcDepthEvent;
         public event Action<AxisType> OnApplyUnitInfoEvent;
         public event Action OnApplyDepthEvent;
         

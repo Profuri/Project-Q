@@ -29,13 +29,11 @@ public class RandomClip
 public class RandomAudioClipSO : AudioClipSO
 {
     private const int c_shuffleCnt = 100;
-    private int _currentIndex = 0;
 
     public RandomClip ShuffleClip()
     {
         List<AudioClip> garbageList = clipList.ToList();
 
-        _currentIndex = 0;
         for (int i = 0; i < c_shuffleCnt; i++)
         {
             int index = Random.Range(0, clipList.Count);
