@@ -13,10 +13,10 @@ public class StoryInfoEditor : PropertyDrawer
         
         switch (appearType)
         {
-            case StoryAppearType.SCENE_ENTER: cnt = 3; break;
-            case StoryAppearType.CUTSCENE_END: cnt = 3; break;
+            case StoryAppearType.SCENE_ENTER: cnt = 4; break;
+            case StoryAppearType.CUTSCENE_END: cnt = 4; break;
             case StoryAppearType.STAGE_ENTER:
-            case StoryAppearType.STAGE_EXIT: cnt = 4; break;
+            case StoryAppearType.STAGE_EXIT: cnt = 5; break;
         }
         
         return 20f * cnt;
@@ -32,6 +32,8 @@ public class StoryInfoEditor : PropertyDrawer
         var stageIndexProperty = property.FindPropertyRelative("stageIndex");
         
         var storyDataProperty = property.FindPropertyRelative("storyData");
+        
+        var recordPlayedProperty = property.FindPropertyRelative("recordPlayed");
 
         EditorGUIUtility.wideMode = true;
         EditorGUIUtility.labelWidth = 100;
@@ -39,10 +41,10 @@ public class StoryInfoEditor : PropertyDrawer
         var appearType = (StoryAppearType)appearTypeProperty.enumValueIndex;
         switch (appearType)
         {
-            case StoryAppearType.SCENE_ENTER: rect.height /= 3; break;
-            case StoryAppearType.CUTSCENE_END: rect.height /= 3; break;
+            case StoryAppearType.SCENE_ENTER: rect.height /= 4; break;
+            case StoryAppearType.CUTSCENE_END: rect.height /= 4; break;
             case StoryAppearType.STAGE_ENTER:
-            case StoryAppearType.STAGE_EXIT: rect.height /= 4; break;
+            case StoryAppearType.STAGE_EXIT: rect.height /= 5; break;
         }
 
         appearTypeProperty.enumValueIndex = Convert.ToInt32(EditorGUI.EnumPopup(rect, "AppearType", (StoryAppearType)appearTypeProperty.enumValueIndex));
@@ -76,5 +78,8 @@ public class StoryInfoEditor : PropertyDrawer
         
         rect.y += rect.height;
         storyDataProperty.objectReferenceValue = EditorGUI.ObjectField(rect, "StoryData", storyDataProperty.objectReferenceValue, typeof(StoryData));
+        
+        rect.y += rect.height;
+        recordPlayedProperty.boolValue = EditorGUI.Toggle(rect, "Record Played", recordPlayedProperty.boolValue);
     }
 }

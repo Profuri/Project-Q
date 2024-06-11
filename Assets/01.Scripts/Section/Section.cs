@@ -93,10 +93,10 @@ public class Section : PoolableMono
             });
     }
 
-    public void ReloadSectionUnits()
+    public void ReloadSectionUnits(bool includeInactiveUnit = true)
     {
         SectionUnits.Clear();
-        SectionUnits = transform.GetComponentsInChildren<ObjectUnit>(true).ToList();
+        SectionUnits = transform.GetComponentsInChildren<ObjectUnit>(includeInactiveUnit).ToList();
     }
 
     public virtual void OnEnter(PlayerUnit player)

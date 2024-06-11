@@ -46,7 +46,7 @@ public class ChapterScene : Scene, IProvideLoad
 
         foreach(var (chapterType, isClear) in clearDictionary)
         {
-            if (chapterType == ChapterType.Cpu || !isClear)
+            if (chapterType == ChapterType.Cpu || chapterType == ChapterType.Tutorial || !isClear)
             {
                 continue;
             }

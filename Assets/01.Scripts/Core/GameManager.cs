@@ -34,7 +34,11 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void Pause()
     {
-        if (InPause || TimelineManager.Instance.IsPlay || TutorialManager.Instance.OnTutorial || StageManager.Instance.CurrentStageAxis != AxisType.None)
+        if (InPause ||
+            TimelineManager.Instance.IsPlay ||
+            TutorialManager.Instance.OnTutorial ||
+            StageManager.Instance.CurrentStageAxis != AxisType.None ||
+            (StageManager.Instance.CurrentStage != null && StageManager.Instance.CurrentStage.ChapterType == ChapterType.Tutorial))
         {
             return;
         }
