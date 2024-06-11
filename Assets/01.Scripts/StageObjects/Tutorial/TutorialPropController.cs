@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using AxisConvertSystem;
@@ -13,11 +12,9 @@ public class TutorialPropController : MonoBehaviour
       {
             _props = new List<ObjectUnit>();
             _props = GetComponentsInChildren<ObjectUnit>(true).ToList();
-      }
 
-      private void Start()
-      {
-            UnShowProps();
+            var ownerStage = GetComponentInParent<Stage>();
+            ownerStage.OnEnterSectionEvent += UnShowProps;
       }
 
       public void ShowProps()
