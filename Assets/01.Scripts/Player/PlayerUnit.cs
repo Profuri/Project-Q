@@ -51,7 +51,7 @@ public class PlayerUnit : ObjectUnit
 
 
     [SerializeField] private float _stepY = 0.05f;
-    [SerializeField] private float _stepOffset = 0.55f;
+    [SerializeField] private float _stepX = 0.03f;
 
     public void StartCoyoteTime()
     {
@@ -203,30 +203,44 @@ public class PlayerUnit : ObjectUnit
 
     public bool IsStairOnNextStep(out RaycastHit hit, float distance = 0.05f)
     {
-        Vector3 center = Collider.bounds.center;
-        center.y = center.y - Collider.bounds.size.y * _stepOffset;
-        center.z = center.z + Collider.bounds.size.z * 0.65f;
+        Vector3 dir = transform.forward;
+        dir.y = 0f;
+        Vector3 origin = Collider.bounds.center + dir;
+        origin.y = Collider.bounds.min.y;
 
+        Vector3 topCenter = origin  + Vector3.up * _stepY * 1.5f -dir * _stepX;
+        Vector3 bottomCenter = origin + Vector3.up * _stepY * 0.5f -dir * _stepX;
         Vector3 halfExtents = Collider.bounds.extents;
-        halfExtents.y = 0.05f;
 
-        Vector3 forward = transform.forward;
-        int layer = 1 << LayerMask.NameToLayer("Ground");
-        return Physics.BoxCast(center, halfExtents, forward, out hit, Quaternion.identity, _stepY, layer);
+        halfExtents.y = _stepY * 0.5f;
+        halfExtents.z = _stepX * 0.5f;
+
+        int layer      = 1 << LayerMask.NameToLayer("Ground");
+        bool topHit    = Physics.BoxCast(topCenter,halfExtents,dir,Quaternion.identity,_stepX,layer);
+        bool bottomhit = Physics.BoxCast(bottomCenter, halfExtents, dir, out hit, Quaternion.identity, _stepX, layer);
+
+        return !topHit && bottomhit;
     }
 
     private void OnDrawGizmos()
     {
         if (Collider == null) return;
+        Vector3 dir = transform.forward;
+        dir.y = 0f;
 
+        Vector3 origin = Collider.bounds.center + dir * 0.5f;
+        origin.y = Collider.bounds.min.y;
 
-        Vector3 center = Collider.bounds.center;
-        center.y = center.y - Collider.bounds.size.y * _stepOffset;
-        center.z = center.z + Collider.bounds.size.z * 0.65f;
-        Vector3 halfExtents = Collider.bounds.extents;
-        halfExtents.y = 0.05f;
+        Vector3 size = Collider.bounds.extents * 2f;
+        size.y = _stepY ;
+        size.z = _stepX ;
+
+        Vector3 topCenter    = origin + Vector3.up * _stepY * 1.5f -dir * _stepX;
+        Vector3 bottomCenter = origin + Vector3.up * _stepY * 0.5f -dir * _stepX;
 
         Gizmos.color = Color.red;
-        Gizmos.DrawCube(center,halfExtents);
+        Gizmos.DrawCube(topCenter,size);
+        Gizmos.color = Color.green;
+        Gizmos.DrawCube(bottomCenter,size);
     }
 }
