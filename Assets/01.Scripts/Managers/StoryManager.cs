@@ -48,6 +48,8 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
             return;
         }
         
+        StopMessageVideo();
+        
         InputManager.Instance.SetEnableInputAll(true);
         _messagePanel.Disappear();
         _messagePanel = null;
@@ -57,9 +59,11 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
     {
         if (IsPlayMessageVideo)
         {
+            _messageVideoWindow.SettingVideo(clip);
+            _messageVideoWindow.Play();
             return;
         }
-        
+
         _messageVideoWindow = UIManager.Instance.GenerateUI("MessageVideoWindow") as MessageVideoWindow;
         _messageVideoWindow.SettingVideo(clip);
         _messageVideoWindow.Play();
@@ -71,7 +75,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
         {
             return;
         }
-        
+
         _messageVideoWindow.Disappear(() =>
         {
             _messageVideoWindow = null;
