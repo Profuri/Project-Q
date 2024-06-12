@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AxisConvertSystem;
@@ -65,7 +66,7 @@ public class Scene : PoolableMono
         onDestroyScene?.Invoke();
     }
 
-    public void CreatePlayer()
+    public void CreatePlayer(Action callBack)
     {
         if (Player is not null)
         {
@@ -91,6 +92,7 @@ public class Scene : PoolableMono
             {
                 InputManager.Instance.SetEnableInputAll(true);
             }
+            callBack?.Invoke();
         });
     }
 
@@ -109,15 +111,13 @@ public class Scene : PoolableMono
         {
             return;
         }
-        
+
         PoolManager.Instance.Push(obj);
     }
 
     public void SafeDeleteObject(PoolableMono obj)
     {
         Destroy(obj.gameObject);
-        
-        
         _objects.Remove(obj);
     }
 
