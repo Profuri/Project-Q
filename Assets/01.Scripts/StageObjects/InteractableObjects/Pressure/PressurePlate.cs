@@ -17,8 +17,6 @@ public class PressurePlate : ToggleTypeInteractableObject
 
     private SoundEffectPlayer _soundEffectPlayer;
 
-    private bool _isPressed = false;
-
     public override void Awake()
     {
         base.Awake();
@@ -27,6 +25,7 @@ public class PressurePlate : ToggleTypeInteractableObject
 
         _soundEffectPlayer = new SoundEffectPlayer(this);
     }
+
 
     public override void UpdateUnit()
     { 
@@ -46,6 +45,7 @@ public class PressurePlate : ToggleTypeInteractableObject
         OnInteraction(null, LastToggleState);
     }
 
+
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         InteractAffectedObjects(interactValue);
@@ -62,6 +62,7 @@ public class PressurePlate : ToggleTypeInteractableObject
         scale.y = Mathf.Lerp(current, dest, Time.deltaTime * _pressSpeed);
         _pressureMainTrm.localScale = scale;
     }
+
 
     private bool CheckPressed()
     {

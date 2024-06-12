@@ -1,7 +1,7 @@
 public enum TimelineType
 {
     // Chapter Scene
-    TutorialClear,
+    MainBoardClear,
     CoolerClear,
     PowerClear,
     GpuClear,

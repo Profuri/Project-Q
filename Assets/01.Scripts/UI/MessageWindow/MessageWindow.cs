@@ -13,6 +13,8 @@ public class MessageWindow : UIComponent
     private StoryData _storyData;
     private int _currentIndex;
 
+    public StoryData StoryData => _storyData;
+
     protected override void Awake()
     {
         base.Awake();
@@ -29,6 +31,14 @@ public class MessageWindow : UIComponent
     {
         _bodyText.text = "";
         _typewriter.onMessage.AddListener(OnTypewriterMessageHandle);
+        InputManager.Instance.UIInputReader.OnEnterClickEvent += NextStory;
+
+
+        callback += () =>
+        {
+            SoundManager.Instance.PlaySFX("PanelAppear", false);
+        };
+
         base.Appear(parentTrm, callback);
     }
 
@@ -36,6 +46,8 @@ public class MessageWindow : UIComponent
     {
         _typewriter.onMessage.RemoveListener(OnTypewriterMessageHandle);
         InputManager.Instance.UIInputReader.OnEnterClickEvent -= NextStory;
+        SoundManager.Instance.PlaySFX("PanelAppear", false);
+
         InputManager.Instance.UIInputReader.OnLeftClickEventWithOutParameter -= NextStory;
         base.Disappear(callback);
     }
@@ -53,6 +65,7 @@ public class MessageWindow : UIComponent
     {
         if (_typewriter.isShowingText)
         {
+            _typewriter.SkipTypewriter();
             return;
         }
         
@@ -76,38 +89,6 @@ public class MessageWindow : UIComponent
     
     private void OnTypewriterMessageHandle(Febucci.UI.Core.Parsing.EventMarker eventMarker)
     {
-        switch (eventMarker.name)
-        {
-            case "camDampingChange":
-            {
-                var xDamping = Convert.ToSingle(eventMarker.parameters[0]);
-                var yDamping = Convert.ToSingle(eventMarker.parameters[1]);
-                var zDamping = Convert.ToSingle(eventMarker.parameters[2]);
-                CameraManager.Instance.ActiveVCam.SetDamping(new Vector3(xDamping, yDamping, zDamping));
-                break;
-            }
-            case "camFollowTargetChange":
-            {
-                var targetName = eventMarker.parameters[0];
-                CameraManager.Instance.ActiveVCam.SetFollowTarget(GameObject.Find(targetName).transform);
-                break;
-            }
-            case "camOffsetChange":
-            {
-                var offsetX = Convert.ToSingle(eventMarker.parameters[0]);
-                var offsetY = Convert.ToSingle(eventMarker.parameters[1]);
-                var offsetZ = Convert.ToSingle(eventMarker.parameters[2]);
-                var offset = new Vector3(offsetX, offsetY, offsetZ);
-                CameraManager.Instance.ActiveVCam.SetOffset(offset);
-                break;
-            }
-            case "camSizeChange":
-            {
-                var targetSize = Convert.ToSingle(eventMarker.parameters[0]);
-                var time = Convert.ToSingle(eventMarker.parameters[1]);
-                CameraManager.Instance.ActiveVCam.Zoom(targetSize, time);
-                break;
-            }
-        }
+        Core.MessageUtil.CallMessageEvent(eventMarker);
     }
 }

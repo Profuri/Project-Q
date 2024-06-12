@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class CursorManager
 {
+    private static bool _enableCursor = false;
     private static HashSet<MonoBehaviour> _uiHashSet = new HashSet<MonoBehaviour>();
     public static int CurrentCnt => _uiHashSet.Count;
 
@@ -33,9 +34,16 @@ public static class CursorManager
         _uiHashSet.Clear();
     }
 
+    public static void ForceEnableCursor(bool enable)
+    {
+        _enableCursor = enable;
+
+        ReloadCursor();
+    }
+
     public static void ReloadCursor()
     {
-        if(CurrentCnt < 1)
+        if(CurrentCnt < 1 && !_enableCursor)
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;

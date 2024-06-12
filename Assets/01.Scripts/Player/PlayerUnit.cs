@@ -49,6 +49,10 @@ public class PlayerUnit : ObjectUnit
     public bool CanAxisControl { get; set; } = true;
     public bool IsControllingAxis => _stateController.CurrentState is PlayerAxisControlState;
 
+
+    [SerializeField] private float _stepY = 0.05f;
+    [SerializeField] private float _stepX = 0.03f;
+
     public void StartCoyoteTime()
     {
         _coyoteTime = Time.time;
@@ -80,11 +84,9 @@ public class PlayerUnit : ObjectUnit
         SoundEffectPlayer = new SoundEffectPlayer(this);
         CanAxisControl = true;
     }    
-    
     public override void UpdateUnit()
     {
         base.UpdateUnit();
-
         if (StandingUnit)
         {
             StandingCheck();
@@ -118,15 +120,19 @@ public class PlayerUnit : ObjectUnit
     {
         if (HoldingHandler.IsHold)
             HoldingHandler.Detach();
+        
+        Converter.ConvertDimension(AxisType.None);
+        
         base.ReloadUnit(true, dissolveTime, () =>
         {
             callBack?.Invoke();
-            InputManagerHelper.OnRevivePlayer();
-            InputManagerHelper.OnRevivePlayer();
+            if (!StoryManager.Instance.IsPlay)
+            {
+                InputManagerHelper.OnRevivePlayer();
+            }
         });
+        
         InputManagerHelper.OnDeadPlayer();
-
-        Converter.ConvertDimension(AxisType.None);
         SoundManager.Instance.PlaySFX("PlayerDead");
         PlaySpawnVFX();
         SetActiveAnimation(true);
@@ -209,5 +215,47 @@ public class PlayerUnit : ObjectUnit
         }        
         
         useGravity = useGravityParam;
+    }
+
+    public bool IsStairOnNextStep(out RaycastHit hit, float distance = 0.05f)
+    {
+        Vector3 dir = ModelTrm.forward;
+        dir.y = 0f;
+
+        Vector3 origin = Collider.bounds.center;
+        origin.y = Collider.bounds.min.y;
+
+        Vector3 topCenter = origin  + Vector3.up * _stepY * 1.5f + dir * -_stepX;
+        Vector3 bottomCenter = origin + Vector3.up * _stepY * 0.5f + dir * -_stepX;
+        Vector3 halfExtents = Collider.bounds.extents;
+        halfExtents.y = _stepY * 0.5f;
+
+        int layer      = 1 << LayerMask.NameToLayer("Ground");
+        bool topHit    = Physics.BoxCast(topCenter,halfExtents,dir,Quaternion.identity,_stepX,layer);
+        bool bottomhit = Physics.BoxCast(bottomCenter, halfExtents, dir, out hit, Quaternion.identity, _stepX, layer);
+
+        return !topHit && bottomhit;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (Collider == null) return;
+
+        Vector3 dir = ModelTrm.forward;
+        dir.y = 0f;
+
+        Vector3 origin = Collider.bounds.center;
+        origin.y = Collider.bounds.min.y;
+
+        Vector3 topCenter = origin + Vector3.up * _stepY * 1.5f    + dir * -_stepX;
+        Vector3 bottomCenter = origin + Vector3.up * _stepY * 0.5f + dir * -_stepX;
+        Vector3 halfExtents = Collider.bounds.extents;
+        halfExtents.y = _stepY * 0.5f;
+
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(topCenter,halfExtents);
+        Gizmos.color = Color.green;
+        Gizmos.DrawCube(bottomCenter,halfExtents);
     }
 }

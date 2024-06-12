@@ -46,6 +46,7 @@ namespace AxisConvertSystem
         // Events
         public event Action<AxisConverter> OnInitEvent;
         public event Action<AxisType> OnConvertEvent;
+        //public event Action<AxisType> OnCalcDepthEvent;
         public event Action<AxisType> OnApplyUnitInfoEvent;
         
         public override void OnPop()
@@ -163,7 +164,7 @@ namespace AxisConvertSystem
         
         public virtual void ApplyUnitInfo(AxisType axis)
         {
-            if (axis == AxisType.None)
+            if (!staticUnit && axis == AxisType.None && Converter.AxisType != AxisType.None)
             {
                 var localPos = transform.localPosition;
                 localPos.SetAxisElement(Converter.AxisType, UnitInfo.LocalPos.GetAxisElement(Converter.AxisType));
@@ -351,7 +352,7 @@ namespace AxisConvertSystem
                     else
                     {
                         UnitInfo.LocalPos = transform.localPosition;
-                    }
+                    } 
                 }
             }
             else
@@ -460,6 +461,7 @@ namespace AxisConvertSystem
 
             col = null;
 
+
             if (Converter.AxisType == AxisType.Y)
             {
                 size = Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
@@ -474,9 +476,10 @@ namespace AxisConvertSystem
                 var dir = Vector3.down;
                 var distance = Collider.bounds.size.y / 2f + checkOffset;
 
+                Vector3 halfExtents = Collider.bounds.extents;
                 var results = new RaycastHit[10];
-                size = Physics.RaycastNonAlloc(origin, dir, results, distance, canStandMask, triggerInteraction);
-
+                //size = Physics.RaycastNonAlloc(origin, dir, results, distance, canStandMask, triggerInteraction);
+                size = Physics.BoxCastNonAlloc(origin,halfExtents,dir,results,Quaternion.identity,distance,canStandMask,triggerInteraction);
                 for (var i = 0; i < size; i++)
                 {
                     cols[i] = results[i].collider;

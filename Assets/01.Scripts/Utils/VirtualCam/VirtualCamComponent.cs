@@ -160,41 +160,5 @@ namespace VirtualCam
                 yield return null;
             }
         }
-
-        public void RotateCam(float rotateValue, float time, Action callBack = null)
-        {
-            if (time <= 0f)
-            {
-                var localEulerAngle = transform.localEulerAngles;
-                transform.localRotation = Quaternion.Euler(localEulerAngle.x, rotateValue, localEulerAngle.z);
-                callBack?.Invoke();
-            }
-            else
-            {
-                StartSafeCoroutine("CamRotateRoutine", CamRotateRoutine(rotateValue, time, callBack));
-            }
-        }
-        
-        private IEnumerator CamRotateRoutine(float rotateValue, float time, Action callBack)
-        {
-            var currentRot = transform.localRotation;
-
-            var localEulerAngle = transform.localEulerAngles;
-            var targetRot = Quaternion.Euler(localEulerAngle.x, rotateValue, localEulerAngle.z);
-
-            var currentTime = 0f;
-            while (currentTime < time)
-            {
-                currentTime += Time.deltaTime;
-                var percent = currentTime / time;
-
-                var rot = Quaternion.Lerp(currentRot, targetRot, percent);
-                transform.localRotation = rot;
-                yield return null;
-            }
-
-            transform.localRotation = targetRot;
-            callBack?.Invoke();
-        }
     }
 }
