@@ -6,7 +6,9 @@ using DG.Tweening;
 public class SlimeObjectUnit : ObjectUnit
 {
     [Header("SlimeSettings")]
-    [SerializeField] private Transform _targetTrm;
+    [SerializeField] private ObjectUnit _defaultJumpTarget;
+    [SerializeField] private bool _useToggle;
+    [SerializeField] private ObjectUnit _toggledJumpTarget;
     [SerializeField] private float _jumpPower = 4f;
     private float _bounceTime = 0.5f;
 
@@ -14,10 +16,13 @@ public class SlimeObjectUnit : ObjectUnit
     private AxisType _prevAxisType = AxisType.None;
     private bool _canApply = false;
 
+    private ObjectUnit _jumpTarget;
+
     public override void Init(AxisConverter converter)
     {
         base.Init(converter);
         _canApply = false;
+        _jumpTarget = _defaultJumpTarget;
     }
 
     public override void Convert(AxisType axis)
@@ -66,14 +71,16 @@ public class SlimeObjectUnit : ObjectUnit
 
     private void MoveToTargetPos(ObjectUnit unit)
     {
-        if (_targetTrm == null || unit.transform.Equals(transform)) return;
+        if (_jumpTarget == null || unit.transform.Equals(transform)) return;
 
+        var destPos = _jumpTarget.Collider.bounds.center;
+        destPos.y = _jumpTarget.Collider.bounds.max.y;
+        
         const float baseDistance = 6f;
-        float ratio = Vector3.Distance(_targetTrm.position, transform.position) / baseDistance;
-        Debug.Log($"ratio: {ratio}");
+        float ratio = Vector3.Distance(destPos, transform.position) / baseDistance;
         float bounceTime = _bounceTime * ratio;
-
-        unit.transform.DOJump(_targetTrm.position,_jumpPower,1,bounceTime).SetEase(Ease.OutSine);
+        
+        unit.transform.DOJump(destPos, _jumpPower, 1, bounceTime).SetEase(Ease.OutSine);
     }
 
     private Collider[] FindColliders()
@@ -83,9 +90,19 @@ public class SlimeObjectUnit : ObjectUnit
         Collider[] results = new Collider[_MAX_COLLIDER_CNT];
         Quaternion orientation = transform.rotation;
         
-       int colCount = Physics.OverlapBoxNonAlloc(center,halfExtents,results,orientation);
+       Physics.OverlapBoxNonAlloc(center,halfExtents,results,orientation);
        
         return results;
+    }
+    
+    public void ToggledJumpTarget(bool toggle)
+    {
+        if (!_useToggle)
+        {
+            return;
+        }
+
+        _jumpTarget = toggle ? _toggledJumpTarget : _defaultJumpTarget;
     }
     
 #if UNITY_EDITOR
@@ -101,6 +118,29 @@ public class SlimeObjectUnit : ObjectUnit
             Vector3 checkScale = col.bounds.size;
 
             Gizmos.DrawWireCube(checkCenterPos, checkScale);
+        }
+        
+        Gizmos.color = Color.red;
+        var startPos = transform.position;
+        var endPos = startPos;
+        
+        Gizmos.DrawWireSphere(startPos, 0.5f);
+
+        if (_defaultJumpTarget)
+        {
+            endPos = _defaultJumpTarget.transform.position;
+        }
+        
+        Gizmos.DrawWireSphere(endPos, 0.5f);
+        Gizmos.DrawLine(startPos, endPos);
+
+        Gizmos.color = Color.blue;
+
+        if (_useToggle && _toggledJumpTarget)
+        {
+            endPos = _toggledJumpTarget.transform.position;
+            Gizmos.DrawWireSphere(endPos, 0.5f);
+            Gizmos.DrawLine(startPos, endPos);
         }
     }
 #endif
