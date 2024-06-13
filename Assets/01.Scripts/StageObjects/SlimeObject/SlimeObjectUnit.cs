@@ -67,6 +67,7 @@ public class SlimeObjectUnit : ObjectUnit
     private void MoveToTargetPos(ObjectUnit unit)
     {
         if (_targetTrm == null || unit.transform.Equals(transform)) return;
+
         unit.transform.DOJump(_targetTrm.position,_jumpPower,1,_bounceTime).SetEase(Ease.OutSine);
     }
 
