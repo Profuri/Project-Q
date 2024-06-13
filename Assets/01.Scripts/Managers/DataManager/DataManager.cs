@@ -24,6 +24,8 @@ public class SaveData
 
         ResolutionIndex = (uint)Screen.resolutions.Length - 1;
         DefaultQuality = QualityType.High;
+
+        GameStartTimeTick = DateTime.Now.Ticks;
     }
 
     public SerializableDictionary<ChapterType, bool> ChapterClearDictionary;
@@ -36,6 +38,8 @@ public class SaveData
     public uint ResolutionIndex;
 
     public string KeyBinding;
+
+    public long GameStartTimeTick;
 }
 
 

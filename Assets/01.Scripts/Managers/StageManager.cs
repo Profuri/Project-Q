@@ -101,7 +101,16 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         if (nextChapter >= _currentPlayChapterData.stageCnt)
         {
             DataManager.Instance.SaveData(this);
-            SceneControlManager.Instance.LoadScene(SceneType.Chapter);
+
+            
+            SceneControlManager.Instance.LoadScene(SceneType.Chapter, null, () =>
+            {
+                if (CurrentStage.ChapterType == ChapterType.Cpu)
+                {
+                    var thanksToPanel = UIManager.Instance.GenerateUI("ThanksToPanel");
+                    thanksToPanel.ResetPosition();
+                }
+            }, () => InputManager.Instance.SetEnableInputAll(false));
             return;
         }
                 

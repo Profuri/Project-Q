@@ -16,6 +16,7 @@ namespace InputControl
         public event InputEventListener OnLeftArrowClickEvent = null;
         public event InputEventListener OnEnterClickEvent = null;
         public event InputEventListener OnTutorialOutEvent = null;
+        public event InputEventListener OnAnyKeyClickEvent = null;
 
         public InputEventListener OnPauseClickEvent = null;
         [HideInInspector] public Vector2 mouseScreenPoint;
@@ -107,6 +108,14 @@ namespace InputControl
             }
         }
 
+        public void OnAnyKey(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                OnAnyKeyClickEvent?.Invoke();
+            }
+        }
+
         public override void ClearInputEvent()
         {
             OnLeftClickEventWithOutParameter = null;
@@ -119,6 +128,7 @@ namespace InputControl
             OnLeftArrowClickEvent = null;
             OnEnterClickEvent = null;
             OnPauseClickEvent = null;
+            OnAnyKeyClickEvent = null;
         }
     }
 }

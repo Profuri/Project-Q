@@ -19,7 +19,7 @@ public class SceneControlManager : BaseManager<SceneControlManager>
         LoadScene(_startSceneType);
     }
 
-    public void LoadScene(SceneType type, Action onSceneCreate = null, Action onLoadedCallback = null, bool loading = true)
+    public void LoadScene(SceneType type, Action onSceneCreate = null, Action onLoadedCallback = null, Action onPlayerGenerated = null, bool loading = true)
     {
         if (_currentCanvas != null) return;
         
@@ -43,11 +43,11 @@ public class SceneControlManager : BaseManager<SceneControlManager>
             
             if(!TimelineManager.Instance.IsPlay)
             {
-                CurrentScene.CreatePlayer();
+                CurrentScene.CreatePlayer(onPlayerGenerated);
             }
             else
             {
-                TimelineManager.Instance.AllTimelineEnd += CurrentScene.CreatePlayer;
+                TimelineManager.Instance.AllTimelineEnd += () => CurrentScene.CreatePlayer(onPlayerGenerated);
             }
             
             //위에 함수가 전부다 정상 작동 했을 경우 밑에 있는 것을 실행시켜주어야 함
