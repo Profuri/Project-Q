@@ -8,7 +8,7 @@ public class SlimeObjectUnit : ObjectUnit
     [Header("SlimeSettings")]
     [SerializeField] private Transform _targetTrm;
     [SerializeField] private float _jumpPower = 4f;
-    [SerializeField] private float _bounceTime = 0.5f;
+    private float _bounceTime = 0.5f;
 
     private const int _MAX_COLLIDER_CNT = 8;
     private AxisType _prevAxisType = AxisType.None;
@@ -68,7 +68,12 @@ public class SlimeObjectUnit : ObjectUnit
     {
         if (_targetTrm == null || unit.transform.Equals(transform)) return;
 
-        unit.transform.DOJump(_targetTrm.position,_jumpPower,1,_bounceTime).SetEase(Ease.OutSine);
+        const float baseDistance = 6f;
+        float ratio = Vector3.Distance(_targetTrm.position, transform.position) / baseDistance;
+        Debug.Log($"ratio: {ratio}");
+        float bounceTime = _bounceTime * ratio;
+
+        unit.transform.DOJump(_targetTrm.position,_jumpPower,1,bounceTime).SetEase(Ease.OutSine);
     }
 
     private Collider[] FindColliders()
