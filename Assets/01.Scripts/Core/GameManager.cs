@@ -14,7 +14,7 @@ public class GameManager : MonoSingleton<GameManager>
     public event UnityEventListener OnStartEvent = null;
 
     public bool InPause { get; set; }
-    
+
     private void Awake()
     {
         DOTween.Init(true, true, LogBehaviour.Verbose). SetCapacity(2000, 100);

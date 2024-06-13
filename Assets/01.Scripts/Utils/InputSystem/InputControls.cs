@@ -301,6 +301,15 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AnyKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""872eed74-96d1-43b2-8438-1c81a0e405da"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -446,6 +455,17 @@ namespace InputControl
                     ""action"": ""LeftArrow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""745548a1-6a35-4fe8-a08d-bb0242953602"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""AnyKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -545,6 +565,7 @@ namespace InputControl
             m_UI_TutorialOut = m_UI.FindAction("TutorialOut", throwIfNotFound: true);
             m_UI_RightArrow = m_UI.FindAction("RightArrow", throwIfNotFound: true);
             m_UI_LeftArrow = m_UI.FindAction("LeftArrow", throwIfNotFound: true);
+            m_UI_AnyKey = m_UI.FindAction("AnyKey", throwIfNotFound: true);
             // Camera
             m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
             m_Camera_ZoomControl = m_Camera.FindAction("ZoomControl", throwIfNotFound: true);
@@ -715,6 +736,7 @@ namespace InputControl
         private readonly InputAction m_UI_TutorialOut;
         private readonly InputAction m_UI_RightArrow;
         private readonly InputAction m_UI_LeftArrow;
+        private readonly InputAction m_UI_AnyKey;
         public struct UIActions
         {
             private @InputControls m_Wrapper;
@@ -728,6 +750,7 @@ namespace InputControl
             public InputAction @TutorialOut => m_Wrapper.m_UI_TutorialOut;
             public InputAction @RightArrow => m_Wrapper.m_UI_RightArrow;
             public InputAction @LeftArrow => m_Wrapper.m_UI_LeftArrow;
+            public InputAction @AnyKey => m_Wrapper.m_UI_AnyKey;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -764,6 +787,9 @@ namespace InputControl
                 @LeftArrow.started += instance.OnLeftArrow;
                 @LeftArrow.performed += instance.OnLeftArrow;
                 @LeftArrow.canceled += instance.OnLeftArrow;
+                @AnyKey.started += instance.OnAnyKey;
+                @AnyKey.performed += instance.OnAnyKey;
+                @AnyKey.canceled += instance.OnAnyKey;
             }
 
             private void UnregisterCallbacks(IUIActions instance)
@@ -795,6 +821,9 @@ namespace InputControl
                 @LeftArrow.started -= instance.OnLeftArrow;
                 @LeftArrow.performed -= instance.OnLeftArrow;
                 @LeftArrow.canceled -= instance.OnLeftArrow;
+                @AnyKey.started -= instance.OnAnyKey;
+                @AnyKey.performed -= instance.OnAnyKey;
+                @AnyKey.canceled -= instance.OnAnyKey;
             }
 
             public void RemoveCallbacks(IUIActions instance)
@@ -934,6 +963,7 @@ namespace InputControl
             void OnTutorialOut(InputAction.CallbackContext context);
             void OnRightArrow(InputAction.CallbackContext context);
             void OnLeftArrow(InputAction.CallbackContext context);
+            void OnAnyKey(InputAction.CallbackContext context);
         }
         public interface ICameraActions
         {
