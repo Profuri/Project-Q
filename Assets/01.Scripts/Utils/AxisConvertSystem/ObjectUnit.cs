@@ -476,7 +476,9 @@ namespace AxisConvertSystem
                 var dir = Vector3.down;
                 var distance = Collider.bounds.size.y / 2f + checkOffset;
 
-                Vector3 halfExtents = Collider.bounds.extents;
+                //충돌 여유
+                Vector3 halfExtents = Collider.bounds.extents * 0.8f;
+                halfExtents.y = 0f;
                 var results = new RaycastHit[10];
                 //size = Physics.RaycastNonAlloc(origin, dir, results, distance, canStandMask, triggerInteraction);
                 size = Physics.BoxCastNonAlloc(origin,halfExtents,dir,results,Quaternion.identity,distance,canStandMask,triggerInteraction);
@@ -648,6 +650,12 @@ namespace AxisConvertSystem
         public virtual void SetGravity(bool useGravityParam)
         {
             useGravity = useGravityParam;
+        }
+
+        public virtual void GetCenterPosAndSize(out Vector3 center, out Vector3 size)
+        {
+            center = Collider.bounds.center;
+            size = UnitInfo.ColliderBoundSize;
         }
     }
 }

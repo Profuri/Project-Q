@@ -62,7 +62,7 @@ public class PlayerUnit : ObjectUnit
     {
         _coyoteTime = float.MinValue;
     }
-    
+
     public override void Awake()
     {
         base.Awake();
@@ -145,12 +145,14 @@ public class PlayerUnit : ObjectUnit
         InputManager.Instance.PlayerInputReader.OnReloadClickEvent += RestartStage;
         _stateController.ChangeState(typeof(PlayerIdleState));
         SetActiveAnimation(true);
+        SoundManager.Instance.SetAudioListenerOwner(transform);
     }
     
     public override void OnPush()
     {
         InputManager.Instance.PlayerInputReader.ClearInputEvent();
         SetActiveAnimation(false);
+        SoundManager.Instance.SetAudioListenerOwner(GameManager.Instance.transform);
     }
 
     private void RestartStage()
@@ -225,18 +227,19 @@ public class PlayerUnit : ObjectUnit
         Vector3 origin = Collider.bounds.center;
         origin.y = Collider.bounds.min.y;
 
-        Vector3 topCenter = origin  + Vector3.up * _stepY * 1.5f + dir * -_stepX;
         Vector3 bottomCenter = origin + Vector3.up * _stepY * 0.5f + dir * -_stepX;
         Vector3 halfExtents = Collider.bounds.extents;
         halfExtents.y = _stepY * 0.5f;
 
         int layer      = 1 << LayerMask.NameToLayer("Ground");
-        bool topHit    = Physics.BoxCast(topCenter,halfExtents,dir,Quaternion.identity,_stepX,layer);
-        bool bottomhit = Physics.BoxCast(bottomCenter, halfExtents, dir, out hit, Quaternion.identity, _stepX, layer);
 
-        return !topHit && bottomhit;
+        bool bottomhit = Physics.BoxCast(bottomCenter, halfExtents, dir, out hit, Quaternion.identity, _stepX, layer);
+        bool topDistance = hit.point.y < transform.position.y + _stepY;
+
+        return bottomhit && topDistance;
     }
 
+    #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (Collider == null) return;
@@ -258,4 +261,5 @@ public class PlayerUnit : ObjectUnit
         Gizmos.color = Color.green;
         Gizmos.DrawCube(bottomCenter,halfExtents);
     }
+    #endif
 }
