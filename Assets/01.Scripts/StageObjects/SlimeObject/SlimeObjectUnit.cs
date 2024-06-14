@@ -10,7 +10,7 @@ public class SlimeObjectUnit : ObjectUnit
     [SerializeField] private bool _useToggle;
     [SerializeField] private ObjectUnit _toggledJumpTarget;
     [SerializeField] private float _jumpPower = 4f;
-    private float _bounceTime = 0.5f;
+    private float _bounceTime = 1f;
 
     private const int _MAX_COLLIDER_CNT = 8;
     private AxisType _prevAxisType = AxisType.None;
