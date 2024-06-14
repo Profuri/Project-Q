@@ -30,9 +30,6 @@ public class MessageWindow : UIComponent
     public override void Appear(Transform parentTrm, Action callback = null)
     {
         _bodyText.text = "";
-        _typewriter.onMessage.AddListener(OnTypewriterMessageHandle);
-        InputManager.Instance.UIInputReader.OnEnterClickEvent += NextStory;
-
 
         callback += () =>
         {
@@ -54,6 +51,7 @@ public class MessageWindow : UIComponent
 
     public void SetData(StoryData data)
     {
+        _typewriter.onMessage.AddListener(OnTypewriterMessageHandle);
         _storyData = data;
         _currentIndex = -1;
         NextStory();
