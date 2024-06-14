@@ -117,8 +117,6 @@ public class RGBObjectUnit : InteractableObject, IPassable
             if(Rigidbody != null)
                 Rigidbody.isKinematic = false;
         }
-
-        Debug.Log($"IsTrigger: {Collider.isTrigger}");
     }
 
     private Color GetColorFromRGBColor(RGBColor rgb)
