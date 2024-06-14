@@ -62,7 +62,7 @@ public class PlayerUnit : ObjectUnit
     {
         _coyoteTime = float.MinValue;
     }
-    
+
     public override void Awake()
     {
         base.Awake();
@@ -145,12 +145,14 @@ public class PlayerUnit : ObjectUnit
         InputManager.Instance.PlayerInputReader.OnReloadClickEvent += RestartStage;
         _stateController.ChangeState(typeof(PlayerIdleState));
         SetActiveAnimation(true);
+        SoundManager.Instance.SetAudioListenerOwner(transform);
     }
     
     public override void OnPush()
     {
         InputManager.Instance.PlayerInputReader.ClearInputEvent();
         SetActiveAnimation(false);
+        SoundManager.Instance.SetAudioListenerOwner(GameManager.Instance.transform);
     }
 
     private void RestartStage()
@@ -237,6 +239,7 @@ public class PlayerUnit : ObjectUnit
         return !topHit && bottomhit;
     }
 
+    #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (Collider == null) return;
@@ -258,4 +261,5 @@ public class PlayerUnit : ObjectUnit
         Gizmos.color = Color.green;
         Gizmos.DrawCube(bottomCenter,halfExtents);
     }
+    #endif
 }
