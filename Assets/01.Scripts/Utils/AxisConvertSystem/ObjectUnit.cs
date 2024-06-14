@@ -649,5 +649,11 @@ namespace AxisConvertSystem
         {
             useGravity = useGravityParam;
         }
+
+        public virtual void GetCenterPosAndSize(out Vector3 center, out Vector3 size)
+        {
+            center = Collider.bounds.center;
+            size = UnitInfo.ColliderBoundSize;
+        }
     }
 }

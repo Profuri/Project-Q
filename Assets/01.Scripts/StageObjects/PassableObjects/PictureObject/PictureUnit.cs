@@ -69,6 +69,13 @@ public class PictureUnit : ObjectUnit, IPassable
         Hide(Converter.AxisType == AxisType.None && PassableAfterAxis);
     }
 
+    public override void GetCenterPosAndSize(out Vector3 center, out Vector3 size)
+    {
+        center = transform.position;
+        size = UnitInfo.ColliderBoundSize;
+        size.SetAxisElement(_enableAxis, -0.09f);
+    }
+
     public void PassableCheck(AxisType axis)
     {
         if (axis == AxisType.None || axis != _enableAxis)
