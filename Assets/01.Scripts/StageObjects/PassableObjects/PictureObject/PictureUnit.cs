@@ -4,6 +4,7 @@ using UnityEngine;
 public class PictureUnit : ObjectUnit, IPassable
 {
     [SerializeField] private AxisType _enableAxis;
+    public AxisType EnableAxis => _enableAxis;
 
     private PictureObject _owner;
     
@@ -12,7 +13,6 @@ public class PictureUnit : ObjectUnit, IPassable
     private Material _enableMat;
     private Material _disableMat;
 
-    public bool PassableLastAxis { get; set; }
     public bool PassableAfterAxis { get; set; }
 
     public void SetPictureUnit(PictureObject owner, Material enableMat, Material disableMat)
@@ -65,7 +65,6 @@ public class PictureUnit : ObjectUnit, IPassable
             return;
         }
         
-        PassableLastAxis = PassableAfterAxis;
         Hide(Converter.AxisType == AxisType.None && PassableAfterAxis);
     }
 
@@ -88,8 +87,8 @@ public class PictureUnit : ObjectUnit, IPassable
         }
     }
 
-    public bool IsPassableLastAxis()
+    public bool IsPassableAfterAxis()
     {
-        return PassableLastAxis;
+        return PassableAfterAxis;
     }
 }

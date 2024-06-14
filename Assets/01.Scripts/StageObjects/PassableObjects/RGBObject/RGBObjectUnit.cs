@@ -28,7 +28,6 @@ public class RGBObjectUnit : InteractableObject, IPassable
     
     private MeshRenderer _renderer;
 
-    public bool PassableLastAxis { get; set; }
     public bool PassableAfterAxis { get; set; }
     
     private static readonly int BaseColorHash = Shader.PropertyToID("_BaseColor");
@@ -65,12 +64,6 @@ public class RGBObjectUnit : InteractableObject, IPassable
         SettingCollider();
     }
 
-    public override void ApplyDepth()
-    {
-        base.ApplyDepth();
-        PassableLastAxis = PassableAfterAxis;
-    }
-
     public void PassableCheck(AxisType axis)
     {
         if(AxisType.None == axis)
@@ -85,9 +78,9 @@ public class RGBObjectUnit : InteractableObject, IPassable
         PassableAfterAxis = !MatchRGB;
     }
 
-    public bool IsPassableLastAxis()
+    public bool IsPassableAfterAxis()
     {
-        return PassableLastAxis;
+        return PassableAfterAxis;
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)

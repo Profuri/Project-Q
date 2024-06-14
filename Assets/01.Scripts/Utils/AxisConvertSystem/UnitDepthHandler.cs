@@ -51,8 +51,9 @@ namespace AxisConvertSystem
                 var isSuperior = _owner.subUnit && _owner.IsSuperiorUnit(unit);
                 var isChild = !_owner.subUnit && _owner.IsChildUnit(unit);
                 var activeUnit = unit.activeUnit;
+                var passable = unit is IPassable passable1 && passable1.IsPassableAfterAxis();
                 
-                if (isOwner || isTransparent || isSuperior || isChild || !activeUnit)
+                if (isOwner || isTransparent || isSuperior || isChild || !activeUnit || passable)
                 {
                     continue;
                 }
