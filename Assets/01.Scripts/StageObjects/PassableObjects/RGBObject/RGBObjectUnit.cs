@@ -51,6 +51,7 @@ public class RGBObjectUnit : InteractableObject, IPassable
 
         SettingColor();
         SettingCollider();
+
     }
     
     public override void Convert(AxisType axis)
@@ -110,20 +111,21 @@ public class RGBObjectUnit : InteractableObject, IPassable
 
     private void SettingCollider()
     {
-        int layer;
         if(MatchRGB)
         {
-            layer = 0;
-            if(Rigidbody != null)
+            Collider.isTrigger = false;
+            if (Rigidbody != null)
                 Rigidbody.isKinematic = true;
         }
         else
         {
-            layer = LayerMask.GetMask("Player", "Obstacle");
+            Collider.isTrigger = true;
+
             if(Rigidbody != null)
                 Rigidbody.isKinematic = false;
         }
-        Collider.excludeLayers = layer;
+
+        Debug.Log($"IsTrigger: {Collider.isTrigger}");
     }
 
     private Color GetColorFromRGBColor(RGBColor rgb)
