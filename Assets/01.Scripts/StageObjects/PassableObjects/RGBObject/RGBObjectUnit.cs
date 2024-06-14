@@ -153,7 +153,7 @@ public class RGBObjectUnit : InteractableObject, IPassable
         if (MatchRGB) return;
         Vector3 direction = Vector3ExtensionMethod.GetAxisDir(axis);
         Vector3 center = transform.position;
-        Vector3 halfExtents = Collider.bounds.extents * 0.5f;
+        Vector3 halfExtents = Collider.bounds.size / 2f;
         Quaternion rotation = transform.rotation;
 
         List<RaycastHit> hitInfoList = new List<RaycastHit>();
