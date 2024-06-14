@@ -35,7 +35,6 @@ public class PlayerMovementState : PlayerOnGroundState
         {
             if(hit.collider is BoxCollider)
             {
-                Debug.Log("IsTrue");
                 Vector3 originPos = Player.transform.position;
                 originPos.y = hit.point.y + 0.045f;
                 Player.transform.position = originPos;

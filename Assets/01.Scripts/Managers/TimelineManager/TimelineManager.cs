@@ -86,6 +86,12 @@ public class TimelineManager : BaseManager<TimelineManager>
     {
         if (_timelineQueue.Count <= 0)
         {
+            StoryManager.Instance.StartStoryIfCan(StoryAppearType.CUTSCENE_END, _currentPlayQueueInfo.AssetType);
+            AllTimelineEnd?.Invoke();
+            AllTimelineEnd = null;
+            InputManager.Instance.TimelineInputReader.OnSpeedUpEvent -= SpeedUpHandle;
+            InputManager.Instance.TimelineInputReader.CancelSpeedUpEvent -= CancelSpeedUpHandle;
+            VolumeManager.Instance.SetVolume(VolumeType.Default, 0.1f);
             return;
         }
         
@@ -110,21 +116,7 @@ public class TimelineManager : BaseManager<TimelineManager>
         _currentDirector = null;
 
         onComplete?.Invoke();
-        
-        // complete last clip
-        if (_timelineQueue.Count <= 0)
-        {
-            StoryManager.Instance.StartStoryIfCan(StoryAppearType.CUTSCENE_END, _currentPlayQueueInfo.AssetType);
-            AllTimelineEnd?.Invoke();
-            AllTimelineEnd = null;
-            InputManager.Instance.TimelineInputReader.OnSpeedUpEvent -= SpeedUpHandle;
-            InputManager.Instance.TimelineInputReader.CancelSpeedUpEvent -= CancelSpeedUpHandle;
-            VolumeManager.Instance.SetVolume(VolumeType.Default, 0.1f);
-        }
-        else
-        {
-            PlayNextQueue();
-        }
+        PlayNextQueue();
     }
 
     private void SpeedUpHandle()
