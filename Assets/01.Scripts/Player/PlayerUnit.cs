@@ -227,16 +227,16 @@ public class PlayerUnit : ObjectUnit
         Vector3 origin = Collider.bounds.center;
         origin.y = Collider.bounds.min.y;
 
-        Vector3 topCenter = origin  + Vector3.up * _stepY * 1.5f + dir * -_stepX;
         Vector3 bottomCenter = origin + Vector3.up * _stepY * 0.5f + dir * -_stepX;
         Vector3 halfExtents = Collider.bounds.extents;
         halfExtents.y = _stepY * 0.5f;
 
         int layer      = 1 << LayerMask.NameToLayer("Ground");
-        bool topHit    = Physics.BoxCast(topCenter,halfExtents,dir,Quaternion.identity,_stepX,layer);
-        bool bottomhit = Physics.BoxCast(bottomCenter, halfExtents, dir, out hit, Quaternion.identity, _stepX, layer);
 
-        return !topHit && bottomhit;
+        bool bottomhit = Physics.BoxCast(bottomCenter, halfExtents, dir, out hit, Quaternion.identity, _stepX, layer);
+        bool topDistance = hit.point.y < transform.position.y + _stepY;
+
+        return bottomhit && topDistance;
     }
 
     #if UNITY_EDITOR
