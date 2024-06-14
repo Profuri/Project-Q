@@ -28,10 +28,16 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
 
     private const string InputBindableKeys = @"^(?:[a-zA-Z]|Space|Tap)$";
 
+    public override void Init()
+    {
+        base.Init();
+        DataManager.Instance.SettingDataProvidable(this, this);
+    }
+
     public override void StartManager()
     {
         SettingDictionary();
-        DataManager.Instance.SettingDataProvidable(this, this);
+        DataManager.Instance.LoadData(this);
     }
 
     private void SettingDictionary()
