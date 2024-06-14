@@ -55,16 +55,17 @@ namespace AxisConvertSystem
             {
                 if (!SafeConvertAxis(AxisType, out var front, out var back))
                 {
-                    var frontUnit = front.collider ? front.collider.GetComponent<ObjectUnit>() : null;
+                    var frontUnit = front == null ? null : front.GetComponent<ObjectUnit>();
                     if (frontUnit is IPassable passable)
                     {
-                        if (passable.IsPassableLastAxis())
+                        if (!passable.IsPassableAfterAxis())
                         {
                             CancelChangeAxis(AxisType, frontUnit, null, () => 
                             {
                                 Convertable = true;
                                 callback?.Invoke();
                             });
+                            passable.PassableCheck(AxisType);
                             return;
                         }
                     }
@@ -77,27 +78,27 @@ namespace AxisConvertSystem
             {
                 ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(nextAxis, () =>
                 {
-                    if (!SafeConvertAxis(nextAxis, out var front, out var back))
-                    {
-                        var frontUnit = front.collider ? front.collider.GetComponent<ObjectUnit>() : null;
-                        var backUnit = back.collider ? back.collider.GetComponent<ObjectUnit>() : null;
-
-                        HandleAxisConversionFailure(nextAxis, frontUnit, backUnit, () =>
-                        {
-                            Convertable = true;
-                            AxisType = nextAxis;
-                            Player.Converter.ConvertDimension(AxisType.None);
-                            callback?.Invoke();
-                        });
-                    }
-
-                    if (_cancelConvert)
-                    {
-                        return;
-                    }
-                    
                     if(nextAxis != AxisType.None)
                     {
+                        if (!SafeConvertAxis(nextAxis, out var front, out var back))
+                        {
+                            var frontUnit = front == null ? null : front.GetComponent<ObjectUnit>();
+                            var backUnit =  back == null ? null : back.GetComponent<ObjectUnit>();
+
+                            HandleAxisConversionFailure(nextAxis, frontUnit, backUnit, () =>
+                            {
+                                Convertable = true;
+                                AxisType = nextAxis;
+                                Player.Converter.ConvertDimension(AxisType.None);
+                                callback?.Invoke();
+                            });
+                        }
+
+                        if (_cancelConvert)
+                        {
+                            return;
+                        }
+                        
                         SoundManager.Instance.PlaySFX("AxisControl");
                         ChangeAxis(nextAxis);
                     }
@@ -179,18 +180,28 @@ namespace AxisConvertSystem
         }
 
 
-        private bool SafeConvertAxis(AxisType axis, out RaycastHit front, out RaycastHit back)
+        private bool SafeConvertAxis(AxisType axis, out Collider front, out Collider back)
         {
             var boxCol = (BoxCollider)Player.Collider;
 
             var center = boxCol.bounds.center + Vector3.up * _underOffset;
 
-            Vector3 halfExtents = boxCol.bounds.extents;
+            Vector3 halfExtents = boxCol.bounds.size * 0.7f / 2f;
             var dir = Vector3ExtensionMethod.GetAxisDir(axis);
+            
+            var isHit1 = Physics.BoxCast(center - dir, halfExtents, dir, out var frontHit, Quaternion.identity, Mathf.Infinity, _objectMask);
+            var isHit2 = Physics.BoxCast(center + dir, halfExtents, -dir, out var backHit, Quaternion.identity, Mathf.Infinity, _objectMask);
 
-            var isHit2 = Physics.BoxCast(center + dir, halfExtents, -dir, out back, Quaternion.identity, Mathf.Infinity, _objectMask);
-            var isHit1 = Physics.BoxCast(center - dir, halfExtents, dir, out front, Quaternion.identity, Mathf.Infinity, _objectMask);
-
+            front = frontHit.collider;
+            back = backHit.collider;
+            
+            if (!isHit1 && !isHit2)
+            {
+                var cols = new Collider[1];
+                isHit1 = Physics.OverlapBoxNonAlloc(center, halfExtents, cols, Quaternion.identity, _objectMask, QueryTriggerInteraction.Ignore) > 0;
+                front = cols[0];
+            }
+            
             return !(isHit1 || isHit2);
         }
 

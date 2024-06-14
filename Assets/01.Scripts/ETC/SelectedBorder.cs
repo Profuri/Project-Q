@@ -11,20 +11,20 @@ public class SelectedBorder : PoolableMono
     
     private ObjectUnit _owner;
 
-    private float _initCornerSize;
+    private const float InitCornerSize = 0.075f;
 
     private void Awake()
     {
         var renderer = GetComponent<Renderer>();
         _material = renderer.material;
-        _initCornerSize = _material.GetFloat(_cornerSizeHash);
     }
 
     private void Update()
     {
         if(_owner)
         {
-            transform.position = _owner.Collider.bounds.center;
+            _owner.GetCenterPosAndSize(out var center, out var size);
+            transform.position = center;
         }
     }
 
@@ -40,26 +40,26 @@ public class SelectedBorder : PoolableMono
     public void Setting(ObjectUnit owner)
     {
         _owner = owner;
-        var bounds = owner.Collider.bounds;
-        var position = bounds.center;
-        var size = owner.UnitInfo.ColliderBoundSize + new Vector3(0.1f, 0.1f, 0.1f);
+        
+        owner.GetCenterPosAndSize(out var position, out var size);
+        size += new Vector3(0.1f, 0.1f, 0.1f);
 
         float originMagnitude = Vector3.one.magnitude;
         float currentMagnitude = size.magnitude;
         float percent = currentMagnitude / originMagnitude;
 
-        float offset = _initCornerSize * 0.5f;
+        float offset = InitCornerSize * 0.5f;
 
         if (percent > 1f)
         {
-            percent = 1f - (percent - 1f);
+            percent = 1f - (percent - (int)percent);
         }
         else
         {
             percent = 1f + (1f - percent);
         }
 
-        float cornerSize = _initCornerSize * percent + offset;
+        float cornerSize = InitCornerSize * percent + offset;
 
         _material.SetFloat(_cornerSizeHash, cornerSize);
 

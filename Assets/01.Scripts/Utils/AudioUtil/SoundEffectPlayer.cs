@@ -11,8 +11,8 @@ public class SoundEffectPlayer
         if (_audioSource == null)
         {
             _audioSource = compo.AddComponent<AudioSource>();
-            SettingAudioSource();
         }
+        SettingAudioSource();
     }
     
     public void Play(AudioClip clip, bool loop)

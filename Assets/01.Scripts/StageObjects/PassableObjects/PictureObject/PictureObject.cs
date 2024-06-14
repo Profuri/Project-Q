@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using AxisConvertSystem;
 using UnityEngine;
 
@@ -10,7 +9,6 @@ public class PictureObject : ObjectUnit, IPassable
 
     private List<PictureUnit> _units;
 
-    public bool PassableLastAxis { get; set; }
     public bool PassableAfterAxis { get; set; }
 
     public override void Awake()
@@ -50,37 +48,32 @@ public class PictureObject : ObjectUnit, IPassable
         }
     }
 
-    public override void ApplyDepth()
-    {
-        base.ApplyDepth();
-        PassableLastAxis = PassableAfterAxis;
-    }
-
     public void PassableCheck(AxisType axis)
     {
         PassableAfterAxis = axis != AxisType.None;
     }
 
-    public bool IsPassableLastAxis()
+    public bool IsPassableAfterAxis()
     {
-        if (PassableLastAxis)
+        if (!PassableAfterAxis)
         {
             if (Converter.AxisType != AxisType.Y)
             {
-                return true;
+                return false;
             }
 
             foreach (var unit in _units)
             {
-                if (!unit.IsPassableLastAxis())
+                if (!unit.IsPassableAfterAxis())
                 {
-                    return false;
+                    Debug.Log(1);
+                    return true;
                 }
             }
 
-            return true;
+            return false;
         }
         
-        return false;
+        return true;
     }
 }

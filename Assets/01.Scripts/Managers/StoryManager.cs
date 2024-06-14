@@ -7,7 +7,7 @@ using UnityEngine.Video;
 public class StoryManager : BaseManager<StoryManager>,IProvideSave
 {
     private MessageWindow _messagePanel;
-    public bool IsPlay => _messagePanel is not null;
+    public bool IsPlay => _messagePanel != null;
 
     private MessageVideoWindow _messageVideoWindow;
     public bool IsPlayMessageVideo => IsPlay && _messageVideoWindow is not null;
@@ -30,7 +30,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
 
     public void StartStory(StoryData storyData)
     {
-        if (_messagePanel != null)
+        if (IsPlay)
         {
             return;
         }
@@ -45,7 +45,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
 
     public void ReleaseStory()
     {
-        if (_messagePanel == null)
+        if (!IsPlay)
         {
             return;
         }
@@ -89,7 +89,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
 
     public bool StartStoryIfCan(StoryAppearType appearType, params object[] objs)
     {
-        if (_messagePanel != null)
+        if (IsPlay)
         {
             return false;
         }
