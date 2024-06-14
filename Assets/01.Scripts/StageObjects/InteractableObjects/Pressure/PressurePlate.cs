@@ -67,11 +67,11 @@ public class PressurePlate : ToggleTypeInteractableObject
     private bool CheckPressed()
     {
         var checkPos = Collider.bounds.center;
-        var checkSize = _pressureObjTrm.localScale;
+        var checkSize = _pressureObjTrm.localScale / 2f;
         checkSize.y *= _yScaleOffset;
 
         var cols = new Collider[2];
-        var size = Physics.OverlapBoxNonAlloc(checkPos, checkSize / 2, cols, Quaternion.identity, _pressionorMask);
+        var size = Physics.OverlapBoxNonAlloc(checkPos, checkSize, cols, Quaternion.identity, _pressionorMask);
 
         if (size <= 1)
         {
