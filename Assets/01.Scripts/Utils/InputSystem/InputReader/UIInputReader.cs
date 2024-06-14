@@ -70,7 +70,7 @@ namespace InputControl
 
         public void OnEnter(InputAction.CallbackContext context)
         {
-            if(context.performed)
+            if(context.started)
             {
                 OnEnterClickEvent?.Invoke();
             }

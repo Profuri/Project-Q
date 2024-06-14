@@ -5,14 +5,12 @@ using DG.Tweening;
 
 public class SlimeObjectUnit : ObjectUnit
 {
-    [Header("SlimeSettings")] 
+    [Header("SlimeSettings")]
     [SerializeField] private ObjectUnit _defaultJumpTarget;
-
     [SerializeField] private bool _useToggle;
     [SerializeField] private ObjectUnit _toggledJumpTarget;
-    
     [SerializeField] private float _jumpPower = 4f;
-    [SerializeField] private float _bounceTime = 0.5f;
+    private float _bounceTime = 0.5f;
 
     private const int _MAX_COLLIDER_CNT = 8;
     private AxisType _prevAxisType = AxisType.None;
@@ -78,7 +76,11 @@ public class SlimeObjectUnit : ObjectUnit
         var destPos = _jumpTarget.Collider.bounds.center;
         destPos.y = _jumpTarget.Collider.bounds.max.y;
         
-        unit.transform.DOJump(destPos, _jumpPower, 1, _bounceTime).SetEase(Ease.OutSine);
+        const float baseDistance = 6f;
+        float ratio = Vector3.Distance(destPos, transform.position) / baseDistance;
+        float bounceTime = _bounceTime * ratio;
+        
+        unit.transform.DOJump(destPos, _jumpPower, 1, bounceTime).SetEase(Ease.OutSine);
     }
 
     private Collider[] FindColliders()
@@ -92,7 +94,7 @@ public class SlimeObjectUnit : ObjectUnit
        
         return results;
     }
-
+    
     public void ToggledJumpTarget(bool toggle)
     {
         if (!_useToggle)
@@ -133,7 +135,7 @@ public class SlimeObjectUnit : ObjectUnit
         Gizmos.DrawLine(startPos, endPos);
 
         Gizmos.color = Color.blue;
-        
+
         if (_useToggle && _toggledJumpTarget)
         {
             endPos = _toggledJumpTarget.transform.position;
