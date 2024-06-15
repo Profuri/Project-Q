@@ -81,6 +81,5 @@ public class SelectedBorder : PoolableMono
         _material.SetFloat(_activeProgressHash, 0f);
         _material.SetFloat(_alphaProgressHash, 0f);
         _material.SetFloat(_alphaProgressHash, alpha);
-
     }
 }

@@ -26,6 +26,7 @@ public class Stage : Section
             {
                 unit.DeleteClimbableEffect();
             }
+            unit.OnPush();
         }
         base.OnPush();
     }
@@ -79,6 +80,9 @@ public class Stage : Section
             {
                 Active = false;
                 Callback?.Invoke();
+                
+                
+                
                 SceneControlManager.Instance.SafeDeleteObject(this);
             });
     }

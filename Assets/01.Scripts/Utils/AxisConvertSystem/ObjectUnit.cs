@@ -56,7 +56,6 @@ namespace AxisConvertSystem
 
         public override void OnPush()
         {
-
         }
 
         public virtual void Awake()
