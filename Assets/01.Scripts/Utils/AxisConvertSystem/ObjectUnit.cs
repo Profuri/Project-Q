@@ -117,6 +117,11 @@ namespace AxisConvertSystem
                 }
             }
         }
+
+        public virtual void LateUpdateUnit()
+        {
+            
+        }
         
         public virtual void Init(AxisConverter converter)
         {

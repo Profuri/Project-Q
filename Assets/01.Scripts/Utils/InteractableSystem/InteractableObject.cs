@@ -5,7 +5,6 @@ namespace InteractableSystem
 {
     public abstract class InteractableObject : ObjectUnit, IInteractable
     {
-        public bool InterEnd { get; set; }
         public bool IsInteract { get; set; }
         public bool IsDetected { get; private set; }
 

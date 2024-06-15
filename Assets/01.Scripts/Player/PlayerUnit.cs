@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using AxisConvertSystem;
-using InteractableSystem;
 using UnityEngine;
 
 public class PlayerUnit : ObjectUnit
@@ -48,10 +46,9 @@ public class PlayerUnit : ObjectUnit
     public bool CanJump => OnGround || IsCoyote;
     public bool CanAxisControl { get; set; } = true;
     public bool IsControllingAxis => _stateController.CurrentState is PlayerAxisControlState;
-
-
-    [SerializeField] private float _stepY = 0.05f;
-    [SerializeField] private float _stepX = 0.03f;
+    
+    private const float StepHeight = 0.05f;
+    private const float StepWidth = 0.03f;
 
     public void StartCoyoteTime()
     {
@@ -87,6 +84,7 @@ public class PlayerUnit : ObjectUnit
     public override void UpdateUnit()
     {
         base.UpdateUnit();
+        
         if (StandingUnit)
         {
             StandingCheck();
@@ -100,6 +98,28 @@ public class PlayerUnit : ObjectUnit
         _stateController.UpdateState();
         HoldingHandler.UpdateHandler();
         InteractHandler.UpdateHandler();
+    }
+
+    public override void LateUpdateUnit()
+    {
+        if (!CheckStandObject(out var standCol, true))
+        {
+            return;
+        }
+        
+        if (!standCol.TryGetComponent<ReciprocationObject>(out var reciprocationObject))
+        {
+            return;
+        }
+        
+        var additionalMovement = reciprocationObject.MovingVector;
+
+        if (additionalMovement.sqrMagnitude <= 0)
+        {
+            return;
+        }
+
+        SetPosition(transform.position + additionalMovement);
     }
 
     public override void ApplyUnitInfo(AxisType axis)
@@ -227,14 +247,14 @@ public class PlayerUnit : ObjectUnit
         Vector3 origin = Collider.bounds.center;
         origin.y = Collider.bounds.min.y;
 
-        Vector3 bottomCenter = origin + Vector3.up * _stepY * 0.5f + dir * -_stepX;
+        Vector3 bottomCenter = origin + Vector3.up * StepHeight * 0.5f + dir * -StepWidth;
         Vector3 halfExtents = Collider.bounds.extents;
-        halfExtents.y = _stepY * 0.5f;
+        halfExtents.y = StepHeight * 0.5f;
 
         int layer      = 1 << LayerMask.NameToLayer("Ground");
 
-        bool bottomhit = Physics.BoxCast(bottomCenter, halfExtents, dir, out hit, Quaternion.identity, _stepX, layer);
-        bool topDistance = hit.point.y < transform.position.y + _stepY;
+        bool bottomhit = Physics.BoxCast(bottomCenter, halfExtents, dir, out hit, Quaternion.identity, StepWidth, layer);
+        bool topDistance = hit.point.y < transform.position.y + StepHeight;
 
         return bottomhit && topDistance;
     }
@@ -250,10 +270,10 @@ public class PlayerUnit : ObjectUnit
         Vector3 origin = Collider.bounds.center;
         origin.y = Collider.bounds.min.y;
 
-        Vector3 topCenter = origin + Vector3.up * _stepY * 1.5f    + dir * -_stepX;
-        Vector3 bottomCenter = origin + Vector3.up * _stepY * 0.5f + dir * -_stepX;
+        Vector3 topCenter = origin + Vector3.up * StepHeight * 1.5f    + dir * -StepWidth;
+        Vector3 bottomCenter = origin + Vector3.up * StepHeight * 0.5f + dir * -StepWidth;
         Vector3 halfExtents = Collider.bounds.extents;
-        halfExtents.y = _stepY * 0.5f;
+        halfExtents.y = StepHeight * 0.5f;
 
 
         Gizmos.color = Color.red;
