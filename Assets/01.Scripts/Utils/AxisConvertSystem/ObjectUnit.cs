@@ -347,7 +347,7 @@ namespace AxisConvertSystem
 
             if (axis == AxisType.None)
             {
-                if (CheckStandObject(out var col))
+                if (CheckStandObject(out var col, true))
                 {
                     if (!subUnit)
                     {
