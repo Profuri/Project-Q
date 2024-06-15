@@ -25,8 +25,6 @@ public class PlayerIdleState : PlayerOnGroundState
         
         PlayerRotating();
 
-        Player.StopImmediately(false);
-
         var movementInput = InputManager.Instance.PlayerInputReader.movementInput;
         if (movementInput.sqrMagnitude > 0.05f)
         {

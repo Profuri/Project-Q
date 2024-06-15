@@ -64,9 +64,8 @@ public class PictureObject : ObjectUnit, IPassable
 
             foreach (var unit in _units)
             {
-                if (!unit.IsPassableAfterAxis())
+                if (unit.EnableAxis == AxisType.Y)
                 {
-                    Debug.Log(1);
                     return true;
                 }
             }

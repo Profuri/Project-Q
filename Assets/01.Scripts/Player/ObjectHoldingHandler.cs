@@ -11,7 +11,7 @@ public class ObjectHoldingHandler : MonoBehaviour
 
     private readonly int _animationHoldHash = Animator.StringToHash("IsHold");
 
-    public bool IsHold => _heldObject is not null;
+    public bool IsHold => _heldObject != null;
 
     private void Awake()
     {

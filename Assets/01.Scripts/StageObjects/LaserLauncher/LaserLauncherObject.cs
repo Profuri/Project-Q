@@ -150,7 +150,8 @@ public class LaserLauncherObject : ObjectUnit
             info.power,
             out hit,
             _laserDistance,
-            _obstacleMask
+            _obstacleMask,
+            QueryTriggerInteraction.Ignore
         );
     }
 

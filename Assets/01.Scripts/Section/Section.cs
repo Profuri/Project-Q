@@ -40,7 +40,7 @@ public class Section : PoolableMono
         SectionUnits = new List<ObjectUnit>();
     }
 
-    protected virtual void FixedUpdate()
+    private void FixedUpdate()
     {
         if (Active)
         {
@@ -51,13 +51,25 @@ public class Section : PoolableMono
         }
     }
 
-    protected virtual void Update()
+    private void Update()
     {
         if (Active)
         {
             foreach (var unit in SectionUnits)
             {
                 unit.UpdateUnit();
+            }
+        }
+    }
+    
+    
+    private void LateUpdate()
+    {
+        if (Active)
+        {
+            foreach (var unit in SectionUnits)
+            {
+                unit.LateUpdateUnit();
             }
         }
     }

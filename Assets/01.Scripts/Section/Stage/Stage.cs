@@ -26,30 +26,9 @@ public class Stage : Section
             {
                 unit.DeleteClimbableEffect();
             }
+            unit.OnPush();
         }
         base.OnPush();
-    }
-
-    protected override void FixedUpdate()
-    {
-        if (Active)
-        {
-            foreach (var unit in SectionUnits)
-            {
-                unit.FixedUpdateUnit();
-            }
-        }
-    }
-
-    protected override void Update()
-    {
-        if (Active)
-        {
-            foreach (var unit in SectionUnits)
-            {
-                unit.UpdateUnit();
-            }
-        }
     }
 
     public override void OnEnter(PlayerUnit player)
@@ -79,6 +58,9 @@ public class Stage : Section
             {
                 Active = false;
                 Callback?.Invoke();
+                
+                
+                
                 SceneControlManager.Instance.SafeDeleteObject(this);
             });
     }

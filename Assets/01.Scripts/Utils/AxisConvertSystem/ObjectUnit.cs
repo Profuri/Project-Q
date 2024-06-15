@@ -56,7 +56,6 @@ namespace AxisConvertSystem
 
         public override void OnPush()
         {
-
         }
 
         public virtual void Awake()
@@ -118,6 +117,11 @@ namespace AxisConvertSystem
                 }
             }
         }
+
+        public virtual void LateUpdateUnit()
+        {
+            
+        }
         
         public virtual void Init(AxisConverter converter)
         {
@@ -164,7 +168,7 @@ namespace AxisConvertSystem
         
         public virtual void ApplyUnitInfo(AxisType axis)
         {
-            if (!staticUnit && axis == AxisType.None && Converter.AxisType != AxisType.None)
+            if (!staticUnit && !OnGround && axis == AxisType.None && Converter.AxisType != AxisType.None)
             {
                 var localPos = transform.localPosition;
                 localPos.SetAxisElement(Converter.AxisType, UnitInfo.LocalPos.GetAxisElement(Converter.AxisType));
@@ -343,7 +347,7 @@ namespace AxisConvertSystem
 
             if (axis == AxisType.None)
             {
-                if (CheckStandObject(out var col))
+                if (CheckStandObject(out var col, true))
                 {
                     if (!subUnit)
                     {
