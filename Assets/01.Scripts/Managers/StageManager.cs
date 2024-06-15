@@ -110,7 +110,13 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
                     var thanksToPanel = UIManager.Instance.GenerateUI("ThanksToPanel");
                     thanksToPanel.ResetPosition();
                 }
-            }, () => InputManager.Instance.SetEnableInputAll(false));
+            }, () =>
+            {
+                if (CurrentStage.ChapterType == ChapterType.Cpu)
+                {
+                    InputManager.Instance.SetEnableInputAll(false);
+                }
+            });
             return;
         }
                 

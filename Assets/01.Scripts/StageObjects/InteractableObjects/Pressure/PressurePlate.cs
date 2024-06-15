@@ -26,10 +26,14 @@ public class PressurePlate : ToggleTypeInteractableObject
         _soundEffectPlayer = new SoundEffectPlayer(this);
     }
 
-
     public override void UpdateUnit()
     { 
         base.UpdateUnit();
+
+        if (!Converter.Convertable)
+        {
+            return;
+        }
 
         var curToggleState = CheckPressed();
         if (LastToggleState != curToggleState)
@@ -44,7 +48,6 @@ public class PressurePlate : ToggleTypeInteractableObject
         LastToggleState = curToggleState;
         OnInteraction(null, LastToggleState);
     }
-
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
@@ -67,22 +70,41 @@ public class PressurePlate : ToggleTypeInteractableObject
     private bool CheckPressed()
     {
         var checkPos = Collider.bounds.center;
-        var checkSize = _pressureObjTrm.localScale;
+        var checkSize = _pressureObjTrm.localScale / 2f;
         checkSize.y *= _yScaleOffset;
 
-        var cols = new Collider[2];
-        var size = Physics.OverlapBoxNonAlloc(checkPos, checkSize / 2, cols, Quaternion.identity, _pressionorMask);
+        var cols = new Collider[10];
+        var size = Physics.OverlapBoxNonAlloc(checkPos, checkSize, cols, Quaternion.identity, _pressionorMask);
 
-        if (size <= 1)
+        var returnValue = false;
+        
+        for (var i = 0; i < size; i++)
         {
-            return false;
+            if (cols[i] == Collider)
+            {
+                continue;
+            }
+
+            if (!cols[i].TryGetComponent<ObjectUnit>(out var unit))
+            {
+                continue;
+            }
+
+            if (unit is InteractableObject interactable)
+            {
+                if (interactable.Attribute.HasFlag(EInteractableAttribute.CAN_PRESS_THE_PRESSURE_PLATE))
+                {
+                    returnValue = true;
+                    break;
+                }
+            }
+            else
+            {
+                returnValue = true;
+                break;
+            }
         }
 
-        if (cols[1].TryGetComponent<InteractableObject>(out var interactable))
-        {
-            return interactable.Attribute.HasFlag(EInteractableAttribute.CAN_PRESS_THE_PRESSURE_PLATE);
-        }
-
-        return true;
+        return returnValue;
     }
 }
