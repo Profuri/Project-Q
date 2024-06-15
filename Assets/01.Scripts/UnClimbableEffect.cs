@@ -35,8 +35,9 @@ public class UnClimbableEffect : PoolableMono
             return;
         }
         
-        if (_owner.Converter.AxisType != AxisType.Y || _owner is IPassable { PassableLastAxis: true })
+        if (_owner.Converter.AxisType != AxisType.Y || _owner is IPassable { PassableAfterAxis: true })
         {
+            SetAlpha(0f);
             return;
         }
         

@@ -42,12 +42,14 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     private RandomAudioClipSO _currentRandomClipSO;
     
     
-#region AudioMixer
+    #region AudioMixer
     [SerializeField] private AudioMixer _masterMixer;
     [SerializeField] private AudioMixerGroup _bgmGroup;
     [SerializeField] private AudioMixerGroup _sfxGroup;
     public AudioMixerGroup SfxGroup => _sfxGroup;
-#endregion
+    #endregion
+
+    [SerializeField] private AudioListener _audioListener;
 
     public float soundFadeOnTime;
 
@@ -89,11 +91,12 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
         _BGMAudioDictionary.Add(SceneType.Title,  _titleClipSO);
         
         _audioSources[(int)SoundEnum.BGM].loop = true;
+        DataManager.Instance.SettingDataProvidable(this, this);
     }
     
     public override void StartManager()
     {
-        DataManager.Instance.SettingDataProvidable(this, this);
+        DataManager.Instance.LoadData(this);
     }
 
     private IEnumerator AudioKeyFrameRoutine(SceneType sceneType)
@@ -218,7 +221,6 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
             Play(source.clip, type);
     }
 
-
     public void SettingVolume(EAUDIO_MIXER mixerType,float volume)
     {
         float originVolume = GetOriginVolume(volume);
@@ -230,6 +232,17 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
     private float GetOriginVolume(float volume)
     {
         return Mathf.Lerp(-40, 0, volume);
+    }
+    
+    public void SetAudioListenerOwner(Transform newOwnerTransform)
+    {
+        if (newOwnerTransform == null || !newOwnerTransform.gameObject.activeSelf)
+        {
+            return;
+        }
+        
+        _audioListener.transform.SetParent(newOwnerTransform);
+        _audioListener.transform.localPosition = Vector3.zero;
     }
 
     public Action<SaveData> GetLoadAction()
@@ -245,24 +258,11 @@ public class SoundManager : BaseManager<SoundManager>, IProvideSave, IProvideLoa
                 return;
             }
 
-            Debug.Log($"MasterVolume: {saveData.VolumeDictionary[EAUDIO_MIXER.MASTER]}");
-
             foreach (var kvp in saveData.VolumeDictionary)
             {
                 EAUDIO_MIXER eMixerType = kvp.Key;
                 float volume = kvp.Value;
-
-
-                if (_volumeDictionary.ContainsKey(eMixerType))
-                {
-                    _volumeDictionary[eMixerType] = volume;
-                }
-                else
-                {
-                    _volumeDictionary.Add(eMixerType, volume);
-                    //Debug.LogError($"{eMixerType} is not exist in :{_volumeDictionary}");
-                }
-
+                SettingVolume(eMixerType, volume);
             }
         };
     }

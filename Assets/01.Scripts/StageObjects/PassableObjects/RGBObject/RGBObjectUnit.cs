@@ -28,7 +28,6 @@ public class RGBObjectUnit : InteractableObject, IPassable
     
     private MeshRenderer _renderer;
 
-    public bool PassableLastAxis { get; set; }
     public bool PassableAfterAxis { get; set; }
     
     private static readonly int BaseColorHash = Shader.PropertyToID("_BaseColor");
@@ -51,6 +50,7 @@ public class RGBObjectUnit : InteractableObject, IPassable
 
         SettingColor();
         SettingCollider();
+
     }
     
     public override void Convert(AxisType axis)
@@ -63,12 +63,6 @@ public class RGBObjectUnit : InteractableObject, IPassable
     {
         base.ApplyUnitInfo(axis);
         SettingCollider();
-    }
-
-    public override void ApplyDepth()
-    {
-        base.ApplyDepth();
-        PassableLastAxis = PassableAfterAxis;
     }
 
     public void PassableCheck(AxisType axis)
@@ -85,9 +79,9 @@ public class RGBObjectUnit : InteractableObject, IPassable
         PassableAfterAxis = !MatchRGB;
     }
 
-    public bool IsPassableLastAxis()
+    public bool IsPassableAfterAxis()
     {
-        return PassableLastAxis;
+        return PassableAfterAxis;
     }
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
@@ -110,20 +104,21 @@ public class RGBObjectUnit : InteractableObject, IPassable
 
     private void SettingCollider()
     {
-        int layer;
         if(MatchRGB)
         {
-            layer = 0;
-            if(Rigidbody != null)
+            Collider.isTrigger = false;
+            if (Rigidbody != null)
                 Rigidbody.isKinematic = true;
         }
         else
         {
-            layer = LayerMask.GetMask("Player", "Obstacle");
+            Collider.isTrigger = true;
+
             if(Rigidbody != null)
                 Rigidbody.isKinematic = false;
         }
-        Collider.excludeLayers = layer;
+
+        Debug.Log($"IsTrigger: {Collider.isTrigger}");
     }
 
     private Color GetColorFromRGBColor(RGBColor rgb)
@@ -160,7 +155,7 @@ public class RGBObjectUnit : InteractableObject, IPassable
         if (MatchRGB) return;
         Vector3 direction = Vector3ExtensionMethod.GetAxisDir(axis);
         Vector3 center = transform.position;
-        Vector3 halfExtents = Collider.bounds.extents * 0.5f;
+        Vector3 halfExtents = Collider.bounds.size / 2f;
         Quaternion rotation = transform.rotation;
 
         List<RaycastHit> hitInfoList = new List<RaycastHit>();
