@@ -168,7 +168,7 @@ namespace AxisConvertSystem
         
         public virtual void ApplyUnitInfo(AxisType axis)
         {
-            if (!staticUnit && axis == AxisType.None && Converter.AxisType != AxisType.None)
+            if (!staticUnit && !OnGround && axis == AxisType.None && Converter.AxisType != AxisType.None)
             {
                 var localPos = transform.localPosition;
                 localPos.SetAxisElement(Converter.AxisType, UnitInfo.LocalPos.GetAxisElement(Converter.AxisType));
