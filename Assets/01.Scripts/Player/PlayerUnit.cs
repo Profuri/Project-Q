@@ -146,17 +146,17 @@ public class PlayerUnit : ObjectUnit
         base.ReloadUnit(true, dissolveTime, () =>
         {
             callBack?.Invoke();
+            SetActiveAnimation(true);
+            _stateController.ChangeState(typeof(PlayerIdleState));
             if (!StoryManager.Instance.IsPlay)
             {
-                InputManagerHelper.OnRevivePlayer();
+                InputManager.Instance.SetEnableInputAll(true);
             }
         });
         
-        InputManagerHelper.OnDeadPlayer();
+        InputManager.Instance.SetEnableInputAll(false);
         SoundManager.Instance.PlaySFX("PlayerDead");
         PlaySpawnVFX();
-        SetActiveAnimation(true);
-        _stateController.ChangeState(typeof(PlayerIdleState));
     }
 
     public override void OnPop()

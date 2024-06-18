@@ -57,11 +57,8 @@ public class Stage : Section
             .OnComplete(() =>
             {
                 Active = false;
-                Callback?.Invoke();
-                
-                
-                
                 SceneControlManager.Instance.SafeDeleteObject(this);
+                Callback?.Invoke();
             });
     }
 

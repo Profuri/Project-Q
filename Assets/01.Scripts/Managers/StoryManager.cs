@@ -3,11 +3,12 @@ using UnityEngine;
 using ManagingSystem;
 using System;
 using UnityEngine.Video;
+using Unity.VisualScripting;
 
 public class StoryManager : BaseManager<StoryManager>,IProvideSave
 {
     private MessageWindow _messagePanel;
-    public bool IsPlay => _messagePanel != null;
+    public bool IsPlay {get; private set; }
 
     private MessageVideoWindow _messageVideoWindow;
     public bool IsPlayMessageVideo => IsPlay && _messageVideoWindow is not null;
@@ -22,6 +23,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
     {
         base.Init();
         DataManager.Instance.SettingDataProvidable(this, null);
+        IsPlay = false;
     }
 
     public override void StartManager()
@@ -40,6 +42,8 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
             return;
         }
 
+        IsPlay = true;
+
         InputManager.Instance.SetEnableInputAll(false);
         UIManager.Instance.Interact3DButton = false;
 
@@ -56,6 +60,8 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
         {
             return;
         }
+
+        IsPlay = false;
         
         StopMessageVideo();
         
