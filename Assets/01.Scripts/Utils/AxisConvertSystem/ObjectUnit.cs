@@ -15,6 +15,7 @@ namespace AxisConvertSystem
         [HideInInspector] public bool staticUnit = true;
         [HideInInspector] public bool activeUnit = true;
         [HideInInspector] public bool subUnit = false;
+        [HideInInspector] public bool useSelectedBorder = true;
         
         [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public float checkOffset = 0.2f; 
