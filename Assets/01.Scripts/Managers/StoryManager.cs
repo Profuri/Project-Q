@@ -18,14 +18,19 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
 
     public event Action OnStoryRealesed = null;
 
+    public override void Init()
+    {
+        base.Init();
+        DataManager.Instance.SettingDataProvidable(this, null);
+    }
+
     public override void StartManager()
     {
         for (var i = 0; i < _storyList.Count; i++)
         {
             _storyList[i].index = i;
         }
-        
-        DataManager.Instance.SettingDataProvidable(this, null);
+        DataManager.Instance.SaveData(this);
     }
 
     public void StartStory(StoryData storyData)
@@ -36,6 +41,8 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
         }
 
         InputManager.Instance.SetEnableInputAll(false);
+        UIManager.Instance.Interact3DButton = false;
+
         _messagePanel = UIManager.Instance.GenerateUI("MessageWindow", null, () =>
         {
             _messagePanel.SetData(storyData);
@@ -53,6 +60,8 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
         StopMessageVideo();
         
         InputManager.Instance.SetEnableInputAll(true);
+        UIManager.Instance.Interact3DButton = true;
+
         _messagePanel.Disappear();
         _messagePanel = null;
         
