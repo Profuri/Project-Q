@@ -117,6 +117,7 @@ public class Scene : PoolableMono
 
     public void SafeDeleteObject(PoolableMono obj)
     {
+        obj.OnPush();
         Destroy(obj.gameObject);
         _objects.Remove(obj);
     }

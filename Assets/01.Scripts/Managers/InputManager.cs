@@ -111,8 +111,8 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
         foreach (EInputCategory category in Enum.GetValues(typeof(EInputCategory)))
         {
             bool isInCategories = categories.Contains(category);
-            bool isEnable = isInCategories ? enable : !enable; 
-            
+            bool isEnable = isInCategories ? enable : !enable;
+
             if (isEnable)
                 _inputDictionary[category].Enable();
             else
@@ -122,20 +122,7 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
 
     public void SetEnableInputWithout(EInputCategory cg, bool enable)
     {
-        foreach (EInputCategory category in Enum.GetValues(typeof(EInputCategory)))
-        {
-            bool isEnable = enable;
-            isEnable = category == cg ? isEnable : !isEnable;
-
-            if (!isEnable)
-            {
-                _inputDictionary[category].Enable();
-            }
-            else
-            {
-                _inputDictionary[category].Disable();
-            }
-        }
+        SetEnableInputWithout(new EInputCategory[] { cg }, enable);
     }
 
     public void SetEnableInput(EInputCategory category,bool enable)
@@ -196,17 +183,4 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
         names[3] = PlayerInputReader.Actions.Movement.bindings[4].ToDisplayString();
         return names;
     }
-}
-
-
-public static class InputManagerHelper
-{
-    public static void OnControllingAxis()
-    {
-        EInputCategory[] inputs = { EInputCategory.AxisControl,  };
-        InputManager.Instance.SetEnableInputWithout(inputs, true);
-    }
-    public static void OnCancelingAxis() => InputManager.Instance.SetEnableInputAll(true);
-    public static void OnDeadPlayer() => InputManager.Instance.SetEnableInputAll(false);
-    public static void OnRevivePlayer() => InputManager.Instance.SetEnableInputAll(true);
 }

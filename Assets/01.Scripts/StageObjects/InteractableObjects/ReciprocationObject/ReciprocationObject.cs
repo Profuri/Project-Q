@@ -13,6 +13,8 @@ public class ReciprocationObject : InteractableObject
 
     private Vector3 _originPos;
     private Vector3 _destPos;
+    
+    public Vector3 MovingVector { get; private set; }
 
     public override void Awake()
     {
@@ -35,12 +37,13 @@ public class ReciprocationObject : InteractableObject
 
         if (Vector3.Distance(curPos, destPosOnConvert) <= 0.01f)
         {
+            MovingVector = Vector3.zero;
             transform.localPosition = destPosOnConvert;
-            InterEnd = true;
             return;
         }
-        
+
         var lerpPos = Vector3.Lerp(curPos, destPosOnConvert, _reciprocationSpeed * Time.deltaTime);
+        MovingVector = lerpPos - curPos;
 
         transform.localPosition = lerpPos;
 

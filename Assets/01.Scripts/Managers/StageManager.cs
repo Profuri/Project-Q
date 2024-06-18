@@ -67,6 +67,9 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             {
                 CurrentStage = SceneControlManager.Instance.AddObject(stageName) as Stage;
                 CurrentStage.Generate(currentPos, true, false, dissolveTime);
+
+                player.OnPop();
+                
                 player.SetSection(CurrentStage);
                 player.useGravity = true;
                 player.ReloadUnit(true, dissolveTime);

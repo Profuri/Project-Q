@@ -19,7 +19,7 @@ public class PlayerMovementState : PlayerOnGroundState
         {
             dir.SetAxisElement(Player.Converter.AxisType, 0);
         }
-        
+
         if (dir.sqrMagnitude < 0.05f)
         {
             Controller.ChangeState(typeof(PlayerIdleState));
@@ -29,9 +29,7 @@ public class PlayerMovementState : PlayerOnGroundState
         Player.Rotate(Quaternion.LookRotation(dir), Player.Converter.AxisType is AxisType.None or AxisType.Y ? Player.Data.rotationSpeed : 1f);
         Player.SetVelocity(dir * Player.Data.walkSpeed);
         
-        RaycastHit hit;
-
-        if (Player.IsStairOnNextStep(out hit))
+        if (Player.IsStairOnNextStep(out var hit))
         {
             if(hit.collider is BoxCollider)
             {

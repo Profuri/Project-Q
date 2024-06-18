@@ -73,8 +73,6 @@ public class SlimeObjectUnit : ObjectUnit
     {
         if (_jumpTarget == null || unit.transform.Equals(transform)) return;
 
-        Debug.Log(_jumpTarget.name);
-
         var destPos = _jumpTarget.Collider.bounds.center;
         destPos.y = _jumpTarget.Collider.bounds.max.y;
         

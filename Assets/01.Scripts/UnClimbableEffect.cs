@@ -68,6 +68,7 @@ public class UnClimbableEffect : PoolableMono
         Vector3 position = col.bounds.center;
         position.y = col.bounds.max.y + yOffset;
 
+        transform.rotation = Quaternion.Euler(90, 0, 0);
         transform.localScale = new Vector3(size.x, size.z, size.y);
         transform.position = position;
         transform.SetParent(col.transform);

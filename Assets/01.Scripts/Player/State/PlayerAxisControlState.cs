@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AxisConvertSystem;
 using UnityEngine;
+using UnityEngine.Windows;
 using VirtualCam;
 
 public class PlayerAxisControlState : PlayerBaseState
@@ -17,7 +18,7 @@ public class PlayerAxisControlState : PlayerBaseState
         Player.SetActiveAnimation(false);
         
         IsControllingAxis = true;
-        InputManagerHelper.OnControllingAxis();
+        InputManager.Instance.SetEnableInputWithout(new EInputCategory[] { EInputCategory.AxisControl }, true);
 
         Player.StopImmediately(true);
 
@@ -56,7 +57,6 @@ public class PlayerAxisControlState : PlayerBaseState
         Player.SetActiveAnimation(true);
         
         IsControllingAxis = false;
-        InputManagerHelper.OnCancelingAxis();
 
         InputManager.Instance.PlayerInputReader.OnAxisControlEvent -= AxisControlHandle;
         InputManager.Instance.PlayerInputReader.OnAxisConvertEvent -= SelectAxisHandle;
@@ -100,6 +100,6 @@ public class PlayerAxisControlState : PlayerBaseState
     {
         Controller.ChangeState(typeof(PlayerIdleState));
         InputManager.Instance.SetEnableInputWithout(EInputCategory.Escape,false);
-        Player.Converter.ConvertDimension(_controllingAxis, InputManagerHelper.OnCancelingAxis);
+        Player.Converter.ConvertDimension(_controllingAxis);
     }
 }
