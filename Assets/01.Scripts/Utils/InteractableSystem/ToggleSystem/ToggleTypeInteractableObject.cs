@@ -89,7 +89,7 @@ namespace InteractableSystem
 
         private bool ShowSelectedBorder(ObjectUnit showObj)
         {
-            if (!IsInDistance || showObj is null) return false;
+            if (showObj is null || !showObj.useSelectedBorder || !IsInDistance) return false;
 
             int instanceID = showObj.GetInstanceID();
             float alpha = AlphaValue;

@@ -88,8 +88,7 @@ namespace AxisConvertSystem
                             HandleAxisConversionFailure(nextAxis, frontUnit, backUnit, () =>
                             {
                                 Convertable = true;
-                                AxisType = nextAxis;
-                                Player.Converter.ConvertDimension(AxisType.None);
+                                ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(AxisType);
                                 callback?.Invoke();
                             });
                         }
@@ -107,6 +106,7 @@ namespace AxisConvertSystem
                     {
                         obj.OnCameraSetting(nextAxis);
                     }
+                    
                     Convertable = true;
                     callback?.Invoke();
                 });
@@ -165,7 +165,6 @@ namespace AxisConvertSystem
 
         private void ChangeAxis(AxisType nextAxis)
         {
-            Player.Converter.UnShowClimbableEffect();
             CameraManager.Instance.ShakeCam(1f, 0.1f);
             VolumeManager.Instance.SetVolume(VolumeType.HighLight, 0.2f, true);
             LightManager.Instance.SetShadow(nextAxis == AxisType.None ? LightShadows.Soft : LightShadows.None);
@@ -203,16 +202,6 @@ namespace AxisConvertSystem
             }
             
             return !(isHit1 || isHit2);
-        }
-
-        public void ShowClimbableEffect()
-        {
-
-        }
-
-        public void UnShowClimbableEffect()
-        {
-
         }
     }
 }
