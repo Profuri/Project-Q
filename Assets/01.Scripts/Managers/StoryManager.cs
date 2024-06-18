@@ -3,11 +3,12 @@ using UnityEngine;
 using ManagingSystem;
 using System;
 using UnityEngine.Video;
+using Unity.VisualScripting;
 
 public class StoryManager : BaseManager<StoryManager>,IProvideSave
 {
     private MessageWindow _messagePanel;
-    public bool IsPlay => _messagePanel != null;
+    public bool IsPlay {get; private set; }
 
     private MessageVideoWindow _messageVideoWindow;
     public bool IsPlayMessageVideo => IsPlay && _messageVideoWindow is not null;
@@ -18,14 +19,20 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
 
     public event Action OnStoryRealesed = null;
 
+    public override void Init()
+    {
+        base.Init();
+        DataManager.Instance.SettingDataProvidable(this, null);
+        IsPlay = false;
+    }
+
     public override void StartManager()
     {
         for (var i = 0; i < _storyList.Count; i++)
         {
             _storyList[i].index = i;
         }
-        
-        DataManager.Instance.SettingDataProvidable(this, null);
+        DataManager.Instance.SaveData(this);
     }
 
     public void StartStory(StoryData storyData)
@@ -35,7 +42,11 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
             return;
         }
 
+        IsPlay = true;
+
         InputManager.Instance.SetEnableInputAll(false);
+        UIManager.Instance.Interact3DButton = false;
+
         _messagePanel = UIManager.Instance.GenerateUI("MessageWindow", null, () =>
         {
             _messagePanel.SetData(storyData);
@@ -49,10 +60,14 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
         {
             return;
         }
+
+        IsPlay = false;
         
         StopMessageVideo();
         
         InputManager.Instance.SetEnableInputAll(true);
+        UIManager.Instance.Interact3DButton = true;
+
         _messagePanel.Disappear();
         _messagePanel = null;
         
