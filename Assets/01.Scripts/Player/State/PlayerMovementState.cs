@@ -29,12 +29,12 @@ public class PlayerMovementState : PlayerOnGroundState
         Player.Rotate(Quaternion.LookRotation(dir), Player.Converter.AxisType is AxisType.None or AxisType.Y ? Player.Data.rotationSpeed : 1f);
         Player.SetVelocity(dir * Player.Data.walkSpeed);
         
-        if (Player.IsStairOnNextStep(out var hit))
+        if (Player.Converter.AxisType != AxisType.Y && Player.IsStairOnNextStep(out var hit))
         {
             if(hit.collider is BoxCollider)
             {
                 Vector3 originPos = Player.transform.position;
-                originPos.y = hit.point.y + 0.045f;
+                originPos.y = hit.point.y + 0.055f;
                 Player.transform.position = originPos;
             }
         }
