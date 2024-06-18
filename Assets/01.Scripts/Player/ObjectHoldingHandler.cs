@@ -27,6 +27,7 @@ public class ObjectHoldingHandler : MonoBehaviour
     public void Attach(IHoldable obj)
     {
         if (IsHold) return;
+       
         _player.Animator.SetBool(_animationHoldHash, true);
         _heldObject = obj;
         _heldObject.Attach(this);
@@ -35,6 +36,7 @@ public class ObjectHoldingHandler : MonoBehaviour
     public void Detach()
     {
         if (!IsHold) return;
+
         _player.Animator.SetBool(_animationHoldHash, false);
         _heldObject.Detach();
         _heldObject = null;
