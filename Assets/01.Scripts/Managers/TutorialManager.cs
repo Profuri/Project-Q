@@ -18,7 +18,7 @@ public class TutorialManager : MonoSingleton<TutorialManager>
         _tutorialWindow.SettingTutorial(info);
         _tutorialWindow.PlayTutorial();
         
-        InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, false);
+        InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, true);
         OnTutorial = true;
     }
 
