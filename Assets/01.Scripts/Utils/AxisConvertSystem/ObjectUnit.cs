@@ -99,7 +99,7 @@ namespace AxisConvertSystem
                 return;
             }
 
-            if (Converter.AxisType == AxisType.Y && OnGround)
+            if (Converter.AxisType == AxisType.Y || OnGround)
             {
                 return;
             }
