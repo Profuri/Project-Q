@@ -45,7 +45,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         InPause = true;       
         Time.timeScale = 0;
-        InputManager.Instance.SetEnableInputWithout(EInputCategory.Escape,false);
+        InputManager.Instance.SetEnableInputWithout(EInputCategory.Escape,true);
         UIManager.Instance.GenerateUI("PauseWindow");
     }
 

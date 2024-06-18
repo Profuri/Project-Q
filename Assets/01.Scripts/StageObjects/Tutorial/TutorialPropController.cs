@@ -41,7 +41,7 @@ public class TutorialPropController : MonoBehaviour
 
             if (_tutorialType != TutorialType.None && StoryManager.Instance.IsPlay)
             {
-                  StoryManager.Instance.OnStoryRealesed += () =>
+                  StoryManager.Instance.OnStoryReleased += () =>
                   {
                         ShowTutorialUI();
                         SceneControlManager.Instance.Player.OnApplyUnitInfoEvent += AxisChangeHandle;

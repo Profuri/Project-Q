@@ -17,7 +17,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
 
     [SerializeField] private List<StoryInfo> _storyList = new List<StoryInfo>();
 
-    public event Action OnStoryRealesed = null;
+    public event Action OnStoryReleased = null;
 
     public override void Init()
     {
@@ -61,18 +61,17 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
             return;
         }
 
-        IsPlay = false;
-        
         StopMessageVideo();
-        
+        IsPlay = false;
+
         InputManager.Instance.SetEnableInputAll(true);
         UIManager.Instance.Interact3DButton = true;
 
         _messagePanel.Disappear();
         _messagePanel = null;
         
-        OnStoryRealesed?.Invoke();
-        OnStoryRealesed = null;
+        OnStoryReleased?.Invoke();
+        OnStoryReleased = null;
     }
 
     public void PlayMessageVideo(VideoClip clip)
