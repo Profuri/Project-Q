@@ -66,6 +66,9 @@ public class Stage : Section
     
     public void StageClearFeedback()
     {
+        CameraManager.Instance.ShakeCam(1f, 0.1f);
+        CameraManager.Instance.Shockwave(true, ChangeGrayScaleDelay);
+        
         foreach (var unit in SectionUnits)
         {
             if (unit is PlayerUnit)
