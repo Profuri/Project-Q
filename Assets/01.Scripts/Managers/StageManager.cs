@@ -97,7 +97,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         
         CurrentStage.Lock = false;
         player.OriginUnitInfo.LocalPos = CurrentStage.PlayerResetPointInClear;
-        player.Converter.ConvertDimension(AxisType.None);
+        player.Converter.ConvertDimension(AxisType.None, CurrentStage.StageClearFeedback);
         player.Converter.SetConvertable(false);
         var nextChapter = CurrentStage.StageOrder + 1;
 

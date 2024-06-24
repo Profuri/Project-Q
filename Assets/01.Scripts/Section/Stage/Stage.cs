@@ -10,6 +10,8 @@ public class Stage : Section
     [SerializeField] private int _stageOrder;
     public int StageOrder => _stageOrder;
 
+    private const float ChangeGrayScaleDelay = 1f;
+    
     public bool IsClear { get; set; } = false;
 
     public override void OnPop()
@@ -60,6 +62,19 @@ public class Stage : Section
                 SceneControlManager.Instance.SafeDeleteObject(this);
                 Callback?.Invoke();
             });
+    }
+    
+    public void StageClearFeedback()
+    {
+        foreach (var unit in SectionUnits)
+        {
+            if (unit is PlayerUnit)
+            {
+                continue;
+            }
+            
+            unit.SetGrayScale(1f, ChangeGrayScaleDelay);
+        }
     }
 
 #if UNITY_EDITOR
