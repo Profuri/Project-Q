@@ -52,7 +52,8 @@ namespace AxisConvertSystem.Editor
             VariableLoad(ref _target.climbableUnit, EditorGUILayout.Toggle("Climbable Unit", _target.climbableUnit));
             VariableLoad(ref _target.activeUnit, EditorGUILayout.Toggle("Active Unit", _target.activeUnit));
             VariableLoad(ref _target.subUnit, EditorGUILayout.Toggle("Sub Unit", _target.subUnit));
-
+            VariableLoad(ref _target.useSelectedBorder, EditorGUILayout.Toggle("Use Selected Border", _target.useSelectedBorder));
+            
             if (!_target.staticUnit)
             {                                      
                 GUILayout.Space(10);

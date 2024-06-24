@@ -52,7 +52,7 @@ public class LaserReflectObject : InteractableObject
             InputManager.Instance.UIInputReader.OnEnterClickEvent += EnterRotateEditHandle;
             InputManager.Instance.PlayerInputReader.OnInteractionEvent += EnterRotateEditHandle;
             
-            InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, false);
+            InputManager.Instance.SetEnableInputWithout(EInputCategory.Interaction, true);
         }
         else if(communicator is LaserLauncherObject laser)
         {

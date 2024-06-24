@@ -21,12 +21,10 @@ public abstract class PlayerBaseState : State
 
         if (IsControllingAxis)
         {
-            Player.Converter.UnShowClimbableEffect();
             Controller.ChangeState(typeof(PlayerIdleState));
         }
         else
         {
-            Player.Converter.ShowClimbableEffect();
             Controller.ChangeState(typeof(PlayerAxisControlState));
         }
     }

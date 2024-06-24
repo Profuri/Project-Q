@@ -15,6 +15,7 @@ namespace AxisConvertSystem
         [HideInInspector] public bool staticUnit = true;
         [HideInInspector] public bool activeUnit = true;
         [HideInInspector] public bool subUnit = false;
+        [HideInInspector] public bool useSelectedBorder = true;
         
         [HideInInspector] public LayerMask canStandMask;
         [HideInInspector] public float checkOffset = 0.2f; 
@@ -99,7 +100,8 @@ namespace AxisConvertSystem
                 return;
             }
 
-            if (Converter.AxisType == AxisType.Y || OnGround)
+            // Y축 압축 시 밖으로 나가는 것 때매 AND 연산으로 두어야 함
+            if (Converter.AxisType == AxisType.Y && OnGround)
             {
                 return;
             }
@@ -120,7 +122,6 @@ namespace AxisConvertSystem
 
         public virtual void LateUpdateUnit()
         {
-            
         }
         
         public virtual void Init(AxisConverter converter)
@@ -460,19 +461,17 @@ namespace AxisConvertSystem
             var origin = Collider.bounds.center;
             var triggerInteraction = ignoreTriggered ? QueryTriggerInteraction.Ignore : QueryTriggerInteraction.Collide;
             
-            var size = 0;
-            var cols = new Collider[10];
+            Collider[] cols;
 
             col = null;
 
-
             if (Converter.AxisType == AxisType.Y)
             {
-                size = Physics.OverlapBoxNonAlloc(origin, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
+                cols = Physics.OverlapBox(origin, Vector3.one * 0.1f, Quaternion.identity, canStandMask, triggerInteraction);
 
-                if (size <= 0)
+                if (cols.Length <= 0)
                 {
-                    size = Physics.OverlapBoxNonAlloc(origin - Vector3.up, Vector3.one * 0.1f, cols, Quaternion.identity, canStandMask, triggerInteraction);
+                    cols = Physics.OverlapBox(origin - Vector3.up, Vector3.one * 0.1f, Quaternion.identity, canStandMask, triggerInteraction);
                 }
             }
             else
@@ -480,45 +479,46 @@ namespace AxisConvertSystem
                 var dir = Vector3.down;
                 var distance = Collider.bounds.size.y / 2f + checkOffset;
 
-                //충돌 여유
                 Vector3 halfExtents = Collider.bounds.extents * 0.8f;
                 halfExtents.y = 0f;
-                var results = new RaycastHit[10];
-                //size = Physics.RaycastNonAlloc(origin, dir, results, distance, canStandMask, triggerInteraction);
-                size = Physics.BoxCastNonAlloc(origin,halfExtents,dir,results,Quaternion.identity,distance,canStandMask,triggerInteraction);
-                for (var i = 0; i < size; i++)
-                {
-                    cols[i] = results[i].collider;
-                }
+                var results = Physics.BoxCastAll(origin,halfExtents,dir,Quaternion.identity,distance,canStandMask,triggerInteraction);
+                cols = results.Select(hit => hit.collider).ToArray();
             }
 
-            for (var i = 0; i < size; i++)
+            var newCols = cols.Where(c => c != Collider).ToArray();
+
+            foreach (var t in newCols)
             {
-                if (cols[i] is null)
+                if (t is null)
                 {
                     continue;
                 }
 
                 if (col is null)
                 {
-                    col = cols[i];
+                    col = t;
                 }
                 else
                 {
+                    if (col == Collider)
+                    {
+                        continue;
+                    }
+                    
                     if (!col.TryGetComponent<ObjectUnit>(out var unit) ||
-                        !cols[i].TryGetComponent<ObjectUnit>(out var otherUnit))
+                        !t.TryGetComponent<ObjectUnit>(out var otherUnit))
                     {
                         continue;
                     }
                     
                     if (unit.DepthHandler.GetDepth(Converter.AxisType) <= otherUnit.DepthHandler.GetDepth(Converter.AxisType))
                     {
-                        col = cols[i];
+                        col = t;
                     }
                 }
             }
 
-            return size > 0;
+            return newCols.Length > 0;
         }
         
         public virtual void Dissolve(float value, float time, bool useDissolve = true, Action callBack = null)

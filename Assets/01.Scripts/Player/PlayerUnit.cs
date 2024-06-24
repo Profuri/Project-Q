@@ -262,19 +262,22 @@ public class PlayerUnit : ObjectUnit
     #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (Collider == null) return;
-
-        Vector3 dir = ModelTrm.forward;
+        var col = GetComponent<Collider>();
+        var modelTrm = transform.Find("Model");
+        
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(col.bounds.center, Data.interactableRadius);
+        
+        Vector3 dir = modelTrm.forward;
         dir.y = 0f;
 
-        Vector3 origin = Collider.bounds.center;
-        origin.y = Collider.bounds.min.y;
+        Vector3 origin = col.bounds.center;
+        origin.y = col.bounds.min.y;
 
         Vector3 topCenter = origin + Vector3.up * StepHeight * 1.5f    + dir * -StepWidth;
         Vector3 bottomCenter = origin + Vector3.up * StepHeight * 0.5f + dir * -StepWidth;
-        Vector3 halfExtents = Collider.bounds.extents;
+        Vector3 halfExtents = col.bounds.extents;
         halfExtents.y = StepHeight * 0.5f;
-
 
         Gizmos.color = Color.red;
         Gizmos.DrawCube(topCenter,halfExtents);
