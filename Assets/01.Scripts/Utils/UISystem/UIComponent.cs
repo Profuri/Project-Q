@@ -27,7 +27,7 @@ public class UIComponent : PoolableMono
         }
     }
 
-    public virtual void Appear(Transform parentTrm, Action callback = null)
+    public virtual void Appear(Transform parentTrm, Action<UIComponent> callback = null)
     {
         ParentTrm = parentTrm;
         transform.SetParent(parentTrm);
@@ -44,19 +44,19 @@ public class UIComponent : PoolableMono
             tweenData.appearAnimator?.Play(() =>
             {
                 IsTweening = false;
-                callback?.Invoke();
+                callback?.Invoke(this);
             });
         }
     }
 
-    public virtual void Disappear(Action callback = null)
+    public virtual void Disappear(Action<UIComponent> callback = null)
     {
         if (tweenData)
         {
             IsTweening = true;
             tweenData.disappearAnimator.Play(() =>
             {
-                callback?.Invoke();
+                callback?.Invoke(this);
                 IsTweening = false;
                 PoolManager.Instance.Push(this);
             });

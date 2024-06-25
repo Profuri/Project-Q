@@ -12,7 +12,7 @@ public class MessageVideoWindow : UIComponent
         _videoPlayer = canvasTrm.Find("VideoPanel/Player").GetComponent<VideoPlayer>();
     }
 
-    public override void Disappear(Action callback = null)
+    public override void Disappear(Action<UIComponent> callback = null)
     {
         _videoPlayer.Stop();
         base.Disappear(callback);

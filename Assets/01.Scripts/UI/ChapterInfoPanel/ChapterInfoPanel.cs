@@ -21,9 +21,9 @@ public class ChapterInfoPanel : UIComponent
         _descText = transform.Find("DescText").GetComponent<TextMeshProUGUI>();
     }
 
-    public override void Appear(Transform parentTrm, Action callback = null)
+    public override void Appear(Transform parentTrm, Action<UIComponent> callback = null)
     {
-        base.Appear(parentTrm, () => StartCoroutine(LifeCycleRoutine()));
+        base.Appear(parentTrm, component => StartCoroutine(LifeCycleRoutine()));
     }
 
     public void SetUp(ChapterType chapter)

@@ -59,12 +59,17 @@ public class StageRoadMapUnit : UIComponent
         }
     }
 
-    public void SetEnable(bool enable)
+    public void SetEnable(bool enable, float time = -1f)
     {
-        StartSafeCoroutine("SetEnableRoutine", SetEnableRoutine(enable));
+        if (time < 0)
+        {
+            time = _enableTime;
+        }
+        
+        StartSafeCoroutine("SetEnableRoutine", SetEnableRoutine(enable, time));
     }
 
-    private IEnumerator SetEnableRoutine(bool enable)
+    private IEnumerator SetEnableRoutine(bool enable, float time)
     {
         var originSize = enable ? NotAccessSize : DefaultSize;
         var targetSize = enable ? DefaultSize : NotAccessSize;
@@ -73,7 +78,7 @@ public class StageRoadMapUnit : UIComponent
 
         ((RectTransform)transform).sizeDelta = Vector2.one * originSize; 
 
-        while (current < _enableTime)
+        while (current < time)
         {
             current += Time.deltaTime;
             var percent = current / _enableTime;

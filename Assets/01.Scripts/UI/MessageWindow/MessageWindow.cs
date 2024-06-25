@@ -27,11 +27,11 @@ public class MessageWindow : UIComponent
         _typewriter = _bodyText.GetComponent<TypewriterByCharacter>();
     }
 
-    public override void Appear(Transform parentTrm, Action callback = null)
+    public override void Appear(Transform parentTrm, Action<UIComponent> callback = null)
     {
         _bodyText.text = "";
 
-        callback += () =>
+        callback += component =>
         {
             SoundManager.Instance.PlaySFX("PanelAppear", false);
         };
@@ -39,7 +39,7 @@ public class MessageWindow : UIComponent
         base.Appear(parentTrm, callback);
     }
 
-    public override void Disappear(Action callback = null)
+    public override void Disappear(Action<UIComponent> callback = null)
     {
         _typewriter.onMessage.RemoveListener(OnTypewriterMessageHandle);
         InputManager.Instance.UIInputReader.OnEnterClickEvent -= NextStory;

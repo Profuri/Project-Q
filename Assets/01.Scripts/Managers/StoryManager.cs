@@ -47,7 +47,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
         InputManager.Instance.SetEnableInputAll(false);
         UIManager.Instance.Interact3DButton = false;
 
-        _messagePanel = UIManager.Instance.GenerateUI("MessageWindow", null, () =>
+        _messagePanel = UIManager.Instance.GenerateUI("MessageWindow", null, component =>
         {
             _messagePanel.SetData(storyData);
         }) as MessageWindow;
@@ -95,7 +95,7 @@ public class StoryManager : BaseManager<StoryManager>,IProvideSave
             return;
         }
 
-        _messageVideoWindow.Disappear(() =>
+        _messageVideoWindow.Disappear(component =>
         {
             _messageVideoWindow = null;
         });

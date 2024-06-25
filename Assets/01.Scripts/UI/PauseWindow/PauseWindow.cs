@@ -5,7 +5,7 @@ public class PauseWindow : UIComponent
 {
      private SettingWindow _settingWindow;
 
-     public override void Appear(Transform parentTrm, Action callback = null)
+     public override void Appear(Transform parentTrm, Action<UIComponent> callback = null)
      {
           base.Appear(parentTrm, callback);
 
@@ -14,7 +14,7 @@ public class PauseWindow : UIComponent
           CursorManager.RegisterUI(this);
     }
 
-    public override void Disappear(Action callback = null)
+    public override void Disappear(Action<UIComponent> callback = null)
     {
           base.Disappear(callback);
 
@@ -31,7 +31,7 @@ public class PauseWindow : UIComponent
         }
         
         GameManager.Instance.Resume(false);
-        Disappear(() => GameManager.Instance.InPause = false);
+        Disappear(component => GameManager.Instance.InPause = false);
     }
 
      public void GenerateSettingPopup()

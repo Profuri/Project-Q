@@ -81,6 +81,12 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     {
         if (CurrentStage is not null)
         {
+            UIManager.Instance.GenerateUI("StageRoadMapPanel", null, component =>
+            {
+                (component as StageRoadMapPanel)?.SetUnitEnable(CurrentStage.StageOrder - 1, false);
+                (component as StageRoadMapPanel)?.SetUnitEnable(CurrentStage.StageOrder, true);
+            });
+            
             CurrentStage.Disappear();
             CurrentStage.RemoveBridge();
         }

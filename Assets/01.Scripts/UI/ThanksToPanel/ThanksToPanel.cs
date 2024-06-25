@@ -12,7 +12,7 @@ public class ThanksToPanel : UIComponent
         base.Awake();
     }
 
-    public override void Appear(Transform parentTrm, Action callback = null)
+    public override void Appear(Transform parentTrm, Action<UIComponent> callback = null)
     {
         base.Appear(parentTrm, callback);
         
