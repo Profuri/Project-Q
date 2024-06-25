@@ -10,7 +10,7 @@ public class Stage : Section
     [SerializeField] private int _stageOrder;
     public int StageOrder => _stageOrder;
 
-    private const float ChangeGrayScaleDelay = 0.75f;
+    private const float ChangeGrayScaleDelay = 2f;
     
     public bool IsClear { get; set; } = false;
 
@@ -66,20 +66,18 @@ public class Stage : Section
     
     public void StageClearFeedback()
     {
-        CameraManager.Instance.ShakeCam(1f, ChangeGrayScaleDelay / 2f);
-        CameraManager.Instance.Shockwave(true, ChangeGrayScaleDelay);
-        
+        CameraManager.Instance.ShakeCam(0.5f, 0.25f);
+        CameraManager.Instance.Shockwave(true, 0.25f);
+
         foreach (var unit in SectionUnits)
         {
             if (unit is PlayerUnit)
             {
                 continue;
             }
-            
+                
             unit.SetGrayScale(1f, ChangeGrayScaleDelay);
         }
-        
-        // UI 추가 하자
     }
 
 #if UNITY_EDITOR
