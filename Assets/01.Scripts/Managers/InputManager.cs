@@ -15,6 +15,7 @@ public enum EInputCategory
     AxisControl,
     ZoomOut,
     Escape,
+    ShowRoadMap,
 }
 
 public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoad
@@ -50,6 +51,7 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
             { EInputCategory.Interaction,       PlayerInputReader.Actions.Interaction },
             { EInputCategory.AxisControl,       PlayerInputReader.Actions.AxisControl },
             { EInputCategory.ZoomOut,           CameraInputReader.Actions.ZoomControl },
+            { EInputCategory.ShowRoadMap,       PlayerInputReader.Actions.ShowRoadMap },   
         };
     }
 

@@ -27,10 +27,14 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     public event Action<ChapterType, int> OnStageClear;
 
     public AxisType CurrentStageAxis => SceneControlManager.Instance.Player.Converter.AxisType;
+
+    private StageRoadMapPanel _stageRoadMap;
+    
     public override void StartManager()
     {
         CurrentStage = null;
         NextStage = null;
+        _stageRoadMap = null;
         LoadToDataManager();
     }        
 
@@ -77,16 +81,46 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             });
         }
     }
+
+    public void ShowRoadMap()
+    {
+        if (_stageRoadMap != null && _stageRoadMap.poolOut)
+        {
+            _stageRoadMap.StopAllCoroutines();
+            return;
+        }
+        
+        _stageRoadMap = UIManager.Instance.GenerateUI("StageRoadMapPanel") as StageRoadMapPanel;
+    }
+
+    public void UnShowRoadMap()
+    {
+        if (_stageRoadMap == null || !_stageRoadMap.poolOut)
+        {
+            return;
+        }
+        
+        _stageRoadMap.Disappear();
+    }
+    
     public void ChangeToNextStage()
     {
         if (CurrentStage is not null)
         {
-            UIManager.Instance.GenerateUI("StageRoadMapPanel", null, component =>
+            if (_stageRoadMap != null && _stageRoadMap.poolOut)
             {
-                (component as StageRoadMapPanel)?.SetUnitEnable(NextStage.StageOrder - 1, false);
-                (component as StageRoadMapPanel)?.SetUnitEnable(NextStage.StageOrder, true);
-                (component as StageRoadMapPanel)?.AutoDisappear();
-            });
+                _stageRoadMap.SetUnitEnable(NextStage.StageOrder - 1, false);
+                _stageRoadMap.SetUnitEnable(NextStage.StageOrder, true);
+            }
+            else
+            {
+                _stageRoadMap = UIManager.Instance.GenerateUI("StageRoadMapPanel", null, component =>
+                {
+                    (component as StageRoadMapPanel)?.SetUnitEnable(NextStage.StageOrder - 1, false);
+                    (component as StageRoadMapPanel)?.SetUnitEnable(NextStage.StageOrder, true);
+                    (component as StageRoadMapPanel)?.AutoDisappear();
+                }) as StageRoadMapPanel;
+            }
             
             CurrentStage.Disappear();
             CurrentStage.RemoveBridge();

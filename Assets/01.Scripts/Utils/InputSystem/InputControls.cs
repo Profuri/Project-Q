@@ -91,6 +91,15 @@ namespace InputControl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ShowRoadMap"",
+                    ""type"": ""Button"",
+                    ""id"": ""abfc913f-c496-4696-9661-34e1c24889f7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -212,6 +221,17 @@ namespace InputControl
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""MouseDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""79bdc37d-2e1f-488a-b2b8-c599b66eff8f"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ShowRoadMap"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -554,6 +574,7 @@ namespace InputControl
             m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
             m_Player_Rotate = m_Player.FindAction("Rotate", throwIfNotFound: true);
             m_Player_MouseDelta = m_Player.FindAction("MouseDelta", throwIfNotFound: true);
+            m_Player_ShowRoadMap = m_Player.FindAction("ShowRoadMap", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_LeftClick = m_UI.FindAction("LeftClick", throwIfNotFound: true);
@@ -640,6 +661,7 @@ namespace InputControl
         private readonly InputAction m_Player_Reload;
         private readonly InputAction m_Player_Rotate;
         private readonly InputAction m_Player_MouseDelta;
+        private readonly InputAction m_Player_ShowRoadMap;
         public struct PlayerActions
         {
             private @InputControls m_Wrapper;
@@ -651,6 +673,7 @@ namespace InputControl
             public InputAction @Reload => m_Wrapper.m_Player_Reload;
             public InputAction @Rotate => m_Wrapper.m_Player_Rotate;
             public InputAction @MouseDelta => m_Wrapper.m_Player_MouseDelta;
+            public InputAction @ShowRoadMap => m_Wrapper.m_Player_ShowRoadMap;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -681,6 +704,9 @@ namespace InputControl
                 @MouseDelta.started += instance.OnMouseDelta;
                 @MouseDelta.performed += instance.OnMouseDelta;
                 @MouseDelta.canceled += instance.OnMouseDelta;
+                @ShowRoadMap.started += instance.OnShowRoadMap;
+                @ShowRoadMap.performed += instance.OnShowRoadMap;
+                @ShowRoadMap.canceled += instance.OnShowRoadMap;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -706,6 +732,9 @@ namespace InputControl
                 @MouseDelta.started -= instance.OnMouseDelta;
                 @MouseDelta.performed -= instance.OnMouseDelta;
                 @MouseDelta.canceled -= instance.OnMouseDelta;
+                @ShowRoadMap.started -= instance.OnShowRoadMap;
+                @ShowRoadMap.performed -= instance.OnShowRoadMap;
+                @ShowRoadMap.canceled -= instance.OnShowRoadMap;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -951,6 +980,7 @@ namespace InputControl
             void OnReload(InputAction.CallbackContext context);
             void OnRotate(InputAction.CallbackContext context);
             void OnMouseDelta(InputAction.CallbackContext context);
+            void OnShowRoadMap(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
