@@ -44,7 +44,7 @@ public class InteractionMark : PoolableMono
         Vector3 offset = _agentInteractable.Offset;
         if(offset == Vector3.zero)
         {
-            offset = Vector3.up * 2f;
+            offset = Vector3.up * 1.01f;
         }
 
         if (collider == null)

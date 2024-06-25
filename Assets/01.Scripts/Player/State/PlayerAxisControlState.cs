@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using AxisConvertSystem;
 using UnityEngine;
 using UnityEngine.Windows;
+using System;
 using VirtualCam;
 
 public class PlayerAxisControlState : PlayerBaseState
 {
     private AxisType _controllingAxis;
-    
+    public event Action<AxisType> axisControlingEvent;
     public PlayerAxisControlState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
     }
@@ -48,6 +49,9 @@ public class PlayerAxisControlState : PlayerBaseState
     {
         Player.StopImmediately(false);
         CalcCurrentControlAxis();
+
+        Player.OnControllingAxisEvent?.Invoke(_controllingAxis);
+
         LightManager.Instance.SetAxisLight(_controllingAxis);
     }
 

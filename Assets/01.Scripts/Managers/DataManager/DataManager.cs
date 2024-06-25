@@ -11,11 +11,13 @@ public class SaveData
     {
         ChapterClearDictionary = new SerializableDictionary<ChapterType, bool>();
         ChapterTimelineDictionary = new SerializableDictionary<ChapterType, bool>();
+        ChapterStageDictionary = new SerializableDictionary<ChapterType, int>();
 
         foreach (ChapterType chapterType in Enum.GetValues(typeof(ChapterType)))
         {
             ChapterClearDictionary.Add(chapterType, false);
             ChapterTimelineDictionary.Add(chapterType, false);
+            ChapterStageDictionary.Add(chapterType,0);
         }
         
         VolumeDictionary = new SerializableDictionary<EAUDIO_MIXER, float>();
@@ -29,6 +31,7 @@ public class SaveData
     }
 
     public SerializableDictionary<ChapterType, bool> ChapterClearDictionary;
+    public SerializableDictionary<ChapterType,int> ChapterStageDictionary;
     public SerializableDictionary<ChapterType, bool> ChapterTimelineDictionary;
     public SerializableDictionary<EAUDIO_MIXER, float> VolumeDictionary;
     public List<bool> StoryShowList;
