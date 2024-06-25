@@ -42,9 +42,11 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     {
         //IsClear = false;
 
+        int stageIndex = DataManager.sSaveData.ChapterStageDictionary[chapterData.chapter];
+        
         _currentPlayChapterData = chapterData;
         CurrentStage = SceneControlManager.Instance.AddObject(
-            $"{chapterData.chapter.ToString().ToUpperFirstChar()}_Stage_0") as Stage;
+            $"{chapterData.chapter.ToString().ToUpperFirstChar()}_Stage_{stageIndex}") as Stage;
         CurrentStage.Generate(Vector3.zero, false, false);
         CurrentStage.IsClear = false;
     }
@@ -206,6 +208,11 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
                 }
             });
         });
+                
+        GenerateNextStage(_currentPlayChapterData.chapter, nextChapter);
+        OnStageClear?.Invoke(_currentPlayChapterData.chapter,nextChapter);
+
+        CurrentStage.IsClear = true;
     }
 
     public Action<SaveData> GetSaveAction()
@@ -217,6 +224,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             bool isClear = CurrentStage.StageOrder + 1 >= _currentPlayChapterData.stageCnt;
             
             saveData.ChapterClearDictionary[currentChapter] = isClear;
+            saveData.ChapterStageDictionary[currentChapter] =CurrentStage.StageOrder;
         };
     }
 
