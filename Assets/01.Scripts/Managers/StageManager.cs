@@ -84,6 +84,11 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
 
     public void ShowRoadMap()
     {
+        if (CurrentStage == null)
+        {
+            return;
+        }
+        
         if (_stageRoadMap != null && _stageRoadMap.poolOut)
         {
             _stageRoadMap.StopAllCoroutines();
@@ -95,6 +100,11 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
 
     public void UnShowRoadMap()
     {
+        if (CurrentStage == null)
+        {
+            return;
+        }
+        
         if (_stageRoadMap == null || !_stageRoadMap.poolOut)
         {
             return;
