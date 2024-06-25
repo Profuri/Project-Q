@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using DG.Tweening;
+using UnityEditor;
 
 public class Stage : Section
 {
@@ -66,6 +67,8 @@ public class Stage : Section
     
     public void StageClearFeedback()
     {
+        SoundManager.Instance.PlaySFX("StageClear");
+        
         CameraManager.Instance.ShakeCam(0.5f, 0.25f);
         CameraManager.Instance.Shockwave(true, 0.25f);
 
