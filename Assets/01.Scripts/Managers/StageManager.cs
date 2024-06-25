@@ -22,6 +22,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     }
 
     private ChapterData _currentPlayChapterData;
+    public ChapterData CurrentPlayChapterData => _currentPlayChapterData;
 
     public event Action<ChapterType, int> OnStageClear;
 
