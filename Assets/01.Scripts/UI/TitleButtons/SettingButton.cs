@@ -17,13 +17,19 @@ public class SettingButton : InteractableObject
     public override void OnDetectedEnter(ObjectUnit communicator = null)
     {
         base.OnDetectedEnter(communicator);
-        _button3D.OnHoverHandle();
+        if (_button3D != null)
+        {
+            _button3D.OnHoverHandle();
+        }
     }
 
     public override void OnDetectedLeave(ObjectUnit communicator = null)
     {
         base.OnDetectedLeave(communicator);
-        _button3D.OnHoverCancelHandle();
+        if (_button3D != null)
+        {
+            _button3D.OnHoverCancelHandle();
+        }
     }
 
     public void SettingButtonCall()

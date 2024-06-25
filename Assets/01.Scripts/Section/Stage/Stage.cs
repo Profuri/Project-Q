@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using DG.Tweening;
 using UnityEditor;
 
@@ -65,12 +66,12 @@ public class Stage : Section
             });
     }
     
-    public void StageClearFeedback()
+    public void StageClearFeedback(Action callback = null)
     {
         SoundManager.Instance.PlaySFX("StageClear");
         
         CameraManager.Instance.ShakeCam(0.5f, 0.25f);
-        CameraManager.Instance.Shockwave(true, 0.25f);
+        CameraManager.Instance.Shockwave(true, 0.5f);
 
         foreach (var unit in SectionUnits)
         {
@@ -81,6 +82,14 @@ public class Stage : Section
                 
             unit.SetGrayScale(1f, ChangeGrayScaleDelay);
         }
+
+        StartSafeCoroutine("StageClearFeedbackDelayRoutine", DelayRoutine(ChangeGrayScaleDelay, callback));
+    }
+
+    private IEnumerator DelayRoutine(float delay, Action callback)
+    {
+        yield return new WaitForSeconds(delay);
+        callback?.Invoke();
     }
 
 #if UNITY_EDITOR

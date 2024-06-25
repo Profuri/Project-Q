@@ -100,21 +100,45 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
 
         if (player.Converter.AxisType != AxisType.None)
         {
-            player.Converter.ConvertDimension(AxisType.None, CurrentStage.StageClearFeedback);
+            player.Converter.ConvertDimension(AxisType.None, StageClearFeedback);
         }
         else
         {
-            CurrentStage.StageClearFeedback();
+            StageClearFeedback();
         }
         
         player.Converter.SetConvertable(false);
-        var nextChapter = CurrentStage.StageOrder + 1;
+        var nextStageIndex = CurrentStage.StageOrder + 1;
 
-        if (nextChapter >= _currentPlayChapterData.stageCnt)
+        if (nextStageIndex >= _currentPlayChapterData.stageCnt)
         {
+            return;
+        }
+                
+        GenerateNextStage(_currentPlayChapterData.chapter, nextStageIndex);
+        OnStageClear?.Invoke(_currentPlayChapterData.chapter,nextStageIndex);
+        CurrentStage.IsClear = true;
+    }
+
+    private void StageClearFeedback()
+    {
+        if (CurrentStage.ChapterType == ChapterType.Tutorial)
+        {
+            SceneControlManager.Instance.LoadScene(SceneType.Chapter);
+            return;
+        }
+        
+        CurrentStage.StageClearFeedback(() =>
+        {
+            var nextStageIndex = CurrentStage.StageOrder + 1;
+
+            if (nextStageIndex < _currentPlayChapterData.stageCnt)
+            {
+                return;
+            }
+            
             DataManager.Instance.SaveData(this);
 
-            
             SceneControlManager.Instance.LoadScene(SceneType.Chapter, null, () =>
             {
                 if (CurrentStage.ChapterType == ChapterType.Cpu)
@@ -129,12 +153,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
                     InputManager.Instance.SetEnableInputAll(false);
                 }
             });
-            return;
-        }
-                
-        GenerateNextStage(_currentPlayChapterData.chapter, nextChapter);
-        OnStageClear?.Invoke(_currentPlayChapterData.chapter,nextChapter);
-        CurrentStage.IsClear = true;
+        });
     }
 
     public Action<SaveData> GetSaveAction()
