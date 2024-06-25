@@ -89,6 +89,7 @@ namespace AxisConvertSystem
                             {
                                 Convertable = true;
                                 ((SectionCamController)CameraManager.Instance.CurrentCamController).ChangeCameraAxis(AxisType);
+                                Player.OnControllingAxisEvent?.Invoke(AxisType);
                                 callback?.Invoke();
                             });
                         }
@@ -176,6 +177,7 @@ namespace AxisConvertSystem
             foreach (var unit in _section.SectionUnits) unit.ApplyDepth();
 
             AxisType = nextAxis;
+            Player.OnControllingAxisEvent?.Invoke(AxisType);
         }
 
 

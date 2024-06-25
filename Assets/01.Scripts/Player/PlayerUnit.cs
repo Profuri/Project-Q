@@ -30,6 +30,8 @@ public class PlayerUnit : ObjectUnit
 
     private StateController _stateController;
 
+    public Action<AxisType> OnControllingAxisEvent;
+
     private readonly int _activeHash = Animator.StringToHash("Active");
 
     private float _coyoteTime = 0f;
@@ -46,7 +48,7 @@ public class PlayerUnit : ObjectUnit
     public bool CanJump => OnGround || IsCoyote;
     public bool CanAxisControl { get; set; } = true;
     public bool IsControllingAxis => _stateController.CurrentState is PlayerAxisControlState;
-    
+    public State CurrentState => _stateController.CurrentState;   
     private const float StepHeight = 0.05f;
     private const float StepWidth = 0.03f;
 
