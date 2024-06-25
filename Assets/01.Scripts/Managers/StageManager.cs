@@ -83,8 +83,9 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         {
             UIManager.Instance.GenerateUI("StageRoadMapPanel", null, component =>
             {
-                (component as StageRoadMapPanel)?.SetUnitEnable(CurrentStage.StageOrder - 1, false);
-                (component as StageRoadMapPanel)?.SetUnitEnable(CurrentStage.StageOrder, true);
+                (component as StageRoadMapPanel)?.SetUnitEnable(NextStage.StageOrder - 1, false);
+                (component as StageRoadMapPanel)?.SetUnitEnable(NextStage.StageOrder, true);
+                (component as StageRoadMapPanel)?.AutoDisappear();
             });
             
             CurrentStage.Disappear();

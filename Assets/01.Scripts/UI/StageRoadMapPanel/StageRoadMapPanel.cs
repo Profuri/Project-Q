@@ -22,17 +22,11 @@ public class StageRoadMapPanel : UIComponent
 
     public override void Appear(Transform parentTrm, Action<UIComponent> callback = null)
     {
-        base.Appear(parentTrm, component =>
-        {
-            callback?.Invoke(component);
-            StartCoroutine(LifeCycleRoutine());
-        });
-        
         var stageInfos = StageManager.Instance.CurrentPlayChapterData.stageInfos;
         
         // 형주가 스테이지 저장 만들어주면 합치기
         // var stageClearData = DataManager.sSaveData.
-        
+
         for (var i = 0; i < stageInfos.Count; i++)
         {
             var unit = UIManager.Instance.GenerateUI("StageRoadMapUnit", _unitParent) as StageRoadMapUnit;
@@ -40,6 +34,10 @@ public class StageRoadMapPanel : UIComponent
             unit.SetEnable(false, 0f);
             _units.Add(unit);
         }
+        
+        _units[StageManager.Instance.CurrentStage.StageOrder].SetEnable(true, 0f);
+
+        base.Appear(parentTrm, callback);
     }
 
     public override void Disappear(Action<UIComponent> callback = null)
@@ -53,6 +51,16 @@ public class StageRoadMapPanel : UIComponent
             _units.Clear();
             callback?.Invoke(component);
         });
+        
+        foreach (var unit in _units)
+        {
+            if (!unit.Enable)
+            {
+                continue;
+            }
+            
+            unit.SetEnable(false);   
+        }
     }
 
     public void SetUnitEnable(int index, bool enable)
@@ -63,6 +71,11 @@ public class StageRoadMapPanel : UIComponent
         }
         
         _units[index].SetEnable(enable);
+    }
+
+    public void AutoDisappear()
+    {
+        StartCoroutine(LifeCycleRoutine());
     }
 
     private IEnumerator LifeCycleRoutine()

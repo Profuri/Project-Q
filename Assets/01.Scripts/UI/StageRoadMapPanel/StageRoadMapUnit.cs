@@ -26,6 +26,8 @@ public class StageRoadMapUnit : UIComponent
 
     [SerializeField] private float _enableTime = 0.5f;
 
+    public bool Enable { get; private set; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -88,5 +90,6 @@ public class StageRoadMapUnit : UIComponent
         }
         
         ((RectTransform)transform).sizeDelta = Vector2.one * targetSize;
+        Enable = enable;
     }
 }
