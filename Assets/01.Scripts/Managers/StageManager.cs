@@ -210,6 +210,12 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             });
         });
     }
+    
+    public void ReleaseChapter()
+    {
+        DataManager.Instance.SaveData(this);
+        _currentPlayChapterData = null;
+    }
 
     public Action<SaveData> GetSaveAction()
     {
