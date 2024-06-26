@@ -37,7 +37,7 @@ public class SettingWindow : UIComponent
         }
     }
 
-    public override void Appear(Transform parentTrm, Action callback = null)
+    public override void Appear(Transform parentTrm, Action<UIComponent> callback = null)
     {
         _currentPanel?.ReleasePanel();
         _currentPanel = _panels[(int)SettingType.None];
@@ -56,7 +56,7 @@ public class SettingWindow : UIComponent
         Disappear();
     }
 
-    public override void Disappear(Action callback = null)
+    public override void Disappear(Action<UIComponent> callback = null)
     {
         _currentPanel?.ReleasePanel();
         _currentPanel = _panels[(int)SettingType.None];

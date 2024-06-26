@@ -43,6 +43,7 @@ namespace AxisConvertSystem
 
         private readonly int _dissolveProgressHash = Shader.PropertyToID("_DissolveProgress");
         private readonly int _visibleProgressHash = Shader.PropertyToID("_VisibleProgress");
+        private readonly int _grayScaleProgressHash = Shader.PropertyToID("_GrayScaleProgress");
         
         // Events
         public event Action<AxisConverter> OnInitEvent;
@@ -560,6 +561,39 @@ namespace AxisConvertSystem
             }
             callBack?.Invoke();
         }
+        
+        public virtual void SetGrayScale(float value, float time, Action callBack = null)
+        {
+            StartSafeCoroutine("SetGrayScaleRoutine", GrayScaleRoutine(value,time,callBack));
+        }
+
+        private IEnumerator GrayScaleRoutine(float value, float time, Action callBack = null)
+        {
+            value = Mathf.Clamp(value, 0f, 1f);
+            var initVal = Mathf.Abs(1f - value);
+
+            foreach (var material in _materials)
+            {
+                material.SetFloat(_grayScaleProgressHash, initVal);
+            }
+
+            var currentTime = 0f;
+
+            while(currentTime <= time )
+            {
+                currentTime += Time.deltaTime;
+                var percent = currentTime / time;
+                var currentProgress = Mathf.Lerp(initVal,value,percent);
+
+                foreach (var material in _materials)
+                {
+                    material.SetFloat(_grayScaleProgressHash, currentProgress);
+                }
+                yield return null;
+            }
+            callBack?.Invoke();
+        }
+        
         public bool IsSuperiorUnit(ObjectUnit checkUnit)
         {
             if (!subUnit)

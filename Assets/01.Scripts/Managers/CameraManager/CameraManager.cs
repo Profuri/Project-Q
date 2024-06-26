@@ -23,6 +23,11 @@ public class CameraManager : BaseManager<CameraManager>
     [SerializeField] private float _zoomControlTimer;
     [field:SerializeField] public AnimationCurve ZoomControlCurve { get; private set; }
 
+    [Header("Shock Wave Setting")] 
+    [SerializeField] private Material _shockwaveMaterial;
+
+    private readonly int _shockwaveDistanceHash = Shader.PropertyToID("_WaveDistance");
+
     public override void StartManager()
     {
         _vCamControllers = new Dictionary<VirtualCamType, VirtualCamController>();
@@ -111,5 +116,30 @@ public class CameraManager : BaseManager<CameraManager>
         }
 
         MainCam.rect = viewportRect;
+    }
+
+    public void Shockwave(bool enable, float time)
+    {
+        StartSafeCoroutine("ShockwaveRoutine", ShockwaveRoutine(enable, time));
+    }
+
+    private IEnumerator ShockwaveRoutine(bool enable, float time)
+    {
+        var origin = enable ? -0.1f : 1f;
+        var target = enable ? 1f : -0.1f;
+        
+        _shockwaveMaterial.SetFloat(_shockwaveDistanceHash, origin);
+
+        var current = 0f;
+        while (current <= time)
+        {
+            current += Time.deltaTime;
+            var percent = current / time;
+            var distance = Mathf.Lerp(origin, target, percent);
+            _shockwaveMaterial.SetFloat(_shockwaveDistanceHash, distance);
+            yield return null;
+        }
+        
+        _shockwaveMaterial.SetFloat(_shockwaveDistanceHash, target);
     }
 }

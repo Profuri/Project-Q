@@ -83,6 +83,7 @@ public class PlayerUnit : ObjectUnit
         SoundEffectPlayer = new SoundEffectPlayer(this);
         CanAxisControl = true;
     }    
+    
     public override void UpdateUnit()
     {
         base.UpdateUnit();
@@ -92,10 +93,12 @@ public class PlayerUnit : ObjectUnit
             StandingCheck();
         }
 
+#if UNITY_EDITOR
         if(Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.C))
         {
             StageManager.Instance.StageClear(this);
         }
+#endif
         
         _stateController.UpdateState();
         HoldingHandler.UpdateHandler();
@@ -165,6 +168,8 @@ public class PlayerUnit : ObjectUnit
     {
         InputManager.Instance.PlayerInputReader.OnInteractionEvent += InteractHandler.OnInteraction;
         InputManager.Instance.PlayerInputReader.OnReloadClickEvent += RestartStage;
+        InputManager.Instance.PlayerInputReader.OnShowRoadMapEvent += StageManager.Instance.ShowRoadMap;
+        InputManager.Instance.PlayerInputReader.OnUnShowRoadMapEvent += StageManager.Instance.UnShowRoadMap;
         _stateController.ChangeState(typeof(PlayerIdleState));
         SetActiveAnimation(true);
         SoundManager.Instance.SetAudioListenerOwner(transform);

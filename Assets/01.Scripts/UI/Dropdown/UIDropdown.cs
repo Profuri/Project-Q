@@ -41,7 +41,7 @@ public class UIDropdown : UIComponent
         _options = new List<UIDropdownOption>();
     }
 
-    public override void Appear(Transform parentTrm,  Action callback = null)
+    public override void Appear(Transform parentTrm, Action<UIComponent> callback = null)
     {
         base.Appear(parentTrm, callback);
 
@@ -61,7 +61,7 @@ public class UIDropdown : UIComponent
         InputManager.Instance.UIInputReader.OnEnterClickEvent += EnterOption;
     }
 
-    public override void Disappear(Action callback = null)
+    public override void Disappear(Action<UIComponent> callback = null)
     {
         UIManager.Instance.Interact3DButton = true;
         InputManager.Instance.PlayerInputReader.Actions.Enable();

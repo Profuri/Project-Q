@@ -119,7 +119,7 @@ public class UIManager : BaseManager<UIManager>
         }
     }
 
-    public UIComponent GenerateUI(string key, Transform parent = null, Action callback = null)
+    public UIComponent GenerateUI(string key, Transform parent = null, Action<UIComponent> callback = null)
     {
         var component = SceneControlManager.Instance.AddObject(key) as UIComponent;
         

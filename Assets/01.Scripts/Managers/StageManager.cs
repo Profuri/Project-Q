@@ -22,14 +22,19 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     }
 
     private ChapterData _currentPlayChapterData;
+    public ChapterData CurrentPlayChapterData => _currentPlayChapterData;
 
-    public event Action<ChapterType, int> OnStageClear;
+    public event Action OnStageClear;
 
     public AxisType CurrentStageAxis => SceneControlManager.Instance.Player.Converter.AxisType;
+
+    private StageRoadMapPanel _stageRoadMap;
+    
     public override void StartManager()
     {
         CurrentStage = null;
         NextStage = null;
+        _stageRoadMap = null;
         LoadToDataManager();
     }        
 
@@ -78,10 +83,57 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             });
         }
     }
+
+    public void ShowRoadMap()
+    {
+        if (CurrentStage == null)
+        {
+            return;
+        }
+        
+        if (_stageRoadMap != null && _stageRoadMap.poolOut)
+        {
+            _stageRoadMap.StopAllCoroutines();
+            return;
+        }
+        
+        _stageRoadMap = UIManager.Instance.GenerateUI("StageRoadMapPanel") as StageRoadMapPanel;
+    }
+
+    public void UnShowRoadMap()
+    {
+        if (CurrentStage == null)
+        {
+            return;
+        }
+        
+        if (_stageRoadMap == null || !_stageRoadMap.poolOut)
+        {
+            return;
+        }
+        
+        _stageRoadMap.Disappear();
+    }
+    
     public void ChangeToNextStage()
     {
         if (CurrentStage is not null)
         {
+            if (_stageRoadMap != null && _stageRoadMap.poolOut)
+            {
+                _stageRoadMap.SetUnitEnable(NextStage.StageOrder - 1, false);
+                _stageRoadMap.SetUnitEnable(NextStage.StageOrder, true);
+            }
+            else
+            {
+                _stageRoadMap = UIManager.Instance.GenerateUI("StageRoadMapPanel", null, component =>
+                {
+                    (component as StageRoadMapPanel)?.SetUnitEnable(NextStage.StageOrder - 1, false);
+                    (component as StageRoadMapPanel)?.SetUnitEnable(NextStage.StageOrder, true);
+                    (component as StageRoadMapPanel)?.AutoDisappear();
+                }) as StageRoadMapPanel;
+            }
+            
             CurrentStage.Disappear();
             CurrentStage.RemoveBridge();
         }
@@ -97,18 +149,51 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             return;
         }
         
+        var nextStageIndex = CurrentStage.StageOrder + 1;
+        OnStageClear?.Invoke();
+        CurrentStage.IsClear = true;
+        
+        DataManager.Instance.SaveData(this);
+        
         CurrentStage.Lock = false;
         player.OriginUnitInfo.LocalPos = CurrentStage.PlayerResetPointInClear;
-        player.Converter.ConvertDimension(AxisType.None);
-        player.Converter.SetConvertable(false);
-        var nextChapter = CurrentStage.StageOrder + 1;
 
-        DataManager.Instance.SaveData(this);
-
-        if (nextChapter >= _currentPlayChapterData.stageCnt)
+        if (player.Converter.AxisType != AxisType.None)
         {
+            player.Converter.ConvertDimension(AxisType.None, StageClearFeedback);
+        }
+        else
+        {
+            StageClearFeedback();
+        }
+        
+        player.Converter.SetConvertable(false);
 
-            
+        if (nextStageIndex >= _currentPlayChapterData.stageCnt)
+        {
+            return;
+        }
+                
+        GenerateNextStage(_currentPlayChapterData.chapter, nextStageIndex);
+    }
+
+    private void StageClearFeedback()
+    {
+        if (CurrentStage.ChapterType == ChapterType.Tutorial)
+        {
+            SceneControlManager.Instance.LoadScene(SceneType.Chapter);
+            return;
+        }
+        
+        CurrentStage.StageClearFeedback(() =>
+        {
+            var nextStageIndex = CurrentStage.StageOrder + 1;
+
+            if (nextStageIndex < _currentPlayChapterData.stageCnt)
+            {
+                return;
+            }
+
             SceneControlManager.Instance.LoadScene(SceneType.Chapter, null, () =>
             {
                 if (CurrentStage.ChapterType == ChapterType.Cpu)
@@ -123,25 +208,21 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
                     InputManager.Instance.SetEnableInputAll(false);
                 }
             });
-            return;
-        }
-                
-        GenerateNextStage(_currentPlayChapterData.chapter, nextChapter);
-        OnStageClear?.Invoke(_currentPlayChapterData.chapter,nextChapter);
-
-        CurrentStage.IsClear = true;
+        });
     }
 
     public Action<SaveData> GetSaveAction()
     {
         return (saveData) =>
         {
-            if (_currentPlayChapterData == null) return;
-            var currentChapter = _currentPlayChapterData.chapter;
-            bool isClear = CurrentStage.StageOrder + 1 >= _currentPlayChapterData.stageCnt;
+            if (_currentPlayChapterData == null) 
+                return;
             
-            saveData.ChapterClearDictionary[currentChapter] = isClear;
-            saveData.ChapterStageDictionary[currentChapter] =CurrentStage.StageOrder;
+            var currentChapter = _currentPlayChapterData.chapter;
+            var isClearChapter = CurrentStage.IsClear && CurrentStage.StageOrder + 1 >= _currentPlayChapterData.stageCnt;
+            
+            saveData.ChapterClearDictionary[currentChapter] = isClearChapter;
+            saveData.ChapterStageDictionary[currentChapter] = CurrentStage.StageOrder;
         };
     }
 

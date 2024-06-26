@@ -42,6 +42,20 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
+--- !u!114 &-8049375957555995381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d97da06d1b4e6e64e837fe2d4f512162, type: 3}
+  m_Name: DigitalGlitchFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  shader: {fileID: 4800000, guid: f543b3af2e0e5044caa979485a566d18, type: 3}
 --- !u!114 &-696540570480305784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,7 +120,8 @@ MonoBehaviour:
   - {fileID: 6723381999856660484}
   - {fileID: -9052582436764201791}
   - {fileID: 7455577514336649257}
-  m_RendererFeatureMap: 54d375e2d469ce458899dfa40a6455f60430b68e4e404e5dc1ccba843cc45e8229006d793f887767
+  - {fileID: 5214775319422724691}
+  m_RendererFeatureMap: 54d375e2d469ce458899dfa40a6455f60430b68e4e404e5dc1ccba843cc45e8229006d793f887767536aaa21869a5e48
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -192,6 +207,23 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 32.6
+--- !u!114 &5214775319422724691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d613f08f173d4dd895bb07b3230baa9, type: 3}
+  m_Name: ShockwaveEffect
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  passMaterial: {fileID: 2100000, guid: 35a1c9bd5b799472aacd5f7178078b59, type: 2}
+  injectionPoint: 600
+  requirements: 4
+  passIndex: 0
 --- !u!114 &6723381999856660484
 MonoBehaviour:
   m_ObjectHideFlags: 0

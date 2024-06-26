@@ -18,12 +18,12 @@ public class TutorialWindow : UIComponent
         _descText = canvasTrm.Find("DescTutText").GetComponent<TextMeshPro>();
     }
 
-    public override void Appear(Transform parentTrm, Action callback = null)
+    public override void Appear(Transform parentTrm, Action<UIComponent> callback = null)
     {
         base.Appear(parentTrm, callback);
         SoundManager.Instance.PlaySFX("PanelAppear", false);
     }
-    public override void Disappear(Action callback = null)
+    public override void Disappear(Action<UIComponent> callback = null)
     {
         _videoPlayer.Stop();
         base.Disappear(callback);

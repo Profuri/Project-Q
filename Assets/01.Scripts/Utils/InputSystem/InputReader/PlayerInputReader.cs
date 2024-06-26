@@ -13,6 +13,8 @@ namespace InputControl
         public event InputEventListener OnAxisConvertEvent = null;
         public event InputEventListener OnPlayerRotateEnterEvent = null;
         public event InputEventListener OnPlayerRotateExitEvent = null;
+        public event InputEventListener OnShowRoadMapEvent = null;
+        public event InputEventListener OnUnShowRoadMapEvent = null;
         
         [HideInInspector] public Vector3 movementInput;
         [HideInInspector] public Vector2 mouseDelta;
@@ -88,6 +90,18 @@ namespace InputControl
             mouseDelta = context.ReadValue<Vector2>();
         }
 
+        public void OnShowRoadMap(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                OnShowRoadMapEvent?.Invoke();
+            }
+            else if (context.canceled)
+            {
+                OnUnShowRoadMapEvent?.Invoke();
+            }
+        }
+
         public override void ClearInputEvent()
         {
             OnJumpEvent = null;
@@ -97,6 +111,8 @@ namespace InputControl
             OnAxisConvertEvent = null;
             OnPlayerRotateEnterEvent = null;
             OnPlayerRotateExitEvent = null;
+            OnShowRoadMapEvent = null;
+            OnUnShowRoadMapEvent = null;
         }
     }
 }

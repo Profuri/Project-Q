@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3887075134562970085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 317cfe0429a14aa8b9217f80ae3a7657, type: 3}
+  m_Name: UIMovementClip
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  ease: 0
+  targetTrmPath: 
+  joinPrevAnimation: 0
+  fromPosition: {x: 0, y: 40}
+  toPosition: {x: 0, y: -60}
+--- !u!114 &-1829481455960639837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 317cfe0429a14aa8b9217f80ae3a7657, type: 3}
+  m_Name: UIMovementClip
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  ease: 0
+  targetTrmPath: 
+  joinPrevAnimation: 0
+  fromPosition: {x: 0, y: -60}
+  toPosition: {x: 0, y: 40}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16534c4049b84d44a9b3de6594bbdb8e, type: 3}
+  m_Name: StageRoadMapPanelTweenData
+  m_EditorClassIdentifier: 
+  appearAnimator:
+    clips:
+    - {fileID: -3887075134562970085}
+    - {fileID: 6496469607055541297}
+  disappearAnimator:
+    clips:
+    - {fileID: 3909625286742920554}
+    - {fileID: -1829481455960639837}
+--- !u!114 &3909625286742920554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5688f4df4b584188a9136a05bd82f653, type: 3}
+  m_Name: UILayoutSpacingClip
+  m_EditorClassIdentifier: 
+  duration: 0.5
+  ease: 17
+  targetTrmPath: UnitParent
+  joinPrevAnimation: 0
+  fromSpacing: 15
+  targetSpacing: -40
+--- !u!114 &6496469607055541297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5688f4df4b584188a9136a05bd82f653, type: 3}
+  m_Name: UILayoutSpacingClip
+  m_EditorClassIdentifier: 
+  duration: 0.5
+  ease: 18
+  targetTrmPath: UnitParent
+  joinPrevAnimation: 0
+  fromSpacing: -40
+  targetSpacing: 15

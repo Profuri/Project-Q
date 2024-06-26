@@ -29,7 +29,7 @@ public class PlayerInteractHandler : MonoBehaviour
         FindInteractable();
     }
 
-    private void ResetInteractable(ChapterType type,int stageIndex)
+    private void ResetInteractable()
     {
         _lastFindInteractableObjects.ForEach(i => i.OnDetectedLeave());
         _player.HoldingHandler.Detach();
