@@ -133,12 +133,12 @@ public class SlimeObjectUnit : ObjectUnit
     {
         float appendTime = 0.15f;
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOScale(1.2f, appendTime));
-        sequence.Append(transform.DOScale(0.8f, appendTime));
-        sequence.Append(transform.DOScale(1f, appendTime));
-        sequence.Append(transform.DOScale(1.2f, appendTime));
-        sequence.Append(transform.DOScale(0.8f, appendTime));
-        sequence.Append(transform.DOScale(1f, appendTime));
+        sequence.Append(transform.DOScale(OriginUnitInfo.LocalScale * 1.2f, appendTime));
+        sequence.Append(transform.DOScale(OriginUnitInfo.LocalScale * 0.8f, appendTime));
+        sequence.Append(transform.DOScale(OriginUnitInfo.LocalScale, appendTime));
+        sequence.Append(transform.DOScale(OriginUnitInfo.LocalScale * 1.2f, appendTime));
+        sequence.Append(transform.DOScale(OriginUnitInfo.LocalScale * 0.8f, appendTime));
+        sequence.Append(transform.DOScale(OriginUnitInfo.LocalScale, appendTime));
         sequence.AppendCallback(() => Callback?.Invoke());
     }
 
