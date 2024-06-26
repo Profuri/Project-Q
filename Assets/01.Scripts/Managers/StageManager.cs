@@ -117,29 +117,33 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     
     public void ChangeToNextStage()
     {
-        if (CurrentStage is not null)
+        var lastStage = CurrentStage;
+        CurrentStage = NextStage;
+        CurrentStage.IsClear = false;
+        DataManager.Instance.SaveData(this);
+        
+        if (lastStage is not null)
         {
             if (_stageRoadMap != null && _stageRoadMap.poolOut)
             {
-                _stageRoadMap.SetUnitEnable(NextStage.StageOrder - 1, false);
-                _stageRoadMap.SetUnitEnable(NextStage.StageOrder, true);
+                _stageRoadMap.SetUnitEnable(lastStage.StageOrder, false);
+                _stageRoadMap.SetUnitEnable(lastStage.StageOrder + 1, true);
             }
             else
             {
                 _stageRoadMap = UIManager.Instance.GenerateUI("StageRoadMapPanel", null, component =>
                 {
-                    (component as StageRoadMapPanel)?.SetUnitEnable(NextStage.StageOrder - 1, false);
-                    (component as StageRoadMapPanel)?.SetUnitEnable(NextStage.StageOrder, true);
+                    (component as StageRoadMapPanel)?.SetUnitEnable(lastStage.StageOrder, false);
+                    (component as StageRoadMapPanel)?.SetUnitEnable(lastStage.StageOrder + 1, true);
                     (component as StageRoadMapPanel)?.AutoDisappear();
                 }) as StageRoadMapPanel;
+                _stageRoadMap.SetUnitEnable(lastStage.StageOrder, true, 0f);
+                _stageRoadMap.SetUnitEnable(lastStage.StageOrder + 1, false, 0f);
             }
             
-            CurrentStage.Disappear();
-            CurrentStage.RemoveBridge();
+            lastStage.Disappear();
+            lastStage.RemoveBridge();
         }
-
-        CurrentStage = NextStage;
-        CurrentStage.IsClear = false;
     }
 
     public void StageClear(PlayerUnit player)
@@ -213,7 +217,6 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     
     public void ReleaseChapter()
     {
-        DataManager.Instance.SaveData(this);
         _currentPlayChapterData = null;
     }
 
