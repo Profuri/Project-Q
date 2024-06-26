@@ -22,15 +22,13 @@ public class StageRoadMapPanel : UIComponent
 
     public override void Appear(Transform parentTrm, Action<UIComponent> callback = null)
     {
-        var stageInfos = StageManager.Instance.CurrentPlayChapterData.stageInfos;
-        
-        // 형주가 스테이지 저장 만들어주면 합치기
-        // var stageClearData = DataManager.sSaveData.
+        var curChapterData = StageManager.Instance.CurrentPlayChapterData;
+        var stageInfos = curChapterData.stageInfos;
 
         for (var i = 0; i < stageInfos.Count; i++)
         {
             var unit = UIManager.Instance.GenerateUI("StageRoadMapUnit", _unitParent) as StageRoadMapUnit;
-            unit.SetUp(stageInfos[i], false);
+            unit.SetUp(stageInfos[i], DataManager.sSaveData.ChapterStageDictionary[curChapterData.chapter] > i);
             unit.SetEnable(false, 0f);
             _units.Add(unit);
         }
