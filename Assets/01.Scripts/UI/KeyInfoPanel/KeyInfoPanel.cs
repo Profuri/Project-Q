@@ -13,7 +13,6 @@ public class KeyInfoPanel : UIComponent
 
     private Dictionary<AxisType,Image> _axisImageDictionary = new Dictionary<AxisType, Image>();
 
-
     protected override void Awake()
     {
         base.Awake();
@@ -21,19 +20,20 @@ public class KeyInfoPanel : UIComponent
         _axisImageDictionary.Add(AxisType.Z,_zAxis);
         _axisImageDictionary.Add(AxisType.X,_xAxis);
     }
-    public override void Appear(Transform parentTrm, Action callback = null)
+    public override void Appear(Transform parentTrm, Action<UIComponent> callback = null)
     {
         base.Appear(parentTrm, callback);
 
         SceneControlManager.Instance.Player.OnControllingAxisEvent += ChangeAxisUI;
     }
 
-    public override void Disappear(Action callback = null)
+    public override void Disappear(Action<UIComponent> callback = null)
     {
         base.Disappear(callback);
         SceneControlManager.Instance.Player.OnControllingAxisEvent -= ChangeAxisUI;
     }
-    public void ChangeAxisUI(AxisType axisType)
+
+    private void ChangeAxisUI(AxisType axisType)
     {
         Action<float> dictionaryChangeAction = (value)  => 
         {

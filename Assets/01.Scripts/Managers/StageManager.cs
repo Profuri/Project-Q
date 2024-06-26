@@ -24,7 +24,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
     private ChapterData _currentPlayChapterData;
     public ChapterData CurrentPlayChapterData => _currentPlayChapterData;
 
-    public event Action<ChapterType, int> OnStageClear;
+    public event Action OnStageClear;
 
     public AxisType CurrentStageAxis => SceneControlManager.Instance.Player.Converter.AxisType;
 
@@ -149,6 +149,12 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             return;
         }
         
+        var nextStageIndex = CurrentStage.StageOrder + 1;
+        OnStageClear?.Invoke();
+        CurrentStage.IsClear = true;
+        
+        DataManager.Instance.SaveData(this);
+        
         CurrentStage.Lock = false;
         player.OriginUnitInfo.LocalPos = CurrentStage.PlayerResetPointInClear;
 
@@ -162,7 +168,6 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         }
         
         player.Converter.SetConvertable(false);
-        var nextStageIndex = CurrentStage.StageOrder + 1;
 
         if (nextStageIndex >= _currentPlayChapterData.stageCnt)
         {
@@ -170,8 +175,6 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         }
                 
         GenerateNextStage(_currentPlayChapterData.chapter, nextStageIndex);
-        OnStageClear?.Invoke(_currentPlayChapterData.chapter,nextStageIndex);
-        CurrentStage.IsClear = true;
     }
 
     private void StageClearFeedback()
@@ -190,8 +193,6 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             {
                 return;
             }
-            
-            DataManager.Instance.SaveData(this);
 
             SceneControlManager.Instance.LoadScene(SceneType.Chapter, null, () =>
             {
@@ -208,23 +209,20 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
                 }
             });
         });
-                
-        GenerateNextStage(_currentPlayChapterData.chapter, nextChapter);
-        OnStageClear?.Invoke(_currentPlayChapterData.chapter,nextChapter);
-
-        CurrentStage.IsClear = true;
     }
 
     public Action<SaveData> GetSaveAction()
     {
         return (saveData) =>
         {
-            if (_currentPlayChapterData == null) return;
-            var currentChapter = _currentPlayChapterData.chapter;
-            bool isClear = CurrentStage.StageOrder + 1 >= _currentPlayChapterData.stageCnt;
+            if (_currentPlayChapterData == null) 
+                return;
             
-            saveData.ChapterClearDictionary[currentChapter] = isClear;
-            saveData.ChapterStageDictionary[currentChapter] =CurrentStage.StageOrder;
+            var currentChapter = _currentPlayChapterData.chapter;
+            var isClearChapter = CurrentStage.IsClear && CurrentStage.StageOrder + 1 >= _currentPlayChapterData.stageCnt;
+            
+            saveData.ChapterClearDictionary[currentChapter] = isClearChapter;
+            saveData.ChapterStageDictionary[currentChapter] = CurrentStage.StageOrder;
         };
     }
 
