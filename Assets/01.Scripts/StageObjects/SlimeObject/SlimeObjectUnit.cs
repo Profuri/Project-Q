@@ -72,13 +72,22 @@ public class SlimeObjectUnit : ObjectUnit
                 }
         }
 
-        targetObjList.ForEach(obj => Debug.Log($"ObjName: {obj.name}"));
         if(targetObjList.Count > 0)
         {
+            var player = targetObjList.Find(unit => unit is PlayerUnit) as PlayerUnit;
+            if (player != null)
+            {
+                InputManager.Instance.SetEnableInputAll(false);
+            }
+            
             ShowBounceEffect(() =>
             {
-                targetObjList.ForEach(obj => MoveToTargetPos(obj));
+                targetObjList.ForEach(MoveToTargetPos);
                 _canApply = false;
+                if (player != null)
+                {
+                    InputManager.Instance.SetEnableInputAll(true);
+                }
             });
 
         }
