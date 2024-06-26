@@ -61,14 +61,14 @@ public class StageRoadMapPanel : UIComponent
         }
     }
 
-    public void SetUnitEnable(int index, bool enable)
+    public void SetUnitEnable(int index, bool enable, float time = -1f)
     {
         if (index < 0 || index >= _units.Count)
         {
             return;
         }
         
-        _units[index].SetEnable(enable);
+        _units[index].SetEnable(enable, time);
     }
 
     public void AutoDisappear()

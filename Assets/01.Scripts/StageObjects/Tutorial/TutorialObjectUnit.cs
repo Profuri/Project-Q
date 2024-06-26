@@ -119,9 +119,9 @@ public class TutorialObjectUnit : InteractableObject
 
     public override void OnDetectedLeave(ObjectUnit communicator = null)
     {
-        base.OnDetectedLeave();
+        base.OnDetectedLeave(communicator);
         
-        if (Converter.AxisType != AxisType.None)
+        if (Converter != null && Converter.AxisType != AxisType.None)
         {
             return;
         }

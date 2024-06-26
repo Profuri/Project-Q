@@ -72,13 +72,22 @@ public class SlimeObjectUnit : ObjectUnit
                 }
         }
 
-        targetObjList.ForEach(obj => Debug.Log($"ObjName: {obj.name}"));
         if(targetObjList.Count > 0)
         {
+            var player = targetObjList.Find(unit => unit is PlayerUnit) as PlayerUnit;
+            if (player != null)
+            {
+                InputManager.Instance.SetEnableInputAll(false);
+            }
+            
             ShowBounceEffect(() =>
             {
-                targetObjList.ForEach(obj => MoveToTargetPos(obj));
+                targetObjList.ForEach(MoveToTargetPos);
                 _canApply = false;
+                if (player != null)
+                {
+                    InputManager.Instance.SetEnableInputAll(true);
+                }
             });
 
         }
@@ -124,12 +133,12 @@ public class SlimeObjectUnit : ObjectUnit
     {
         float appendTime = 0.15f;
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOScale(1.2f, appendTime));
-        sequence.Append(transform.DOScale(0.8f, appendTime));
-        sequence.Append(transform.DOScale(1f, appendTime));
-        sequence.Append(transform.DOScale(1.2f, appendTime));
-        sequence.Append(transform.DOScale(0.8f, appendTime));
-        sequence.Append(transform.DOScale(1f, appendTime));
+        sequence.Append(transform.DOScale(OriginUnitInfo.LocalScale * 1.2f, appendTime));
+        sequence.Append(transform.DOScale(OriginUnitInfo.LocalScale * 0.8f, appendTime));
+        sequence.Append(transform.DOScale(OriginUnitInfo.LocalScale, appendTime));
+        sequence.Append(transform.DOScale(OriginUnitInfo.LocalScale * 1.2f, appendTime));
+        sequence.Append(transform.DOScale(OriginUnitInfo.LocalScale * 0.8f, appendTime));
+        sequence.Append(transform.DOScale(OriginUnitInfo.LocalScale, appendTime));
         sequence.AppendCallback(() => Callback?.Invoke());
     }
 

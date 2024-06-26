@@ -30,7 +30,7 @@ public class PressurePlate : ToggleTypeInteractableObject
     { 
         base.UpdateUnit();
 
-        if (!Converter.Convertable)
+        if (!Converter.Convertable || !activeUnit)
         {
             return;
         }

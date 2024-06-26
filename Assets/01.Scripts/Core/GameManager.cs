@@ -15,11 +15,6 @@ public class GameManager : MonoSingleton<GameManager>
 
     public bool InPause { get; set; }
 
-    private void OnApplicationQuit()
-    {
-        DataManager.Instance.SaveData();
-    }
-
     private void Awake()
     {
         DOTween.Init(true, true, LogBehaviour.Verbose). SetCapacity(2000, 100);
