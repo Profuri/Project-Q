@@ -35,7 +35,7 @@ namespace AxisConvertSystem
         public void ConvertDimension(AxisType nextAxis, Action callback = null)
         {
             Stage stage = StageManager.Instance.CurrentStage;
-            if (!Convertable || stage is null  || stage.IsClear)
+            if (!Convertable || stage is null)
             {
                 return;
             }

@@ -161,7 +161,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         
         CurrentStage.Lock = false;
         player.OriginUnitInfo.LocalPos = CurrentStage.PlayerResetPointInClear;
-
+        
         if (player.Converter.AxisType != AxisType.None)
         {
             player.Converter.ConvertDimension(AxisType.None, StageClearFeedback);
@@ -172,7 +172,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
         }
         
         player.Converter.SetConvertable(false);
-
+        
         if (nextStageIndex >= _currentPlayChapterData.stageCnt)
         {
             return;
