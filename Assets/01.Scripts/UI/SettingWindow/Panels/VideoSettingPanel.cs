@@ -90,9 +90,11 @@ public class VideoSettingPanel : WindowPanel
             var resolutionList = VideoManager.Instance.ResolutionList;
             
             resolution = resolutionList[resolutionList.Count - 1];
-            string resolutionText = $"{resolution.width} X {resolution.height}";
-            _resolutionBtn.Text = resolutionText;
         }
+
+        string resolutionText = $"{resolution.width} X {resolution.height}";
+        _resolutionBtn.Text = resolutionText;
+        //goood
         
         //Qaulity
         QualityType qualityType = saveData.DefaultQuality;

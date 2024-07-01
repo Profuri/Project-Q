@@ -9,6 +9,7 @@ public class PlayerCamController : VirtualCamController
     public override void Init()
     {
         base.Init();
+
         CurrentSelectedCam = _virtualCams[0];
         _originPos = CurrentSelectedCam.transform.position;
         _originRot = CurrentSelectedCam.transform.rotation;
