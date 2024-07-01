@@ -52,7 +52,6 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
             { EInputCategory.ZoomOut,           CameraInputReader.Actions.ZoomControl },
         };
     }
-
     public void ChangeKeyBinding(
         EInputCategory category,
         int bindingIndex,
