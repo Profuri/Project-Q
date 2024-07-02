@@ -173,6 +173,8 @@ public class PlayerUnit : ObjectUnit
         _stateController.ChangeState(typeof(PlayerIdleState));
         SetActiveAnimation(true);
         SoundManager.Instance.SetAudioListenerOwner(transform);
+
+        Dissolve(0f,0f);
     }
     
     public override void OnPush()

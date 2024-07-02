@@ -82,7 +82,6 @@ public class SectionCamController : VirtualCamController
 
     public override void ResetCamera()
     {
-
         foreach(var kvp in _virtualCamDiction)
         {
             _virtualCamDiction[kvp.Key].enabled = false;

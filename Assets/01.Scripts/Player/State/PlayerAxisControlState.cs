@@ -103,7 +103,6 @@ public class PlayerAxisControlState : PlayerBaseState
     private void SelectAxisHandle()
     {
         Controller.ChangeState(typeof(PlayerIdleState));
-        InputManager.Instance.SetEnableInputWithout(EInputCategory.Escape,false);
         Player.Converter.ConvertDimension(_controllingAxis);
     }
 }

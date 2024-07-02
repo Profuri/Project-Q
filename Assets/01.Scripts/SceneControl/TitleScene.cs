@@ -7,12 +7,8 @@ public class TitleScene : Scene
     public override void OnPop()
     {
         base.OnPop();
-        //�ϴ� �߸ŷ� ��ħ
-        //if(CameraManager.Instance != null)
-        //{
-         //   CameraManager.Instance?.CurrentCamController?.CurrentSelectedCam?.SetFollowTarget(null);
-        //}
 
+        //CameraManager.Instance.InitCamera();
         CursorManager.ForceEnableCursor(true);
     }
 
