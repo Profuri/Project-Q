@@ -11,6 +11,7 @@ public class PlayerAxisControlState : PlayerBaseState
     public event Action<AxisType> axisControlingEvent;
     public PlayerAxisControlState(StateController controller, bool useAnim = false, string animationKey = "") : base(controller, useAnim, animationKey)
     {
+        
     }
 
     public override void EnterState()
@@ -72,9 +73,7 @@ public class PlayerAxisControlState : PlayerBaseState
         if (currentCamController && currentCamController.CurrentSelectedCam is SectionVirtualCam { AxisType: AxisType.None})
         {
             currentCamController.SetAxisControlCam(false);
-        }
-        
-        InputManager.Instance.SetEnableInputAll(true);
+        }        
     }
     
     private void CalcCurrentControlAxis()
@@ -103,6 +102,7 @@ public class PlayerAxisControlState : PlayerBaseState
     private void SelectAxisHandle()
     {
         Controller.ChangeState(typeof(PlayerIdleState));
-        Player.Converter.ConvertDimension(_controllingAxis);
+        
+        Player.Converter.ConvertDimension(_controllingAxis, ()=> InputManager.Instance.SetEnableInputAll(true));
     }
 }
