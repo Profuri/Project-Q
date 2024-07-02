@@ -2,7 +2,11 @@ public class GameSettingPanel : WindowPanel
 {
     public void ResetGameData()
     {
-        DataManager.Instance.ResetData();
-        SceneControlManager.Instance.LoadScene(SceneType.Title);
+        if (GameManager.Instance.InPause)
+        {
+            GameManager.Instance.Resume(false);
+        }
+        
+        SceneControlManager.Instance.LoadScene(SceneType.Title, DataManager.Instance.ResetData);
     }
 }

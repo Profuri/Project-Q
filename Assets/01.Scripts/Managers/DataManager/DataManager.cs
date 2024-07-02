@@ -101,11 +101,6 @@ public class DataManager : BaseManager<DataManager>
     [ContextMenu("ResetData")]
     public void ResetData()
     {
-        if (GameManager.Instance.InPause)
-        {
-            GameManager.Instance.Resume(false);
-        }
-        
         _fileDataHandler.DeleteSaveData();
         s_saveData = new SaveData();
         Instance.SaveData();
