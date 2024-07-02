@@ -7,9 +7,10 @@ using UnityEngine;
 public class UIAnimator
 {
     public List<UIAnimation> clips = new List<UIAnimation>();
-
     private float _prevStartTime;
     private float _prevEndTime;
+
+    public bool IsPlay {get; private set;} = false;
 
     public void Init(UIComponent component)
     {
@@ -22,6 +23,7 @@ public class UIAnimator
     public void Play(Action callBack = null)
     {
         var seq = DOTween.Sequence();
+        IsPlay = true;
         seq.SetAutoKill(false);
         seq.SetUpdate(true);
 
@@ -39,6 +41,10 @@ public class UIAnimator
             _prevEndTime = _prevStartTime + clip.duration;
         }
 
-        seq.OnComplete(() => callBack?.Invoke());
+        seq.OnComplete(() => 
+        {
+            IsPlay = false;
+            callBack?.Invoke();
+        });
     }
 }

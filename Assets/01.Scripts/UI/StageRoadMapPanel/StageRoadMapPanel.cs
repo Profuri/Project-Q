@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using Febucci.UI.Actions;
 using UnityEngine;
 
 public class StageRoadMapPanel : UIComponent
@@ -22,6 +24,8 @@ public class StageRoadMapPanel : UIComponent
 
     public override void Appear(Transform parentTrm, Action<UIComponent> callback = null)
     {
+        if(tweenData.disappearAnimator.IsPlay || tweenData.appearAnimator.IsPlay) return;
+
         var curChapterData = StageManager.Instance.CurrentPlayChapterData;
         var stageInfos = curChapterData.stageInfos;
 
@@ -40,25 +44,34 @@ public class StageRoadMapPanel : UIComponent
 
     public override void Disappear(Action<UIComponent> callback = null)
     {
-        base.Disappear(component =>
+        StartSafeCoroutine(nameof(WaitForTweenAction),WaitForTweenAction(() => tweenData.appearAnimator.IsPlay == false,() => 
         {
+            base.Disappear(component =>
+            {
+                foreach (var unit in _units)
+                {
+                    unit.Disappear();   
+                }
+                _units.Clear();
+                callback?.Invoke(component);
+            });
+        
             foreach (var unit in _units)
             {
-                unit.Disappear();   
+                if (!unit.Enable)
+                {
+                    continue;
+                }
+
+                unit.SetEnable(false);   
             }
-            _units.Clear();
-            callback?.Invoke(component);
-        });
-        
-        foreach (var unit in _units)
-        {
-            if (!unit.Enable)
-            {
-                continue;
-            }
-            
-            unit.SetEnable(false);   
-        }
+        }));
+    }
+
+    private IEnumerator WaitForTweenAction(Func<bool> predicate,Action Callback = null)
+    {
+        yield return new WaitUntil(predicate);
+        Callback?.Invoke();
     }
 
     public void SetUnitEnable(int index, bool enable, float time = -1f)
