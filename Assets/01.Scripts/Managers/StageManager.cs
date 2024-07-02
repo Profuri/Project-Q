@@ -227,7 +227,7 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
             
             var currentChapter = _currentPlayChapterData.chapter;
             var isClearChapter = CurrentStage.IsClear && CurrentStage.StageOrder + 1 >= _currentPlayChapterData.stageCnt;
-            
+
             saveData.ChapterClearDictionary[currentChapter] = isClearChapter;
             saveData.ChapterStageDictionary[currentChapter] = CurrentStage.StageOrder;
         };

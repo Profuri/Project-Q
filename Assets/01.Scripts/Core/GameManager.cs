@@ -60,7 +60,7 @@ public class GameManager : MonoSingleton<GameManager>
         {
             InPause = false;
         }
-        
+
         Time.timeScale = 1;
         InputManager.Instance.SetEnableInputAll(true);
     }

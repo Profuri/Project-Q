@@ -190,8 +190,8 @@ namespace AxisConvertSystem
             Vector3 halfExtents = boxCol.bounds.size * 0.7f / 2f;
             var dir = Vector3ExtensionMethod.GetAxisDir(axis);
             
-            var isHit1 = Physics.BoxCast(center - dir, halfExtents, dir, out var frontHit, Quaternion.identity, Mathf.Infinity, _objectMask);
-            var isHit2 = Physics.BoxCast(center + dir, halfExtents, -dir, out var backHit, Quaternion.identity, Mathf.Infinity, _objectMask);
+            var isHit1 = Physics.BoxCast(center - dir, halfExtents, dir, out var frontHit, Quaternion.identity, Mathf.Infinity, _objectMask, QueryTriggerInteraction.Ignore);
+            var isHit2 = Physics.BoxCast(center + dir, halfExtents, -dir, out var backHit, Quaternion.identity, Mathf.Infinity, _objectMask, QueryTriggerInteraction.Ignore);
 
             front = frontHit.collider;
             back = backHit.collider;
