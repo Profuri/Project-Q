@@ -54,7 +54,6 @@ public class InputManager : BaseManager<InputManager>, IProvideSave, IProvideLoa
             { EInputCategory.ShowRoadMap,       PlayerInputReader.Actions.ShowRoadMap },   
         };
     }
-
     public void ChangeKeyBinding(
         EInputCategory category,
         int bindingIndex,

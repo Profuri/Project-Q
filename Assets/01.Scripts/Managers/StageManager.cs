@@ -40,8 +40,6 @@ public class StageManager : BaseManager<StageManager>, IProvideSave
 
     public void StartNewChapter(ChapterData chapterData)
     {
-        //IsClear = false;
-
         int stageIndex = DataManager.sSaveData.ChapterStageDictionary[chapterData.chapter];
         
         _currentPlayChapterData = chapterData;
