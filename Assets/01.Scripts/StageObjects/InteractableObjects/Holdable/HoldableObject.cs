@@ -11,11 +11,13 @@ public class HoldableObject : InteractableObject, IHoldable
         _holdingHandler = null;
     }
 
-    public override void UpdateUnit()
+    public override void LateUpdateUnit()
     {
-        base.UpdateUnit();
+        base.LateUpdateUnit();
         if (_holdingHandler is not null)
         {
+            useGravity = false;
+            StopImmediately(true);
             SetPosition(_holdingHandler.HoldingPoint);
         }
     }
@@ -23,7 +25,6 @@ public class HoldableObject : InteractableObject, IHoldable
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
         var player = (PlayerUnit)communicator;
-        _holdingHandler = player.HoldingHandler;
         player.HoldingHandler.Attach(this);
     }
     
@@ -36,17 +37,29 @@ public class HoldableObject : InteractableObject, IHoldable
 
     public void Detach()
     {
+        if (_holdingHandler is null)
+        {
+            return;
+        }
+            
         _holdingHandler = null;
-        StopImmediately(true);
         useGravity = true;
+        StopImmediately(true);
+    }
+
+    public override void Activate(bool active)
+    {
+        if (!active)
+        {
+            Detach();
+        }
+        
+        base.Activate(active);
     }
 
     public override void OnPush()
     {
         base.OnPush();
-        if (_holdingHandler is not null)
-        {
-            Detach();
-        }
+        Detach();
     }
 }

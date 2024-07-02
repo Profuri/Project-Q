@@ -25,7 +25,7 @@ public class InteractionMark : PoolableMono
     {
         
     }
-    private void Update()
+    private void LateUpdate()
     {
         SynchronizeTransform();
         SynchronizeRotation();

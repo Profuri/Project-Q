@@ -31,12 +31,11 @@ public class Chapter : InteractableObject
 
     public override void OnInteraction(ObjectUnit communicator, bool interactValue, params object[] param)
     {
-        if (Data.stageCnt <= 0 || !_canInteract)
+        if (DataManager.sSaveData.ChapterClearDictionary[Data.chapter] || Data.stageCnt <= 0 || !_canInteract)
         {
             return;
         }
-        
-        
+
         SceneControlManager.Instance.LoadScene(SceneType.Stage, 
             () =>
             { 

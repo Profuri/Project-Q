@@ -12,13 +12,13 @@ using File = System.IO.File;
 
 public class FileDataHandler
 {
-    private string _directoryPath = "";
-    private string _fileName = "";
+    private readonly string _directoryPath;
+    private readonly string _fileName;
 
-    private bool _isEncrypt;
-    private bool _isBase64;
+    private readonly bool _isEncrypt;
+    private readonly bool _isBase64;
 
-    private CryotoModule _cryptoModule;
+    private readonly CryotoModule _cryptoModule;
 
     public FileDataHandler(string directoryPath, string fileName, bool isEncrypt, bool isBase64 = false)
     {
