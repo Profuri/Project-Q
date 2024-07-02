@@ -46,12 +46,12 @@ public class FanObject : InteractableObject
     public override void UpdateUnit()
     {
         base.UpdateUnit();
-        
+
         RotateFan();
         CheckAffectedUnit();
     }
 
-    public void LateUpdate()
+    public override void LateUpdateUnit()
     {
         FloatingUnits();
     }
@@ -115,6 +115,21 @@ public class FanObject : InteractableObject
 
     private void ReleaseFan()
     {
+        foreach (var unit in _affectedUnits)
+        {
+            unit.StopImmediately(false);
+            unit.useGravity = true;
+        }
+
+        foreach (var unit in _lastAffectedUnits)
+        {
+            unit.StopImmediately(false);
+            unit.useGravity = true;
+        }
+        
+        _affectedUnits.Clear();
+        _lastAffectedUnits.Clear();
+        
         _enabled = false;
         _airParticle.Stop();
         _soundEffectPlayer.Stop();
