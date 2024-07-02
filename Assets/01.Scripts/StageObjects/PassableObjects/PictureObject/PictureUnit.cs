@@ -71,7 +71,7 @@ public class PictureUnit : ObjectUnit, IPassable
     public override void GetCenterPosAndSize(out Vector3 center, out Vector3 size)
     {
         center = transform.position;
-        size = UnitInfo.ColliderBoundSize;
+        size = OriginUnitInfo.ColliderBoundSize;
         size.SetAxisElement(_enableAxis, -0.09f);
     }
 
